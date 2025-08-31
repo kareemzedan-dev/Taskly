@@ -1,0 +1,13 @@
+{
+  "@@locale": "en",
+  "appTitle": "Taskly",
+"welcomeMessage": "Organize work, connect,\n and succeed!",
+  "freelancerTitle": "I'm a Freelancer",
+  "freelancerSubtitle": "Find projects & grow your career",
+  "clientTitle": "I'm a Client",
+  "clientSubtitle": "Hire talents to get your work done",
+    "createFreelancerAccount": "Create Freelancer Account",
+  "createClientAccount": "Create Client Account",
+  "alreadyHaveAccount": "Already have an account?",
+  "login": "Log in"
+}

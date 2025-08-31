@@ -1,0 +1,13 @@
+{
+  "@@locale": "ar",
+  "appTitle": "تاسكلي",
+  "welcomeMessage": "رتب شغلك، تواصل،\n  وحقق النجاح!",
+  "freelancerTitle": "أنا مستقل",
+  "freelancerSubtitle": "ابحث عن مشاريع وطوّر مسيرتك",
+  "clientTitle": "أنا عميل",
+  "clientSubtitle": "وظّف المستقلين لإنجاز عملك",
+    "createFreelancerAccount": "إنشاء حساب مستقل",
+  "createClientAccount": "إنشاء حساب عميل",
+  "alreadyHaveAccount": "لديك حساب بالفعل؟",
+  "login": "تسجيل الدخول"
+}
