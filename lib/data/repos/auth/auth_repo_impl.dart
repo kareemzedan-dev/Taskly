@@ -1,0 +1,21 @@
+import 'package:either_dart/src/either.dart';
+import 'package:injectable/injectable.dart';
+import 'package:taskly/core/helper/failures.dart';
+import 'package:taskly/data/data_sources/remote/auth_remote_data_source.dart';
+import 'package:taskly/domain/entities/login_response_entity/login_response_entity.dart';
+import 'package:taskly/domain/entities/register_response_entity/register_response_entity.dart';
+import 'package:taskly/domain/repos/auth/auth_repo.dart';
+@Injectable(as: AuthRepo)
+class AuthRepoImpl extends AuthRepo {
+  AuthRemoteDataSource authRemoteDataSource ;
+  AuthRepoImpl(this.authRemoteDataSource);
+  @override
+  Future<Either<Failures, RegisterResponseEntity>> register(String firstName, String lastName, String email, String password, String role) {
+    return authRemoteDataSource.register(firstName, lastName, email, password, role);
+  }
+
+  @override
+  Future<Either<Failures, LoginResponseEntity>> login(String email, String password, String role) {
+    return authRemoteDataSource.login(email, password, role);
+  }
+}

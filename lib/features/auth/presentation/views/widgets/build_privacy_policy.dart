@@ -35,21 +35,21 @@ class _PrivacyPolicyWithCheckState extends State<PrivacyPolicyWithCheck> {
             TextSpan(
               children: [
                 TextSpan(
-                  text:   AppLocalizations.of(context)!.privacyPolicyAgreement,
+                  text: AppLocalizations.of(context)!.privacyPolicyAgreement,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 TextSpan(
-                  text:   AppLocalizations.of(context)!.privacyPolicy,
+                  text: AppLocalizations.of(context)!.privacyPolicy,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: ColorsManager.primary,
                   ),
                 ),
                 TextSpan(
-                  text:  AppLocalizations.of(context)!.termsAgreement,
+                  text: AppLocalizations.of(context)!.termsAgreement,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 TextSpan(
-                  text:  AppLocalizations.of(context)!.termsOfUse,
+                  text: AppLocalizations.of(context)!.termsOfUse,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: ColorsManager.primary,
                   ),

@@ -236,7 +236,7 @@ abstract class AppLocalizations {
   /// No description provided for @termsAgreement.
   ///
   /// In en, this message translates to:
-  /// **' and\nto the '**
+  /// **' and to the '**
   String get termsAgreement;
 
   /// No description provided for @termsOfUse.

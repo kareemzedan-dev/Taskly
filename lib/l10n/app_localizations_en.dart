@@ -78,7 +78,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get privacyPolicy => 'privacy policy';
 
   @override
-  String get termsAgreement => ' and\nto the ';
+  String get termsAgreement => ' and to the ';
 
   @override
   String get termsOfUse => 'terms of use';

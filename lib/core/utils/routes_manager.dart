@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:taskly/features/auth/presentation/views/login_view.dart';
 import 'package:taskly/features/auth/presentation/views/register_view.dart';
+import 'package:taskly/features/splash/presentation/views/splash_view.dart';
 import 'package:taskly/features/welcome/presentation/views/welcome_view.dart';
  
 class RoutesManager {
   
+  static const String splash = "/";
   static const String welcome = "welcome";
   static const String login = "login";
   static const String register="register";
@@ -13,6 +15,8 @@ class RoutesManager {
 
   static Route onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
+      case splash:
+        return MaterialPageRoute(builder: (_) => const SplashView());
       
       case welcome:
         return MaterialPageRoute(builder: (_) => const WelcomeView());
