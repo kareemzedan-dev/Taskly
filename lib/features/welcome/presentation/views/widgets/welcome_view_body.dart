@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/utils/assets_manager.dart';
+import 'package:taskly/core/utils/routes_manager.dart';
 import 'package:taskly/core/widgets/custom_button.dart';
 import 'package:taskly/features/welcome/presentation/views/widgets/build_back_video.dart';
 import 'package:taskly/features/welcome/presentation/views/widgets/gradient_overlay.dart';
@@ -99,9 +100,9 @@ class _WelcomeViewBodyState extends State<WelcomeViewBody> {
                               : "Create Client Account",
                       ontap: () {
                         if (selectedIndex == 0) {
-                          // navigate to freelancer signup
+                          Navigator.pushNamed(context, RoutesManager.register,arguments: "freelancer");
                         } else {
-                          // navigate to client signup
+                          Navigator.pushNamed(context, RoutesManager.register,arguments: "client");
                         }
                       },
                     ),
@@ -126,9 +127,9 @@ class _WelcomeViewBodyState extends State<WelcomeViewBody> {
                         GestureDetector(
                           onTap: () {
                             if (selectedIndex == 0) {
-                              // navigate to freelancer login
+                              Navigator.pushNamed(context, RoutesManager.login,arguments: "freelancer");
                             } else {
-                              // navigate to client login
+                              Navigator.pushNamed(context, RoutesManager.login,arguments: "client");
                             }
                           },
                           child: Text(

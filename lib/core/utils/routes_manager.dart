@@ -8,16 +8,20 @@ class RoutesManager {
   static const String welcome = "welcome";
   static const String login = "login";
   static const String register="register";
+  
  
 
   static Route onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
+      
       case welcome:
         return MaterialPageRoute(builder: (_) => const WelcomeView());
         case login:
-        return MaterialPageRoute(builder: (_) => const LoginView());
+          final role = settings.arguments as String;
+        return MaterialPageRoute(builder: (_) =>   LoginView(role: role));
         case register:
-        return MaterialPageRoute(builder: (_) => const RegisterView());
+         final role = settings.arguments as String;
+        return MaterialPageRoute(builder: (_) =>   RegisterView(role: role));
   
       default:
         return MaterialPageRoute(builder: (_) => const Placeholder());

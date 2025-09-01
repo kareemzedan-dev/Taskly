@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:taskly/core/utils/app_text_styles.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
- 
 
 class CustomTextFormField extends StatefulWidget {
   CustomTextFormField({
@@ -13,7 +12,8 @@ class CustomTextFormField extends StatefulWidget {
     this.validator,
     this.isEmailValidator = false,
     this.textEditingController,
-    required this.autovalidateMode,
+    this.autovalidateMode,
+    this.prefixIcon
   });
 
   final String? hintText;
@@ -23,7 +23,8 @@ class CustomTextFormField extends StatefulWidget {
   final String? Function(String?)? validator;
   final bool isEmailValidator;
   TextEditingController? textEditingController = TextEditingController();
-  AutovalidateMode autovalidateMode;
+  AutovalidateMode? autovalidateMode;
+  Widget ? prefixIcon ;
 
   @override
   State<CustomTextFormField> createState() => _CustomTextFormFieldState();
@@ -35,6 +36,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      
       autovalidateMode: widget.autovalidateMode,
       controller: widget.textEditingController,
       obscureText: widget.iconShow ? iconVisible : false,
@@ -57,6 +59,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         hintStyle: AppTextStyles.bold14.copyWith(
           color: ColorsManager.textSecondary,
         ),
+        prefixIcon: widget.prefixIcon,
         suffixIcon:
             widget.iconShow
                 ? GestureDetector(

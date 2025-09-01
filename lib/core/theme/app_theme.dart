@@ -23,7 +23,14 @@ class AppTheme {
         fontWeight: FontWeight.bold,
       ),
       bodyLarge: TextStyle(color: ColorsManager.textSecondary, fontSize: 16),
+      bodyMedium: TextStyle(color: ColorsManager.textSecondary, fontSize: 14),
     ),
+    // checkboxTheme: CheckboxThemeData(
+    //   overlayColor: MaterialStateProperty.all(ColorsManager.black),
+
+ 
+      
+    //   ),
     colorScheme: ColorScheme.fromSwatch().copyWith(
       secondary: ColorsManager.accent,
     ),
@@ -50,7 +57,10 @@ class AppTheme {
         fontWeight: FontWeight.bold,
       ),
       bodyLarge: TextStyle(color: Colors.grey, fontSize: 16),
+      bodyMedium: TextStyle(color: Colors.grey, fontSize: 14),
     ),
+    // checkboxTheme: CheckboxThemeData(
+    //   overlayColor: MaterialStateProperty.all(ColorsManager.white),),
     colorScheme: ColorScheme.fromSwatch().copyWith(
       secondary: ColorsManager.accent,
       brightness: Brightness.dark,
