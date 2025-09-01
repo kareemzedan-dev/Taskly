@@ -37,4 +37,52 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get login => 'Log in';
+
+  @override
+  String get registerFreelancerSubtitle => 'Sign up to find work';
+
+  @override
+  String get registerClientSubtitle => 'Sign up to hire the best talent';
+
+  @override
+  String get firstName => 'First Name';
+
+  @override
+  String get lastName => 'Last Name';
+
+  @override
+  String get email => 'Email';
+
+  @override
+  String get password => 'Password';
+
+  @override
+  String get createAccount => 'Create my account';
+
+  @override
+  String get welcomeBack => 'Welcome back';
+
+  @override
+  String get dontHaveAccount => 'Don\'t have an account?';
+
+  @override
+  String get signUp => 'Sign up';
+
+  @override
+  String get continueWithGoogle => 'Continue with Google';
+
+  @override
+  String get privacyPolicyAgreement => 'By creating an account you agree to the ';
+
+  @override
+  String get privacyPolicy => 'privacy policy';
+
+  @override
+  String get termsAgreement => ' and\nto the ';
+
+  @override
+  String get termsOfUse => 'terms of use';
+
+  @override
+  String get or => 'Or';
 }

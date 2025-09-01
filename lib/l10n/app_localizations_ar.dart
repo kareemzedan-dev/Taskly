@@ -37,4 +37,52 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get login => 'تسجيل الدخول';
+
+  @override
+  String get registerFreelancerSubtitle => 'سجل للبحث عن عمل';
+
+  @override
+  String get registerClientSubtitle => 'سجل لتوظيف أفضل المواهب';
+
+  @override
+  String get firstName => 'الاسم الأول';
+
+  @override
+  String get lastName => 'اسم العائلة';
+
+  @override
+  String get email => 'البريد الإلكتروني';
+
+  @override
+  String get password => 'كلمة المرور';
+
+  @override
+  String get createAccount => 'إنشاء حسابي';
+
+  @override
+  String get welcomeBack => 'مرحباً بعودتك';
+
+  @override
+  String get dontHaveAccount => 'ليس لديك حساب؟';
+
+  @override
+  String get signUp => 'إنشاء حساب';
+
+  @override
+  String get continueWithGoogle => 'المتابعة باستخدام جوجل';
+
+  @override
+  String get privacyPolicyAgreement => 'بإنشائك حساباً فإنك توافق على ';
+
+  @override
+  String get privacyPolicy => 'سياسة الخصوصية';
+
+  @override
+  String get termsAgreement => ' و\nعلى ';
+
+  @override
+  String get termsOfUse => 'شروط الاستخدام';
+
+  @override
+  String get or => 'او';
 }

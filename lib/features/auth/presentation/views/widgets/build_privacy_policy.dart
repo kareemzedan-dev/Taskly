@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
+import 'package:taskly/l10n/app_localizations.dart';
 
 class PrivacyPolicyWithCheck extends StatefulWidget {
   const PrivacyPolicyWithCheck({super.key});
@@ -34,21 +35,21 @@ class _PrivacyPolicyWithCheckState extends State<PrivacyPolicyWithCheck> {
             TextSpan(
               children: [
                 TextSpan(
-                  text: 'By creating an account you agree to the ',
+                  text:   AppLocalizations.of(context)!.privacyPolicyAgreement,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 TextSpan(
-                  text: 'privacy policy',
+                  text:   AppLocalizations.of(context)!.privacyPolicy,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: ColorsManager.primary,
                   ),
                 ),
                 TextSpan(
-                  text: ' and\nto the ',
+                  text:  AppLocalizations.of(context)!.termsAgreement,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 TextSpan(
-                  text: 'terms of use',
+                  text:  AppLocalizations.of(context)!.termsOfUse,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: ColorsManager.primary,
                   ),

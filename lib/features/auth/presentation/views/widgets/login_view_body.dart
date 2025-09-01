@@ -8,6 +8,7 @@ import 'package:taskly/core/widgets/custom_button.dart';
 import 'package:taskly/core/widgets/custom_text_field.dart';
 import 'package:taskly/core/widgets/or_divider.dart';
 import 'package:taskly/features/auth/presentation/views/widgets/social_login_button.dart';
+import 'package:taskly/l10n/app_localizations.dart';
 
 class LoginViewBody extends StatelessWidget {
   LoginViewBody({super.key, required this.role});
@@ -37,7 +38,7 @@ class LoginViewBody extends StatelessWidget {
             SizedBox(height: 16.h),
             Center(
               child: Text(
-                "Welcome back",
+                AppLocalizations.of(context)!.welcomeBack,
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                   fontSize: 20.sp,
                   fontFamily: 'DM Sans',
@@ -50,7 +51,7 @@ class LoginViewBody extends StatelessWidget {
             /// Email
             CustomTextFormField(
               prefixIcon: Icon(CupertinoIcons.mail),
-              hintText: "Email",
+              hintText:   AppLocalizations.of(context)!.email,
               textEditingController: emailController,
               validator: (p0) => p0!.isEmpty ? 'This field is required' : null,
               keyboardType: TextInputType.emailAddress,
@@ -63,7 +64,7 @@ class LoginViewBody extends StatelessWidget {
             /// Password
             CustomTextFormField(
               prefixIcon: Icon(CupertinoIcons.lock),
-              hintText: "Password",
+              hintText: AppLocalizations.of(context)!.password,
               textEditingController: passwordController,
               iconShow: true,
               validator: (p0) => p0!.isEmpty ? 'This field is required' : null,
@@ -79,7 +80,7 @@ class LoginViewBody extends StatelessWidget {
 
             /// Google button
             SocialLoginButton(
-              label: "Continue with Google",
+              label: AppLocalizations.of(context)!.continueWithGoogle,
               iconPath: Assets.assetsImagesIcGoogle,
               onPressed: () {},
             ),
@@ -87,7 +88,7 @@ class LoginViewBody extends StatelessWidget {
             SizedBox(height: 48.h),
 
             /// Login button
-            CustomBotton(title: "Log in", ontap: () {}),
+            CustomBotton(title:  AppLocalizations.of(context)!.login, ontap: () {}),
 
             SizedBox(height: 5.h),
 
@@ -96,7 +97,7 @@ class LoginViewBody extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "Don't have an account?",
+                   AppLocalizations.of(context)!.dontHaveAccount,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: Colors.grey,
                     fontWeight: FontWeight.bold,
@@ -118,7 +119,7 @@ class LoginViewBody extends StatelessWidget {
                         );
                   },
                   child: Text(
-                    "Sign up",
+                   AppLocalizations.of(context)!.signUp,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: ColorsManager.primary,
                       fontWeight: FontWeight.bold,

@@ -9,5 +9,22 @@
     "createFreelancerAccount": "إنشاء حساب مستقل",
   "createClientAccount": "إنشاء حساب عميل",
   "alreadyHaveAccount": "لديك حساب بالفعل؟",
-  "login": "تسجيل الدخول"
+  "login": "تسجيل الدخول",
+   "registerFreelancerSubtitle": "سجل للبحث عن عمل",
+  "registerClientSubtitle": "سجل لتوظيف أفضل المواهب",
+  "firstName": "الاسم الأول",
+  "lastName": "اسم العائلة",
+  "email": "البريد الإلكتروني",
+  "password": "كلمة المرور",
+  "createAccount": "إنشاء حسابي",
+  
+  "welcomeBack": "مرحباً بعودتك",
+  "dontHaveAccount": "ليس لديك حساب؟",
+  "signUp": "إنشاء حساب",
+  "continueWithGoogle": "المتابعة باستخدام جوجل",
+    "privacyPolicyAgreement": "بإنشائك حساباً فإنك توافق على ",
+  "privacyPolicy": "سياسة الخصوصية",
+  "termsAgreement": " و\nعلى ",
+  "termsOfUse": "شروط الاستخدام",
+  "or": "او"
 }

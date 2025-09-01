@@ -9,5 +9,22 @@
     "createFreelancerAccount": "Create Freelancer Account",
   "createClientAccount": "Create Client Account",
   "alreadyHaveAccount": "Already have an account?",
-  "login": "Log in"
+  "login": "Log in",
+    "registerFreelancerSubtitle": "Sign up to find work",
+  "registerClientSubtitle": "Sign up to hire the best talent",
+  "firstName": "First Name",
+  "lastName": "Last Name",
+  "email": "Email",
+  "password": "Password",
+  "createAccount": "Create my account",
+ 
+  "welcomeBack": "Welcome back",
+  "dontHaveAccount": "Don't have an account?",
+  "signUp": "Sign up",
+  "continueWithGoogle": "Continue with Google",
+    "privacyPolicyAgreement": "By creating an account you agree to the ",
+  "privacyPolicy": "privacy policy",
+  "termsAgreement": " and\nto the ",
+  "termsOfUse": "terms of use",
+  "or":"Or"
 }

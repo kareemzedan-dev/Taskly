@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:taskly/l10n/app_localizations.dart';
  
 
 class OrDivider extends StatelessWidget {
@@ -16,7 +17,7 @@ class OrDivider extends StatelessWidget {
         ),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 17.0),
-          child: Text("Or", style: Theme.of(context).textTheme.bodyMedium,),
+          child: Text(  AppLocalizations.of(context)!.or, style: Theme.of(context).textTheme.bodyMedium,),
         ),
         Expanded(
           child: Divider(

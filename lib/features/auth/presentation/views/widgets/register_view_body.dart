@@ -10,6 +10,7 @@ import 'package:taskly/core/widgets/or_divider.dart';
 import 'package:taskly/core/widgets/receive_offers.dart';
 import 'package:taskly/features/auth/presentation/views/widgets/build_privacy_policy.dart';
 import 'package:taskly/features/auth/presentation/views/widgets/social_login_button.dart';
+import 'package:taskly/l10n/app_localizations.dart';
 
 class RegisterViewBody extends StatelessWidget {
   RegisterViewBody({super.key, required this.role});
@@ -42,8 +43,8 @@ class RegisterViewBody extends StatelessWidget {
             Center(
               child: Text(
                 role == "freelancer"
-                    ? "Sign up to find work"
-                    : "Sign up to hire the best talent",
+                    ?  AppLocalizations.of(context)!.registerFreelancerSubtitle
+                    :  AppLocalizations.of(context)!.registerClientSubtitle,
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                   fontSize: 20.sp,
                   fontFamily: 'DM Sans',
@@ -57,7 +58,7 @@ class RegisterViewBody extends StatelessWidget {
                 Expanded(
                   child: CustomTextFormField(
                     prefixIcon: Icon(CupertinoIcons.person),
-                    hintText: "First Name",
+                    hintText:   AppLocalizations.of(context)!.firstName,
                     textEditingController: fNameController,
                     validator:
                         (p0) => p0!.isEmpty ? 'This field is required' : null,
@@ -71,7 +72,7 @@ class RegisterViewBody extends StatelessWidget {
                 Expanded(
                   child: CustomTextFormField(
                     prefixIcon: Icon(CupertinoIcons.person),
-                    hintText: "Last Name",
+                    hintText:  AppLocalizations.of(context)!.lastName,
                     textEditingController: lNameController,
                     validator:
                         (p0) => p0!.isEmpty ? 'This field is required' : null,
@@ -88,7 +89,7 @@ class RegisterViewBody extends StatelessWidget {
             CustomTextFormField(
               //  autovalidateMode: authCubit.autovalidateMode!,
               prefixIcon: Icon(CupertinoIcons.mail),
-              hintText: "Email",
+              hintText:   AppLocalizations.of(context)!.email,
               textEditingController: emailController,
               validator: (p0) => p0!.isEmpty ? 'This field is required' : null,
               keyboardType: TextInputType.emailAddress,
@@ -100,7 +101,7 @@ class RegisterViewBody extends StatelessWidget {
             CustomTextFormField(
               // autovalidateMode: authCubit.autovalidateMode!,
               prefixIcon: Icon(CupertinoIcons.lock),
-              hintText: "Password",
+              hintText:   AppLocalizations.of(context)!.password,
               textEditingController: passwordController,
               iconShow: true,
               validator: (p0) => p0!.isEmpty ? 'This field is required' : null,
@@ -115,19 +116,19 @@ class RegisterViewBody extends StatelessWidget {
             OrDivider(),
             SizedBox(height: 20.h),
             SocialLoginButton(
-              label: "Continue with Google",
+              label:   AppLocalizations.of(context)!.continueWithGoogle,
               iconPath: Assets.assetsImagesIcGoogle,
               onPressed: () {},
             ),
             SizedBox(height: 48.h),
 
-            CustomBotton(title: "Create my account", ontap: () {}),
+            CustomBotton(title:   AppLocalizations.of(context)!.createAccount, ontap: () {}),
             SizedBox(height: 5.h),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "Already have an account?",
+                  AppLocalizations.of(context)!.alreadyHaveAccount,
 
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: Colors.grey,
@@ -151,7 +152,7 @@ class RegisterViewBody extends StatelessWidget {
                         );
                   },
                   child: Text(
-                    "Log in",
+                    AppLocalizations.of(context)!.login,
 
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: ColorsManager.primary,
