@@ -20,12 +20,15 @@ class _CustomSearchTextFieldState extends State<CustomSearchTextField> {
     return Stack(
       alignment: Alignment.centerLeft,
       children: [
-        // TextField الأساسي
         Container(
           height: 50,
           decoration: BoxDecoration(
             color: const Color(0xFFF5F5F5),
             borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+              color: Colors.grey.shade300,  
+              width: 1.2,  
+            ),
           ),
           child: TextField(
             controller: _controller,
@@ -34,15 +37,15 @@ class _CustomSearchTextFieldState extends State<CustomSearchTextField> {
               prefixIcon: Icon(Icons.search, color: Colors.grey),
               contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 14),
             ),
+
             style: const TextStyle(color: Colors.black, fontSize: 16),
             onChanged: (_) => setState(() {}),
           ),
         ),
 
-        // Animated hint
         if (!_isTyping)
           Positioned.fill(
-            left: 48, // بعد أيقونة السيرش
+            left: 48,  
             child: Align(
               alignment: Alignment.centerLeft,
               child: IgnorePointer(
