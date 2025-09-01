@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:taskly/features/auth/presentation/views/login_view.dart';
 import 'package:taskly/features/auth/presentation/views/register_view.dart';
 import 'package:taskly/features/client/presentation/views/client_home_view.dart';
-import 'package:taskly/features/client/presentation/views/widgets/client_home_view_body.dart';
+import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/client_home_tab_view_body.dart';
 import 'package:taskly/features/splash/presentation/views/splash_view.dart';
 import 'package:taskly/features/welcome/presentation/views/welcome_view.dart';
  
