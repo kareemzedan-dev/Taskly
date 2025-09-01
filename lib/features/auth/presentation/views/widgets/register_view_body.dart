@@ -12,12 +12,12 @@ import 'package:taskly/features/auth/presentation/views/widgets/build_privacy_po
 import 'package:taskly/features/auth/presentation/views/widgets/social_login_button.dart';
 
 class RegisterViewBody extends StatelessWidget {
-  RegisterViewBody({super.key,required this.role});
+  RegisterViewBody({super.key, required this.role});
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController fNameController = TextEditingController();
   final TextEditingController lNameController = TextEditingController();
-  final String role  ;
+  final String role;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +41,9 @@ class RegisterViewBody extends StatelessWidget {
             SizedBox(height: 16.h),
             Center(
               child: Text(
-                role=="freelancer" ? "Sign up to find work" : "Sign up to hire the best talent",
+                role == "freelancer"
+                    ? "Sign up to find work"
+                    : "Sign up to hire the best talent",
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                   fontSize: 20.sp,
                   fontFamily: 'DM Sans',

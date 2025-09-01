@@ -100,9 +100,17 @@ class _WelcomeViewBodyState extends State<WelcomeViewBody> {
                               : "Create Client Account",
                       ontap: () {
                         if (selectedIndex == 0) {
-                          Navigator.pushNamed(context, RoutesManager.register,arguments: "freelancer");
+                          Navigator.pushNamed(
+                            context,
+                            RoutesManager.register,
+                            arguments: "freelancer",
+                          );
                         } else {
-                          Navigator.pushNamed(context, RoutesManager.register,arguments: "client");
+                          Navigator.pushNamed(
+                            context,
+                            RoutesManager.register,
+                            arguments: "client",
+                          );
                         }
                       },
                     ),
@@ -127,9 +135,17 @@ class _WelcomeViewBodyState extends State<WelcomeViewBody> {
                         GestureDetector(
                           onTap: () {
                             if (selectedIndex == 0) {
-                              Navigator.pushNamed(context, RoutesManager.login,arguments: "freelancer");
+                              Navigator.pushNamed(
+                                context,
+                                RoutesManager.login,
+                                arguments: "freelancer",
+                              );
                             } else {
-                              Navigator.pushNamed(context, RoutesManager.login,arguments: "client");
+                              Navigator.pushNamed(
+                                context,
+                                RoutesManager.login,
+                                arguments: "client",
+                              );
                             }
                           },
                           child: Text(

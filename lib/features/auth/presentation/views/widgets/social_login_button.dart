@@ -23,7 +23,7 @@ class SocialLoginButton extends StatelessWidget {
           elevation: 0,
           backgroundColor: Colors.transparent,
           shape: RoundedRectangleBorder(
-            side: const BorderSide(color: Colors.grey, width: 1  ),
+            side: const BorderSide(color: Colors.grey, width: 1),
             borderRadius: BorderRadius.circular(16),
           ),
         ),
@@ -32,12 +32,10 @@ class SocialLoginButton extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             SvgPicture.asset(iconPath),
-              SizedBox(width: 30.w),
+            SizedBox(width: 30.w),
             Text(
               label,
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                
-              )
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(),
             ),
           ],
         ),
