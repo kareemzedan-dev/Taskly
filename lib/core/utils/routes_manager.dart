@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:taskly/features/auth/presentation/views/login_view.dart';
 import 'package:taskly/features/auth/presentation/views/register_view.dart';
+import 'package:taskly/features/client/presentation/views/client_home_view.dart';
+import 'package:taskly/features/client/presentation/views/widgets/client_home_view_body.dart';
 import 'package:taskly/features/splash/presentation/views/splash_view.dart';
 import 'package:taskly/features/welcome/presentation/views/welcome_view.dart';
  
@@ -10,6 +12,7 @@ class RoutesManager {
   static const String welcome = "welcome";
   static const String login = "login";
   static const String register="register";
+  static const String clientHome = "clientHome";
   
  
 
@@ -26,6 +29,8 @@ class RoutesManager {
         case register:
          final role = settings.arguments as String;
         return MaterialPageRoute(builder: (_) =>   RegisterView(role: role));
+        case clientHome:
+        return MaterialPageRoute(builder: (_) =>   ClientHomeView());
   
       default:
         return MaterialPageRoute(builder: (_) => const Placeholder());
