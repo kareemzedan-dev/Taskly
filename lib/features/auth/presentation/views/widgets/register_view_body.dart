@@ -138,7 +138,17 @@ class RegisterViewBody extends StatelessWidget {
                 ),
                 TextButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, RoutesManager.login);
+                     role == "freelancer"
+                        ? Navigator.pushNamed(
+                          context,
+                          RoutesManager.login,
+                          arguments: "freelancer",
+                        )
+                        : Navigator.pushNamed(
+                          context,
+                          RoutesManager.login,
+                          arguments: "client",
+                        );
                   },
                   child: Text(
                     "Log in",

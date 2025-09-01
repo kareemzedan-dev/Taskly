@@ -13,7 +13,7 @@ class LoginViewBody extends StatelessWidget {
   LoginViewBody({super.key, required this.role});
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-      final String role;
+  final String role;
 
   @override
   Widget build(BuildContext context) {
@@ -27,22 +27,22 @@ class LoginViewBody extends StatelessWidget {
               child: Text(
                 "Taskly",
                 style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                      color: ColorsManager.primary,
-                      fontSize: 30.sp,
-                      fontFamily: 'DM Sans',
-                      fontWeight: FontWeight.w700,
-                    ),
+                  color: ColorsManager.primary,
+                  fontSize: 30.sp,
+                  fontFamily: 'DM Sans',
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
             SizedBox(height: 16.h),
             Center(
               child: Text(
-               role == 'freelancer' ? "Welcome back freelancer" : "Welcome back client",
+                "Welcome back",
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontSize: 20.sp,
-                      fontFamily: 'DM Sans',
-                      fontWeight: FontWeight.w600,
-                    ),
+                  fontSize: 20.sp,
+                  fontFamily: 'DM Sans',
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
             SizedBox(height: 32.h),
@@ -98,22 +98,32 @@ class LoginViewBody extends StatelessWidget {
                 Text(
                   "Don't have an account?",
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Colors.grey,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14.sp,
-                      ),
+                    color: Colors.grey,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14.sp,
+                  ),
                 ),
                 TextButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, RoutesManager.register);
+                    role == "freelancer"
+                        ? Navigator.pushNamed(
+                          context,
+                          RoutesManager.register,
+                          arguments: "freelancer",
+                        )
+                        : Navigator.pushNamed(
+                          context,
+                          RoutesManager.register,
+                          arguments: "client",
+                        );
                   },
                   child: Text(
                     "Sign up",
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: ColorsManager.primary,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14.sp,
-                        ),
+                      color: ColorsManager.primary,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14.sp,
+                    ),
                   ),
                 ),
               ],
