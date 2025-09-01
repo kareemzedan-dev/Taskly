@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
-SizedBox buildBackVideo(VideoPlayerController controller) {
-  return SizedBox.expand(
-    child:
-        controller.value.isInitialized
-            ? FittedBox(
+class BackVideo extends StatelessWidget {
+  final VideoPlayerController controller;
+
+  const BackVideo({super.key, required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox.expand(
+      child: controller.value.isInitialized
+          ? FittedBox(
               fit: BoxFit.cover,
               child: SizedBox(
                 width: controller.value.size.width,
@@ -13,6 +18,7 @@ SizedBox buildBackVideo(VideoPlayerController controller) {
                 child: VideoPlayer(controller),
               ),
             )
-            : Container(color: Colors.black),
-  );
+          : Container(color: Colors.black),
+    );
+  }
 }

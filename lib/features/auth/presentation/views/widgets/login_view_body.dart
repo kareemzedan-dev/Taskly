@@ -89,7 +89,7 @@ class LoginViewBody extends StatelessWidget {
             /// Login button
             CustomBotton(title: "Log in", ontap: () {}),
 
-            SizedBox(height: 20.h),
+            SizedBox(height: 5.h),
 
             /// Sign up link
             Row(

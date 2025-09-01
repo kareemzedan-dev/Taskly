@@ -122,7 +122,7 @@ class RegisterViewBody extends StatelessWidget {
             SizedBox(height: 48.h),
 
             CustomBotton(title: "Create my account", ontap: () {}),
-            SizedBox(height: 20.h),
+            SizedBox(height: 5.h),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -138,7 +138,7 @@ class RegisterViewBody extends StatelessWidget {
                 ),
                 TextButton(
                   onPressed: () {
-                     role == "freelancer"
+                    role == "freelancer"
                         ? Navigator.pushNamed(
                           context,
                           RoutesManager.login,
