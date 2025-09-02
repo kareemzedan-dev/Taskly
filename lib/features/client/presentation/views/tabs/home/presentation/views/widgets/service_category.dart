@@ -1,22 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
+import 'package:taskly/core/widgets/icon_mapper_widgets.dart';
+import 'package:taskly/features/client/domain/entities/home/service_response_entity.dart';
+
+Color hexToColor(String hexCode) {
+  hexCode = hexCode.replaceAll('#', '');
+  if (hexCode.length == 6) {
+    hexCode = 'FF$hexCode';
+  }
+  return Color(int.parse(hexCode, radix: 16));
+}
 
 class ServiceCategory extends StatelessWidget {
-  const ServiceCategory({
+  ServiceCategory({
     super.key,
-    required this.topColor,
-    required this.title,
-    required this.icon,
-    this.buttonText = "Order Now",
-    this.onTap,
+    required this.serviceEntity,
+    required this.onTap,
   });
-
-  final Color topColor;
-  final String title;
-  final IconData icon;
-  final String buttonText;
-  final VoidCallback? onTap;
+  ServiceEntity serviceEntity;
+  VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -38,17 +41,21 @@ class ServiceCategory extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // الجزء العلوي الملون
+          
             Container(
-              height: 100.h, // ارتفاع ثابت للجزء العلوي
+              height: 100.h, 
               decoration: BoxDecoration(
-                color: topColor,
+                color: hexToColor(serviceEntity.color),
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                    topColor,
-                    Color.lerp(topColor, Colors.black, 0.1)!,
+                    hexToColor(serviceEntity.color),
+                    Color.lerp(
+                      hexToColor(serviceEntity.color),
+                      Colors.black,
+                      0.1,
+                    )!,
                   ],
                 ),
               ),
@@ -68,15 +75,14 @@ class ServiceCategory extends StatelessWidget {
                     ],
                   ),
                   child: Icon(
-                    icon,
-                    color: topColor,
+                    IconMapper.getIcon(serviceEntity.icon),
+                    color: hexToColor(serviceEntity.color),
                     size: 28.sp,
                   ),
                 ),
               ),
             ),
-            
-            // محتوى البطاقة
+
             Expanded(
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
@@ -86,7 +92,7 @@ class ServiceCategory extends StatelessWidget {
                   children: [
                     // العنوان
                     Text(
-                      title,
+                      serviceEntity.title,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w700,
                         fontSize: 16.sp,
@@ -96,8 +102,7 @@ class ServiceCategory extends StatelessWidget {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    
-                    // الزر
+
                     Padding(
                       padding: EdgeInsets.only(bottom: 12.h),
                       child: InkWell(
@@ -105,7 +110,10 @@ class ServiceCategory extends StatelessWidget {
                         borderRadius: BorderRadius.circular(20.r),
                         child: Container(
                           width: double.infinity,
-                          padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 16.w),
+                          padding: EdgeInsets.symmetric(
+                            vertical: 10.h,
+                            horizontal: 16.w,
+                          ),
                           decoration: BoxDecoration(
                             color: ColorsManager.primary,
                             borderRadius: BorderRadius.circular(20.r),
@@ -121,8 +129,10 @@ class ServiceCategory extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                buttonText,
-                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                serviceEntity.buttonText,
+                                style: Theme.of(
+                                  context,
+                                ).textTheme.bodyMedium?.copyWith(
                                   color: Colors.white,
                                   fontSize: 14.sp,
                                   fontWeight: FontWeight.w600,
