@@ -49,11 +49,12 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
           Navigator.pop(context);
         }
         if (state is AuthRegisterSuccessState) {
-          Navigator.pushNamed(
-            context,
-            RoutesManager.login,
-            arguments: widget.role,
-          );
+         if(widget.role == "freelancer"){
+          Navigator.pushNamedAndRemoveUntil(context, RoutesManager.freelancerHome, (_) => false);
+         }
+         else{
+          Navigator.pushNamedAndRemoveUntil(context, RoutesManager.clientHome, (_) => false);
+         }
         }
         if (state is AuthRegisterErrorState) {
           ScaffoldMessenger.of(

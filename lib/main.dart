@@ -18,9 +18,9 @@ void main() async {
     anonKey:
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ6dHN6dnpmY25iZm1zeGtoa2huIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY2Njc1NzcsImV4cCI6MjA3MjI0MzU3N30.wErI53sqLbmnK_WXe3oJhuYffS7Xcl9yGne1arhhLoA',
   );
-   await SharedPrefHelper.init();
+  await SharedPrefHelper.init();
   configureDependencies();
-    Bloc.observer = MyBlocObserver();
+  Bloc.observer = MyBlocObserver();
   runApp(const Taskly());
 }
 
@@ -49,7 +49,7 @@ class Taskly extends StatelessWidget {
 
           onGenerateRoute:
               (settings) => RoutesManager.onGenerateRoute(settings),
-          initialRoute: RoutesManager.clientHome,
+          initialRoute: RoutesManager.welcome,
         );
       },
     );

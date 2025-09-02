@@ -3,6 +3,7 @@ import 'package:taskly/features/auth/presentation/views/login_view.dart';
 import 'package:taskly/features/auth/presentation/views/register_view.dart';
 import 'package:taskly/features/client/presentation/views/client_home_view.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/client_home_tab_view_body.dart';
+import 'package:taskly/features/freelancer/presentation/views/freelancer_home_view.dart';
 import 'package:taskly/features/splash/presentation/views/splash_view.dart';
 import 'package:taskly/features/welcome/presentation/views/welcome_view.dart';
  
@@ -13,6 +14,7 @@ class RoutesManager {
   static const String login = "login";
   static const String register="register";
   static const String clientHome = "clientHome";
+  static const String freelancerHome = "freelancerHome";
   
  
 
@@ -31,6 +33,8 @@ class RoutesManager {
         return MaterialPageRoute(builder: (_) =>   RegisterView(role: role));
         case clientHome:
         return MaterialPageRoute(builder: (_) =>   ClientHomeView());
+        case freelancerHome:
+        return MaterialPageRoute(builder: (_) =>   FreelancerHomeView());
   
       default:
         return MaterialPageRoute(builder: (_) => const Placeholder());

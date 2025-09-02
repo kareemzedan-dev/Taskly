@@ -4,22 +4,26 @@ import 'package:taskly/features/client/presentation/views/tabs/home/presentation
 import 'package:taskly/features/client/presentation/views/tabs/messages/presentation/views/messages_tab_view.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/my_jobs_tab_view.dart';
 import 'package:taskly/features/client/presentation/views/tabs/profile/presentation/views/profile_view.dart';
+import 'package:taskly/features/freelancer/presentation/views/tabs/messages/presentation/views/messages_tab_view.dart';
+import 'package:taskly/features/freelancer/presentation/views/tabs/my_jobs/presentation/views/my_jobs_tab_view.dart';
+import 'package:taskly/features/freelancer/presentation/views/tabs/profile/presentation/views/profile_view.dart';
 
-class ClientHomeView extends StatefulWidget {
-  const ClientHomeView({super.key});
+class FreelancerHomeView extends StatefulWidget {
+  const FreelancerHomeView({super.key});
 
   @override
-  State<ClientHomeView> createState() => _ClientHomeViewState();
+  State<FreelancerHomeView> createState() => _FreelancerHomeView();
 }
 
-class _ClientHomeViewState extends State<ClientHomeView> {
+class _FreelancerHomeView extends State<FreelancerHomeView> {
   int currentIndex = 0;
 
   List<Widget> items = [
-    const HomeTabView(),
-    const MyJobsTabView(),
-    const MessagesTabView(),
-    const ProfileViewTab(),
+    Container(color: Colors.red,),
+    Container(color: Colors.amber,),
+    Container(color: Colors.black,),
+    Container(color: Colors.yellow,),
+ 
   ];
 
   @override

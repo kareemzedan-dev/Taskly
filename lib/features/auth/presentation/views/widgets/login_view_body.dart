@@ -46,9 +46,13 @@ class _LoginViewBodyState extends State<LoginViewBody> {
           Navigator.pop(context);
         }
         if (state is AuthLoginSuccessState) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text("Login Success")));
+          if(widget.role == 'client'){
+            Navigator.pushNamedAndRemoveUntil(context, RoutesManager.clientHome, (_) => false);
+          }else{
+            Navigator.pushNamedAndRemoveUntil(context, RoutesManager.freelancerHome, (_) => false);
+            
+          }
+       
         }
         if (state is AuthLoginErrorState) {
           ScaffoldMessenger.of(
@@ -88,9 +92,8 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                   ),
                 ),
                 SizedBox(height: 32.h),
-
-                /// Email
-                CustomTextFormField(
+                
+                 CustomTextFormField(
                   prefixIcon: Icon(CupertinoIcons.mail),
                   hintText: AppLocalizations.of(context)!.email,
                   textEditingController: authViewModel.emailController,
@@ -149,7 +152,6 @@ class _LoginViewBodyState extends State<LoginViewBody> {
 
                 SizedBox(height: 5.h),
 
-                /// Sign up link
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

@@ -3,8 +3,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/features/client/presentation/views/tabs/messages/presentation/views/widgets/messages_tab_view_body.dart';
 
-class MessagesTabView extends StatelessWidget {
-  const MessagesTabView({super.key});
+class FreelancerMessagesTabView extends StatelessWidget {
+  const FreelancerMessagesTabView({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -5,15 +5,16 @@ import 'package:flutter/widgets.dart';
 import 'package:injectable/injectable.dart';
 import 'package:taskly/core/helper/failures.dart';
 import 'package:taskly/core/helper/shared_preferences.dart';
+import 'package:taskly/core/services/supabase_service.dart';
 import 'package:taskly/data/data_sources/remote/auth_remote_data_source.dart';
 import 'package:taskly/data/models/login_response_dm/login_response_dm.dart';
 import 'package:taskly/data/models/register_response_dm/register_response_dm.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:taskly/domain/entities/login_response_entity/login_response_entity.dart';
 
 @Injectable(as: AuthRemoteDataSource)
 class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   final SupabaseClient supabase = Supabase.instance.client;
+  SupabaseService supabaseService = SupabaseService();
 
   @override
   Future<Either<Failures, RegisterResponseDm>> register(
@@ -63,6 +64,24 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
           message: "User registered successfully",
           token: token,
         );
+        Map<String, dynamic>? success = await supabaseService
+            .sendDataToSupabase(
+              tableName: 'users',
+              data: {
+                'id': user.id,
+                'full_name': "$firstName $lastName",
+                'email': user.email,
+                'role': role,
+              },
+              conflictColumn: 'email',
+            );
+        bool successResult = (success != null);
+
+        if (successResult) {
+          print('User saved successfully!');
+        } else {
+          print('Failed to save user.');
+        }
 
         return Right(registerResponse);
       } else {
@@ -131,7 +150,24 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
         message: "User Login successfully",
         token: token,
       );
+      Map<String, dynamic>? success = await supabaseService.sendDataToSupabase(
+        tableName: 'users',
+        data: {
+          'id': user.id,
+          'full_name': user.userMetadata!['full_name'],
+          'email': user.email,
 
+          'role': role,
+        },
+        conflictColumn: 'email',
+      );
+      bool successResult = (success != null);
+
+      if (successResult) {
+        print('User saved successfully!');
+      } else {
+        print('Failed to save user.');
+      }
       return Right(loginResponse);
     } on AuthException catch (e) {
       return Left(ServerFailure(e.message));
