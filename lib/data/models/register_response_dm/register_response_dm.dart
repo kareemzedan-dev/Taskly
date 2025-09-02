@@ -18,7 +18,7 @@ class RegisterResponseDm extends RegisterResponseEntity {
   }
 }
 
-class UserDm extends UserEntity {
+class UserDm extends RegisterUserEntity {
   UserDm({super.firstName, super.lastName, super.email, super.password, super.role});
 
   UserDm.fromJson(Map<String, dynamic> json) {

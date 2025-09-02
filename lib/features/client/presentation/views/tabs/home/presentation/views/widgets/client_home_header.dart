@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/utils/assets_manager.dart';
+import 'package:taskly/features/client/domain/entities/home/user_info_entity.dart';
 
 class ClientHomeHeader extends StatelessWidget {
-  const ClientHomeHeader({super.key});
+    ClientHomeHeader({super.key,required this.fullName});
+  String? fullName;
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +15,7 @@ class ClientHomeHeader extends StatelessWidget {
         Column(
           children: [
             Text(
-              "Hi Kareem Zedan,",
+              "Hi ${fullName ??""},",
               style: Theme.of(
                 context,
               ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),

@@ -5,7 +5,8 @@ import 'package:taskly/core/utils/app_text_styles.dart';
 import 'package:taskly/core/utils/assets_manager.dart';
  
 class UserInfoSection extends StatelessWidget {
-  const UserInfoSection({super.key});
+    UserInfoSection({super.key,required this.name,required this.email});
+  String name , email ;
 
   @override
   Widget build(BuildContext context) {
@@ -18,8 +19,8 @@ class UserInfoSection extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('John Doe',style:AppTextStyles.bold20 ,),
-            Text('johndoe@gmail.com',style:AppTextStyles.bold16.copyWith(color: Colors.grey) ,),
+            Text(name,style:AppTextStyles.bold20 ,),
+            Text(email,style:AppTextStyles.bold16.copyWith(color: Colors.grey) ,),
            Row(
             mainAxisAlignment: MainAxisAlignment.center,
 

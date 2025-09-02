@@ -17,7 +17,7 @@ class ProfileViewBody extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 20),
-            const UserInfoSection(),
+         //   const UserInfoSection(),
 
             const SizedBox(height: 40),
 

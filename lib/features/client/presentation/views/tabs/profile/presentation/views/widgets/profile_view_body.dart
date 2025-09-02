@@ -1,12 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:taskly/core/di/di.dart';
 import 'package:taskly/core/utils/assets_manager.dart';
-import 'package:taskly/core/utils/colors_manger.dart';
+import 'package:taskly/features/client/presentation/cubit/user_view_model/user_info_view_model.dart';
+import 'package:taskly/features/client/presentation/cubit/user_view_model/user_info_view_model_states.dart';
 import 'package:taskly/features/client/presentation/views/tabs/profile/presentation/views/widgets/account_item_row.dart';
 import 'package:taskly/features/client/presentation/views/tabs/profile/presentation/views/widgets/user_info_section.dart';
 
-class ProfileViewBody extends StatelessWidget {
+class ProfileViewBody extends StatefulWidget {
   const ProfileViewBody({super.key});
+
+  @override
+  State<ProfileViewBody> createState() => _ProfileViewBodyState();
+}
+
+late final UserInfoViewModel _userInfoViewModel;
+
+class _ProfileViewBodyState extends State<ProfileViewBody> {
+  @override
+  void initState() {
+    super.initState();
+    _userInfoViewModel = getIt<UserInfoViewModel>();
+    _userInfoViewModel.loadUserInfo();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +34,24 @@ class ProfileViewBody extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 20),
-            const UserInfoSection(),
+            BlocProvider(
+              create: (context) => _userInfoViewModel,
+              child: BlocBuilder<UserInfoViewModel, UserInfoViewModelStates>(
+                builder: (context, state) {
+                  if (state is UserInfoViewModelLoading) {
+                    return const CircularProgressIndicator();
+                  } else if (state is UserInfoViewModelSuccess) {
+                    return UserInfoSection(
+                      email: state.userInfoEntity.email,
+                      name: state.userInfoEntity.fullName!,
+                    );
+                  } else if (state is UserInfoViewModelError) {
+                    return Text(state.errorMessage);
+                  }
+                  return Container();
+                },
+              ),
+            ),
 
             const SizedBox(height: 40),
 
@@ -25,15 +59,14 @@ class ProfileViewBody extends StatelessWidget {
               "Support",
               style: Theme.of(context).textTheme.titleMedium!.copyWith(
                 fontWeight: FontWeight.bold,
-  
-                     fontSize: 18.sp,
+
+                fontSize: 18.sp,
               ),
             ),
             const SizedBox(height: 10),
             AccountItemRow(
               image: Assets.assetsImagesTechSupport5109502,
               text: "Technical Support",
-              
             ),
 
             const SizedBox(height: 30),
@@ -42,8 +75,8 @@ class ProfileViewBody extends StatelessWidget {
               "Account",
               style: Theme.of(context).textTheme.titleMedium!.copyWith(
                 fontWeight: FontWeight.bold,
-               
-                      fontSize: 18.sp,
+
+                fontSize: 18.sp,
               ),
             ),
             const SizedBox(height: 10),
@@ -63,7 +96,7 @@ class ProfileViewBody extends StatelessWidget {
               "Settings",
               style: Theme.of(context).textTheme.titleMedium!.copyWith(
                 fontWeight: FontWeight.bold,
-              
+
                 fontSize: 18.sp,
               ),
             ),

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/service_category.dart';
 
-
 class ServiceCategoryGridView extends StatelessWidget {
   const ServiceCategoryGridView({super.key});
 
@@ -42,7 +41,7 @@ class ServiceCategoryGridView extends StatelessWidget {
     ];
 
     return Padding(
-      padding: EdgeInsets.symmetric(  vertical: 16.h),
+      padding: EdgeInsets.symmetric(vertical: 16.h),
       child: GridView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
@@ -51,7 +50,7 @@ class ServiceCategoryGridView extends StatelessWidget {
           crossAxisCount: 2,
           crossAxisSpacing: 16.w,
           mainAxisSpacing: 16.h,
-          childAspectRatio: 0.75, 
+          childAspectRatio: 0.75,
         ),
         itemBuilder: (context, index) {
           final service = services[index];

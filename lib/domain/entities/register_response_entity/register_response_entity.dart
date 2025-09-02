@@ -8,12 +8,12 @@ class RegisterResponseEntity {
   RegisterResponseEntity({this.token, this.user, this.message});
 }
 
-class UserEntity {
+class RegisterUserEntity {
   String? firstName;
   String? lastName;
   String? email;
   String? password;
   String? role;  
 
-  UserEntity({this.firstName, this.lastName, this.email, this.password, this.role});
+  RegisterUserEntity({this.firstName, this.lastName, this.email, this.password, this.role});
 }

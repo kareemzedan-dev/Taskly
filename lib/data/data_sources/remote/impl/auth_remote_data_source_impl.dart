@@ -56,7 +56,10 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
 
         if (token != null) {
           await SharedPrefHelper.setString('token', token);
-          debugPrint("Saved Token: $token");
+          await SharedPrefHelper.setString('id', user.id);
+          await SharedPrefHelper.setString('fullName', "$firstName $lastName");
+          await SharedPrefHelper.setString('email', email);
+          await SharedPrefHelper.setString('role', role);
         }
 
         final registerResponse = RegisterResponseDm(
@@ -117,17 +120,12 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
       final user = response.user;
       final session = response.session;
       final token = session?.accessToken;
-
-      debugPrint("Login User: $user");
-      debugPrint("Login Session: $session");
-
       if (user == null || session == null) {
         return Left(
           ServerFailure("Login failed. Please check your email and password."),
         );
       }
 
-      // تحقق من الدور (role)
       final userRole = user.userMetadata!['role'] ?? '';
       if (userRole != role) {
         return Left(
@@ -137,14 +135,18 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
         );
       }
 
-      // حفظ الـ token
       if (token != null) {
         await SharedPrefHelper.setString('token', token);
-        debugPrint("Saved Token: $token");
+        await SharedPrefHelper.setString('id', user.id);
+        await SharedPrefHelper.setString(
+          'fullName',
+          user.userMetadata!['full_name'],
+        );
+        await SharedPrefHelper.setString('email', user.email!);
+        await SharedPrefHelper.setString('role', role);
       }
 
       final userDm = LoginUserDm(email: user.email, password: password);
-      // إنشاء LoginResponseEntity
       final loginResponse = LoginResponseDm(
         user: userDm,
         message: "User Login successfully",
