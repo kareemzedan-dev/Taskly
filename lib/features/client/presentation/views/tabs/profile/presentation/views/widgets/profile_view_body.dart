@@ -15,9 +15,10 @@ class ProfileViewBody extends StatefulWidget {
   State<ProfileViewBody> createState() => _ProfileViewBodyState();
 }
 
-late final UserInfoViewModel _userInfoViewModel;
-
+ 
 class _ProfileViewBodyState extends State<ProfileViewBody> {
+  late final UserInfoViewModel _userInfoViewModel;
+
   @override
   void initState() {
     super.initState();

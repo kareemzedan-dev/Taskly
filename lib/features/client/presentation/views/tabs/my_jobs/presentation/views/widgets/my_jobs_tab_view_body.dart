@@ -8,9 +8,14 @@ class MyJobsTabViewBody extends StatelessWidget {
     return   SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [],
-        ),
+        child: TabBarView(
+                  children: [
+        Center(child: Text("No pending jobs")),
+        Center(child: Text("No jobs in progress")),
+        Center(child: Text("No completed jobs")),
+        Center(child: Text("No cancelled jobs")),
+                  ],
+                ),
       ),
     );
   }
