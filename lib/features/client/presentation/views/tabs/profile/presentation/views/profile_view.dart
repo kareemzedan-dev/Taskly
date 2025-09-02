@@ -28,7 +28,7 @@ class ProfileViewTab extends StatelessWidget {
           ),
         ],
       ),
-
+backgroundColor: Colors.white,
       body: ProfileViewBody(),
     );
   }

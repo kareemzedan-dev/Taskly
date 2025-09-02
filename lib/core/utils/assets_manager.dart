@@ -2,6 +2,14 @@
 class Assets {
   Assets._();
   
+  /// Assets for assetsImagesAccount3166234
+  /// assets/images/account_3166234.png
+  static const String assetsImagesAccount3166234 = "assets/images/account_3166234.png";
+
+  /// Assets for assetsImagesBrushes3450037
+  /// assets/images/brushes_3450037.png
+  static const String assetsImagesBrushes3450037 = "assets/images/brushes_3450037.png";
+
   /// Assets for assetsImagesChat6431892
   /// assets/images/chat_6431892.png
   static const String assetsImagesChat6431892 = "assets/images/chat_6431892.png";
@@ -13,6 +21,10 @@ class Assets {
   /// Assets for assetsImagesCover
   /// assets/images/cover.jpg
   static const String assetsImagesCover = "assets/images/cover.jpg";
+
+  /// Assets for assetsImagesDocument10103871
+  /// assets/images/document_10103871.png
+  static const String assetsImagesDocument10103871 = "assets/images/document_10103871.png";
 
   /// Assets for assetsImagesFreelancer
   /// assets/images/freelancer.png
@@ -26,6 +38,10 @@ class Assets {
   /// assets/images/ic_google.svg
   static const String assetsImagesIcGoogle = "assets/images/ic_google.svg";
 
+  /// Assets for assetsImagesInternet2889312
+  /// assets/images/internet_2889312.png
+  static const String assetsImagesInternet2889312 = "assets/images/internet_2889312.png";
+
   /// Assets for assetsImagesJobBoard18989826
   /// assets/images/job-board_18989826.png
   static const String assetsImagesJobBoard18989826 = "assets/images/job-board_18989826.png";
@@ -37,6 +53,10 @@ class Assets {
   /// Assets for assetsImagesSettings
   /// assets/images/settings.png
   static const String assetsImagesSettings = "assets/images/settings.png";
+
+  /// Assets for assetsImagesTechSupport5109502
+  /// assets/images/tech-support_5109502.png
+  static const String assetsImagesTechSupport5109502 = "assets/images/tech-support_5109502.png";
 
   /// Assets for assetsImagesUser12366536
   /// assets/images/user_12366536.png

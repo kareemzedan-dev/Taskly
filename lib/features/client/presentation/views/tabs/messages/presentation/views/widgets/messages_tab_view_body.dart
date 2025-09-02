@@ -16,13 +16,13 @@ class MessagesTabViewBody extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            SizedBox(height: 30.h),
+            SizedBox(height: 16.h),
 
             CustomSearchTextField(
               hintTexts: ["Search messages...", "Search contacts...", "Search groups..."],
             ),
 
-            SizedBox(height: 80.h),
+            SizedBox(height: 40.h),
 
             hasMessages 
               ? MessagesCard() 

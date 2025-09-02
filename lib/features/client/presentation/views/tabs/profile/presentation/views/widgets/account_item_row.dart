@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/utils/app_text_styles.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
 
@@ -29,11 +30,11 @@ class AccountItemRow extends StatelessWidget {
             elevation: 10,
             shadowColor: Colors.transparent,
             child: Container(
-              height: 40,
-              width: 40,
+              height: 40.h,
+              width: 40.w,
               decoration: BoxDecoration(
                 color: Colors.grey.shade200,
-                borderRadius: BorderRadius.circular(30),
+                borderRadius: BorderRadius.circular(30.r),
               ),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -41,11 +42,13 @@ class AccountItemRow extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 20),
+            SizedBox(width: 20.w),
           Text(
             text,
+
             style: AppTextStyles.bold16.copyWith(
               color: textColor ?? ColorsManager.black.withOpacity(.6),
+              fontSize: 16.sp,
             ),
           ),
           const Spacer(),

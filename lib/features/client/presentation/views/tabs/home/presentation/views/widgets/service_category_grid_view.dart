@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/service_category.dart';
 
+
 class ServiceCategoryGridView extends StatelessWidget {
   const ServiceCategoryGridView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // قائمة بالخدمات
     final List<Map<String, dynamic>> services = [
       {
         "title": "Mind Maps",
@@ -49,9 +49,9 @@ class ServiceCategoryGridView extends StatelessWidget {
         itemCount: services.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          crossAxisSpacing: 12.w,
-          mainAxisSpacing: 12.h,
-          childAspectRatio:.7.h,
+          crossAxisSpacing: 16.w,
+          mainAxisSpacing: 16.h,
+          childAspectRatio: 0.75, 
         ),
         itemBuilder: (context, index) {
           final service = services[index];

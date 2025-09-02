@@ -25,13 +25,13 @@ class ProfileViewBody extends StatelessWidget {
               "Support",
               style: Theme.of(context).textTheme.titleMedium!.copyWith(
                 fontWeight: FontWeight.bold,
-                color: ColorsManager.primary,
-                fontSize: 16.sp,
+  
+                     fontSize: 18.sp,
               ),
             ),
             const SizedBox(height: 10),
             AccountItemRow(
-              image: Assets.assetsImagesChat6431892,
+              image: Assets.assetsImagesTechSupport5109502,
               text: "Technical Support",
               
             ),
@@ -42,18 +42,18 @@ class ProfileViewBody extends StatelessWidget {
               "Account",
               style: Theme.of(context).textTheme.titleMedium!.copyWith(
                 fontWeight: FontWeight.bold,
-                color: ColorsManager.primary,
-                fontSize: 16.sp,
+               
+                      fontSize: 18.sp,
               ),
             ),
             const SizedBox(height: 10),
             AccountItemRow(
-              image: Assets.assetsImagesChat6431892,
+              image: Assets.assetsImagesInternet2889312,
               text: "Language",
             ),
             const SizedBox(height: 10),
             AccountItemRow(
-              image: Assets.assetsImagesChat6431892,
+              image: Assets.assetsImagesBrushes3450037,
               text: "Theme",
             ),
 
@@ -63,18 +63,18 @@ class ProfileViewBody extends StatelessWidget {
               "Settings",
               style: Theme.of(context).textTheme.titleMedium!.copyWith(
                 fontWeight: FontWeight.bold,
-                color: ColorsManager.primary,
-                fontSize: 16.sp,
+              
+                fontSize: 18.sp,
               ),
             ),
             const SizedBox(height: 10),
             AccountItemRow(
-              image: Assets.assetsImagesChat6431892,
+              image: Assets.assetsImagesAccount3166234,
               text: "Privacy Policy",
             ),
             const SizedBox(height: 10),
             AccountItemRow(
-              image: Assets.assetsImagesChat6431892,
+              image: Assets.assetsImagesDocument10103871,
               text: "Terms & Conditions",
             ),
 
