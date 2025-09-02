@@ -10,6 +10,10 @@ class Assets {
   /// assets/images/client.png
   static const String assetsImagesClient = "assets/images/client.png";
 
+  /// Assets for assetsImagesCover
+  /// assets/images/cover.jpg
+  static const String assetsImagesCover = "assets/images/cover.jpg";
+
   /// Assets for assetsImagesFreelancer
   /// assets/images/freelancer.png
   static const String assetsImagesFreelancer = "assets/images/freelancer.png";
@@ -25,6 +29,10 @@ class Assets {
   /// Assets for assetsImagesJobBoard18989826
   /// assets/images/job-board_18989826.png
   static const String assetsImagesJobBoard18989826 = "assets/images/job-board_18989826.png";
+
+  /// Assets for assetsImagesPortraitHappySmileyMan
+  /// assets/images/portrait-happy-smiley-man.jpg
+  static const String assetsImagesPortraitHappySmileyMan = "assets/images/portrait-happy-smiley-man.jpg";
 
   /// Assets for assetsImagesUser12366536
   /// assets/images/user_12366536.png

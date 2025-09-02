@@ -30,7 +30,7 @@ class ClientHomeHeader extends StatelessWidget {
         CircleAvatar(
           backgroundColor: Colors.grey.shade300,
           radius: 30.r,
-          backgroundImage: AssetImage(Assets.assetsImagesClient),
+          backgroundImage: AssetImage(Assets.assetsImagesPortraitHappySmileyMan),
         ),
       ],
     );
