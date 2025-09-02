@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:lottie/lottie.dart';
 import 'package:taskly/core/widgets/custom_search_text_field.dart';
 import 'package:taskly/features/client/presentation/views/tabs/messages/presentation/views/widgets/empty_message_widget.dart';
+import 'package:taskly/features/client/presentation/views/tabs/messages/presentation/views/widgets/messages_card.dart';
 
 class MessagesTabViewBody extends StatelessWidget {
   const MessagesTabViewBody({super.key});
 
   @override
   Widget build(BuildContext context) {
-    bool hasMessages = false; // دي هتتغير بعدين بناءً على الداتا
+    bool hasMessages = true;  
 
     return SingleChildScrollView(
       child: Padding(
@@ -25,7 +25,7 @@ class MessagesTabViewBody extends StatelessWidget {
             SizedBox(height: 80.h),
 
             hasMessages 
-              ? const Text("عرض الرسائل هنا") 
+              ? MessagesCard() 
               : const EmptyMessagesWidget(),
           ],
         ),

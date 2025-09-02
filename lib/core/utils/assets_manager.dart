@@ -34,6 +34,10 @@ class Assets {
   /// assets/images/portrait-happy-smiley-man.jpg
   static const String assetsImagesPortraitHappySmileyMan = "assets/images/portrait-happy-smiley-man.jpg";
 
+  /// Assets for assetsImagesSettings
+  /// assets/images/settings.png
+  static const String assetsImagesSettings = "assets/images/settings.png";
+
   /// Assets for assetsImagesUser12366536
   /// assets/images/user_12366536.png
   static const String assetsImagesUser12366536 = "assets/images/user_12366536.png";

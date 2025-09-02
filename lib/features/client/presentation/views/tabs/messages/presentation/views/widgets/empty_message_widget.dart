@@ -20,7 +20,7 @@ class EmptyMessagesWidget extends StatelessWidget {
         ),
         SizedBox(height: 20.h),
         Text(
-          "No messages found",
+          "No Conversations yet",
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 fontWeight: FontWeight.w600,
                 fontSize: 20.sp,
