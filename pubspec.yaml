@@ -52,6 +52,7 @@ dependencies:
   lottie: ^3.3.1
   dropdown_button2: ^2.3.9
   font_awesome_flutter: ^10.9.1
+  flutter_launcher_icons: ^0.14.4
 
 dev_dependencies:
   flutter_test:
@@ -125,3 +126,9 @@ flutter_assets:
   assets_path: assets/images/
   output_path:  lib/core/utils/
   filename: assets_manager.dart
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/Taskly.png"
+  

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:taskly/core/utils/assets_manager.dart';
 import 'package:taskly/core/widgets/custom_bottom_navigation_bar.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/home_tab_view.dart';
 import 'package:taskly/features/client/presentation/views/tabs/messages/presentation/views/messages_tab_view.dart';
@@ -32,6 +33,8 @@ class _FreelancerHomeView extends State<FreelancerHomeView> {
       backgroundColor: Colors.white,
       body: SafeArea(child: items[currentIndex]),
       bottomNavigationBar: CustomBottomNavigationBar(
+        firstTabName: "Find Work",
+        firstTabicon: Assets.assetsImagesWork,
         currentIndex: currentIndex,
         onTap: (index) {
           setState(() {

@@ -8,10 +8,14 @@ class CustomBottomNavigationBar extends StatelessWidget {
     super.key,
     required this.currentIndex,
     required this.onTap,
+    this.firstTabName,
+    this.firstTabicon,
   });
 
   final int currentIndex;
   final ValueChanged<int> onTap;
+  final String? firstTabName;
+  final String? firstTabicon;
 
   @override
   Widget build(BuildContext context) {
@@ -35,18 +39,18 @@ class CustomBottomNavigationBar extends StatelessWidget {
       items: [
         BottomNavigationBarItem(
           icon: Image.asset(
-            Assets.assetsImagesHome4561540,
+            firstTabicon ?? Assets.assetsImagesHome4561540,
             color: Colors.black.withOpacity(0.5),
             height: 24.h,
             width: 24.w,
           ),
           activeIcon: Image.asset(
-            Assets.assetsImagesHome4561540,
+            firstTabicon ?? Assets.assetsImagesHome4561540,
             color: ColorsManager.primary,
             height: 24.h,
             width: 24.w,
           ),
-          label: 'Home',
+          label: firstTabName ?? 'Home',
         ),
         BottomNavigationBarItem(
           icon: Image.asset(
