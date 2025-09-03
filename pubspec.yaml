@@ -53,6 +53,7 @@ dependencies:
   dropdown_button2: ^2.3.9
   font_awesome_flutter: ^10.9.1
   flutter_launcher_icons: ^0.14.4
+  flutter_spinbox: ^0.13.1
 
 dev_dependencies:
   flutter_test:

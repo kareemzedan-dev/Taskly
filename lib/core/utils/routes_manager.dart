@@ -7,6 +7,7 @@ import 'package:taskly/features/client/presentation/views/tabs/home/presentation
 import 'package:taskly/features/client/presentation/views/tabs/messages/presentation/views/chat_view.dart';
 import 'package:taskly/features/freelancer/presentation/views/freelancer_home_view.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/job_details_view.dart';
+import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/send_offer_view.dart';
 import 'package:taskly/features/splash/presentation/views/splash_view.dart';
 import 'package:taskly/features/welcome/presentation/views/welcome_view.dart';
  
@@ -21,6 +22,7 @@ class RoutesManager {
   static const String serviceOrderView = "serviceOrderView";
   static const String chatView = "chatView";
   static const String jobDetailsView = "jobDetailsView";
+  static const String sendOfferView = "sendOfferView";
   
  
 
@@ -47,6 +49,8 @@ class RoutesManager {
         return MaterialPageRoute(builder: (_) =>   ChatView());
         case jobDetailsView:
         return MaterialPageRoute(builder: (_) =>   JobDetailsView());
+        case sendOfferView:
+        return MaterialPageRoute(builder: (_) =>   SendOfferView());
   
       default:
         return MaterialPageRoute(builder: (_) => const Placeholder());
