@@ -104,9 +104,20 @@ class FreelancerWorkCard extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                CustomActionContainer(title: "View details", icon: Icons.remove_red_eye_outlined,onTap: () => Navigator.pushNamed(context, RoutesManager.jobDetailsView),),
-                CustomActionContainer(title: "Send offers", icon: Icons.send,isOffer: true,),
-                 
+                  CustomActionContainer(
+                    title: "View details",
+                    icon: Icons.remove_red_eye_outlined,
+                    onTap:
+                        () => Navigator.pushNamed(
+                          context,
+                          RoutesManager.jobDetailsView,
+                        ),
+                  ),
+                  CustomActionContainer(
+                    title: "Send offers",
+                    icon: Icons.send,
+                    isOffer: true,
+                  ),
                 ],
               ),
             ],
