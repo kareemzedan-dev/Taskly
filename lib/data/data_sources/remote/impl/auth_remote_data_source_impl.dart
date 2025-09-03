@@ -120,13 +120,14 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
       final user = response.user;
       final session = response.session;
       final token = session?.accessToken;
+
       if (user == null || session == null) {
         return Left(
           ServerFailure("Login failed. Please check your email and password."),
         );
       }
 
-      final userRole = user.userMetadata!['role'] ?? '';
+      final userRole = user.userMetadata?['role'] ?? '';
       if (userRole != role) {
         return Left(
           ServerFailure(
@@ -134,15 +135,15 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
           ),
         );
       }
+      final userData =
+          await supabase.from('users').select().eq('id', user.id).maybeSingle();
 
+      final fullName = userData?['full_name'] ?? '';
       if (token != null) {
-        await SharedPrefHelper.setString('token', token);
+        await SharedPrefHelper.setString('token', token ?? '');
         await SharedPrefHelper.setString('id', user.id);
-        await SharedPrefHelper.setString(
-          'fullName',
-          user.userMetadata!['full_name'],
-        );
-        await SharedPrefHelper.setString('email', user.email!);
+        await SharedPrefHelper.setString('fullName', fullName);
+        await SharedPrefHelper.setString('email', user.email ?? '');
         await SharedPrefHelper.setString('role', role);
       }
 
@@ -152,24 +153,10 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
         message: "User Login successfully",
         token: token,
       );
-      Map<String, dynamic>? success = await supabaseService.sendDataToSupabase(
-        tableName: 'users',
-        data: {
-          'id': user.id,
-          'full_name': user.userMetadata!['full_name'],
-          'email': user.email,
 
-          'role': role,
-        },
-        conflictColumn: 'email',
+      print(
+        'User saved successfully! data saved is ${user.email}${user.userMetadata?['full_name']}',
       );
-      bool successResult = (success != null);
-
-      if (successResult) {
-        print('User saved successfully!');
-      } else {
-        print('Failed to save user.');
-      }
       return Right(loginResponse);
     } on AuthException catch (e) {
       return Left(ServerFailure(e.message));

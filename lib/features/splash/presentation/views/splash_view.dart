@@ -10,15 +10,7 @@ class SplashView extends StatelessWidget {
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              ColorsManager.primary,
-              ColorsManager.secondary,
-              ColorsManager.primary,
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
+        color:  ColorsManager.primary,
         ),
         child: const SplashViewBody(),
       ),
