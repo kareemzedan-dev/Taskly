@@ -12,7 +12,7 @@ class ServiceCategoryGridView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ServicesViewModel servicesViewModel = getIt<ServicesViewModel>();
+ 
 
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 16.h),
