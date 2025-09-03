@@ -81,7 +81,7 @@ class HireMethodCard extends StatelessWidget {
                     ),
                   ),
                 )
-                : SizedBox(height: 22.h),
+                :  Container(),
 
             SizedBox(height: 8.h),
             Text(

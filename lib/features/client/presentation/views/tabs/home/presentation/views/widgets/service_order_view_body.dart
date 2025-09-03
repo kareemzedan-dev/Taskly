@@ -5,8 +5,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:taskly/core/utils/app_text_styles.dart';
 import 'package:taskly/core/utils/assets_manager.dart';
 import 'package:taskly/core/widgets/custom_button.dart';
+import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/attachments_files_section.dart';
+import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/build_text_field_widget.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/custom_drop_down.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/hire_method_card.dart';
+import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/hiring_methods_options.dart';
 import 'package:taskly/features/welcome/presentation/views/widgets/role_box.dart';
 
 class ServiceOrderViewBody extends StatefulWidget {
@@ -29,6 +32,7 @@ class _ServiceOrderViewBodyState extends State<ServiceOrderViewBody> {
   ];
 
   String? selectedCategory;
+  TextEditingController descriptionController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -47,22 +51,8 @@ class _ServiceOrderViewBodyState extends State<ServiceOrderViewBody> {
               ),
             ),
             SizedBox(height: 16.h),
-            TextField(
-              controller: titleController,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.r),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.r),
-                  borderSide: const BorderSide(color: Colors.black),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.r),
-                  borderSide: const BorderSide(color: Colors.grey),
-                ),
-              ),
-            ),
+            buildTextField('', 1, titleController),
+
             SizedBox(height: 28.h),
             Text(
               "Category",
@@ -73,15 +63,23 @@ class _ServiceOrderViewBodyState extends State<ServiceOrderViewBody> {
             ),
             SizedBox(height: 16.h),
 
-            CustomDropdown(
-              value: selectedCategory,
-              items: categories,
-              hint: "Select Category",
-              onChanged: (value) {
-                setState(() {
-                  selectedCategory = value;
-                });
-              },
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10.r),
+                border: Border.all(color: Colors.grey.shade300),
+              ),
+              child: CustomDropdown(
+                value: selectedCategory,
+                items: categories,
+
+                hint: "Select Category",
+                onChanged: (value) {
+                  setState(() {
+                    selectedCategory = value;
+                  });
+                },
+              ),
             ),
             SizedBox(height: 28.h),
             Text(
@@ -106,24 +104,10 @@ class _ServiceOrderViewBodyState extends State<ServiceOrderViewBody> {
                   ),
                 ],
               ),
-              child: TextField(
-                maxLines: 10,
-
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.r),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.r),
-                    borderSide: const BorderSide(color: Colors.black),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.r),
-                    borderSide: const BorderSide(color: Colors.grey),
-                  ),
-                  hintText: "Write your description here",
-                  hintStyle: TextStyle(fontSize: 14.sp, color: Colors.grey),
-                ),
+              child: buildTextField(
+                "Write your description here",
+                10,
+                descriptionController,
               ),
             ),
             SizedBox(height: 28.h),
@@ -135,29 +119,7 @@ class _ServiceOrderViewBodyState extends State<ServiceOrderViewBody> {
               ),
             ),
             SizedBox(height: 16.h),
-            Row(
-              children: [
-                Icon(Icons.attach_file, color: Colors.grey),
-                SizedBox(width: 2.w),
-                Expanded(
-                  child: Container(
-                    height: 50.h,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(30.r),
-                    ),
-                    child: Center(
-                      child: Text(
-                        "you can attach files or images here",
-                        style: AppTextStyles.bold16.copyWith(
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            AttachmentsFilesSection(),
             SizedBox(height: 28.h),
             Text(
               "Hiring Method",
@@ -167,29 +129,29 @@ class _ServiceOrderViewBodyState extends State<ServiceOrderViewBody> {
               ),
             ),
             SizedBox(height: 16.h),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                HireMethodCard(
-                  icon: Icons.language,
-                  title: "Public Posting",
-                  subtitle: "Post your request publicly and recive multiple proposals",
-                  isSelected: false,
-                  onTap: () {},
-                ),
-                      HireMethodCard(
-                  icon: FontAwesomeIcons.bullseye,
-                  title: "Hire Specific Freelancer",
-                  subtitle: "Send your request directly to a specific freelancer as a private offer",
-                  isSelected: false,
-                  onTap: () {},
-                  badge: "Private",
-                ),
-              ],
+
+            HiringMethodsOptions(),
+            SizedBox(height: 16.h),
+            CustomBotton(
+              title: "Submit",
+              ontap: () {
+                if (selectedHireMethodIndex == -1) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("Please select a hiring method"),
+                    ),
+                  );
+                  return;
+                }
+
+                if (selectedHireMethodIndex == 0) {
+                  print("Public Posting selected");
+                } else {
+                  print("Hire Specific Freelancer selected");
+                }
+              },
             ),
-                        SizedBox(height: 16.h),
-                        CustomBotton(title: "Submit", ontap: () {},),
-                                    SizedBox(height: 16.h),
+            SizedBox(height: 16.h),
           ],
         ),
       ),
