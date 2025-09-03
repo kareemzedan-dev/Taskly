@@ -1,33 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/my_jobs_tab_view_body.dart';
+import 'package:taskly/core/widgets/custom_tab_bar.dart';
+import 'package:taskly/features/freelancer/presentation/views/tabs/my_jobs/presentation/views/widgets/my_jobs_tab_view_body.dart';
 
 class FreelancerMyJobsTabView extends StatelessWidget {
   const FreelancerMyJobsTabView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-    appBar: AppBar(
-  backgroundColor: Colors.white,
-  elevation: 0, 
-  shape: Border(
-    bottom: BorderSide(
-      color: Colors.grey.shade300,
-      width: 2,  
-    ),
-  ),
-  title: Text(
-    'Manage Orders',
-    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-          fontWeight: FontWeight.w700,
-          fontSize: 20.sp,
+    return DefaultTabController(
+      length: 4,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          shape: Border(
+            bottom: BorderSide(color: Colors.grey.shade300, width: 2),
+          ),
+          title: Text(
+            'Manage Orders',
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 20.sp,
+                ),
+          ),
+          bottom: const CustomTabBar(
+            tabs: ['Pending', 'Accepted', 'Completed', 'Rejected'],
+          ),
         ),
-  ),
-),
-
-      backgroundColor: Colors.white,
-      body: SafeArea(child: MyJobsTabViewBody()),
+        backgroundColor: Colors.white,
+        body: const MyJobsTabViewBody(),
+      ),
     );
   }
 }

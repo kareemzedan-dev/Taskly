@@ -22,7 +22,7 @@ class _FreelancerHomeView extends State<FreelancerHomeView> {
 
   List<Widget> items = [
    FreelancerHomeTabView(),
-    Container(color: Colors.amber,),
+  FreelancerMyJobsTabView(),
     Container(color: Colors.black,),
     Container(color: Colors.yellow,),
  
