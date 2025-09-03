@@ -3,8 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/utils/assets_manager.dart';
 import 'package:taskly/features/client/domain/entities/home/user_info_entity.dart';
 
-class ClientHomeHeader extends StatelessWidget {
-    ClientHomeHeader({super.key,required this.fullName});
+class UserInfoHomeHeader extends StatelessWidget {
+    UserInfoHomeHeader({super.key,required this.fullName});
   String? fullName;
 
   @override

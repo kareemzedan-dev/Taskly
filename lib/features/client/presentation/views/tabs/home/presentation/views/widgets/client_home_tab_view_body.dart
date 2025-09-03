@@ -51,7 +51,7 @@ class _ClientHomeTabViewBodyState extends State<ClientHomeTabViewBody> {
                   if (state is UserInfoViewModelLoading) {
                     return const CircularProgressIndicator();
                   } else if (state is UserInfoViewModelSuccess) {
-                    return ClientHomeHeader(
+                    return UserInfoHomeHeader(
                       fullName: state.userInfoEntity.fullName,
                     );
                   } else if (state is UserInfoViewModelError) {

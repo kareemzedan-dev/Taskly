@@ -5,6 +5,7 @@ import 'package:taskly/features/client/presentation/views/tabs/home/presentation
 import 'package:taskly/features/client/presentation/views/tabs/messages/presentation/views/messages_tab_view.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/my_jobs_tab_view.dart';
 import 'package:taskly/features/client/presentation/views/tabs/profile/presentation/views/profile_view.dart';
+import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/find_work_tab_view.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/messages/presentation/views/messages_tab_view.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/my_jobs/presentation/views/my_jobs_tab_view.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/profile/presentation/views/profile_view.dart';
@@ -20,7 +21,7 @@ class _FreelancerHomeView extends State<FreelancerHomeView> {
   int currentIndex = 0;
 
   List<Widget> items = [
-    Container(color: Colors.red,),
+   FreelancerHomeTabView(),
     Container(color: Colors.amber,),
     Container(color: Colors.black,),
     Container(color: Colors.yellow,),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/client_home_tab_view_body.dart';
+import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/freelancer_find_work_tab_view_body.dart';
 
 class FreelancerHomeTabView extends StatelessWidget {
   const FreelancerHomeTabView({super.key});
@@ -8,7 +9,7 @@ class FreelancerHomeTabView extends StatelessWidget {
   Widget build(BuildContext context) {
     return   Scaffold(
       backgroundColor: Colors.white,
-      body: ClientHomeTabViewBody(),
+      body: FreelancerHomeTabViewBody(),
     );
   }
 }
