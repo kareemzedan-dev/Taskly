@@ -6,10 +6,12 @@ import 'package:taskly/core/widgets/custom_search_text_field.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/client_home_header.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/service_category.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/service_category_grid_view.dart';
+import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/freelancer_work_card.dart';
+import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/search_bar_with_favorite.dart';
 
 class FreelancerHomeTabViewBody extends StatelessWidget {
-  const FreelancerHomeTabViewBody({super.key});
-
+  FreelancerHomeTabViewBody({super.key});
+  final List<String> searchHintTexts = ["Search for jobs..."];
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -20,6 +22,8 @@ class FreelancerHomeTabViewBody extends StatelessWidget {
           child: Column(
             children: [
               UserInfoHomeHeader(fullName: "Kareem Zedan"),
+              SizedBox(height: 20.h),
+           SearchBarWithFavorite(hintTexts: searchHintTexts,),
               SizedBox(height: 30.h),
               TabBar(
                 labelColor: ColorsManager.primary,
@@ -39,8 +43,10 @@ class FreelancerHomeTabViewBody extends StatelessWidget {
                   Tab(text: "Private Requests"),
                 ],
               ),
-              SizedBox(height: 6.h,),
+              SizedBox(height: 6.h),
               Divider(color: Colors.grey.shade300, thickness: 1.w),
+              SizedBox(height: 16.h),
+              FreelancerWorkCard(),
             ],
           ),
         ),
