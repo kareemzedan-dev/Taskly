@@ -9,7 +9,7 @@ class HireMethodCard extends StatelessWidget {
   final String subtitle;
   final bool isSelected;
   final VoidCallback onTap;
-  final String? badge;  
+  final String? badge;
 
   const HireMethodCard({
     super.key,
@@ -27,6 +27,7 @@ class HireMethodCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: 160.w,
+      
 
         padding: EdgeInsets.all(12.w),
         decoration: BoxDecoration(
@@ -86,7 +87,7 @@ class HireMethodCard extends StatelessWidget {
             Text(
               title,
               textAlign: TextAlign.center,
-              maxLines: 1,
+
               overflow: TextOverflow.visible,
               style: AppTheme.lightTheme.textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.bold,
@@ -97,7 +98,7 @@ class HireMethodCard extends StatelessWidget {
             SizedBox(height: 6.h),
             Text(
               subtitle,
-              maxLines: 2,
+
               textAlign: TextAlign.center,
               style: AppTheme.lightTheme.textTheme.bodySmall?.copyWith(
                 fontSize: 12.sp,

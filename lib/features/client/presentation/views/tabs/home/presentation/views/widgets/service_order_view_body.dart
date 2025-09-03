@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:taskly/core/utils/app_text_styles.dart';
 import 'package:taskly/core/utils/assets_manager.dart';
+import 'package:taskly/core/widgets/custom_button.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/custom_drop_down.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/hire_method_card.dart';
 import 'package:taskly/features/welcome/presentation/views/widgets/role_box.dart';
@@ -186,6 +187,9 @@ class _ServiceOrderViewBodyState extends State<ServiceOrderViewBody> {
                 ),
               ],
             ),
+                        SizedBox(height: 16.h),
+                        CustomBotton(title: "Submit", ontap: () {},),
+                                    SizedBox(height: 16.h),
           ],
         ),
       ),

@@ -17,13 +17,10 @@ class MessagesTabView extends StatelessWidget {
             fontSize: 20.sp,
           ),
         ),
-          elevation: 0, 
-  shape: Border(
-    bottom: BorderSide(
-      color: Colors.grey.shade300,
-      width: 2,  
-    ),
-  ),
+        elevation: 0,
+        shape: Border(
+          bottom: BorderSide(color: Colors.grey.shade300, width: 2),
+        ),
         centerTitle: true,
         backgroundColor: Colors.white,
       ),

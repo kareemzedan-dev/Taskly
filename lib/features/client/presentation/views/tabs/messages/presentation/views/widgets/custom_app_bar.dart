@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/utils/assets_manager.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
+import 'package:taskly/features/client/presentation/views/tabs/messages/presentation/views/widgets/custom_states_container.dart';
 
 AppBar customAppBar(BuildContext context) {
     return AppBar(
@@ -68,30 +69,7 @@ AppBar customAppBar(BuildContext context) {
                         ),
                       ),
                       SizedBox(width: 8.w),
-                      Container(
-                        height: 18.h,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(4.r),
-                          color: ColorsManager.secondary,
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8.0,
-                          ),
-                          child: Center(
-                            child: Text(
-                              "In Progress",
-                              style: Theme.of(
-                                context,
-                              ).textTheme.bodyLarge?.copyWith(
-                                fontWeight: FontWeight.w400,
-                                fontSize: 12.sp,
-                                    color: ColorsManager.primary,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
+                      CustomStatesContainer()
                     ],
                   ),
                 ],

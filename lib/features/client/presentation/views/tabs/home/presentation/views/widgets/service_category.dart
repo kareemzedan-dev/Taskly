@@ -90,7 +90,6 @@ class ServiceCategory extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // العنوان
                     Text(
                       serviceEntity.title,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(

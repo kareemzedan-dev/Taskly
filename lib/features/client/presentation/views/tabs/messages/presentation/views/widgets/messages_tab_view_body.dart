@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:taskly/core/utils/routes_manager.dart';
 import 'package:taskly/core/widgets/custom_search_text_field.dart';
 import 'package:taskly/features/client/presentation/views/tabs/messages/presentation/views/widgets/empty_message_widget.dart';
 import 'package:taskly/features/client/presentation/views/tabs/messages/presentation/views/widgets/messages_card.dart';
@@ -25,7 +26,7 @@ class MessagesTabViewBody extends StatelessWidget {
             SizedBox(height: 40.h),
 
             hasMessages 
-              ? MessagesCard() 
+              ? MessagesCard(onTap: () => Navigator.pushNamed(context, RoutesManager.chatView),) 
               : const EmptyMessagesWidget(),
           ],
         ),

@@ -25,7 +25,7 @@ class RoleBox extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: 150.w,
-        padding: EdgeInsets.all(8.w),
+     
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16.r),

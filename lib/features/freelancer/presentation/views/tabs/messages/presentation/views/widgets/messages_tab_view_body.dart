@@ -24,9 +24,9 @@ class MessagesTabViewBody extends StatelessWidget {
 
             SizedBox(height: 40.h),
 
-            hasMessages 
-              ? MessagesCard() 
-              : const EmptyMessagesWidget(),
+            // hasMessages 
+            //   ? MessagesCard() 
+            //   : const EmptyMessagesWidget(),
           ],
         ),
       ),
