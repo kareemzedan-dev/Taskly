@@ -30,6 +30,8 @@ import '../../features/client/domain/use_cases/home/home_use_case.dart'
     as _i213;
 import '../../features/client/presentation/cubit/user_view_model/user_info_view_model.dart'
     as _i907;
+import '../../features/client/presentation/views/tabs/home/presentation/cubit/order_view_model/order_view_model.dart'
+    as _i791;
 import '../../features/client/presentation/views/tabs/home/presentation/cubit/services_view_model/services_view_model.dart'
     as _i313;
 import '../services/supabase_service.dart' as _i374;
@@ -68,6 +70,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i907.UserInfoViewModel>(
       () => _i907.UserInfoViewModel(gh<_i213.HomeUseCase>()),
+    );
+    gh.factory<_i791.OrderViewModel>(
+      () => _i791.OrderViewModel(gh<_i213.HomeUseCase>()),
     );
     gh.factory<_i313.ServicesViewModel>(
       () => _i313.ServicesViewModel(gh<_i213.HomeUseCase>()),

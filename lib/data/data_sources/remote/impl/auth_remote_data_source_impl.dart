@@ -78,6 +78,37 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
               },
               conflictColumn: 'email',
             );
+        if (role == "client") {
+          final clientInsert = await supabaseService.sendDataToSupabase(
+            tableName: 'clients',
+            data: {
+              'id': user.id,
+              'billing_info': '',
+              'balance': 0,
+              'created_at': DateTime.now().toIso8601String(),
+            },
+            conflictColumn: 'id',
+          );
+          if (clientInsert == null) {
+            print('Failed to insert client');
+          } else {
+            print('Client inserted successfully');
+          }
+        }
+
+        if (role == "freelancer") {
+          final freelancerInsert = await supabaseService.sendDataToSupabase(
+            tableName: 'freelancers',
+            data: {'id': user.id, 'created_at': DateTime.now()},
+            conflictColumn: 'id',
+          );
+          if (freelancerInsert == null) {
+            print('Failed to insert freelancer');
+          } else {
+            print('Freelancer inserted successfully');
+          }
+        }
+
         bool successResult = (success != null);
 
         if (successResult) {
@@ -153,6 +184,36 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
         message: "User Login successfully",
         token: token,
       );
+      if (role == "client") {
+        final clientInsert = await supabaseService.sendDataToSupabase(
+          tableName: 'clients',
+          data: {
+            'id': user.id,
+            'billing_info': '',
+            'balance': 0,
+            'created_at': DateTime.now().toIso8601String(),
+          },
+          conflictColumn: 'id',
+        );
+        if (clientInsert == null) {
+          print('Failed to insert client');
+        } else {
+          print('Client inserted successfully');
+        }
+      }
+
+      if (role == "freelancer") {
+        final freelancerInsert = await supabaseService.sendDataToSupabase(
+          tableName: 'freelancers',
+          data: {'id': user.id, 'created_at': DateTime.now()},
+          conflictColumn: 'id',
+        );
+        if (freelancerInsert == null) {
+          print('Failed to insert freelancer');
+        } else {
+          print('Freelancer inserted successfully');
+        }
+      }
 
       print(
         'User saved successfully! data saved is ${user.email}${user.userMetadata?['full_name']}',
