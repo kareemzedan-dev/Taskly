@@ -2,12 +2,12 @@ import 'dart:io';
 
 import 'package:injectable/injectable.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:uuid/uuid.dart';
 
 @singleton
 class SupabaseService {
   final supabase = Supabase.instance.client;
 
-  // Insert or Update
   Future<Map<String, dynamic>?> sendDataToSupabase({
     required String tableName,
     required Map<String, dynamic> data,
@@ -31,12 +31,11 @@ class SupabaseService {
   // Get Data
   Future<List<Map<String, dynamic>>?> getDataFromSupabase({
     required String tableName,
-    Map<String, dynamic>? filters, // optional filters
+    Map<String, dynamic>? filters, 
   }) async {
     try {
       var query = supabase.from(tableName).select();
 
-      // لو عايز تعمل فلترة
       if (filters != null) {
         filters.forEach((key, value) {
           query = query.eq(key, value);
@@ -53,14 +52,18 @@ class SupabaseService {
     }
   }
 
-  Future<String> uploadFile(File file) async {
-  final fileName = file.path.split('/').last;
+Future<String> uploadFile(File file) async {
+  final uuid = Uuid();
+  final fileName = '${uuid.v4()}_${file.path.split('/').last}'; // اسم فريد
+
+  // رفع الملف
   final response = await Supabase.instance.client.storage
-      .from('orders-attachments')
+      .from('order-attachments')
       .upload(fileName, file);
 
+  // الحصول على الرابط العام
   final publicUrl = Supabase.instance.client.storage
-      .from('orders-attachments')
+      .from('order-attachments')
       .getPublicUrl(fileName);
 
   return publicUrl;

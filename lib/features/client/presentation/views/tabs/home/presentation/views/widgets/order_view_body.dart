@@ -173,24 +173,27 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                   ),
                 ),
                 SizedBox(height: 16.h),
-                AttachmentsFilesSection(
-                  onFilesSelected: (files) async {
-                    final uploadedAttachments = await Future.wait(
-                      files.map((file) async {
-                        final url = await supabaseService.uploadFile(file);
-                        return Attachment(
-                          type: file.path.split('/').last,
-                          url: url,
-                        );
-                      }),
+                BlocConsumer<OrderViewModel, OrderViewModelStates>(
+                  listener: (context, state) {
+                    if (state is OrderViewModelStatesAttachmentsSuccess) {
+                      orderViewModel.attachments = state.attachments;
+                    } else if (state is OrderViewModelStatesAttachmentsError) {
+                      ScaffoldMessenger.of(
+                        context,
+                      ).showSnackBar(SnackBar(content: Text(state.message)));
+                    }
+                  },
+                  builder: (context, state) {
+                    if (state is OrderViewModelStatesAttachmentsLoading) {
+                      return const CircularProgressIndicator();
+                    }
+                    return AttachmentsFilesSection(
+                      onFilesSelected: (files) async {
+                        context.read<OrderViewModel>().uploadAttachments(files);
+                      },
                     );
-
-                    setState(() {
-                      orderViewModel.attachments = uploadedAttachments;
-                    });
                   },
                 ),
-
                 SizedBox(height: 28.h),
                 Text(
                   "Hiring Method",

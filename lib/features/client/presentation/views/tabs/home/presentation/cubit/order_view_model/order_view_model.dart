@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:either_dart/either.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:taskly/core/helper/failures.dart';
 import 'package:taskly/core/helper/shared_preferences.dart';
+import 'package:taskly/core/services/supabase_service.dart';
 import 'package:taskly/features/client/domain/entities/home/order_entity.dart';
 import 'package:taskly/features/client/domain/use_cases/home/home_use_case.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/cubit/order_view_model/order_view_model_states.dart';
@@ -32,6 +35,28 @@ class OrderViewModel extends Cubit<OrderViewModelStates> {
   String? selectedCategory;
   TextEditingController descriptionController = TextEditingController();
   final clientId = SharedPrefHelper.getString("id");
+  SupabaseService _supabaseService = SupabaseService();
+Future<List<Attachment>> uploadAttachments(List<File> files) async {
+  emit(OrderViewModelStatesAttachmentsLoading());
+
+  try {
+    final uploaded = await Future.wait(
+      files.map((file) async {
+        final url = await _supabaseService.uploadFile(file);  
+        return Attachment(type: file.path.split('/').last, url: url);
+      }),
+    );
+
+    attachments = uploaded;
+    emit(OrderViewModelStatesAttachmentsSuccess(uploaded));
+    return uploaded;
+  } catch (e) {
+    emit(OrderViewModelStatesAttachmentsError(e.toString()));
+    return [];
+  }
+}
+
+
   Future<Either<Failures, OrderEntity>> placeOrder(
     OrderEntity orderEntity,
   ) async {
@@ -65,5 +90,4 @@ class OrderViewModel extends Cubit<OrderViewModelStates> {
         return null;
     }
   }
-  
 }

@@ -17,3 +17,15 @@ class OrderViewModelStatesSuccess extends OrderViewModelStates {
 
   OrderViewModelStatesSuccess(this.orderEntity);
 }
+
+class OrderViewModelStatesAttachmentsLoading extends OrderViewModelStates {}
+
+class OrderViewModelStatesAttachmentsSuccess extends OrderViewModelStates {
+  final List<Attachment> attachments;
+  OrderViewModelStatesAttachmentsSuccess(this.attachments);
+}
+
+class OrderViewModelStatesAttachmentsError extends OrderViewModelStates {
+  final String message;
+  OrderViewModelStatesAttachmentsError(this.message);
+}
