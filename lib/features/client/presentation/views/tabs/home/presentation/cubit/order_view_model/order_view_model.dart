@@ -17,10 +17,18 @@ class OrderViewModel extends Cubit<OrderViewModelStates> {
   HomeUseCase homeUseCase;
   OrderViewModel(this.homeUseCase) : super(OrderViewModelStatesInitial());
   final List<String> categories = [
-    "Design",
-    "Development",
-    "Marketing",
-    "Writing",
+    "Academic Sources",
+    "Scientific Reports",
+    "Mind Maps",
+    "Translation",
+    "Summarization",
+    "Scientific Projects",
+    "Presentations",
+    "SPSS Analysis",
+    "Proofreading",
+    "Programming",
+    "Tutorials",
+    "Other",
   ];
   TextEditingController titleController = TextEditingController(
     text: "Mind Map",
@@ -36,26 +44,25 @@ class OrderViewModel extends Cubit<OrderViewModelStates> {
   TextEditingController descriptionController = TextEditingController();
   final clientId = SharedPrefHelper.getString("id");
   SupabaseService _supabaseService = SupabaseService();
-Future<List<Attachment>> uploadAttachments(List<File> files) async {
-  emit(OrderViewModelStatesAttachmentsLoading());
+  Future<List<Attachment>> uploadAttachments(List<File> files) async {
+    emit(OrderViewModelStatesAttachmentsLoading());
 
-  try {
-    final uploaded = await Future.wait(
-      files.map((file) async {
-        final url = await _supabaseService.uploadFile(file);  
-        return Attachment(type: file.path.split('/').last, url: url);
-      }),
-    );
+    try {
+      final uploaded = await Future.wait(
+        files.map((file) async {
+          final url = await _supabaseService.uploadFile(file);
+          return Attachment(type: file.path.split('/').last, url: url);
+        }),
+      );
 
-    attachments = uploaded;
-    emit(OrderViewModelStatesAttachmentsSuccess(uploaded));
-    return uploaded;
-  } catch (e) {
-    emit(OrderViewModelStatesAttachmentsError(e.toString()));
-    return [];
+      attachments = uploaded;
+      emit(OrderViewModelStatesAttachmentsSuccess(uploaded));
+      return uploaded;
+    } catch (e) {
+      emit(OrderViewModelStatesAttachmentsError(e.toString()));
+      return [];
+    }
   }
-}
-
 
   Future<Either<Failures, OrderEntity>> placeOrder(
     OrderEntity orderEntity,

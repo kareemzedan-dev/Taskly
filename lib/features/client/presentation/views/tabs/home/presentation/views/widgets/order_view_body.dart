@@ -8,6 +8,7 @@ import 'package:taskly/core/services/supabase_service.dart';
 
 import 'package:taskly/core/utils/colors_manger.dart';
 import 'package:taskly/core/widgets/custom_button.dart';
+import 'package:taskly/core/widgets/dismissible_error_card.dart';
 import 'package:taskly/features/client/domain/entities/home/order_entity.dart';
 import 'package:taskly/features/client/presentation/views/client_home_view.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/cubit/order_view_model/order_view_model.dart';
@@ -26,6 +27,7 @@ class OrderViewBody extends StatefulWidget {
 
 OrderViewModel orderViewModel = getIt<OrderViewModel>();
 SupabaseService supabaseService = SupabaseService();
+String errorMessage = "";
 
 class _OrderViewBodyState extends State<OrderViewBody> {
   @override
@@ -45,10 +47,7 @@ class _OrderViewBodyState extends State<OrderViewBody> {
           );
         }
         if (state is OrderViewModelStatesError) {
-          print("Order Error: ${state.message}");
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(state.message)));
+          DismissibleErrorCard(message: state.message, onDismiss: () {});
         }
       },
 
@@ -206,47 +205,56 @@ class _OrderViewBodyState extends State<OrderViewBody> {
 
                 HiringMethodsOptions(),
                 SizedBox(height: 16.h),
+
                 CustomBotton(
                   title: "Submit",
                   ontap: () {
                     if (selectedHireMethodIndex == -1) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Please select a hiring method"),
-                        ),
+                      showTemporaryError(
+                        context,
+                        "Please select hiring method",
                       );
                       return;
                     }
 
                     if (selectedHireMethodIndex == 0) {
-                      context.read<OrderViewModel>().placeOrder(
-                        OrderEntity(
-                          id: orderViewModel.orderId,
-                          title: orderViewModel.titleController.text,
-                          Category: orderViewModel.selectedCategory,
-                          description:
-                              orderViewModel.descriptionController.text,
-                          attachments: orderViewModel.attachments,
+                      if (orderViewModel.titleController.text.isNotEmpty &&
+                          orderViewModel
+                              .descriptionController
+                              .text
+                              .isNotEmpty &&
+                          orderViewModel.selectedCategory!.isNotEmpty &&
+                          orderViewModel.attachments.isNotEmpty) {
+                        context.read<OrderViewModel>().placeOrder(
+                          OrderEntity(
+                            id: orderViewModel.orderId,
+                            title: orderViewModel.titleController.text,
+                            Category: orderViewModel.selectedCategory,
+                            description:
+                                orderViewModel.descriptionController.text,
+                            attachments: orderViewModel.attachments,
 
-                          freelancerId: null,
-                          clientId: orderViewModel.clientId!,
-                          serviceType: ServiceType.public,
-                          budget: 0,
-                          status: OrderStatus.pending,
-                          deadline: orderViewModel.calculateDeadline(
-                            orderViewModel.timeController.text,
-                            orderViewModel.selectedTimeUnit,
+                            freelancerId: null,
+                            clientId: orderViewModel.clientId!,
+                            serviceType: ServiceType.public,
+                            budget: 0,
+                            status: OrderStatus.pending,
+                            deadline: orderViewModel.calculateDeadline(
+                              orderViewModel.timeController.text,
+                              orderViewModel.selectedTimeUnit,
+                            ),
+
+                            createdAt: DateTime.now(),
+                            updatedAt: DateTime.now(),
                           ),
-
-                          createdAt: DateTime.now(),
-                          updatedAt: DateTime.now(),
-                        ),
-                      );
+                        );
+                      }
                     } else {
                       print("Hire Specific Freelancer selected");
                     }
                   },
                 ),
+
                 SizedBox(height: 16.h),
               ],
             ),

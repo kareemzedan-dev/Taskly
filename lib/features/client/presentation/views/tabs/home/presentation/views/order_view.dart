@@ -13,6 +13,7 @@ class OrderView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        surfaceTintColor: Colors.white,
         backgroundColor: Colors.white,
         leading: GestureDetector(
           onTap: () => Navigator.pop(context),
