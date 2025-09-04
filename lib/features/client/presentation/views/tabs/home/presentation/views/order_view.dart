@@ -4,10 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/di/di.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/cubit/order_view_model/order_view_model.dart';
-import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/service_order_view_body.dart';
+import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/order_view_body.dart';
 
-class ServiceOrderView extends StatelessWidget {
-  const ServiceOrderView({super.key});
+class OrderView extends StatelessWidget {
+  const OrderView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class ServiceOrderView extends StatelessWidget {
       backgroundColor: Colors.white,
       body: BlocProvider(
         create: (context) => getIt<OrderViewModel>(),
-        child: ServiceOrderViewBody(),
+        child: OrderViewBody(),
       ),
     );
   }

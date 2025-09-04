@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:injectable/injectable.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -50,4 +52,18 @@ class SupabaseService {
       return null;
     }
   }
+
+  Future<String> uploadFile(File file) async {
+  final fileName = file.path.split('/').last;
+  final response = await Supabase.instance.client.storage
+      .from('orders-attachments')
+      .upload(fileName, file);
+
+  final publicUrl = Supabase.instance.client.storage
+      .from('orders-attachments')
+      .getPublicUrl(fileName);
+
+  return publicUrl;
+}
+
 }

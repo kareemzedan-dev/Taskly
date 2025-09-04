@@ -1,14 +1,11 @@
 import 'dart:io';
 
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:taskly/core/helper/calculate_deadline.dart';
-import 'package:taskly/core/helper/shared_preferences.dart';
-import 'package:taskly/core/utils/app_text_styles.dart';
-import 'package:taskly/core/utils/assets_manager.dart';
+import 'package:taskly/core/di/di.dart';
+import 'package:taskly/core/services/supabase_service.dart';
+
 import 'package:taskly/core/utils/colors_manger.dart';
 import 'package:taskly/core/widgets/custom_button.dart';
 import 'package:taskly/features/client/domain/entities/home/order_entity.dart';
@@ -18,41 +15,19 @@ import 'package:taskly/features/client/presentation/views/tabs/home/presentation
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/attachments_files_section.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/build_text_field_widget.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/custom_drop_down.dart';
-import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/hire_method_card.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/hiring_methods_options.dart';
-import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/input_with_drop_down.dart';
-import 'package:taskly/features/welcome/presentation/views/widgets/role_box.dart';
-import 'package:uuid/uuid.dart';
 
-class ServiceOrderViewBody extends StatefulWidget {
-  const ServiceOrderViewBody({super.key});
+class OrderViewBody extends StatefulWidget {
+  const OrderViewBody({super.key});
 
   @override
-  State<ServiceOrderViewBody> createState() => _ServiceOrderViewBodyState();
+  State<OrderViewBody> createState() => _OrderViewBodyState();
 }
 
-class _ServiceOrderViewBodyState extends State<ServiceOrderViewBody> {
-  TextEditingController titleController = TextEditingController(
-    text: "Mind Map",
-  );
+OrderViewModel orderViewModel = getIt<OrderViewModel>();
+SupabaseService supabaseService = SupabaseService();
 
-  final List<String> categories = [
-    "Design",
-    "Development",
-    "Marketing",
-    "Writing",
-  ];
-  List<Attachment> attachments = [];
-
-  TextEditingController timeController = TextEditingController();
-  final orderId = Uuid().v4();
-
-  String selectedTimeUnit = "Days";
-  final List<String> timeUnits = ["Hours", "Days", "Weeks"];
-  String? selectedCategory;
-  TextEditingController descriptionController = TextEditingController();
-  final clientId = SharedPrefHelper.getString("id");
-
+class _OrderViewBodyState extends State<OrderViewBody> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<OrderViewModel, OrderViewModelStates>(
@@ -70,7 +45,7 @@ class _ServiceOrderViewBodyState extends State<ServiceOrderViewBody> {
           );
         }
         if (state is OrderViewModelStatesError) {
-              print("Order Error: ${state.message}");
+          print("Order Error: ${state.message}");
           ScaffoldMessenger.of(
             context,
           ).showSnackBar(SnackBar(content: Text(state.message)));
@@ -93,7 +68,7 @@ class _ServiceOrderViewBodyState extends State<ServiceOrderViewBody> {
                   ),
                 ),
                 SizedBox(height: 16.h),
-                buildTextField('', 1, titleController),
+                buildTextField('', 1, orderViewModel.titleController),
 
                 SizedBox(height: 28.h),
                 Text(
@@ -112,13 +87,13 @@ class _ServiceOrderViewBodyState extends State<ServiceOrderViewBody> {
                     border: Border.all(color: Colors.grey.shade300),
                   ),
                   child: CustomDropdown(
-                    value: selectedCategory,
-                    items: categories,
+                    value: orderViewModel.selectedCategory,
+                    items: orderViewModel.categories,
 
                     hint: "Select Category",
                     onChanged: (value) {
                       setState(() {
-                        selectedCategory = value;
+                        orderViewModel.selectedCategory = value;
                       });
                     },
                   ),
@@ -149,7 +124,7 @@ class _ServiceOrderViewBodyState extends State<ServiceOrderViewBody> {
                   child: buildTextField(
                     "Write your description here",
                     10,
-                    descriptionController,
+                    orderViewModel.descriptionController,
                   ),
                 ),
                 SizedBox(height: 28.h),
@@ -167,21 +142,24 @@ class _ServiceOrderViewBodyState extends State<ServiceOrderViewBody> {
                       child: TextField(
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(hintText: "Enter time"),
-                        onChanged: (val) => timeController.text = val,
+                        onChanged:
+                            (val) => orderViewModel.timeController.text = val,
                       ),
                     ),
                     SizedBox(width: 8),
                     DropdownButton<String>(
-                      value: selectedTimeUnit,
+                      value: orderViewModel.selectedTimeUnit,
                       items:
-                          timeUnits
+                          orderViewModel.timeUnits
                               .map(
                                 (e) =>
                                     DropdownMenuItem(value: e, child: Text(e)),
                               )
                               .toList(),
                       onChanged:
-                          (val) => setState(() => selectedTimeUnit = val!),
+                          (val) => setState(
+                            () => orderViewModel.selectedTimeUnit = val!,
+                          ),
                     ),
                   ],
                 ),
@@ -196,20 +174,23 @@ class _ServiceOrderViewBodyState extends State<ServiceOrderViewBody> {
                 ),
                 SizedBox(height: 16.h),
                 AttachmentsFilesSection(
-                  onFilesSelected: (files) {
+                  onFilesSelected: (files) async {
+                    final uploadedAttachments = await Future.wait(
+                      files.map((file) async {
+                        final url = await supabaseService.uploadFile(file);
+                        return Attachment(
+                          type: file.path.split('/').last,
+                          url: url,
+                        );
+                      }),
+                    );
+
                     setState(() {
-                      attachments =
-                          files
-                              .map(
-                                (file) => Attachment(
-                                  type: file.path.split('/').last,
-                                  url: file.path,
-                                ),
-                              )
-                              .toList();
+                      orderViewModel.attachments = uploadedAttachments;
                     });
                   },
                 ),
+
                 SizedBox(height: 28.h),
                 Text(
                   "Hiring Method",
@@ -237,20 +218,21 @@ class _ServiceOrderViewBodyState extends State<ServiceOrderViewBody> {
                     if (selectedHireMethodIndex == 0) {
                       context.read<OrderViewModel>().placeOrder(
                         OrderEntity(
-                          id: orderId,
-                          title: titleController.text,
-                          Category: selectedCategory,
-                          description: descriptionController.text,
-                          attachments: attachments  ,
+                          id: orderViewModel.orderId,
+                          title: orderViewModel.titleController.text,
+                          Category: orderViewModel.selectedCategory,
+                          description:
+                              orderViewModel.descriptionController.text,
+                          attachments: orderViewModel.attachments,
 
                           freelancerId: null,
-                          clientId: clientId!,
+                          clientId: orderViewModel.clientId!,
                           serviceType: ServiceType.public,
                           budget: 0,
                           status: OrderStatus.pending,
-                          deadline: calculateDeadline(
-                            timeController.text,
-                            selectedTimeUnit,
+                          deadline: orderViewModel.calculateDeadline(
+                            orderViewModel.timeController.text,
+                            orderViewModel.selectedTimeUnit,
                           ),
 
                           createdAt: DateTime.now(),
