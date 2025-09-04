@@ -1,8 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:injectable/injectable.dart';
 import 'package:taskly/core/di/di.dart';
 import 'package:taskly/core/services/supabase_service.dart';
 
@@ -15,8 +14,11 @@ import 'package:taskly/features/client/presentation/views/tabs/home/presentation
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/cubit/order_view_model/order_view_model_states.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/attachments_files_section.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/build_text_field_widget.dart';
+import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/category_drop_down.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/custom_drop_down.dart';
+import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/description_box.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/hiring_methods_options.dart';
+import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/time_input_raw.dart';
 
 class OrderViewBody extends StatefulWidget {
   const OrderViewBody({super.key});
@@ -33,6 +35,11 @@ class _OrderViewBodyState extends State<OrderViewBody> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<OrderViewModel, OrderViewModelStates>(
+      buildWhen:
+          (previous, current) =>
+              current is OrderViewModelStatesLoading ||
+              current is OrderViewModelStatesSuccess ||
+              current is OrderViewModelStatesError,
       listener: (context, state) {
         if (state is OrderViewModelStatesLoading) {
           Center(
@@ -40,6 +47,12 @@ class _OrderViewBodyState extends State<OrderViewBody> {
           );
         }
         if (state is OrderViewModelStatesSuccess) {
+          showTemporaryMessage(
+            context,
+            "Order created successfully",
+            MessageType.success,
+          );
+
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => const ClientHomeView()),
@@ -47,7 +60,11 @@ class _OrderViewBodyState extends State<OrderViewBody> {
           );
         }
         if (state is OrderViewModelStatesError) {
-          DismissibleErrorCard(message: state.message, onDismiss: () {});
+          showTemporaryMessage(
+            context,
+            "Something went wrong, try again later",
+            MessageType.error,
+          );
         }
       },
 
@@ -67,7 +84,11 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                   ),
                 ),
                 SizedBox(height: 16.h),
-                buildTextField('', 1, orderViewModel.titleController),
+                buildTextField(
+                  'Enter title',
+                  1,
+                  orderViewModel.titleController,
+                ),
 
                 SizedBox(height: 28.h),
                 Text(
@@ -78,25 +99,7 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                   ),
                 ),
                 SizedBox(height: 16.h),
-
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10.r),
-                    border: Border.all(color: Colors.grey.shade300),
-                  ),
-                  child: CustomDropdown(
-                    value: orderViewModel.selectedCategory,
-                    items: orderViewModel.categories,
-
-                    hint: "Select Category",
-                    onChanged: (value) {
-                      setState(() {
-                        orderViewModel.selectedCategory = value;
-                      });
-                    },
-                  ),
-                ),
+                CategoryDropDown(),
                 SizedBox(height: 28.h),
                 Text(
                   "Description",
@@ -106,26 +109,7 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                   ),
                 ),
                 SizedBox(height: 16.h),
-                Container(
-                  height: 200.h,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10.r),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        blurRadius: 8,
-                        offset: const Offset(0, 4),
-                        spreadRadius: 1,
-                      ),
-                    ],
-                  ),
-                  child: buildTextField(
-                    "Write your description here",
-                    10,
-                    orderViewModel.descriptionController,
-                  ),
-                ),
+                DescriptionBox(),
                 SizedBox(height: 28.h),
                 Text(
                   "Deadline",
@@ -135,34 +119,7 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                   ),
                 ),
                 SizedBox(height: 16.h),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(hintText: "Enter time"),
-                        onChanged:
-                            (val) => orderViewModel.timeController.text = val,
-                      ),
-                    ),
-                    SizedBox(width: 8),
-                    DropdownButton<String>(
-                      value: orderViewModel.selectedTimeUnit,
-                      items:
-                          orderViewModel.timeUnits
-                              .map(
-                                (e) =>
-                                    DropdownMenuItem(value: e, child: Text(e)),
-                              )
-                              .toList(),
-                      onChanged:
-                          (val) => setState(
-                            () => orderViewModel.selectedTimeUnit = val!,
-                          ),
-                    ),
-                  ],
-                ),
-
+                TimeInputRaw(),
                 SizedBox(height: 28.h),
                 Text(
                   "Attachments",
@@ -173,9 +130,19 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                 ),
                 SizedBox(height: 16.h),
                 BlocConsumer<OrderViewModel, OrderViewModelStates>(
+                  buildWhen:
+                      (previous, current) =>
+                          current is OrderViewModelStatesAttachmentsLoading ||
+                          current is OrderViewModelStatesAttachmentsSuccess ||
+                          current is OrderViewModelStatesAttachmentsError,
                   listener: (context, state) {
                     if (state is OrderViewModelStatesAttachmentsSuccess) {
-                      orderViewModel.attachments = state.attachments;
+                      orderViewModel.uploadedAttachments = state.attachments;
+                      showTemporaryMessage(
+                        context,
+                        "Files uploaded successfully",
+                        MessageType.success,
+                      );
                     } else if (state is OrderViewModelStatesAttachmentsError) {
                       ScaffoldMessenger.of(
                         context,
@@ -184,11 +151,16 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                   },
                   builder: (context, state) {
                     if (state is OrderViewModelStatesAttachmentsLoading) {
-                      return const CircularProgressIndicator();
+                      return Center(
+                        child: const CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: ColorsManager.primary,
+                        ),
+                      );
                     }
                     return AttachmentsFilesSection(
-                      onFilesSelected: (files) async {
-                        context.read<OrderViewModel>().uploadAttachments(files);
+                      onFilesSelected: (files) {
+                        orderViewModel.localAttachments = files;
                       },
                     );
                   },
@@ -205,52 +177,54 @@ class _OrderViewBodyState extends State<OrderViewBody> {
 
                 HiringMethodsOptions(),
                 SizedBox(height: 16.h),
-
                 CustomBotton(
                   title: "Submit",
-                  ontap: () {
-                    if (selectedHireMethodIndex == -1) {
-                      showTemporaryError(
+                  ontap: () async {
+                    if (orderViewModel.localAttachments.isEmpty) {
+                      showTemporaryMessage(
                         context,
-                        "Please select hiring method",
+                        "Please add attachments",
+                        MessageType.error,
                       );
+
                       return;
                     }
 
-                    if (selectedHireMethodIndex == 0) {
-                      if (orderViewModel.titleController.text.isNotEmpty &&
-                          orderViewModel
-                              .descriptionController
-                              .text
-                              .isNotEmpty &&
-                          orderViewModel.selectedCategory!.isNotEmpty &&
-                          orderViewModel.attachments.isNotEmpty) {
-                        context.read<OrderViewModel>().placeOrder(
-                          OrderEntity(
-                            id: orderViewModel.orderId,
-                            title: orderViewModel.titleController.text,
-                            Category: orderViewModel.selectedCategory,
-                            description:
-                                orderViewModel.descriptionController.text,
-                            attachments: orderViewModel.attachments,
-
-                            freelancerId: null,
-                            clientId: orderViewModel.clientId!,
-                            serviceType: ServiceType.public,
-                            budget: 0,
-                            status: OrderStatus.pending,
-                            deadline: orderViewModel.calculateDeadline(
-                              orderViewModel.timeController.text,
-                              orderViewModel.selectedTimeUnit,
-                            ),
-
-                            createdAt: DateTime.now(),
-                            updatedAt: DateTime.now(),
-                          ),
-                        );
-                      }
+                    if (orderViewModel.timeController.text.isEmpty ||
+                        orderViewModel.descriptionController.text.isEmpty ||
+                        orderViewModel.localAttachments.isEmpty ||
+                        orderViewModel.timeController.text.isEmpty ||
+                        orderViewModel.selectedCategory!.isEmpty) {
+                      return showTemporaryMessage(
+                        context,
+                        "Please fill all fields",
+                        MessageType.error,
+                      );
                     } else {
-                      print("Hire Specific Freelancer selected");
+                      List<Attachment> uploadedAttachments = await context
+                          .read<OrderViewModel>()
+                          .uploadAttachments(orderViewModel.localAttachments);
+
+                      await context.read<OrderViewModel>().placeOrder(
+                        OrderEntity(
+                          id: orderViewModel.orderId,
+                          clientId: orderViewModel.clientId!,
+                          freelancerId: null,
+                          title: orderViewModel.titleController.text,
+                          description:
+                              orderViewModel.descriptionController.text,
+                          Category: orderViewModel.selectedCategory,
+                          attachments: uploadedAttachments,
+                          serviceType: ServiceType.public,
+                          status: OrderStatus.pending,
+                          deadline: orderViewModel.calculateDeadline(
+                            orderViewModel.timeController.text,
+                            orderViewModel.selectedTimeUnit,
+                          ),
+                          createdAt: DateTime.now(),
+                          updatedAt: DateTime.now(),
+                        ),
+                      );
                     }
                   },
                 ),

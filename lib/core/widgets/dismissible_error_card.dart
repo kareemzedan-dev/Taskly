@@ -1,39 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class DismissibleErrorCard extends StatelessWidget {
+enum MessageType { success, error }
+
+class DismissibleMessageCard extends StatelessWidget {
   final String message;
   final VoidCallback onDismiss;
+  final MessageType type;
 
-  const DismissibleErrorCard({
+  const DismissibleMessageCard({
     super.key,
     required this.message,
     required this.onDismiss,
+    required this.type,
   });
 
   @override
   Widget build(BuildContext context) {
     if (message.isEmpty) return const SizedBox.shrink();
 
+    final color = type == MessageType.error ? Colors.red : Colors.green;
+    final bgColor =
+        type == MessageType.error ? Colors.red.shade100 : Colors.green.shade100;
+    final icon =
+        type == MessageType.error ? Icons.error_outline : Icons.check_circle;
+
     return Card(
-      color: Colors.red.shade100,
+      color: bgColor,
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
         child: Row(
           children: [
-            const Icon(Icons.error_outline, color: Colors.red),
-              SizedBox(width: 8.w),
+            Icon(icon, color: color),
+            SizedBox(width: 8.w),
             Expanded(
               child: Text(
                 message,
-                style: const TextStyle(color: Colors.red, fontWeight: FontWeight.w500),
+                style: TextStyle(color: color, fontWeight: FontWeight.w500),
               ),
             ),
             GestureDetector(
               onTap: onDismiss,
-              child: const Icon(Icons.close, color: Colors.red),
+              child: Icon(Icons.close, color: color),
             ),
           ],
         ),
@@ -41,30 +51,38 @@ class DismissibleErrorCard extends StatelessWidget {
     );
   }
 }
-void showTemporaryError(BuildContext context, String message, {int durationSeconds = 3}) {
+
+void showTemporaryMessage(
+  BuildContext context,
+  String message,
+  MessageType type, {
+  int durationSeconds = 3,
+}) {
   final overlay = Overlay.of(context);
   late OverlayEntry entry;
 
   entry = OverlayEntry(
-    builder: (context) => Positioned(
-      bottom: 100,  
-      left: 16,
-      right: 16,
-      child: Material(
-        color: Colors.transparent,
-        child: DismissibleErrorCard(
-          message: message,
-          onDismiss: () {
-            entry.remove();
-          },
+    builder:
+        (context) => Positioned(
+          bottom: 20,
+          left: 16,
+          right: 16,
+          child: Material(
+            color: Colors.transparent,
+            child: DismissibleMessageCard(
+              message: message,
+              type: type,
+              onDismiss: () {
+                entry.remove();
+              },
+            ),
+          ),
         ),
-      ),
-    ),
   );
 
   overlay.insert(entry);
 
   Future.delayed(Duration(seconds: durationSeconds), () {
-    entry.remove();
+    if (entry.mounted) entry.remove();
   });
 }

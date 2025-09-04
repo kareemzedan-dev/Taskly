@@ -30,11 +30,9 @@ class OrderViewModel extends Cubit<OrderViewModelStates> {
     "Tutorials",
     "Other",
   ];
-  TextEditingController titleController = TextEditingController(
-    text: "Mind Map",
-  );
-  List<Attachment> attachments = [];
-
+  TextEditingController titleController = TextEditingController(text: "trans");
+List<File> localAttachments = [];  
+List<Attachment> uploadedAttachments = [];  
   TextEditingController timeController = TextEditingController();
   final orderId = Uuid().v4();
 
@@ -55,7 +53,7 @@ class OrderViewModel extends Cubit<OrderViewModelStates> {
         }),
       );
 
-      attachments = uploaded;
+      uploadedAttachments = uploaded;
       emit(OrderViewModelStatesAttachmentsSuccess(uploaded));
       return uploaded;
     } catch (e) {
