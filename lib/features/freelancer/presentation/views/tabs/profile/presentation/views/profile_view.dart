@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/utils/assets_manager.dart';
 import 'package:taskly/core/widgets/circle_icon_button.dart';
-import 'package:taskly/features/client/presentation/views/tabs/profile/presentation/views/widgets/profile_view_body.dart';
+import 'package:taskly/features/freelancer/presentation/views/tabs/profile/presentation/views/widgets/freelancer_profile_view_body.dart';
 
 class FreelancerProfileViewTab extends StatelessWidget {
   const FreelancerProfileViewTab({super.key});
@@ -12,6 +11,7 @@ class FreelancerProfileViewTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        surfaceTintColor: Colors.transparent,
         backgroundColor: Colors.white,
         title: Text(
           'Profile',
@@ -32,7 +32,7 @@ class FreelancerProfileViewTab extends StatelessWidget {
         ],
       ),
       backgroundColor: Colors.white,
-      body: ProfileViewBody(),
+      body: FreelancerProfileViewBody(),
     );
   }
 }

@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/utils/assets_manager.dart';
 import 'package:taskly/core/widgets/circle_icon_button.dart';
-import 'package:taskly/features/client/presentation/views/tabs/profile/presentation/views/widgets/profile_view_body.dart';
+import 'package:taskly/features/client/presentation/views/tabs/profile/presentation/views/widgets/client_profile_view_body.dart';
 
 class ProfileViewTab extends StatelessWidget {
   const ProfileViewTab({super.key});
@@ -36,7 +36,7 @@ class ProfileViewTab extends StatelessWidget {
         ],
       ),
 backgroundColor: Colors.white,
-      body: ProfileViewBody(),
+      body: ClientProfileViewBody(),
     );
   }
 }

@@ -26,6 +26,10 @@ class Assets {
   /// assets/images/document_10103871.png
   static const String assetsImagesDocument10103871 = "assets/images/document_10103871.png";
 
+  /// Assets for assetsImagesFaq6736884
+  /// assets/images/faq_6736884.png
+  static const String assetsImagesFaq6736884 = "assets/images/faq_6736884.png";
+
   /// Assets for assetsImagesFreelancer
   /// assets/images/freelancer.png
   static const String assetsImagesFreelancer = "assets/images/freelancer.png";
@@ -54,6 +58,10 @@ class Assets {
   /// assets/images/settings.png
   static const String assetsImagesSettings = "assets/images/settings.png";
 
+  /// Assets for assetsImagesStar967444
+  /// assets/images/star_967444.png
+  static const String assetsImagesStar967444 = "assets/images/star_967444.png";
+
   /// Assets for assetsImagesTechSupport5109502
   /// assets/images/tech-support_5109502.png
   static const String assetsImagesTechSupport5109502 = "assets/images/tech-support_5109502.png";
@@ -61,6 +69,14 @@ class Assets {
   /// Assets for assetsImagesUser12366536
   /// assets/images/user_12366536.png
   static const String assetsImagesUser12366536 = "assets/images/user_12366536.png";
+
+  /// Assets for assetsImagesWallet2527857
+  /// assets/images/wallet_2527857.png
+  static const String assetsImagesWallet2527857 = "assets/images/wallet_2527857.png";
+
+  /// Assets for assetsImagesWithdrawal8211181
+  /// assets/images/withdrawal_8211181.png
+  static const String assetsImagesWithdrawal8211181 = "assets/images/withdrawal_8211181.png";
 
   /// Assets for assetsImagesWork
   /// assets/images/work.png

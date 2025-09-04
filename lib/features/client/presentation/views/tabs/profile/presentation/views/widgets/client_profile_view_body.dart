@@ -7,16 +7,16 @@ import 'package:taskly/features/client/presentation/cubit/user_view_model/user_i
 import 'package:taskly/features/client/presentation/cubit/user_view_model/user_info_view_model_states.dart';
 import 'package:taskly/features/client/presentation/views/tabs/profile/presentation/views/widgets/account_item_row.dart';
 import 'package:taskly/features/client/presentation/views/tabs/profile/presentation/views/widgets/user_info_section.dart';
+import 'package:taskly/features/shared/presentation/views/widgets/profile_section.dart';
 
-class ProfileViewBody extends StatefulWidget {
-  const ProfileViewBody({super.key});
+class ClientProfileViewBody extends StatefulWidget {
+  const ClientProfileViewBody({super.key});
 
   @override
-  State<ProfileViewBody> createState() => _ProfileViewBodyState();
+  State<ClientProfileViewBody> createState() => _ClientProfileViewBodyState();
 }
 
- 
-class _ProfileViewBodyState extends State<ProfileViewBody> {
+class _ClientProfileViewBodyState extends State<ClientProfileViewBody> {
   late final UserInfoViewModel _userInfoViewModel;
 
   @override
@@ -45,6 +45,7 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
                     return UserInfoSection(
                       email: state.userInfoEntity.email,
                       name: state.userInfoEntity.fullName!,
+                    
                     );
                   } else if (state is UserInfoViewModelError) {
                     return Text(state.errorMessage);
@@ -54,65 +55,46 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
               ),
             ),
 
-            const SizedBox(height: 40),
-
-            Text(
-              "Support",
-              style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                fontWeight: FontWeight.bold,
-
-                fontSize: 18.sp,
-              ),
-            ),
-            const SizedBox(height: 10),
-            AccountItemRow(
-              image: Assets.assetsImagesTechSupport5109502,
-              text: "Technical Support",
+            SizedBox(height: 40.h),
+            ProfileSection(
+              title: "Support",
+              children: [
+                AccountItemRow(
+                  image: Assets.assetsImagesTechSupport5109502,
+                  text: "Technical Support",
+                ),
+              ],
             ),
 
-            const SizedBox(height: 30),
-
-            Text(
-              "Account",
-              style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                fontWeight: FontWeight.bold,
-
-                fontSize: 18.sp,
-              ),
-            ),
-            const SizedBox(height: 10),
-            AccountItemRow(
-              image: Assets.assetsImagesInternet2889312,
-              text: "Language",
-            ),
-            const SizedBox(height: 10),
-            AccountItemRow(
-              image: Assets.assetsImagesBrushes3450037,
-              text: "Theme",
+            ProfileSection(
+              title: "Account",
+              children: [
+                AccountItemRow(
+                  image: Assets.assetsImagesInternet2889312,
+                  text: "Language",
+                ),
+                AccountItemRow(
+                  image: Assets.assetsImagesBrushes3450037,
+                  text: "Theme",
+                ),
+              ],
             ),
 
-            const SizedBox(height: 30),
-
-            Text(
-              "Settings",
-              style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                fontWeight: FontWeight.bold,
-
-                fontSize: 18.sp,
-              ),
-            ),
-            const SizedBox(height: 10),
-            AccountItemRow(
-              image: Assets.assetsImagesAccount3166234,
-              text: "Privacy Policy",
-            ),
-            const SizedBox(height: 10),
-            AccountItemRow(
-              image: Assets.assetsImagesDocument10103871,
-              text: "Terms & Conditions",
+            ProfileSection(
+              title: "Settings",
+              children: [
+                AccountItemRow(
+                  image: Assets.assetsImagesAccount3166234,
+                  text: "Privacy Policy",
+                ),
+                SizedBox(height: 10.h),
+                AccountItemRow(
+                  image: Assets.assetsImagesDocument10103871,
+                  text: "Terms & Conditions",
+                ),
+              ],
             ),
 
-            SizedBox(height: 50.h),
 
             Container(
               width: double.infinity,

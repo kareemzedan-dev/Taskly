@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:taskly/features/client/presentation/views/tabs/messages/presentation/views/widgets/messages_tab_view_body.dart';
+import 'package:taskly/features/shared/presentation/views/widgets/messages_tab_view_body.dart';
 
 class MessagesTabView extends StatelessWidget {
   const MessagesTabView({super.key});
@@ -26,7 +26,7 @@ class MessagesTabView extends StatelessWidget {
       ),
       backgroundColor: Colors.white,
 
-      body: SafeArea(child: MessagesTabViewBody()),
+      body: SafeArea(child: UserMessagesTabViewBody()),
     );
   }
 }

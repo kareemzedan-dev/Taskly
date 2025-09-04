@@ -131,5 +131,5 @@ flutter_assets:
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/images/Taskly.png"
+  image_path: "assets/images/taskly.png"
   

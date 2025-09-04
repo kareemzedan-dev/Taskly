@@ -2,6 +2,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:taskly/core/utils/colors_manger.dart';
 import 'package:taskly/core/widgets/custom_button.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/delivery_info.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/description_section.dart';
@@ -33,13 +34,21 @@ class SendOfferViewBody extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        "Mind Maps",
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16.sp,
-                              color: Colors.black,
-                            ),
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey.shade300, width: 2.w),
+                          borderRadius: BorderRadius.circular(10.r),
+                          color: ColorsManager.primary.withOpacity(.4)
+                          ),
+                        child: Text(
+                          "Mind Maps",
+                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16.sp,
+                                color: Colors.black,
+                              ),
+                        ),
                       ),
                       const DeliveryInfo(),
                     ],
@@ -50,14 +59,14 @@ class SendOfferViewBody extends StatelessWidget {
                   const Divider(thickness: 1, color: Colors.grey),
                   SizedBox(height: 16.h),
 
-                  _buildSectionTitle(context, "Proposal Description"),
+                  _buildSectionTitle(context, "Proposal Description : "),
                   SizedBox(height: 8.h),
                   _buildDescriptionBox(context),
                   SizedBox(height: 16.h),
                   const Divider(thickness: 1, color: Colors.grey),
                   SizedBox(height: 16.h),
 
-                  _buildSectionTitle(context, "Proposal Price"),
+                  _buildSectionTitle(context, "Proposal Price : "),
                   SizedBox(height: 8.h),
                   InputWithDropdown(
                     hint: "Enter price",
@@ -69,7 +78,7 @@ class SendOfferViewBody extends StatelessWidget {
                   const Divider(thickness: 1, color: Colors.grey),
                   SizedBox(height: 16.h),
 
-                  _buildSectionTitle(context, "Delivery Time"),
+                  _buildSectionTitle(context, "Delivery Time : "),
                   SizedBox(height: 8.h),
                   InputWithDropdown(
                     hint: "Enter time",

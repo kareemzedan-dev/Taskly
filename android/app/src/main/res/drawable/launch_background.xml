@@ -8,7 +8,7 @@
     <item>
         <bitmap
             android:gravity="center_crop"
-            android:src="@drawable/my_splash_logo" />
+            android:src="@drawable/taskly" />
     </item>
 
 </layer-list>

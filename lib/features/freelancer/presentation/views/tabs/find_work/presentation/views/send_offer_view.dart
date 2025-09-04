@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/send_offer_view_body.dart';
 
@@ -9,9 +8,9 @@ class SendOfferView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return   Scaffold(
+    return Scaffold(
       appBar: AppBar(
-        surfaceTintColor: Colors.transparent, 
+        surfaceTintColor: Colors.transparent,
         backgroundColor: Colors.white,
         title: Text(
           'Send Offer',
@@ -22,8 +21,8 @@ class SendOfferView extends StatelessWidget {
         ),
         leading: GestureDetector(
           onTap: () => Navigator.pop(context),
-          child: Icon(CupertinoIcons.back, color: Colors.black)),
-
+          child: Icon(CupertinoIcons.back, color: Colors.black),
+        ),
       ),
       backgroundColor: Colors.white,
       body: SendOfferViewBody(),

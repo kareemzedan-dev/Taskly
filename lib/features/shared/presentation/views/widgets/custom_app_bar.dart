@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/utils/assets_manager.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
-import 'package:taskly/features/client/presentation/views/tabs/messages/presentation/views/widgets/custom_states_container.dart';
+import 'package:taskly/features/shared/presentation/views/widgets/custom_states_container.dart';
 
 AppBar customAppBar(BuildContext context) {
     return AppBar(
