@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:injectable/injectable.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:lottie/lottie.dart';
 import 'package:taskly/core/di/di.dart';
 import 'package:taskly/core/services/supabase_service.dart';
-
 import 'package:taskly/core/utils/colors_manger.dart';
 import 'package:taskly/core/widgets/custom_button.dart';
 import 'package:taskly/core/widgets/dismissible_error_card.dart';
@@ -15,10 +16,13 @@ import 'package:taskly/features/client/presentation/views/tabs/home/presentation
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/attachments_files_section.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/build_text_field_widget.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/category_drop_down.dart';
-import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/custom_drop_down.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/description_box.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/hiring_methods_options.dart';
+import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/private_hire_section.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/time_input_raw.dart';
+
+OrderViewModel orderViewModel = getIt<OrderViewModel>();
+SupabaseService supabaseService = SupabaseService();
 
 class OrderViewBody extends StatefulWidget {
   const OrderViewBody({super.key});
@@ -27,38 +31,26 @@ class OrderViewBody extends StatefulWidget {
   State<OrderViewBody> createState() => _OrderViewBodyState();
 }
 
-OrderViewModel orderViewModel = getIt<OrderViewModel>();
-SupabaseService supabaseService = SupabaseService();
-String errorMessage = "";
-
 class _OrderViewBodyState extends State<OrderViewBody> {
+  int selectedHireMethodIndex = -1;
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<OrderViewModel, OrderViewModelStates>(
-      buildWhen:
-          (previous, current) =>
-              current is OrderViewModelStatesLoading ||
-              current is OrderViewModelStatesSuccess ||
-              current is OrderViewModelStatesError,
       listener: (context, state) {
-        if (state is OrderViewModelStatesLoading) {
-          Center(
-            child: CircularProgressIndicator(color: ColorsManager.primary),
-          );
-        }
         if (state is OrderViewModelStatesSuccess) {
           showTemporaryMessage(
             context,
             "Order created successfully",
             MessageType.success,
           );
-
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => const ClientHomeView()),
             (_) => false,
           );
         }
+
         if (state is OrderViewModelStatesError) {
           showTemporaryMessage(
             context,
@@ -66,173 +58,200 @@ class _OrderViewBodyState extends State<OrderViewBody> {
             MessageType.error,
           );
         }
+
+        if (state is OrderViewModelStatesAttachmentsError) {
+          showTemporaryMessage(context, state.message, MessageType.error);
+        }
       },
-
       builder: (context, state) {
-        return SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 16.h),
-                Text(
-                  "Title",
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 18.sp,
-                  ),
-                ),
-                SizedBox(height: 16.h),
-                buildTextField(
-                  'Enter title',
-                  1,
-                  orderViewModel.titleController,
-                ),
+        final isLoading =
+            state is OrderViewModelStatesLoading ||
+            state is OrderViewModelStatesAttachmentsLoading;
 
-                SizedBox(height: 28.h),
-                Text(
-                  "Category",
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 18.sp,
-                  ),
-                ),
-                SizedBox(height: 16.h),
-                CategoryDropDown(),
-                SizedBox(height: 28.h),
-                Text(
-                  "Description",
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 18.sp,
-                  ),
-                ),
-                SizedBox(height: 16.h),
-                DescriptionBox(),
-                SizedBox(height: 28.h),
-                Text(
-                  "Deadline",
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 18.sp,
-                  ),
-                ),
-                SizedBox(height: 16.h),
-                TimeInputRaw(),
-                SizedBox(height: 28.h),
-                Text(
-                  "Attachments",
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 18.sp,
-                  ),
-                ),
-                SizedBox(height: 16.h),
-                BlocConsumer<OrderViewModel, OrderViewModelStates>(
-                  buildWhen:
-                      (previous, current) =>
-                          current is OrderViewModelStatesAttachmentsLoading ||
-                          current is OrderViewModelStatesAttachmentsSuccess ||
-                          current is OrderViewModelStatesAttachmentsError,
-                  listener: (context, state) {
-                    if (state is OrderViewModelStatesAttachmentsSuccess) {
-                      orderViewModel.uploadedAttachments = state.attachments;
-                      showTemporaryMessage(
-                        context,
-                        "Files uploaded successfully",
-                        MessageType.success,
-                      );
-                    } else if (state is OrderViewModelStatesAttachmentsError) {
-                      ScaffoldMessenger.of(
-                        context,
-                      ).showSnackBar(SnackBar(content: Text(state.message)));
-                    }
-                  },
-                  builder: (context, state) {
-                    if (state is OrderViewModelStatesAttachmentsLoading) {
-                      return Center(
-                        child: const CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: ColorsManager.primary,
-                        ),
-                      );
-                    }
-                    return AttachmentsFilesSection(
+        return Stack(
+          children: [
+            SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 16.h),
+                    Text(
+                      "Title",
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 18.sp,
+                      ),
+                    ),
+                    SizedBox(height: 16.h),
+                    buildTextField(
+                      'Enter title',
+                      1,
+                      orderViewModel.titleController,
+                      (value) {
+                        orderViewModel.titleController.text = value!;
+                      },
+                    ),
+
+                    SizedBox(height: 28.h),
+                    Text(
+                      "Category",
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 18.sp,
+                      ),
+                    ),
+                    SizedBox(height: 16.h),
+                    CategoryDropDown(),
+
+                    SizedBox(height: 28.h),
+                    Text(
+                      "Description",
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 18.sp,
+                      ),
+                    ),
+                    SizedBox(height: 16.h),
+                    DescriptionBox(),
+
+                    SizedBox(height: 28.h),
+                    Text(
+                      "Deadline",
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 18.sp,
+                      ),
+                    ),
+                    SizedBox(height: 16.h),
+                    TimeInputRaw(),
+
+                    SizedBox(height: 28.h),
+                    Text(
+                      "Attachments",
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 18.sp,
+                      ),
+                    ),
+                    SizedBox(height: 16.h),
+                    AttachmentsFilesSection(
                       onFilesSelected: (files) {
                         orderViewModel.localAttachments = files;
                       },
-                    );
-                  },
-                ),
-                SizedBox(height: 28.h),
-                Text(
-                  "Hiring Method",
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 18.sp,
-                  ),
-                ),
-                SizedBox(height: 16.h),
+                    ),
 
-                HiringMethodsOptions(),
-                SizedBox(height: 16.h),
-                CustomBotton(
-                  title: "Submit",
-                  ontap: () async {
-                    if (orderViewModel.localAttachments.isEmpty) {
-                      showTemporaryMessage(
-                        context,
-                        "Please add attachments",
-                        MessageType.error,
-                      );
+                    SizedBox(height: 28.h),
+                    Text(
+                      "Hiring Method",
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 18.sp,
+                      ),
+                    ),
+                    SizedBox(height: 16.h),
+                    HiringMethodsOptions(
+                      selectedIndex: selectedHireMethodIndex,
+                      onChanged: (val) {
+                        setState(() {
+                          selectedHireMethodIndex = val;
+                        });
+                      },
+                    ),
 
-                      return;
-                    }
+                    SizedBox(height: 16.h),
+                    if (selectedHireMethodIndex == 1) PrivateHireSection(),
+                    SizedBox(height: 16.h),
+                    CustomBotton(
+                      title: "Submit",
+                      ontap: () async {
+                        if (orderViewModel.titleController.text.isEmpty) {
+                          return showTemporaryMessage(
+                            context,
+                            "Please enter title",
+                            MessageType.error,
+                          );
+                        }
+                        if (orderViewModel.selectedCategory == null) {
+                          return showTemporaryMessage(
+                            context,
+                            "Please choose category",
+                            MessageType.error,
+                          );
+                        }
+                        if (orderViewModel.descriptionController.text.isEmpty) {
+                          return showTemporaryMessage(
+                            context,
+                            "Please enter description",
+                            MessageType.error,
+                          );
+                        }
+                        if (orderViewModel.timeController.text.isEmpty) {
+                          return showTemporaryMessage(
+                            context,
+                            "Please enter deadline",
+                            MessageType.error,
+                          );
+                        }
+                        if (orderViewModel.localAttachments.isEmpty) {
+                          return showTemporaryMessage(
+                            context,
+                            "Please add attachments",
+                            MessageType.error,
+                          );
+                        }
+                        if (selectedHireMethodIndex == -1) {
+                          return showTemporaryMessage(
+                            context,
+                            "Please select hiring method",
+                            MessageType.error,
+                          );
+                        }
 
-                    if (orderViewModel.timeController.text.isEmpty ||
-                        orderViewModel.descriptionController.text.isEmpty ||
-                        orderViewModel.localAttachments.isEmpty ||
-                        orderViewModel.timeController.text.isEmpty ||
-                        orderViewModel.selectedCategory!.isEmpty) {
-                      return showTemporaryMessage(
-                        context,
-                        "Please fill all fields",
-                        MessageType.error,
-                      );
-                    } else {
-                      List<Attachment> uploadedAttachments = await context
-                          .read<OrderViewModel>()
-                          .uploadAttachments(orderViewModel.localAttachments);
+                        List<Attachment> uploadedAttachments = await context
+                            .read<OrderViewModel>()
+                            .uploadAttachments(orderViewModel.localAttachments);
 
-                      await context.read<OrderViewModel>().placeOrder(
-                        OrderEntity(
-                          id: orderViewModel.orderId,
-                          clientId: orderViewModel.clientId!,
-                          freelancerId: null,
-                          title: orderViewModel.titleController.text,
-                          description:
-                              orderViewModel.descriptionController.text,
-                          Category: orderViewModel.selectedCategory,
-                          attachments: uploadedAttachments,
-                          serviceType: ServiceType.public,
-                          status: OrderStatus.pending,
-                          deadline: orderViewModel.calculateDeadline(
-                            orderViewModel.timeController.text,
-                            orderViewModel.selectedTimeUnit,
+                        await context.read<OrderViewModel>().placeOrder(
+                          OrderEntity(
+                            id: orderViewModel.orderId,
+                            clientId: orderViewModel.clientId!,
+                            freelancerId: null,
+                            title: orderViewModel.titleController.text,
+                            description:
+                                orderViewModel.descriptionController.text,
+                            Category: orderViewModel.selectedCategory,
+                            attachments: uploadedAttachments,
+                            serviceType: ServiceType.public,
+                            status: OrderStatus.pending,
+                            deadline: orderViewModel.calculateDeadline(
+                              orderViewModel.timeController.text,
+                              orderViewModel.selectedTimeUnit,
+                            ),
+                            createdAt: DateTime.now(),
+                            updatedAt: DateTime.now(),
                           ),
-                          createdAt: DateTime.now(),
-                          updatedAt: DateTime.now(),
-                        ),
-                      );
-                    }
-                  },
+                        );
+                      },
+                    ),
+                    SizedBox(height: 16.h),
+                  ],
                 ),
-
-                SizedBox(height: 16.h),
-              ],
+              ),
             ),
-          ),
+    if (isLoading)
+  Container(
+    color: Colors.black.withOpacity(0.3),
+    child: Center(
+      child: LoadingAnimationWidget.staggeredDotsWave(
+        color: ColorsManager.primary,
+        size: 60, 
+      ),
+    ),
+  ),
+
+          ],
         );
       },
     );

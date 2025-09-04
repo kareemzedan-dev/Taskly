@@ -27,7 +27,6 @@ class HireMethodCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: 160.w,
-      
 
         padding: EdgeInsets.all(12.w),
         decoration: BoxDecoration(
@@ -81,7 +80,21 @@ class HireMethodCard extends StatelessWidget {
                     ),
                   ),
                 )
-                :  Container(),
+                : Container(
+                  padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                  decoration: BoxDecoration(
+                    color: Colors.transparent,
+                    borderRadius: BorderRadius.circular(8.r),
+                  ),
+                  child: Text(
+                    "Public",
+                    style: TextStyle(
+                      color: Colors.transparent,
+                      fontSize: 10.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ), // this container for design only (not working)
 
             SizedBox(height: 8.h),
             Text(

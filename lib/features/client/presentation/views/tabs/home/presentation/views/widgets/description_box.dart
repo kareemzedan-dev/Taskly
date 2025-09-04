@@ -27,6 +27,9 @@ class DescriptionBox extends StatelessWidget {
         "Write your description here",
         10,
         orderViewModel.descriptionController,
+        (p0) {
+          
+        },
       ),
     );
   }

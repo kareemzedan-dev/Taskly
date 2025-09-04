@@ -30,7 +30,7 @@ class OrderViewModel extends Cubit<OrderViewModelStates> {
     "Tutorials",
     "Other",
   ];
-  TextEditingController titleController = TextEditingController(text: "trans");
+  TextEditingController titleController = TextEditingController();
 List<File> localAttachments = [];  
 List<Attachment> uploadedAttachments = [];  
   TextEditingController timeController = TextEditingController();
