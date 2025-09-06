@@ -13,6 +13,7 @@ class HomeRepoImpl extends HomeRepos {
 
   HomeRepoImpl({required this.homeremoteDataSource});
 
+  @override
   Future<Either<Failures, UserInfoEntity>> getUserInfo() =>
       homeremoteDataSource.getUserInfo();
 

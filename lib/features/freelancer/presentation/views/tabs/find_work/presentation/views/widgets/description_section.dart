@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DescriptionSection extends StatelessWidget {
-  const DescriptionSection();
+  const DescriptionSection({super.key});
 
   @override
   Widget build(BuildContext context) {

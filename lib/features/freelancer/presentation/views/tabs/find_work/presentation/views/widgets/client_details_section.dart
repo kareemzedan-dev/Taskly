@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/utils/assets_manager.dart';
 class ClientDetailsSection extends StatelessWidget {
-  const ClientDetailsSection();
+  const ClientDetailsSection({super.key});
 
   @override
   Widget build(BuildContext context) {

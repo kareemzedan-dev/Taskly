@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:taskly/core/utils/routes_manager.dart';
-import 'package:taskly/core/widgets/custom_button.dart';
 import 'package:taskly/features/welcome/presentation/cubit/welcome_states.dart';
 import 'package:taskly/features/welcome/presentation/cubit/welcome_view_model.dart';
 import 'package:taskly/features/welcome/presentation/views/widgets/auth_action_section.dart';

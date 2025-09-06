@@ -10,7 +10,6 @@ import 'package:taskly/features/client/data/models/home/service_response_dm.dart
 import 'package:taskly/features/client/data/models/home/user_info_response_dm.dart';
 import 'package:taskly/features/client/domain/entities/home/order_entity.dart';
 import 'package:taskly/features/client/domain/entities/home/service_response_entity.dart';
-import 'package:taskly/features/client/domain/entities/home/user_info_entity.dart';
 
 @Injectable(as: HomeRemoteDataSource)
 class HomeRemoteDataSourceImpl extends HomeRemoteDataSource {
@@ -34,10 +33,6 @@ class HomeRemoteDataSourceImpl extends HomeRemoteDataSource {
               .select()
               .eq('id', currentUser.id)
               .single();
-
-      if (response == null) {
-        return Left(ServerFailure("User data not found"));
-      }
 
       final user = UserInfoDm(
         id: response['id'],

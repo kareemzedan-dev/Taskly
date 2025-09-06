@@ -3,7 +3,7 @@ import 'package:taskly/core/utils/routes_manager.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/custom_action_container.dart';
 
 class ActionsRow extends StatelessWidget {
-  const ActionsRow();
+  const ActionsRow({super.key});
 
   @override
   Widget build(BuildContext context) {

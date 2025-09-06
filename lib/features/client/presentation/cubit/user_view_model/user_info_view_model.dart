@@ -14,9 +14,9 @@ class UserInfoViewModel extends Cubit<UserInfoViewModelStates> {
 
   Future<Either<Failures, UserInfoEntity>> loadUserInfo({bool forceFetch = false}) async {
     if (!forceFetch) {
-      final fullName = await SharedPrefHelper.getString('fullName');
-      final email = await SharedPrefHelper.getString('email');
-      final role = await SharedPrefHelper.getString('role');
+      final fullName = SharedPrefHelper.getString('fullName');
+      final email = SharedPrefHelper.getString('email');
+      final role = SharedPrefHelper.getString('role');
 
       if (fullName != null && email != null && role != null) {
         final cachedUser = UserInfoEntity(

@@ -17,6 +17,11 @@ class OrderViewModelStatesSuccess extends OrderViewModelStates {
 
   OrderViewModelStatesSuccess(this.orderEntity);
 }
+class OrderViewModelStatesAttachmentsProgress extends OrderViewModelStates {
+  final Map<String, double> progressMap;
+  
+  OrderViewModelStatesAttachmentsProgress(this.progressMap);
+}
 
 class OrderViewModelStatesAttachmentsLoading extends OrderViewModelStates {}
 

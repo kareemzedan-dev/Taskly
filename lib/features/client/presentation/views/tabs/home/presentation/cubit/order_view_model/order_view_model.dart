@@ -31,35 +31,72 @@ class OrderViewModel extends Cubit<OrderViewModelStates> {
     "Other",
   ];
   TextEditingController titleController = TextEditingController();
-List<File> localAttachments = [];  
-List<Attachment> uploadedAttachments = [];  
+  List<File> localAttachments = [];
+  List<Attachment> uploadedAttachments = [];
   TextEditingController timeController = TextEditingController();
   final orderId = Uuid().v4();
-
+  Map<String, double> uploadProgress = {};
   String selectedTimeUnit = "Days";
   final List<String> timeUnits = ["Hours", "Days", "Weeks"];
   String? selectedCategory;
   TextEditingController descriptionController = TextEditingController();
   final clientId = SharedPrefHelper.getString("id");
-  SupabaseService _supabaseService = SupabaseService();
-  Future<List<Attachment>> uploadAttachments(List<File> files) async {
+  final SupabaseService _supabaseService = SupabaseService();
+
+  Future<List<Attachment>> uploadAttachments(
+    List<File> files, {
+    Function(String filePath, double progress)? onProgress,
+  }) async {
     emit(OrderViewModelStatesAttachmentsLoading());
 
     try {
-      final uploaded = await Future.wait(
-        files.map((file) async {
-          final url = await _supabaseService.uploadFile(file);
-          return Attachment(type: file.path.split('/').last, url: url);
-        }),
-      );
+      List<Attachment> uploaded = [];
+      // لا تمسح التقدم القديم، فقط أضف التقدم الجديد
 
-      uploadedAttachments = uploaded;
-      emit(OrderViewModelStatesAttachmentsSuccess(uploaded));
-      return uploaded;
+      for (var file in files) {
+        final filePath = file.path;
+
+        // إذا الملف موجود بالفعل وتم رفعه، تجاوزه
+        if (uploadProgress[filePath] == 1.0) {
+          continue; // تخطى الملفات المرفوعة مسبقاً
+        }
+
+        // ابدأ من الصفر للملفات الجديدة فقط
+        uploadProgress[filePath] = 0.0;
+        emit(OrderViewModelStatesAttachmentsProgress(Map.from(uploadProgress)));
+
+        final url = await _supabaseService.uploadFile(
+          file,
+          onProgress: (sentBytes, totalBytes) {
+            final progress = sentBytes / totalBytes;
+            uploadProgress[filePath] = progress;
+            emit(
+              OrderViewModelStatesAttachmentsProgress(Map.from(uploadProgress)),
+            );
+            if (onProgress != null) onProgress(filePath, progress);
+          },
+        );
+
+        // حدد كمل 100%
+        uploadProgress[filePath] = 1.0;
+        emit(OrderViewModelStatesAttachmentsProgress(Map.from(uploadProgress)));
+
+        uploaded.add(Attachment(type: file.path.split('/').last, url: url));
+      }
+
+      uploadedAttachments.addAll(uploaded); // أضف الجديد للقديم
+      emit(OrderViewModelStatesAttachmentsSuccess(uploadedAttachments));
+      return uploadedAttachments;
     } catch (e) {
       emit(OrderViewModelStatesAttachmentsError(e.toString()));
       return [];
     }
+  }
+
+  
+  void clearUploadProgress() {
+    uploadProgress.clear();
+    emit(OrderViewModelStatesAttachmentsProgress(Map.from(uploadProgress)));
   }
 
   Future<Either<Failures, OrderEntity>> placeOrder(

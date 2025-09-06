@@ -52,21 +52,34 @@ class SupabaseService {
     }
   }
 
-Future<String> uploadFile(File file) async {
-  final uuid = Uuid();
-  final fileName = '${uuid.v4()}_${file.path.split('/').last}'; // اسم فريد
+ Future<String> uploadFile(
+    File file, {
+    Function(int sentBytes, int totalBytes)? onProgress,
+  }) async {
+    final uuid = Uuid();
+    final fileName = '${uuid.v4()}_${file.path.split('/').last}';
+    final totalBytes = await file.length();
 
-  // رفع الملف
-  final response = await Supabase.instance.client.storage
-      .from('order-attachments')
-      .upload(fileName, file);
+    if (onProgress != null) {
+      const int chunks = 20;
+      final chunkSize = totalBytes ~/ chunks;
+      
+      for (int i = 1; i <= chunks; i++) {
+        await Future.delayed(Duration(milliseconds: 100));  
+        onProgress(chunkSize * i, totalBytes);
+      }
+    }
+ 
+    final response = await Supabase.instance.client.storage
+        .from('order-attachments')
+        .upload(fileName, file);
 
-  // الحصول على الرابط العام
-  final publicUrl = Supabase.instance.client.storage
-      .from('order-attachments')
-      .getPublicUrl(fileName);
+    // Get public URL
+    final publicUrl = Supabase.instance.client.storage
+        .from('order-attachments')
+        .getPublicUrl(fileName);
 
-  return publicUrl;
-}
+    return publicUrl;
+  }
 
 }

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:injectable/injectable.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:lottie/lottie.dart';
 import 'package:taskly/core/di/di.dart';
 import 'package:taskly/core/services/supabase_service.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
@@ -32,8 +30,15 @@ class OrderViewBody extends StatefulWidget {
 }
 
 class _OrderViewBodyState extends State<OrderViewBody> {
-  int selectedHireMethodIndex = -1;
+  @override
+  void initState() {
+    super.initState();
+    orderViewModel.clearUploadProgress();
+  }
 
+  int selectedHireMethodIndex = -1;
+  List<Attachment> uploadedAttachments = [];
+  Map<String, double> uploadProgress = {};
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<OrderViewModel, OrderViewModelStates>(
@@ -61,6 +66,11 @@ class _OrderViewBodyState extends State<OrderViewBody> {
 
         if (state is OrderViewModelStatesAttachmentsError) {
           showTemporaryMessage(context, state.message, MessageType.error);
+        }
+        if (state is OrderViewModelStatesAttachmentsProgress) {
+          setState(() {
+            uploadProgress = state.progressMap;
+          });
         }
       },
       builder: (context, state) {
@@ -137,11 +147,21 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                     ),
                     SizedBox(height: 16.h),
                     AttachmentsFilesSection(
-                      onFilesSelected: (files) {
+                      onFilesSelected: (files) async {
                         orderViewModel.localAttachments = files;
+                        orderViewModel.clearUploadProgress();
+                        uploadedAttachments = await context
+                            .read<OrderViewModel>()
+                            .uploadAttachments(orderViewModel.localAttachments);
+                      },
+                      uploadProgress: uploadProgress,
+                      onClearAll: () {
+                        orderViewModel.clearUploadProgress();
+                        setState(() {
+                          uploadProgress.clear();
+                        });
                       },
                     ),
-
                     SizedBox(height: 28.h),
                     Text(
                       "Hiring Method",
@@ -208,10 +228,13 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                             MessageType.error,
                           );
                         }
-
-                        List<Attachment> uploadedAttachments = await context
-                            .read<OrderViewModel>()
-                            .uploadAttachments(orderViewModel.localAttachments);
+                        if (uploadedAttachments.isEmpty) {
+                          return showTemporaryMessage(
+                            context,
+                            "Please upload attachments",
+                            MessageType.error,
+                          );
+                        }
 
                         await context.read<OrderViewModel>().placeOrder(
                           OrderEntity(
@@ -240,17 +263,16 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                 ),
               ),
             ),
-    if (isLoading)
-  Container(
-    color: Colors.black.withOpacity(0.3),
-    child: Center(
-      child: LoadingAnimationWidget.staggeredDotsWave(
-        color: ColorsManager.primary,
-        size: 60, 
-      ),
-    ),
-  ),
-
+            if (isLoading)
+              Container(
+                color: Colors.black.withOpacity(0.3),
+                child: Center(
+                  child: LoadingAnimationWidget.staggeredDotsWave(
+                    color: ColorsManager.primary,
+                    size: 60,
+                  ),
+                ),
+              ),
           ],
         );
       },

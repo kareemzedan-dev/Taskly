@@ -21,7 +21,7 @@ class ApiManager {
     try {
       final response = await _dio.get(endpoint, queryParameters: queryParams);
       return response.data;
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       throw Exception(
         'GET request error: ${e.response?.statusCode} - ${e.message}',
       );
@@ -33,7 +33,7 @@ class ApiManager {
     try {
       final response = await _dio.post(endpoint, data: body);
       return response.data;
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       throw Exception(
         'POST request error: ${e.response?.statusCode} - ${e.message}',
       );
@@ -45,7 +45,7 @@ class ApiManager {
     try {
       final response = await _dio.put(endpoint, data: body);
       return response.data;
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       throw Exception(
         'PUT request error: ${e.response?.statusCode} - ${e.message}',
       );
@@ -63,7 +63,7 @@ class ApiManager {
         queryParameters: queryParams,
       );
       return response.data;
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       throw Exception(
         'DELETE request error: ${e.response?.statusCode} - ${e.message}',
       );

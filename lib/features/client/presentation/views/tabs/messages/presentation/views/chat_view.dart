@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
  
 import 'package:taskly/features/shared/presentation/views/widgets/chat_view_body.dart';
 import 'package:taskly/features/shared/presentation/views/widgets/custom_app_bar.dart';

@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';

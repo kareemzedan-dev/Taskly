@@ -16,7 +16,7 @@ import 'package:taskly/features/auth/presentation/views/widgets/social_login_but
 import 'package:taskly/l10n/app_localizations.dart';
 
 class LoginViewBody extends StatefulWidget {
-  LoginViewBody({super.key, required this.role});
+  const LoginViewBody({super.key, required this.role});
   final String role;
 
   @override
