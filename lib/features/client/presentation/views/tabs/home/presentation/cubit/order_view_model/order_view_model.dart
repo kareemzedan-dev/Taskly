@@ -41,7 +41,7 @@ class OrderViewModel extends Cubit<OrderViewModelStates> {
   String? selectedCategory;
   TextEditingController descriptionController = TextEditingController();
   final clientId = SharedPrefHelper.getString("id");
-  final SupabaseService _supabaseService = SupabaseService();
+  SupabaseService _supabaseService = SupabaseService();
 
   Future<List<Attachment>> uploadAttachments(
     List<File> files, {
@@ -51,17 +51,14 @@ class OrderViewModel extends Cubit<OrderViewModelStates> {
 
     try {
       List<Attachment> uploaded = [];
-      // لا تمسح التقدم القديم، فقط أضف التقدم الجديد
 
-      for (var file in files) {
+      for (var file in List<File>.from(files)) {
         final filePath = file.path;
 
-        // إذا الملف موجود بالفعل وتم رفعه، تجاوزه
         if (uploadProgress[filePath] == 1.0) {
-          continue; // تخطى الملفات المرفوعة مسبقاً
+          continue;
         }
 
-        // ابدأ من الصفر للملفات الجديدة فقط
         uploadProgress[filePath] = 0.0;
         emit(OrderViewModelStatesAttachmentsProgress(Map.from(uploadProgress)));
 
@@ -77,14 +74,18 @@ class OrderViewModel extends Cubit<OrderViewModelStates> {
           },
         );
 
-        // حدد كمل 100%
         uploadProgress[filePath] = 1.0;
         emit(OrderViewModelStatesAttachmentsProgress(Map.from(uploadProgress)));
 
-        uploaded.add(Attachment(type: file.path.split('/').last, url: url));
+        final fileName = file.path.split('/').last;
+        final newAttachment = Attachment(type: fileName, url: url);
+
+        if (!uploadedAttachments.any((att) => att.type == fileName)) {
+          uploaded.add(newAttachment);
+        }
       }
 
-      uploadedAttachments.addAll(uploaded); // أضف الجديد للقديم
+      uploadedAttachments.addAll(uploaded);
       emit(OrderViewModelStatesAttachmentsSuccess(uploadedAttachments));
       return uploadedAttachments;
     } catch (e) {
@@ -93,7 +94,10 @@ class OrderViewModel extends Cubit<OrderViewModelStates> {
     }
   }
 
-  
+  bool areAllAttachmentsUploaded() {
+    return uploadProgress.values.every((progress) => progress == 1.0);
+  }
+
   void clearUploadProgress() {
     uploadProgress.clear();
     emit(OrderViewModelStatesAttachmentsProgress(Map.from(uploadProgress)));

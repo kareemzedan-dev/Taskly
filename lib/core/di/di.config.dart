@@ -34,6 +34,7 @@ import '../../features/client/presentation/views/tabs/home/presentation/cubit/or
     as _i791;
 import '../../features/client/presentation/views/tabs/home/presentation/cubit/services_view_model/services_view_model.dart'
     as _i313;
+import '../services/file_uploaded_services.dart' as _i383;
 import '../services/supabase_service.dart' as _i374;
 
 extension GetItInjectableX on _i174.GetIt {
@@ -43,6 +44,7 @@ extension GetItInjectableX on _i174.GetIt {
     _i526.EnvironmentFilter? environmentFilter,
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
+    gh.singleton<_i383.FilePickerService>(() => _i383.FilePickerService());
     gh.singleton<_i374.SupabaseService>(() => _i374.SupabaseService());
     gh.factory<_i865.AuthRemoteDataSource>(
       () => _i335.AuthRemoteDataSourceImpl(),

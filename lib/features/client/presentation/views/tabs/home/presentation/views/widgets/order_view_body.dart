@@ -236,6 +236,16 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                           );
                         }
 
+                        if (!context
+                            .read<OrderViewModel>()
+                            .areAllAttachmentsUploaded()) {
+                          return showTemporaryMessage(
+                            context,
+                            "Please wait until all attachments are uploaded",
+                            MessageType.error,
+                          );
+                        }
+
                         await context.read<OrderViewModel>().placeOrder(
                           OrderEntity(
                             id: orderViewModel.orderId,

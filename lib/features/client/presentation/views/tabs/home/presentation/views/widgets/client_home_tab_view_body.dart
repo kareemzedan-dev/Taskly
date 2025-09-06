@@ -61,10 +61,7 @@ class _ClientHomeTabViewBodyState extends State<ClientHomeTabViewBody> {
             SizedBox(height: 30.h),
             CustomSearchTextField(hintTexts: searchHintTexts),
             SizedBox(height: 30.h),
-            BlocProvider(
-              create: (context) => getIt<ServicesViewModel>()..getServices(),
-              child: ServiceCategoryGridView(),
-            ),
+            ServiceCategoryGridView(),
           ],
         ),
       ),

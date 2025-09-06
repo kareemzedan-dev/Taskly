@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/empty_state_animation.dart';
+import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/order_states_card.dart';
 
 class MyJobsTabView extends StatelessWidget {
   const MyJobsTabView({super.key});
@@ -51,9 +52,17 @@ class MyJobsTabView extends StatelessWidget {
         backgroundColor: Colors.white,
         body: const TabBarView(
           children: [
-            EmptyStateAnimation(
-              animationPath: "assets/lotties/Loading.json",
-              message: "No pending orders",
+            // EmptyStateAnimation(
+            //   animationPath: "assets/lotties/Loading.json",
+            //   message: "No pending orders",
+            // ),
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  OrderStatesCard(),
+                ],
+              ),
             ),
             EmptyStateAnimation(
               animationPath: "assets/lotties/Progress.json",

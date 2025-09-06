@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/services/file_uploaded_services.dart';
 import 'package:taskly/core/utils/app_text_styles.dart';
+import 'package:taskly/core/widgets/dismissible_error_card.dart';
 
 class AttachmentsFilesSection extends StatefulWidget {
   final Function(List<File>)? onFilesSelected;
@@ -10,14 +11,15 @@ class AttachmentsFilesSection extends StatefulWidget {
   final VoidCallback? onClearAll;
 
   const AttachmentsFilesSection({
-    super.key, 
+    super.key,
     this.onFilesSelected,
     this.uploadProgress,
     this.onClearAll,
   });
 
   @override
-  State<AttachmentsFilesSection> createState() => _AttachmentsFilesSectionState();
+  State<AttachmentsFilesSection> createState() =>
+      _AttachmentsFilesSectionState();
 }
 
 class _AttachmentsFilesSectionState extends State<AttachmentsFilesSection> {
@@ -27,23 +29,41 @@ class _AttachmentsFilesSectionState extends State<AttachmentsFilesSection> {
   void pickFiles() async {
     List<File>? files = await _filePickerService.pickMultipleFiles();
     if (files != null && files.isNotEmpty) {
-      setState(() {
-        selectedFiles.addAll(files); // أضف الجديد للقديم بدل الاستبدال
-      });
-      widget.onFilesSelected?.call(selectedFiles);
+      List<File> newFiles = [];
+
+      for (var file in files) {
+        final fileName = file.path.split('/').last;
+
+        if (selectedFiles.any((f) => f.path.split('/').last == fileName)) {
+          return showTemporaryMessage(
+            context,
+            "${file.path.split('/').last} is already selected",
+            MessageType.error,
+          );
+        } else {
+          newFiles.add(file);
+        }
+      }
+
+      if (newFiles.isNotEmpty) {
+        setState(() {
+          selectedFiles = List.from(selectedFiles)..addAll(newFiles);
+        });
+        widget.onFilesSelected?.call(selectedFiles);
+      }
     }
   }
 
   void removeFile(int index) {
     setState(() {
-      selectedFiles.removeAt(index);
+      selectedFiles = List.from(selectedFiles)..removeAt(index);
     });
     widget.onFilesSelected?.call(selectedFiles);
   }
 
   void clearAllFiles() {
     setState(() {
-      selectedFiles.clear();
+      selectedFiles = [];
     });
     widget.onFilesSelected?.call(selectedFiles);
     widget.onClearAll?.call();
@@ -95,7 +115,7 @@ class _AttachmentsFilesSectionState extends State<AttachmentsFilesSection> {
             final fileName = file.path.split('/').last;
             final filePath = file.path;
             final progress = widget.uploadProgress?[filePath] ?? 0.0;
-            
+
             return Container(
               margin: EdgeInsets.only(bottom: 8.h),
               padding: EdgeInsets.all(8.w),
@@ -144,9 +164,9 @@ class _AttachmentsFilesSectionState extends State<AttachmentsFilesSection> {
                   ),
                   SizedBox(height: 4.h),
                   Text(
-                    progress < 1.0 
-                      ? 'Uploading ...(Please wait for the upload to complete)'
-                      : 'Upload complete',
+                    progress < 1.0
+                        ? 'Uploading ...(Please wait for the upload to complete)'
+                        : 'Upload complete',
                     style: AppTextStyles.regular12.copyWith(
                       color: Colors.grey.shade600,
                     ),
