@@ -61,6 +61,7 @@ class MyJobsTabView extends StatelessWidget {
               child: Column(
                 children: [
                   OrderStatesCard(),
+                  
                 ],
               ),
             ),

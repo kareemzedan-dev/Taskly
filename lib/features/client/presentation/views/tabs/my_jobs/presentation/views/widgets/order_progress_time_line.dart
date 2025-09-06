@@ -4,7 +4,7 @@ import 'package:taskly/core/utils/colors_manger.dart';
 
 class OrderProgressTimeline extends StatelessWidget {
   final List<String> steps; 
-  final int currentStep; 
+  final int currentStep;  
   final Color activeColor;
   final Color inactiveColor;
 
@@ -14,57 +14,72 @@ class OrderProgressTimeline extends StatelessWidget {
     required this.currentStep,
     this.activeColor = ColorsManager.primary,
     this.inactiveColor = Colors.grey,
-  });
+  }) : assert(steps.length == 4, 'This timeline supports exactly 4 steps');
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: List.generate(steps.length * 2 - 1, (index) {
-        if (index.isEven) {
-          int stepIndex = index ~/ 2;
-          bool isActive = stepIndex <= currentStep;
+    return IntrinsicHeight(
+      child: Row(
+        children: List.generate(steps.length * 2 - 1, (index) {
+          if (index.isEven) {
+   
+            final stepIndex = index ~/ 2;
+            final isActive = stepIndex <= currentStep;
 
-          return Column(
-            children: [
-              Container(
-                width: 24.w,
-                height: 24.w,
-                decoration: BoxDecoration(
-                  color: isActive ? activeColor : inactiveColor,
-                  shape: BoxShape.circle,
-                ),
-                child: Center(
-                  child: Icon(
-                    isActive ? Icons.check : Icons.circle_outlined,
-                    size: 16.sp,
-                    color: Colors.white,
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 28.w,
+                  height: 28.w,
+                  decoration: BoxDecoration(
+                    color: isActive ? activeColor : Colors.white,
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: isActive ? activeColor : inactiveColor,
+                      width: 2.w,
+                    ),
+                  ),
+                  child: Center(
+                    child: isActive
+                        ? Icon(Icons.check, size: 16.sp, color: Colors.white)
+                        : Icon(Icons.circle_outlined,
+                            size: 16.sp, color: inactiveColor),
                   ),
                 ),
-              ),
-              SizedBox(height: 4.h),
-              Text(
-                steps[stepIndex],
-                style: TextStyle(
-                  fontSize: 12.sp,
-                  color: isActive ? activeColor : inactiveColor,
+                SizedBox(height: 6.h),
+                SizedBox(
+                  width: 60.w,
+                  child: Text(
+                    steps[stepIndex],
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w500,
+                      color: isActive ? activeColor : inactiveColor,
+                    ),
+                  ),
+                ),
+              ],
+            );
+          } else {
+            final leftStep = index ~/ 2;
+            final isActive = leftStep < currentStep;
+
+            return Expanded(
+              child: Align(
+                alignment: Alignment.center,
+                child: Container(
+                  height: 3.h,
+                  color: isActive
+                      ? activeColor
+                      : inactiveColor.withOpacity(0.3),
                 ),
               ),
-            ],
-          );
-        } else {
-          // الخط بين الدوائر
-          int leftStep = index ~/ 2;
-          bool isActive = leftStep < currentStep;
-
-          return Expanded(
-            child: Container(
-              height: 2.h,
-              color: isActive ? activeColor : inactiveColor.withOpacity(0.3),
-            ),
-          );
-        }
-      }),
+            );
+          }
+        }),
+      ),
     );
   }
 }

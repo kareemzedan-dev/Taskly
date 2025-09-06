@@ -61,7 +61,7 @@ class Taskly extends StatelessWidget {
 
           onGenerateRoute:
               (settings) => RoutesManager.onGenerateRoute(settings),
-          initialRoute: RoutesManager.clientHome,
+          initialRoute: RoutesManager.  splash,
         );
       },
     );

@@ -8,6 +8,8 @@ class UserInfoSection extends StatelessWidget {
   final String name, email;
   final double rating;
   final bool isFreelancer;
+  final bool photoSizeSelected;
+  final bool emailShow;
 
   const UserInfoSection({
     super.key,
@@ -15,6 +17,8 @@ class UserInfoSection extends StatelessWidget {
     required this.email,
     this.rating = 1.0,
     this.isFreelancer = false,
+    this.photoSizeSelected = false,
+    this.emailShow = true,
   });
 
   @override
@@ -22,7 +26,7 @@ class UserInfoSection extends StatelessWidget {
     return Row(
       children: [
         CircleAvatar(
-          radius: 40.r,
+          radius: photoSizeSelected ? 26.r : 40.r,
           backgroundImage: AssetImage(
             Assets.assetsImagesPortraitHappySmileyMan,
           ),
@@ -32,10 +36,11 @@ class UserInfoSection extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(name, style: AppTextStyles.bold20),
-            Text(
-              email,
-              style: AppTextStyles.bold16.copyWith(color: Colors.grey),
-            ),
+            if (emailShow)
+              Text(
+                email,
+                style: AppTextStyles.bold16.copyWith(color: Colors.grey),
+              ),
             Row(
               children: [
                 ...List.generate(5, (index) {
@@ -58,7 +63,11 @@ class UserInfoSection extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Icon(Icons.verified_user_outlined, color: Colors.green,size: 14.sp,),
+                  Icon(
+                    Icons.verified_user_outlined,
+                    color: Colors.green,
+                    size: 14.sp,
+                  ),
                   SizedBox(width: 5.w),
                   Text(
                     isFreelancer ? 'Verified Freelancer' : '',

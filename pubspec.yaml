@@ -56,10 +56,10 @@ dependencies:
   flutter_spinbox: ^0.13.1
   uuid: ^4.5.1
   file_picker: ^10.3.2
-  timelines: ^0.1.0
   shared_preferences: any
   bloc: any
   intl: any
+ 
 dev_dependencies:
   flutter_test:
     sdk: flutter
