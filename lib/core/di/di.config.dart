@@ -34,8 +34,8 @@ import '../../features/client/data/repos/home/home_repo_impl.dart' as _i86;
 import '../../features/client/domain/repos/home/home_repos.dart' as _i660;
 import '../../features/client/domain/use_cases/home/home_use_case.dart'
     as _i213;
-import '../../features/client/presentation/cubit/user_view_model/user_info_view_model.dart'
-    as _i907;
+import '../../features/client/presentation/cubit/client_info_view_model/client_info_view_model.dart'
+    as _i449;
 import '../../features/client/presentation/views/tabs/home/presentation/cubit/freelancers_view_model/freelancers_view_model.dart'
     as _i392;
 import '../../features/client/presentation/views/tabs/home/presentation/cubit/place_order_view_model/place_order_view_model.dart'
@@ -44,6 +44,8 @@ import '../../features/client/presentation/views/tabs/home/presentation/cubit/se
     as _i313;
 import '../../features/client/presentation/views/tabs/my_jobs/presentation/cubit/get_order_view_model.dart/get_order_view_model.dart'
     as _i772;
+import '../../features/freelancer/presentation/cubit/freelancer_info_view_model/freelancer_info_view_model.dart'
+    as _i776;
 import '../services/file_uploaded_services.dart' as _i383;
 import '../services/supabase_service.dart' as _i374;
 
@@ -94,14 +96,17 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i772.GetOrderViewModel>(
       () => _i772.GetOrderViewModel(gh<_i340.OrdersUseCase>()),
     );
-    gh.factory<_i907.UserInfoViewModel>(
-      () => _i907.UserInfoViewModel(gh<_i213.HomeUseCase>()),
-    );
     gh.factory<_i313.ServicesViewModel>(
       () => _i313.ServicesViewModel(gh<_i213.HomeUseCase>()),
     );
     gh.factory<_i399.PlaceOrderViewModel>(
       () => _i399.PlaceOrderViewModel(gh<_i213.HomeUseCase>()),
+    );
+    gh.factory<_i449.ClientInfoViewModel>(
+      () => _i449.ClientInfoViewModel(gh<_i213.HomeUseCase>()),
+    );
+    gh.factory<_i776.FreelancerInfoViewModel>(
+      () => _i776.FreelancerInfoViewModel(gh<_i213.HomeUseCase>()),
     );
     gh.factory<_i392.FreelancersViewModel>(
       () => _i392.FreelancersViewModel(gh<_i213.HomeUseCase>()),

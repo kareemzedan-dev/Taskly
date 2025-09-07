@@ -5,12 +5,12 @@ import 'package:taskly/core/helper/failures.dart';
 import 'package:taskly/core/helper/shared_preferences.dart';
 import 'package:taskly/features/client/domain/entities/home/user_info_entity.dart';
 import 'package:taskly/features/client/domain/use_cases/home/home_use_case.dart';
-import 'package:taskly/features/client/presentation/cubit/user_view_model/user_info_view_model_states.dart';
+import 'package:taskly/features/client/presentation/cubit/client_info_view_model/client_info_view_model_states.dart';
 
-@injectable@injectable
-class UserInfoViewModel extends Cubit<UserInfoViewModelStates> {
+@injectable 
+class ClientInfoViewModel extends Cubit<ClientInfoViewModelStates> {
   final HomeUseCase homeUseCase;
-  UserInfoViewModel(this.homeUseCase) : super(UserInfoViewModelInitial());
+  ClientInfoViewModel(this.homeUseCase) : super(ClientInfoViewModelInitial());
   final List<String> searchHintTexts = [
   "Find top freelancers",
   "Search by category",
@@ -32,7 +32,7 @@ class UserInfoViewModel extends Cubit<UserInfoViewModelStates> {
           email: email,
           role: role,
         );
-        emit(UserInfoViewModelSuccess(cachedUser));
+        emit(ClientInfoViewModelSuccess(cachedUser));
         return Right(cachedUser); 
       }
     }
@@ -42,12 +42,12 @@ class UserInfoViewModel extends Cubit<UserInfoViewModelStates> {
 
   Future<Either<Failures, UserInfoEntity>> getUserInfo() async {
     try {
-      emit(UserInfoViewModelLoading());
+      emit(ClientInfoViewModelLoading());
       final result = await homeUseCase.call();
       result.fold(
-        (failure) => emit(UserInfoViewModelError(failure.message)),
+        (failure) => emit(ClientInfoViewModelError(failure.message)),
         (user) async {
-          emit(UserInfoViewModelSuccess(user));
+          emit(ClientInfoViewModelSuccess(user));
 
           await SharedPrefHelper.setString('fullName', user.fullName ?? '');
           await SharedPrefHelper.setString('email', user.email);

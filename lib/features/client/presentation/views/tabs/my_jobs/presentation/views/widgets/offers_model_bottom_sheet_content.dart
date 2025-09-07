@@ -4,8 +4,8 @@ import 'package:taskly/core/utils/colors_manger.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/offer_card.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/offer_header.dart';
 
-class ModelBottomSheetContent extends StatelessWidget {
-  ModelBottomSheetContent({super.key});
+class OffersBottomSheetContent extends StatelessWidget {
+  OffersBottomSheetContent({super.key});
 
   final filters = ["Price", "Delivery", "Rating"];
 

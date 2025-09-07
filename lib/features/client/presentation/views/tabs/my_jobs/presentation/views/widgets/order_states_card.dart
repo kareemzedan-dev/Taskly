@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
 import 'package:taskly/domain/entities/order_entity/order_entity.dart';
-import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/model_bottom_sheet_content.dart';
+import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/offers_model_bottom_sheet_content.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/order_action_button.dart';
-import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/order_details_content.dart';
+import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/order_details_bottom_sheet_content.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/order_header.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/order_progress_time_line.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/job_details_view.dart';
@@ -64,7 +64,7 @@ class OrderStatesCard extends StatelessWidget {
                       ),
                     ),
                     builder: (context) {
-                      return ModelBottomSheetContent();
+                      return OffersBottomSheetContent();
                     },
                   );
                 },
@@ -86,7 +86,7 @@ class OrderStatesCard extends StatelessWidget {
                       ),
                     ),
                     builder: (context) {
-                      return  OrderDetailsContent();
+                      return  OrderDetailsBottomSheetContent(order:order ,);
                     },
                   );
               

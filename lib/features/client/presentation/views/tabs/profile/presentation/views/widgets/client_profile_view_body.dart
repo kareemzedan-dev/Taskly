@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/di/di.dart';
 import 'package:taskly/core/utils/assets_manager.dart';
-import 'package:taskly/features/client/presentation/cubit/user_view_model/user_info_view_model.dart';
-import 'package:taskly/features/client/presentation/cubit/user_view_model/user_info_view_model_states.dart';
+import 'package:taskly/features/client/presentation/cubit/client_info_view_model/client_info_view_model.dart';
+import 'package:taskly/features/client/presentation/cubit/client_info_view_model/client_info_view_model_states.dart';
 import 'package:taskly/features/client/presentation/views/tabs/profile/presentation/views/widgets/account_item_row.dart';
 import 'package:taskly/features/client/presentation/views/tabs/profile/presentation/views/widgets/user_info_section.dart';
 import 'package:taskly/features/shared/presentation/views/widgets/profile_section.dart';
@@ -17,12 +17,12 @@ class ClientProfileViewBody extends StatefulWidget {
 }
 
 class _ClientProfileViewBodyState extends State<ClientProfileViewBody> {
-  late final UserInfoViewModel _userInfoViewModel;
+  late final ClientInfoViewModel _userInfoViewModel;
 
   @override
   void initState() {
     super.initState();
-    _userInfoViewModel = getIt<UserInfoViewModel>();
+    _userInfoViewModel = getIt<ClientInfoViewModel>();
     _userInfoViewModel.loadUserInfo();
   }
 
@@ -37,17 +37,17 @@ class _ClientProfileViewBodyState extends State<ClientProfileViewBody> {
             const SizedBox(height: 20),
             BlocProvider(
               create: (context) => _userInfoViewModel,
-              child: BlocBuilder<UserInfoViewModel, UserInfoViewModelStates>(
+              child: BlocBuilder<ClientInfoViewModel, ClientInfoViewModelStates>(
                 builder: (context, state) {
-                  if (state is UserInfoViewModelLoading) {
+                  if (state is ClientInfoViewModelLoading) {
                     return const CircularProgressIndicator();
-                  } else if (state is UserInfoViewModelSuccess) {
+                  } else if (state is ClientInfoViewModelSuccess) {
                     return UserInfoSection(
                       email: state.userInfoEntity.email,
                       name: state.userInfoEntity.fullName!,
                     
                     );
-                  } else if (state is UserInfoViewModelError) {
+                  } else if (state is ClientInfoViewModelError) {
                     return Text(state.errorMessage);
                   }
                   return Container();
