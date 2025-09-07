@@ -5,7 +5,7 @@ class FreelancerEntity {
   String? email;
   String? phone;
   String? bio;
-  String? skills;
+  List<String>? skills;
  String? role;
  double? hourlyRate;
  double? rating;

@@ -98,7 +98,7 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
         if (role == "freelancer") {
           final freelancerInsert = await supabaseService.sendDataToSupabase(
             tableName: 'freelancers',
-            data: {'id': user.id, 'created_at': DateTime.now()},
+            data: {'id': user.id, 'created_at': DateTime.now().toIso8601String(),},
             conflictColumn: 'id',
           );
           if (freelancerInsert == null) {
@@ -204,7 +204,7 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
       if (role == "freelancer") {
         final freelancerInsert = await supabaseService.sendDataToSupabase(
           tableName: 'freelancers',
-          data: {'id': user.id, 'created_at': DateTime.now()},
+          data: {'id': user.id, 'created_at':DateTime.now().toIso8601String(),},
           conflictColumn: 'id',
         );
         if (freelancerInsert == null) {

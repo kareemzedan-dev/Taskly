@@ -5,9 +5,11 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:taskly/core/helper/failures.dart';
 import 'package:taskly/core/services/supabase_service.dart';
 import 'package:taskly/features/client/data/data_sources/remote/home_remote_data_source.dart';
+import 'package:taskly/features/client/data/models/home/freelancer_dm.dart';
 import 'package:taskly/features/client/data/models/home/order_dm.dart';
 import 'package:taskly/features/client/data/models/home/service_response_dm.dart';
 import 'package:taskly/features/client/data/models/home/user_info_response_dm.dart';
+import 'package:taskly/features/client/domain/entities/home/freelancer_entity.dart';
 import 'package:taskly/features/client/domain/entities/home/order_entity.dart';
 import 'package:taskly/features/client/domain/entities/home/service_response_entity.dart';
 
@@ -107,6 +109,54 @@ class HomeRemoteDataSourceImpl extends HomeRemoteDataSource {
       }
     } catch (e) {
       return Left(ServerFailure("Failed to place order: $e"));
+    }
+  }
+
+  @override
+  Future<Either<Failures, List<FreelancerEntity>>>
+  getAllFreelancerInfo() async {
+    try {
+      var result = await Connectivity().checkConnectivity();
+      if (result.contains(ConnectivityResult.wifi) ||
+          result.contains(ConnectivityResult.mobile)) {
+       
+        final userResponse = await supabaseService.getDataFromSupabase(
+          tableName: "users",
+          filters: {"role": "freelancer"},
+        );
+
+        if (userResponse == null || userResponse.isEmpty) {
+          return Left(ServerFailure("No freelancers found"));
+        }
+
+     
+        List<FreelancerEntity> freelancers = [];
+        for (final userData in userResponse) {
+          final freelancerResponse = await supabaseService.getDataFromSupabase(
+            tableName: "freelancers",
+            filters: {"id": userData['id']},
+          );
+
+          final freelancerData =
+              freelancerResponse != null && freelancerResponse.isNotEmpty
+                  ? freelancerResponse.first
+                  : null;
+
+          final freelancer = FreelancerDm.fromJson(userData);
+
+          final mergedFreelancer = freelancer.copyWith(
+            rating: freelancerData?['rating'] ?? 0.0,
+          );
+
+          freelancers.add(mergedFreelancer);
+        }
+
+        return Right(freelancers);
+      } else {
+        return Left(NetworkFailure('No internet connection'));
+      }
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
     }
   }
 }

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:taskly/core/di/di.dart';
 import 'package:taskly/core/widgets/custom_search_text_field.dart';
+import 'package:taskly/features/client/presentation/views/tabs/home/presentation/cubit/freelancers_view_model/freelancers_view_model.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/freelancer_info_list_view.dart';
 
 class PrivateHireSection extends StatelessWidget {
@@ -41,7 +44,10 @@ class PrivateHireSection extends StatelessWidget {
               ),
 
               SizedBox(height: 16.h),
-              FreelancerInfoListView(),
+              BlocProvider(
+                create: (context) =>  getIt<FreelancersViewModel>()..getAllFreelancer(),
+                child: FreelancerInfoListView(),
+              ),
             ],
           ),
         ),

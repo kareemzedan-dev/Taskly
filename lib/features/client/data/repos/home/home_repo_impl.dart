@@ -2,6 +2,7 @@ import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
 import 'package:taskly/core/helper/failures.dart';
 import 'package:taskly/features/client/data/data_sources/remote/home_remote_data_source.dart';
+import 'package:taskly/features/client/domain/entities/home/freelancer_entity.dart';
 import 'package:taskly/features/client/domain/entities/home/order_entity.dart';
 import 'package:taskly/features/client/domain/entities/home/service_response_entity.dart';
 import 'package:taskly/features/client/domain/entities/home/user_info_entity.dart';
@@ -25,5 +26,11 @@ class HomeRepoImpl extends HomeRepos {
   @override
   Future<Either<Failures, OrderEntity>> placeOrder(OrderEntity orderEntity) {
     return homeremoteDataSource.placeOrder(orderEntity);
+  }
+
+  @override
+  Future<Either<Failures, List<FreelancerEntity>>> getAllFreelancer() {
+    return homeremoteDataSource.getAllFreelancerInfo();
+    
   }
 }
