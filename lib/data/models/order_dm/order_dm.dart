@@ -1,4 +1,4 @@
-import 'package:taskly/features/client/domain/entities/home/order_entity.dart';
+import 'package:taskly/domain/entities/order_entity/order_entity.dart';
 
 class OrderDm extends OrderEntity {
   OrderDm({
@@ -7,7 +7,7 @@ class OrderDm extends OrderEntity {
     super.freelancerId,
     required super.title,
     super.description,
-    super.Category,
+    super.category,
     super.attachments,
     super.serviceType,
     super.budget,
@@ -24,7 +24,7 @@ class OrderDm extends OrderEntity {
       freelancerId: json['freelancer_id'] as String?,
       title: json['title'] as String,
       description: json['description'] as String?,
-      Category: json['category'] as String?,
+      category: json['category'] as String?,
       attachments: json['attachments'] != null
           ? (json['attachments'] as List)
               .map((e) => Attachment.fromJson(e))
@@ -51,7 +51,7 @@ class OrderDm extends OrderEntity {
       'freelancer_id': freelancerId,
       'title': title,
       'description': description,
-      'category': Category,
+      'category': category,
       'attachments': attachments.map((e) => e.toJson()).toList(),
       'service_type': serviceType == ServiceType.private ? 'private' : 'public',
       'budget': budget,
@@ -98,7 +98,7 @@ class OrderDm extends OrderEntity {
       clientId: entity.clientId,
       freelancerId: entity.freelancerId,
       title: entity.title,
-      Category: entity.Category,
+      category: entity.category,
       description: entity.description,
       attachments: entity.attachments,
       serviceType: entity.serviceType,
@@ -107,6 +107,23 @@ class OrderDm extends OrderEntity {
       deadline: entity.deadline,
       createdAt: entity.createdAt,
       updatedAt: entity.updatedAt,
+    );
+  }
+    OrderEntity toEntity() {
+    return OrderEntity(
+      id: id,
+      clientId: clientId,
+      freelancerId: freelancerId,
+      title: title,
+      description: description,
+      category: category,
+      attachments: attachments,
+      serviceType: serviceType,
+      budget: budget,
+      status: status,
+      deadline: deadline,
+      createdAt: createdAt,
+      updatedAt: updatedAt,
     );
   }
 }

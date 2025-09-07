@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
+import 'package:taskly/domain/entities/order_entity/order_entity.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/model_bottom_sheet_content.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/order_action_button.dart';
+import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/order_details_content.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/order_header.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/order_progress_time_line.dart';
+import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/job_details_view.dart';
 
 class OrderStatesCard extends StatelessWidget {
-  const OrderStatesCard({super.key});
+  const OrderStatesCard({super.key, required this.order});
+  final OrderEntity order  ;
 
   @override
   Widget build(BuildContext context) {
@@ -32,16 +36,16 @@ class OrderStatesCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const OrderHeader(
-                orderName: "Order Name",
-                orderId: "#343432",
+                OrderHeader(
+                orderName:order.title  ,
+                orderId:order.id,
               ),
 
               SizedBox(height: 20.h),
 
               OrderProgressTimeline(
                 steps: ['Created', 'Paid', 'Executing', 'Completed'],
-                currentStep: 0,
+                currentStep: order.status == OrderStatus.pending ? 0 : 1,
               ),
               SizedBox(height: 26.h),
 
@@ -73,6 +77,18 @@ class OrderStatesCard extends StatelessWidget {
                 icon: Icons.remove_red_eye_outlined,
                 color: ColorsManager.primary,
                 onTap: () {
+                         showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(20),
+                      ),
+                    ),
+                    builder: (context) {
+                      return  OrderDetailsContent();
+                    },
+                  );
               
                 },
               ),

@@ -7,15 +7,15 @@ import 'package:injectable/injectable.dart';
 import 'package:taskly/core/helper/failures.dart';
 import 'package:taskly/core/helper/shared_preferences.dart';
 import 'package:taskly/core/services/supabase_service.dart';
-import 'package:taskly/features/client/domain/entities/home/order_entity.dart';
+import 'package:taskly/domain/entities/order_entity/order_entity.dart';
 import 'package:taskly/features/client/domain/use_cases/home/home_use_case.dart';
-import 'package:taskly/features/client/presentation/views/tabs/home/presentation/cubit/order_view_model/order_view_model_states.dart';
+import 'package:taskly/features/client/presentation/views/tabs/home/presentation/cubit/place_order_view_model/place_order_view_model_states.dart';
 import 'package:uuid/uuid.dart';
 
 @injectable
-class OrderViewModel extends Cubit<OrderViewModelStates> {
+class PlaceOrderViewModel extends Cubit<PlaceOrderViewModelStates> {
   HomeUseCase homeUseCase;
-  OrderViewModel(this.homeUseCase) : super(OrderViewModelStatesInitial());
+  PlaceOrderViewModel(this.homeUseCase) : super(PlaceOrderViewModelStatesInitial());
   final List<String> categories = [
     "Academic Sources",
     "Scientific Reports",
@@ -47,7 +47,7 @@ class OrderViewModel extends Cubit<OrderViewModelStates> {
     List<File> files, {
     Function(String filePath, double progress)? onProgress,
   }) async {
-    emit(OrderViewModelStatesAttachmentsLoading());
+    emit(PlaceOrderViewModelStatesAttachmentsLoading());
 
     try {
       List<Attachment> uploaded = [];
@@ -60,7 +60,7 @@ class OrderViewModel extends Cubit<OrderViewModelStates> {
         }
 
         uploadProgress[filePath] = 0.0;
-        emit(OrderViewModelStatesAttachmentsProgress(Map.from(uploadProgress)));
+        emit(PlaceOrderViewModelStatesAttachmentsProgress(Map.from(uploadProgress)));
 
         final url = await _supabaseService.uploadFile(
           file,
@@ -68,14 +68,14 @@ class OrderViewModel extends Cubit<OrderViewModelStates> {
             final progress = sentBytes / totalBytes;
             uploadProgress[filePath] = progress;
             emit(
-              OrderViewModelStatesAttachmentsProgress(Map.from(uploadProgress)),
+              PlaceOrderViewModelStatesAttachmentsProgress(Map.from(uploadProgress)),
             );
             if (onProgress != null) onProgress(filePath, progress);
           },
         );
 
         uploadProgress[filePath] = 1.0;
-        emit(OrderViewModelStatesAttachmentsProgress(Map.from(uploadProgress)));
+        emit(PlaceOrderViewModelStatesAttachmentsProgress(Map.from(uploadProgress)));
 
         final fileName = file.path.split('/').last;
         final newAttachment = Attachment(type: fileName, url: url);
@@ -86,10 +86,10 @@ class OrderViewModel extends Cubit<OrderViewModelStates> {
       }
 
       uploadedAttachments.addAll(uploaded);
-      emit(OrderViewModelStatesAttachmentsSuccess(uploadedAttachments));
+      emit(PlaceOrderViewModelStatesAttachmentsSuccess(uploadedAttachments));
       return uploadedAttachments;
     } catch (e) {
-      emit(OrderViewModelStatesAttachmentsError(e.toString()));
+      emit(PlaceOrderViewModelStatesAttachmentsError(e.toString()));
       return [];
     }
   }
@@ -100,18 +100,18 @@ class OrderViewModel extends Cubit<OrderViewModelStates> {
 
   void clearUploadProgress() {
     uploadProgress.clear();
-    emit(OrderViewModelStatesAttachmentsProgress(Map.from(uploadProgress)));
+    emit(PlaceOrderViewModelStatesAttachmentsProgress(Map.from(uploadProgress)));
   }
 
   Future<Either<Failures, OrderEntity>> placeOrder(
     OrderEntity orderEntity,
   ) async {
     try {
-      emit(OrderViewModelStatesLoading());
+      emit(PlaceOrderViewModelStatesLoading());
       final result = await homeUseCase.callPlaceOrder(orderEntity);
       result.fold(
-        (failure) => emit(OrderViewModelStatesError(failure.message)),
-        (order) => emit(OrderViewModelStatesSuccess(order)),
+        (failure) => emit(PlaceOrderViewModelStatesError(failure.message)),
+        (order) => emit(PlaceOrderViewModelStatesSuccess(order)),
       );
       return result;
     } catch (e) {

@@ -4,7 +4,7 @@ class OrderEntity {
   final String? freelancerId;
   final String title;
   final String? description;
-  final String?Category ;
+  final String?category ;
   final List<Attachment> attachments;
   final ServiceType serviceType;
   final double? budget;
@@ -19,7 +19,7 @@ class OrderEntity {
     this.freelancerId,
     required this.title,
     this.description,
-    required this.Category ,
+    required this.category ,
     this.attachments = const [],
     this.serviceType = ServiceType.public,
     this.budget,

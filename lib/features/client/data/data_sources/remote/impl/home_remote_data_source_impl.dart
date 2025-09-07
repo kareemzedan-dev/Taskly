@@ -4,13 +4,13 @@ import 'package:injectable/injectable.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:taskly/core/helper/failures.dart';
 import 'package:taskly/core/services/supabase_service.dart';
+import 'package:taskly/data/models/order_dm/order_dm.dart';
+import 'package:taskly/domain/entities/order_entity/order_entity.dart';
 import 'package:taskly/features/client/data/data_sources/remote/home_remote_data_source.dart';
 import 'package:taskly/features/client/data/models/home/freelancer_dm.dart';
-import 'package:taskly/features/client/data/models/home/order_dm.dart';
 import 'package:taskly/features/client/data/models/home/service_response_dm.dart';
 import 'package:taskly/features/client/data/models/home/user_info_response_dm.dart';
 import 'package:taskly/features/client/domain/entities/home/freelancer_entity.dart';
-import 'package:taskly/features/client/domain/entities/home/order_entity.dart';
 import 'package:taskly/features/client/domain/entities/home/service_response_entity.dart';
 
 @Injectable(as: HomeRemoteDataSource)

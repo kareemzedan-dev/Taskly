@@ -17,7 +17,7 @@ class _ClientHomeViewState extends State<ClientHomeView> {
 
   List<Widget> items = [
     const HomeTabView(),
-    const MyJobsTabView(),
+      MyJobsTabView(),
     const MessagesTabView(),
     const ProfileViewTab(),
   ];

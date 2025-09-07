@@ -45,12 +45,14 @@ class OrderHeader extends StatelessWidget {
         ),
         SizedBox(height: 3.h),
         Text(
-          orderId,
+          "#${orderId.substring(0, 8)}",
           style: Theme.of(context)
               .textTheme
               .bodyMedium
               ?.copyWith(color: Colors.grey.shade600),
+
         ),
+
       ],
     );
   }

@@ -7,10 +7,10 @@ import 'package:taskly/core/services/supabase_service.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
 import 'package:taskly/core/widgets/custom_button.dart';
 import 'package:taskly/core/widgets/dismissible_error_card.dart';
-import 'package:taskly/features/client/domain/entities/home/order_entity.dart';
+import 'package:taskly/domain/entities/order_entity/order_entity.dart';
 import 'package:taskly/features/client/presentation/views/client_home_view.dart';
-import 'package:taskly/features/client/presentation/views/tabs/home/presentation/cubit/order_view_model/order_view_model.dart';
-import 'package:taskly/features/client/presentation/views/tabs/home/presentation/cubit/order_view_model/order_view_model_states.dart';
+import 'package:taskly/features/client/presentation/views/tabs/home/presentation/cubit/place_order_view_model/place_order_view_model.dart';
+import 'package:taskly/features/client/presentation/views/tabs/home/presentation/cubit/place_order_view_model/place_order_view_model_states.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/attachments_files_section.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/build_text_field_widget.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/category_drop_down.dart';
@@ -19,7 +19,7 @@ import 'package:taskly/features/client/presentation/views/tabs/home/presentation
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/private_hire_section.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/time_input_raw.dart';
 
-OrderViewModel orderViewModel = getIt<OrderViewModel>();
+PlaceOrderViewModel orderViewModel = getIt<PlaceOrderViewModel>();
 SupabaseService supabaseService = SupabaseService();
 
 class OrderViewBody extends StatefulWidget {
@@ -42,9 +42,9 @@ class _OrderViewBodyState extends State<OrderViewBody> {
   Map<String, double> uploadProgress = {};
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<OrderViewModel, OrderViewModelStates>(
+    return BlocConsumer<PlaceOrderViewModel, PlaceOrderViewModelStates>(
       listener: (context, state) {
-        if (state is OrderViewModelStatesSuccess) {
+        if (state is PlaceOrderViewModelStatesSuccess) {
           showTemporaryMessage(
             context,
             "Order created successfully",
@@ -57,7 +57,7 @@ class _OrderViewBodyState extends State<OrderViewBody> {
           );
         }
 
-        if (state is OrderViewModelStatesError) {
+        if (state is PlaceOrderViewModelStatesError) {
           showTemporaryMessage(
             context,
             "Something went wrong, try again later",
@@ -65,10 +65,10 @@ class _OrderViewBodyState extends State<OrderViewBody> {
           );
         }
 
-        if (state is OrderViewModelStatesAttachmentsError) {
+        if (state is PlaceOrderViewModelStatesAttachmentsError) {
           showTemporaryMessage(context, state.message, MessageType.error);
         }
-        if (state is OrderViewModelStatesAttachmentsProgress) {
+        if (state is PlaceOrderViewModelStatesAttachmentsProgress) {
           setState(() {
             uploadProgress = state.progressMap;
           });
@@ -76,8 +76,8 @@ class _OrderViewBodyState extends State<OrderViewBody> {
       },
       builder: (context, state) {
         final isLoading =
-            state is OrderViewModelStatesLoading ||
-            state is OrderViewModelStatesAttachmentsLoading;
+            state is PlaceOrderViewModelStatesLoading ||
+            state is PlaceOrderViewModelStatesAttachmentsLoading;
 
         return Stack(
           children: [
@@ -152,7 +152,7 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                         orderViewModel.localAttachments = files;
                         orderViewModel.clearUploadProgress();
                         uploadedAttachments = await context
-                            .read<OrderViewModel>()
+                            .read<PlaceOrderViewModel>()
                             .uploadAttachments(orderViewModel.localAttachments);
                       },
                       uploadProgress: uploadProgress,
@@ -238,7 +238,7 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                         }
 
                         if (!context
-                            .read<OrderViewModel>()
+                            .read<PlaceOrderViewModel>()
                             .areAllAttachmentsUploaded()) {
                           return showTemporaryMessage(
                             context,
@@ -247,7 +247,7 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                           );
                         }
 
-                        await context.read<OrderViewModel>().placeOrder(
+                        await context.read<PlaceOrderViewModel>().placeOrder(
                           OrderEntity(
                             id: orderViewModel.orderId,
                             clientId: orderViewModel.clientId!,
@@ -255,7 +255,7 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                             title: orderViewModel.titleController.text,
                             description:
                                 orderViewModel.descriptionController.text,
-                            Category: orderViewModel.selectedCategory,
+                            category: orderViewModel.selectedCategory,
                             attachments: uploadedAttachments,
                             serviceType: ServiceType.public,
                             status: OrderStatus.pending,

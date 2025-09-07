@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:taskly/core/di/di.dart';
+import 'package:taskly/core/helper/shared_preferences.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
+import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/cubit/get_order_view_model.dart/get_order_view_model.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/empty_state_animation.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/order_states_card.dart';
+import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/order_status_card_list_view.dart';
 
 class MyJobsTabView extends StatelessWidget {
-  const MyJobsTabView({super.key});
+    MyJobsTabView({super.key});
+  final String userId =   SharedPrefHelper.getString("id")!;
 
   @override
   Widget build(BuildContext context) {
@@ -16,25 +22,19 @@ class MyJobsTabView extends StatelessWidget {
           backgroundColor: Colors.white,
           elevation: 0,
           shape: Border(
-            bottom: BorderSide(
-              color: Colors.grey.shade300,
-              width: 2,
-            ),
+            bottom: BorderSide(color: Colors.grey.shade300, width: 2),
           ),
           title: Text(
             'Manage Orders',
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  fontWeight: FontWeight.w700,
-                  fontSize: 20.sp,
-                ),
+              fontWeight: FontWeight.w700,
+              fontSize: 20.sp,
+            ),
           ),
           bottom: TabBar(
             labelColor: ColorsManager.primary,
             unselectedLabelColor: Colors.grey,
-            labelStyle: TextStyle(
-              fontSize: 16.sp,
-              fontWeight: FontWeight.w600,
-            ),
+            labelStyle: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600),
             unselectedLabelStyle: TextStyle(
               fontSize: 14.sp,
               fontWeight: FontWeight.w400,
@@ -50,7 +50,7 @@ class MyJobsTabView extends StatelessWidget {
           ),
         ),
         backgroundColor: Colors.white,
-        body: const TabBarView(
+        body: TabBarView(
           children: [
             // EmptyStateAnimation(
             //   animationPath: "assets/lotties/Loading.json",
@@ -60,8 +60,10 @@ class MyJobsTabView extends StatelessWidget {
               padding: EdgeInsets.all(8.0),
               child: Column(
                 children: [
-                  OrderStatesCard(),
-                  
+                  BlocProvider(
+                    create: (context) => getIt<GetOrderViewModel>()..getUserOrdersByUserId(userId, "client"),
+                    child: OrderStatusCardListView(),
+                  ),
                 ],
               ),
             ),
