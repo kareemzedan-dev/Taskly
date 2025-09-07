@@ -7,7 +7,8 @@ import 'package:taskly/features/client/presentation/views/tabs/home/presentation
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/order_view_body.dart';
 
 class OrderView extends StatelessWidget {
-  const OrderView({super.key});
+  const OrderView({super.key,required this.title,required this.selectedCategory});
+  final String? title ,selectedCategory;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +37,7 @@ class OrderView extends StatelessWidget {
       backgroundColor: Colors.white,
       body: BlocProvider(
         create: (context) => getIt<OrderViewModel>(),
-        child: OrderViewBody(),
+        child: OrderViewBody(title:title!,selectedCategory:selectedCategory! ),
       ),
     );
   }

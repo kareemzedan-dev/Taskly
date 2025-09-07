@@ -4,7 +4,8 @@ import 'package:taskly/features/client/presentation/views/tabs/home/presentation
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/order_view_body.dart';
 
 class CategoryDropDown extends StatefulWidget {
-  const CategoryDropDown({super.key});
+  const CategoryDropDown({super.key,required this.selectedCategory});
+final   String? selectedCategory;
 
   @override
   State<CategoryDropDown> createState() => _CategoryDropDownState();
@@ -23,10 +24,10 @@ class _CategoryDropDownState extends State<CategoryDropDown> {
         value: orderViewModel.selectedCategory,
         items: orderViewModel.categories,
 
-        hint: "Select Category",
+        hint: widget.selectedCategory ?? "Select Category",
         onChanged: (value) {
           setState(() {
-            orderViewModel.selectedCategory = value;
+            orderViewModel.selectedCategory = value ?? widget.selectedCategory;
           });
         },
       ),

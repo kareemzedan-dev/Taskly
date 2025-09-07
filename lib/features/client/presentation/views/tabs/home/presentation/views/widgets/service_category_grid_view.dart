@@ -7,12 +7,23 @@ import 'package:taskly/features/client/presentation/views/tabs/home/presentation
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/service_category.dart';
 
 class ServiceCategoryGridView extends StatelessWidget {
-  const ServiceCategoryGridView({super.key});
-
+  ServiceCategoryGridView({super.key});
+  final List<String> categories = [
+    "Academic Sources",
+    "Scientific Reports",
+    "Mind Maps",
+    "Translation",
+    "Summarization",
+    "Scientific Projects",
+    "Presentations",
+    "SPSS Analysis",
+    "Proofreading",
+    "Programming",
+    "Tutorials",
+    "Other",
+  ];
   @override
   Widget build(BuildContext context) {
- 
-
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 16.h),
       child: BlocBuilder<ServicesViewModel, ServicesViewModelStates>(
@@ -37,7 +48,14 @@ class ServiceCategoryGridView extends StatelessWidget {
                   serviceEntity: state.services[index],
 
                   onTap: () {
-                    Navigator.pushNamed(context, RoutesManager.serviceOrderView);
+                    Navigator.pushNamed(
+                      context,
+                      RoutesManager.serviceOrderView,
+                      arguments: {
+                        'title': state.services[index].title,
+                        'category': categories[index],
+                      },
+                    );
                   },
                 );
               },

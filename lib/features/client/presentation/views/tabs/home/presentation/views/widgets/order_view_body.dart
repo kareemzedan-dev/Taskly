@@ -23,7 +23,8 @@ OrderViewModel orderViewModel = getIt<OrderViewModel>();
 SupabaseService supabaseService = SupabaseService();
 
 class OrderViewBody extends StatefulWidget {
-  const OrderViewBody({super.key});
+  const OrderViewBody({super.key,required this.title,required this.selectedCategory});
+  final String title ,selectedCategory;
 
   @override
   State<OrderViewBody> createState() => _OrderViewBodyState();
@@ -96,11 +97,11 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                     ),
                     SizedBox(height: 16.h),
                     buildTextField(
-                      'Enter title',
+                       widget.title,
                       1,
                       orderViewModel.titleController,
                       (value) {
-                        orderViewModel.titleController.text = value!;
+                        orderViewModel.titleController.text = value ?? widget.title;
                       },
                     ),
 
@@ -113,7 +114,7 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                       ),
                     ),
                     SizedBox(height: 16.h),
-                    CategoryDropDown(),
+                    CategoryDropDown(selectedCategory: widget.selectedCategory,),
 
                     SizedBox(height: 28.h),
                     Text(

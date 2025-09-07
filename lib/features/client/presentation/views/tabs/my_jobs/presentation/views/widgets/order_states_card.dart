@@ -50,17 +50,8 @@ class OrderStatesCard extends StatelessWidget {
                 icon: Icons.local_offer_outlined,
                 color: ColorsManager.primary,
                 count: 3,
-                onTap: () {},
-              ),
-
-              SizedBox(height: 10.h),
-
-              OrderActionButton(
-                text: "View details",
-                icon: Icons.remove_red_eye_outlined,
-                color: ColorsManager.primary,
                 onTap: () {
-                  showModalBottomSheet(
+                       showModalBottomSheet(
                     context: context,
                     isScrollControlled: true,
                     shape: const RoundedRectangleBorder(
@@ -72,6 +63,17 @@ class OrderStatesCard extends StatelessWidget {
                       return ModelBottomSheetContent();
                     },
                   );
+                },
+              ),
+
+              SizedBox(height: 10.h),
+
+              OrderActionButton(
+                text: "View details",
+                icon: Icons.remove_red_eye_outlined,
+                color: ColorsManager.primary,
+                onTap: () {
+              
                 },
               ),
             ],
