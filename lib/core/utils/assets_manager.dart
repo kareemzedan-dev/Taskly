@@ -46,6 +46,10 @@ class Assets {
   /// assets/images/internet_2889312.png
   static const String assetsImagesInternet2889312 = "assets/images/internet_2889312.png";
 
+  /// Assets for assetsImagesIntialAvatar
+  /// assets/images/intial_avatar.jpg
+  static const String assetsImagesIntialAvatar = "assets/images/intial_avatar.jpg";
+
   /// Assets for assetsImagesJobBoard18989826
   /// assets/images/job-board_18989826.png
   static const String assetsImagesJobBoard18989826 = "assets/images/job-board_18989826.png";
@@ -61,6 +65,10 @@ class Assets {
   /// Assets for assetsImagesStar967444
   /// assets/images/star_967444.png
   static const String assetsImagesStar967444 = "assets/images/star_967444.png";
+
+  /// Assets for assetsImagesTaskly
+  /// assets/images/taskly.png
+  static const String assetsImagesTaskly = "assets/images/taskly.png";
 
   /// Assets for assetsImagesTechSupport5109502
   /// assets/images/tech-support_5109502.png

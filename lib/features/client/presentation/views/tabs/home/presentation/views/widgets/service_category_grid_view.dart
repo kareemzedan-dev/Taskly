@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
+import 'package:taskly/core/di/di.dart';
 import 'package:taskly/core/utils/routes_manager.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/cubit/services_view_model/services_view_model.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/cubit/services_view_model/services_view_model_states.dart';
@@ -8,20 +10,9 @@ import 'package:taskly/features/client/presentation/views/tabs/home/presentation
 
 class ServiceCategoryGridView extends StatelessWidget {
   ServiceCategoryGridView({super.key});
-  final List<String> categories = [
-    "Academic Sources",
-    "Scientific Reports",
-    "Mind Maps",
-    "Translation",
-    "Summarization",
-    "Scientific Projects",
-    "Presentations",
-    "SPSS Analysis",
-    "Proofreading",
-    "Programming",
-    "Tutorials",
-    "Other",
-  ];
+
+  final ServicesViewModel servicesViewModel = getIt<ServicesViewModel>();
+ 
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -33,6 +24,28 @@ class ServiceCategoryGridView extends StatelessWidget {
           }
 
           if (state is ServicesViewModelStatesSuccess) {
+            if (state.services.isEmpty) {
+               
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 200,
+                      child: Lottie.asset("assets/lotties/empty.json"),
+                    ),
+                    const SizedBox(height: 16),
+                      Text(
+                      "No services found",
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
             return GridView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -53,7 +66,7 @@ class ServiceCategoryGridView extends StatelessWidget {
                       RoutesManager.serviceOrderView,
                       arguments: {
                         'title': state.services[index].title,
-                        'category': categories[index],
+                        'category': servicesViewModel.categories[index],
                       },
                     );
                   },

@@ -11,6 +11,13 @@ import 'package:taskly/features/client/presentation/cubit/user_view_model/user_i
 class UserInfoViewModel extends Cubit<UserInfoViewModelStates> {
   final HomeUseCase homeUseCase;
   UserInfoViewModel(this.homeUseCase) : super(UserInfoViewModelInitial());
+  final List<String> searchHintTexts = [
+  "Find top freelancers",
+  "Search by category",
+  "Discover trending jobs",
+  "Explore recent projects",
+  "Search by skill or service",
+];
 
   Future<Either<Failures, UserInfoEntity>> loadUserInfo({bool forceFetch = false}) async {
     if (!forceFetch) {

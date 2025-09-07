@@ -16,22 +16,29 @@ class ClientHomeTabViewBody extends StatefulWidget {
   State<ClientHomeTabViewBody> createState() => _ClientHomeTabViewBodyState();
 }
 
-final List<String> searchHintTexts = [
-  "Find top freelancers",
-  "Search by category",
-  "Discover trending jobs",
-  "Explore recent projects",
-  "Search by skill or service",
-];
-
+ 
 class _ClientHomeTabViewBodyState extends State<ClientHomeTabViewBody> {
   late final UserInfoViewModel _userInfoViewModel;
+  late final TextEditingController _searchController;
 
   @override
   void initState() {
     super.initState();
     _userInfoViewModel = getIt<UserInfoViewModel>();
     _userInfoViewModel.loadUserInfo();
+
+    _searchController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _onSearchChanged(String query) {
+    debugPrint("Searching for: $query");
+    context.read<ServicesViewModel>().searchServices(query);
   }
 
   @override
@@ -59,9 +66,16 @@ class _ClientHomeTabViewBodyState extends State<ClientHomeTabViewBody> {
               ),
             ),
             SizedBox(height: 30.h),
-            CustomSearchTextField(hintTexts: searchHintTexts),
+
+           
+            CustomSearchTextField(
+              hintTexts:_userInfoViewModel.searchHintTexts,
+              controller: _searchController,
+              onChanged: _onSearchChanged,  
+            ),
+
             SizedBox(height: 30.h),
-            ServiceCategoryGridView(),
+              ServiceCategoryGridView(),
           ],
         ),
       ),

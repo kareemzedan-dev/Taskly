@@ -31,7 +31,7 @@ class UserInfoHomeHeader extends StatelessWidget {
         CircleAvatar(
           backgroundColor: Colors.grey.shade300,
           radius: 30.r,
-          backgroundImage: AssetImage(Assets.assetsImagesPortraitHappySmileyMan),
+          backgroundImage: AssetImage(Assets.assetsImagesIntialAvatar),
         ),
       ],
     );
