@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
-import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/cubit/freelancer_pending_order_view_model/freelancer_pending_order_view_model_states.dart';
+import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/cubit/get_order_view_model.dart/get_order_view_model_states.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/freelancer_work_card.dart';
 
-class FreelancerPublicOrdersList extends StatelessWidget {
-  final FreelancerPendingOrdersState state;
+class FreelancerPrivateOrdersList extends StatelessWidget {
+  final GetOrderViewModelStates state;
 
-  const FreelancerPublicOrdersList({super.key, required this.state});
+  const FreelancerPrivateOrdersList({super.key, required this.state});
 
   @override
   Widget build(BuildContext context) {
-    if (state is FreelancerPendingOrdersLoading) {
+    if (state is GetOrderViewModelStatesLoading) {
       return Expanded(
         child: Center(
           child: LoadingAnimationWidget.inkDrop(
@@ -21,9 +21,8 @@ class FreelancerPublicOrdersList extends StatelessWidget {
           ),
         ),
       );
-    } else if (state is FreelancerPendingOrdersSuccess) {
-      final orders =
-          (state as FreelancerPendingOrdersSuccess).pendingOrdersList;
+    } else if (state is GetOrderViewModelStatesSuccess) {
+      final orders = (state as GetOrderViewModelStatesSuccess).orderEntity;
 
       if (orders.isEmpty) {
         return ListView(
@@ -31,10 +30,10 @@ class FreelancerPublicOrdersList extends StatelessWidget {
           children: [
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.5,
-              child: Center(
+              child: const Center(
                 child: Text(
-                  'No Pubilc orders',
-                  style: TextStyle(fontSize: 18.sp),
+                  'No private orders',
+                  style: TextStyle(fontSize: 18),
                 ),
               ),
             ),
@@ -43,6 +42,7 @@ class FreelancerPublicOrdersList extends StatelessWidget {
       }
 
       return ListView.separated(
+        physics: const AlwaysScrollableScrollPhysics(),
         separatorBuilder:
             (context, index) => Padding(
               padding: const EdgeInsets.all(8.0),
@@ -55,9 +55,9 @@ class FreelancerPublicOrdersList extends StatelessWidget {
               child: FreelancerWorkCard(order: orders[index]),
             ),
       );
-    } else if (state is FreelancerPendingOrdersError) {
+    } else if (state is GetOrderViewModelStatesError) {
       return Center(
-        child: Text((state as FreelancerPendingOrdersError).errorMessage),
+        child: Text((state as GetOrderViewModelStatesError).message),
       );
     }
     return Container();

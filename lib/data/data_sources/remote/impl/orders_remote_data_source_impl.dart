@@ -38,7 +38,7 @@ class OrdersRemoteDataSourceImpl extends OrdersRemoteDataSource {
       );
 
       if (response == null || response.isEmpty) {
-        return Left(Failures("Orders not found"));
+        return  Right([]);
       }
 
  
