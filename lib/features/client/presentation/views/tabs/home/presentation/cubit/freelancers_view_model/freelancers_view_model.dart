@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:either_dart/either.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:taskly/core/helper/failures.dart';
+import 'package:taskly/core/errors/failures.dart';
 import 'package:taskly/features/client/domain/entities/home/freelancer_entity.dart';
 import 'package:taskly/features/client/domain/use_cases/home/home_use_case.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/cubit/freelancers_view_model/freelancers_view_model_states.dart';

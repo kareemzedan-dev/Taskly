@@ -1,17 +1,18 @@
 import 'package:either_dart/either.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:taskly/core/helper/failures.dart';
-import 'package:taskly/core/helper/shared_preferences.dart';
-import 'package:taskly/features/client/domain/entities/home/user_info_entity.dart';
+import 'package:taskly/core/errors/failures.dart';
+import 'package:taskly/core/cache/shared_preferences.dart';
+import 'package:taskly/domain/entities/user_info_entity/user_info_entity.dart';
+import 'package:taskly/domain/use_cases/profile/profile_use_case.dart';
 import 'package:taskly/features/client/domain/use_cases/home/home_use_case.dart';
 import 'package:taskly/features/client/presentation/cubit/client_info_view_model/client_info_view_model_states.dart';
 import 'package:taskly/features/freelancer/presentation/cubit/freelancer_info_view_model/freelancer_info_view_model_states.dart';
 
 @injectable 
 class FreelancerInfoViewModel extends Cubit<FreelancerInfoViewModelStates> {
-  final HomeUseCase homeUseCase;
-  FreelancerInfoViewModel(this.homeUseCase) : super(FreelancerInfoViewModelInitial());
+ final ProfileUseCase profileUseCase;
+  FreelancerInfoViewModel(this.profileUseCase) : super(FreelancerInfoViewModelInitial());
   Future<Either<Failures, UserInfoEntity>> loadUserInfo({bool forceFetch = false}) async {
     if (!forceFetch) {
       final fullName = SharedPrefHelper.getString('fullName');
@@ -36,7 +37,7 @@ class FreelancerInfoViewModel extends Cubit<FreelancerInfoViewModelStates> {
   Future<Either<Failures, UserInfoEntity>> getUserInfo() async {
     try {
       emit(FreelancerInfoViewModelLoading());
-      final result = await homeUseCase.call();
+      final result = await profileUseCase.callUserInfo();
       result.fold(
         (failure) => emit(FreelancerInfoViewModelError(failure.message)),
         (user) async {

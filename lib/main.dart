@@ -5,12 +5,12 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:taskly/core/di/di.dart';
 import 'package:taskly/core/helper/my_bloc_observer.dart';
-import 'package:taskly/core/helper/shared_preferences.dart';
-import 'package:taskly/core/theme/app_theme.dart';
+import 'package:taskly/core/cache/shared_preferences.dart';
+import 'package:taskly/config/theme/app_theme.dart';
 
-import 'package:taskly/core/utils/routes_manager.dart';
+import 'package:taskly/config/routes/routes_manager.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/cubit/services_view_model/services_view_model.dart';
-import 'package:taskly/l10n/app_localizations.dart';
+import 'package:taskly/config/l10n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

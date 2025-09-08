@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:taskly/domain/entities/order_entity/order_entity.dart';
 import 'package:taskly/features/auth/presentation/views/login_view.dart';
 import 'package:taskly/features/auth/presentation/views/register_view.dart';
 import 'package:taskly/features/client/presentation/views/client_home_view.dart';
@@ -40,23 +41,33 @@ class RoutesManager {
         return MaterialPageRoute(builder: (_) => ClientHomeView());
       case freelancerHome:
         return MaterialPageRoute(builder: (_) => FreelancerHomeView());
-  case RoutesManager.serviceOrderView:
-  final args = settings.arguments as Map<String, dynamic>;
+      case RoutesManager.serviceOrderView:
+        final args = settings.arguments as Map<String, dynamic>;
 
-  final title = args['title'] as String;
-  final category = args['category'] as String;
+        final title = args['title'] as String;
+        final category = args['category'] as String;
 
-  return MaterialPageRoute(
-    builder: (_) => OrderView(
-      title: title,
-      selectedCategory: category,
-    ),
-  );
+        return MaterialPageRoute(
+          builder: (_) => OrderView(title: title, selectedCategory: category),
+        );
 
       case chatView:
         return MaterialPageRoute(builder: (_) => ChatView());
       case jobDetailsView:
-        return MaterialPageRoute(builder: (_) => JobDetailsView());
+        final args = settings.arguments;
+        if (args is OrderEntity) {
+          return MaterialPageRoute(
+            builder: (_) => JobDetailsView(orderEntity: args),
+          );
+        } else {
+          return MaterialPageRoute(
+            builder:
+                (_) => Scaffold(
+                  body: Center(child: Text('No order data provided')),
+                ),
+          );
+        }
+
       case sendOfferView:
         return MaterialPageRoute(builder: (_) => SendOfferView());
 

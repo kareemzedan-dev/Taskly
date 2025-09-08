@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:taskly/core/widgets/custom_bottom_navigation_bar.dart';
+import 'package:taskly/core/components/custom_bottom_navigation_bar.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/home_tab_view.dart';
 import 'package:taskly/features/client/presentation/views/tabs/messages/presentation/views/messages_tab_view.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/my_jobs_tab_view.dart';

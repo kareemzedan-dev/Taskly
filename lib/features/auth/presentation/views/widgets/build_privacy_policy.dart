@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
-import 'package:taskly/l10n/app_localizations.dart';
+import 'package:taskly/config/l10n/app_localizations.dart';
 
 class PrivacyPolicyWithCheck extends FormField<bool> {
   PrivacyPolicyWithCheck({super.key})
@@ -8,7 +8,7 @@ class PrivacyPolicyWithCheck extends FormField<bool> {
           initialValue: false,
           validator: (value) {
             if (value == false) {
-              return "error"; // بس عشان نعرف إن في مشكلة
+              return "error";  
             }
             return null;
           },
@@ -21,7 +21,7 @@ class PrivacyPolicyWithCheck extends FormField<bool> {
                   activeColor: ColorsManager.primary,
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   side: BorderSide(
-                    color: state.hasError ? Colors.red : Colors.grey, // 👈 هنا البوردر نفسه
+                    color: state.hasError ? Colors.red : Colors.grey,  
                     width: 2,
                   ),
                   onChanged: (value) {

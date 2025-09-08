@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
-import 'package:taskly/core/widgets/icon_mapper_widgets.dart';
+import 'package:taskly/core/components/icon_mapper_widgets.dart';
 import 'package:taskly/features/client/domain/entities/home/service_response_entity.dart';
 
 Color hexToColor(String hexCode) {

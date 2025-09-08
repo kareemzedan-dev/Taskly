@@ -18,13 +18,19 @@ import '../../data/data_sources/remote/impl/auth_remote_data_source_impl.dart'
     as _i335;
 import '../../data/data_sources/remote/impl/orders_remote_data_source_impl.dart'
     as _i607;
+import '../../data/data_sources/remote/impl/profile_remote_data_source_impl.dart'
+    as _i644;
 import '../../data/data_sources/remote/orders_remote_data_source.dart' as _i700;
+import '../../data/data_sources/remote/profile_remote_data_source.dart' as _i81;
 import '../../data/repos/auth/auth_repo_impl.dart' as _i291;
 import '../../data/repos/orders/orders_repo_impl.dart' as _i879;
+import '../../data/repos/profile/profile_repo_impl.dart' as _i549;
 import '../../domain/repos/auth/auth_repo.dart' as _i876;
 import '../../domain/repos/orders/orders_repo.dart' as _i145;
+import '../../domain/repos/profile/profile_repo.dart' as _i647;
 import '../../domain/use_cases/auth/auth_use_case.dart' as _i285;
 import '../../domain/use_cases/orders/orders_use_case.dart' as _i340;
+import '../../domain/use_cases/profile/profile_use_case.dart' as _i31;
 import '../../features/auth/presentation/cubit/auth_view_model.dart' as _i745;
 import '../../features/client/data/data_sources/remote/home_remote_data_source.dart'
     as _i307;
@@ -44,8 +50,20 @@ import '../../features/client/presentation/views/tabs/home/presentation/cubit/se
     as _i313;
 import '../../features/client/presentation/views/tabs/my_jobs/presentation/cubit/get_order_view_model.dart/get_order_view_model.dart'
     as _i772;
+import '../../features/freelancer/data/data_sources/remote/freelancer_order_remote_data_source.dart'
+    as _i297;
+import '../../features/freelancer/data/data_sources/remote/impl/freelancer_order_remote_data_source_impl.dart'
+    as _i800;
+import '../../features/freelancer/data/repos/freelancer_order_repo_impl/freelancer_order_repo_impl.dart'
+    as _i535;
+import '../../features/freelancer/domain/repos/freelancer_order_repo/freelancer_order_repo.dart'
+    as _i75;
+import '../../features/freelancer/domain/use_cases/freelancer_order_use_case/freelancer_order_use_case.dart'
+    as _i171;
 import '../../features/freelancer/presentation/cubit/freelancer_info_view_model/freelancer_info_view_model.dart'
     as _i776;
+import '../../features/freelancer/presentation/views/tabs/find_work/presentation/cubit/freelancer_pending_order_view_model/freelancer_pending_order_view_model.dart'
+    as _i636;
 import '../services/file_uploaded_services.dart' as _i383;
 import '../services/supabase_service.dart' as _i374;
 
@@ -58,17 +76,34 @@ extension GetItInjectableX on _i174.GetIt {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     gh.singleton<_i383.FilePickerService>(() => _i383.FilePickerService());
     gh.singleton<_i374.SupabaseService>(() => _i374.SupabaseService());
+    gh.factory<_i297.FreelancerOrderRemoteDataSource>(
+      () => _i800.FreelancerOrderRemoteDataSourceImpl(),
+    );
+    gh.factory<_i75.FreelancerOrderRepo>(
+      () => _i535.FreelancerOrderRepoImpl(
+        freelancerOrderRemoteDataSource:
+            gh<_i297.FreelancerOrderRemoteDataSource>(),
+      ),
+    );
     gh.factory<_i865.AuthRemoteDataSource>(
       () => _i335.AuthRemoteDataSourceImpl(),
     );
     gh.factory<_i700.OrdersRemoteDataSource>(
       () => _i607.OrdersRemoteDataSourceImpl(),
     );
+    gh.factory<_i81.ProfileRemoteDataSource>(
+      () => _i644.ProfileRemoteDataSourceImpl(gh<_i454.SupabaseClient>()),
+    );
     gh.factory<_i876.AuthRepo>(
       () => _i291.AuthRepoImpl(gh<_i865.AuthRemoteDataSource>()),
     );
     gh.factory<_i285.AuthUseCase>(
       () => _i285.AuthUseCase(gh<_i876.AuthRepo>()),
+    );
+    gh.factory<_i171.FreelancerOrderUseCase>(
+      () => _i171.FreelancerOrderUseCase(
+        freelancerOrderRepo: gh<_i75.FreelancerOrderRepo>(),
+      ),
     );
     gh.factory<_i307.HomeRemoteDataSource>(
       () =>
@@ -77,15 +112,26 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i745.AuthViewModel>(
       () => _i745.AuthViewModel(authUseCase: gh<_i285.AuthUseCase>()),
     );
+    gh.factory<_i647.ProfileRepo>(
+      () => _i549.ProfileRepoImpl(gh<_i81.ProfileRemoteDataSource>()),
+    );
     gh.factory<_i145.OrdersRepo>(
       () => _i879.OrdersRepoImpl(
         ordersRemoteDataSource: gh<_i700.OrdersRemoteDataSource>(),
+      ),
+    );
+    gh.factory<_i636.FreelancerPendingOrdersViewModel>(
+      () => _i636.FreelancerPendingOrdersViewModel(
+        gh<_i171.FreelancerOrderUseCase>(),
       ),
     );
     gh.factory<_i660.HomeRepos>(
       () => _i86.HomeRepoImpl(
         homeremoteDataSource: gh<_i307.HomeRemoteDataSource>(),
       ),
+    );
+    gh.factory<_i31.ProfileUseCase>(
+      () => _i31.ProfileUseCase(gh<_i647.ProfileRepo>()),
     );
     gh.factory<_i340.OrdersUseCase>(
       () => _i340.OrdersUseCase(gh<_i145.OrdersRepo>()),
@@ -103,10 +149,10 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i399.PlaceOrderViewModel(gh<_i213.HomeUseCase>()),
     );
     gh.factory<_i449.ClientInfoViewModel>(
-      () => _i449.ClientInfoViewModel(gh<_i213.HomeUseCase>()),
+      () => _i449.ClientInfoViewModel(gh<_i31.ProfileUseCase>()),
     );
     gh.factory<_i776.FreelancerInfoViewModel>(
-      () => _i776.FreelancerInfoViewModel(gh<_i213.HomeUseCase>()),
+      () => _i776.FreelancerInfoViewModel(gh<_i31.ProfileUseCase>()),
     );
     gh.factory<_i392.FreelancersViewModel>(
       () => _i392.FreelancersViewModel(gh<_i213.HomeUseCase>()),

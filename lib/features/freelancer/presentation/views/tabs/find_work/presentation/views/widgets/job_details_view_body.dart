@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:taskly/core/widgets/custom_button.dart';
+import 'package:taskly/core/components/custom_button.dart';
+import 'package:taskly/core/helper/date_time_formatter.dart';
+import 'package:taskly/domain/entities/order_entity/order_entity.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/about_job_section.dart';
 import 'package:taskly/features/shared/presentation/views/widgets/attachments_section.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/client_details_section.dart';
@@ -7,7 +9,8 @@ import 'package:taskly/features/shared/presentation/views/widgets/description_se
 import 'package:taskly/features/shared/presentation/views/widgets/job_header_section.dart';
 
 class JobDetailsViewBody extends StatelessWidget {
-  const JobDetailsViewBody({super.key});
+  const JobDetailsViewBody({super.key,required this.orderEntity});
+  final OrderEntity orderEntity ;
 
   @override
   Widget build(BuildContext context) {
@@ -21,10 +24,10 @@ class JobDetailsViewBody extends StatelessWidget {
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                //    JobHeader(),
+                  children:   [
+                    JobHeader(title: orderEntity.title ,category: orderEntity.category!,date: orderEntity.deadline!.toRelative(),),
                     Divider(thickness: 1, color: Colors.grey),
-                    DescriptionSection(),
+                    DescriptionSection(description:orderEntity.description ,),
                     Divider(thickness: 1, color: Colors.grey),
                     ClientDetailsSection(),
                     Divider(thickness: 1, color: Colors.grey),

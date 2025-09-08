@@ -1,10 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:injectable/injectable.dart';
+import 'package:taskly/domain/entities/order_entity/order_entity.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/job_details_view_body.dart';
 
 class JobDetailsView extends StatelessWidget {
-  const JobDetailsView({super.key});
+  const JobDetailsView({super.key, required this.orderEntity});
+  final OrderEntity orderEntity;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +31,7 @@ class JobDetailsView extends StatelessWidget {
         ),
       ),
       backgroundColor: Colors.white,
-      body: JobDetailsViewBody(),
+      body: JobDetailsViewBody(orderEntity:orderEntity ,),
     );
   }
 }

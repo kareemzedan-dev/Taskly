@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:taskly/core/utils/routes_manager.dart';
-import 'package:taskly/core/widgets/custom_button.dart';
+import 'package:taskly/config/routes/routes_manager.dart';
+import 'package:taskly/core/components/custom_button.dart';
 import 'package:taskly/features/welcome/presentation/cubit/welcome_states.dart';
-import 'package:taskly/l10n/app_localizations.dart';
+import 'package:taskly/config/l10n/app_localizations.dart';
 
 class AuthActionSection extends StatelessWidget {
   final UserRole selectedRole;

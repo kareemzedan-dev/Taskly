@@ -1,7 +1,7 @@
 import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
  
-import 'package:taskly/core/helper/failures.dart';
+import 'package:taskly/core/errors/failures.dart';
 import 'package:taskly/domain/entities/login_response_entity/login_response_entity.dart';
 import 'package:taskly/domain/entities/register_response_entity/register_response_entity.dart';
 import 'package:taskly/domain/repos/auth/auth_repo.dart';

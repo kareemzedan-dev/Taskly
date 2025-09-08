@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:taskly/core/helper/shared_preferences.dart';
-import 'package:taskly/core/utils/routes_manager.dart';
+import 'package:taskly/core/cache/shared_preferences.dart';
+import 'package:taskly/config/routes/routes_manager.dart';
 
 class SplashViewBody extends StatefulWidget {
   const SplashViewBody({super.key});

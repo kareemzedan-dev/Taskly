@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:taskly/l10n/app_localizations.dart';
+import 'package:taskly/config/l10n/app_localizations.dart';
  
 
 class OrDivider extends StatelessWidget {

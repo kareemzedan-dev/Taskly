@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:taskly/core/helper/date_time_formatter.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
+import 'package:taskly/domain/entities/order_entity/order_entity.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/action_row.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/delivery_info.dart';
 
 class FreelancerWorkCard extends StatelessWidget {
-  const FreelancerWorkCard({super.key});
+  FreelancerWorkCard({super.key, required this.order});
+  OrderEntity order;
 
   @override
   Widget build(BuildContext context) {
@@ -22,18 +25,18 @@ class FreelancerWorkCard extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              _HeaderRow(),
+            children: [
+              _HeaderRow(order.createdAt.toRelative()),
               SizedBox(height: 10),
-              _Title(),
+              _Title(order.title),
               SizedBox(height: 5),
-              _CategoryChip(),
+              _CategoryChip(order.category ?? "No category"),
               SizedBox(height: 16),
-              _Description(),
+              _Description(order.description ?? "No description"),
               SizedBox(height: 16),
               DeliveryInfo(),
               SizedBox(height: 16),
-              ActionsRow(),
+              ActionsRow(order: order),
             ],
           ),
         ),
@@ -43,7 +46,8 @@ class FreelancerWorkCard extends StatelessWidget {
 }
 
 class _HeaderRow extends StatelessWidget {
-  const _HeaderRow();
+  _HeaderRow(this.date);
+  String date;
 
   @override
   Widget build(BuildContext context) {
@@ -51,11 +55,11 @@ class _HeaderRow extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          "Posted 1 hour ago",
+          "Posted $date",
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                fontWeight: FontWeight.w500,
-                fontSize: 12.sp,
-              ),
+            fontWeight: FontWeight.w500,
+            fontSize: 12.sp,
+          ),
         ),
         const Icon(Icons.favorite_border_rounded, color: Colors.black),
       ],
@@ -64,16 +68,17 @@ class _HeaderRow extends StatelessWidget {
 }
 
 class _Title extends StatelessWidget {
-  const _Title();
+  const _Title(this.title);
+  final String title;
 
   @override
   Widget build(BuildContext context) {
     return Text(
-      "Mind Maps",
+      title,
       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-            fontWeight: FontWeight.w700,
-            fontSize: 18.sp,
-          ),
+        fontWeight: FontWeight.w700,
+        fontSize: 18.sp,
+      ),
       softWrap: true,
       overflow: TextOverflow.ellipsis,
     );
@@ -81,7 +86,8 @@ class _Title extends StatelessWidget {
 }
 
 class _CategoryChip extends StatelessWidget {
-  const _CategoryChip();
+  const _CategoryChip(this.category);
+  final String category;
 
   @override
   Widget build(BuildContext context) {
@@ -95,12 +101,12 @@ class _CategoryChip extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 8),
         child: Center(
           child: Text(
-            "Mind Maps",
+            category,
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  fontWeight: FontWeight.w400,
-                  fontSize: 12.sp,
-                  color: Colors.white,
-                ),
+              fontWeight: FontWeight.w400,
+              fontSize: 12.sp,
+              color: Colors.white,
+            ),
           ),
         ),
       ),
@@ -109,21 +115,20 @@ class _CategoryChip extends StatelessWidget {
 }
 
 class _Description extends StatelessWidget {
-  const _Description();
+  const _Description(this.description);
+  final String description;
 
   @override
   Widget build(BuildContext context) {
     return Text(
-      "I need to create a mind map for a project, please let me know if you are interested.,please let me know if you are interested",
+      description,
       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-            fontWeight: FontWeight.w500,
-            fontSize: 14.sp,
-          ),
+        fontWeight: FontWeight.w500,
+        fontSize: 14.sp,
+      ),
       maxLines: 2,
       softWrap: true,
       overflow: TextOverflow.ellipsis,
     );
   }
 }
-
- 

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/services/file_uploaded_services.dart';
 import 'package:taskly/core/utils/app_text_styles.dart';
-import 'package:taskly/core/widgets/dismissible_error_card.dart';
+import 'package:taskly/core/components/dismissible_error_card.dart';
 
 class AttachmentsFilesSection extends StatefulWidget {
   final Function(List<File>)? onFilesSelected;

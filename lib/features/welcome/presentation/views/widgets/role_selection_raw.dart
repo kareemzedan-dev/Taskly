@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/utils/assets_manager.dart';
 import 'package:taskly/features/welcome/presentation/cubit/welcome_states.dart';
 import 'package:taskly/features/welcome/presentation/views/widgets/role_box.dart';
-import 'package:taskly/l10n/app_localizations.dart';
+import 'package:taskly/config/l10n/app_localizations.dart';
 
 class RoleSelectionRow extends StatelessWidget {
   final UserRole? selectedRole; // null لو لسه مش مختار

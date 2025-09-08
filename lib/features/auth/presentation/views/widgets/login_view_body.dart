@@ -6,14 +6,14 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:taskly/core/di/di.dart';
 import 'package:taskly/core/utils/assets_manager.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
-import 'package:taskly/core/utils/routes_manager.dart';
-import 'package:taskly/core/widgets/custom_button.dart';
-import 'package:taskly/core/widgets/custom_text_field.dart';
-import 'package:taskly/core/widgets/or_divider.dart';
+import 'package:taskly/config/routes/routes_manager.dart';
+import 'package:taskly/core/components/custom_button.dart';
+import 'package:taskly/core/components/custom_text_field.dart';
+import 'package:taskly/core/components/or_divider.dart';
 import 'package:taskly/features/auth/presentation/cubit/auth_states.dart';
 import 'package:taskly/features/auth/presentation/cubit/auth_view_model.dart';
 import 'package:taskly/features/auth/presentation/views/widgets/social_login_button.dart';
-import 'package:taskly/l10n/app_localizations.dart';
+import 'package:taskly/config/l10n/app_localizations.dart';
 
 class LoginViewBody extends StatefulWidget {
   const LoginViewBody({super.key, required this.role});

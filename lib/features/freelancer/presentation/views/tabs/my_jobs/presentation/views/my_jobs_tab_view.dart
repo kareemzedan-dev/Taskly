@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:taskly/core/widgets/custom_tab_bar.dart';
+import 'package:taskly/core/components/custom_tab_bar.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/my_jobs/presentation/views/widgets/my_jobs_tab_view_body.dart';
 
 class FreelancerMyJobsTabView extends StatelessWidget {

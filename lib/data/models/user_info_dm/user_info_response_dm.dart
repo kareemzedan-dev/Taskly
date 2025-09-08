@@ -1,4 +1,4 @@
-import 'package:taskly/features/client/domain/entities/home/user_info_entity.dart';
+import 'package:taskly/domain/entities/user_info_entity/user_info_entity.dart';
 
 class UserInfoResponseModel extends UserInfoResponseEntity {
   UserInfoResponseModel({super.user, super.message});

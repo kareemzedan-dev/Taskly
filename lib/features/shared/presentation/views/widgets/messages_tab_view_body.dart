@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:taskly/core/utils/routes_manager.dart';
-import 'package:taskly/core/widgets/custom_search_text_field.dart';
+import 'package:taskly/config/routes/routes_manager.dart';
+import 'package:taskly/core/components/custom_search_text_field.dart';
 import 'package:taskly/features/shared/presentation/views/widgets/messages_card.dart';
 
 class UserMessagesTabViewBody extends StatelessWidget {

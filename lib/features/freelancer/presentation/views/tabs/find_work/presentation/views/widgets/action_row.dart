@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:taskly/core/utils/routes_manager.dart';
+import 'package:injectable/injectable.dart';
+import 'package:taskly/config/routes/routes_manager.dart';
+import 'package:taskly/domain/entities/order_entity/order_entity.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/custom_action_container.dart';
 
 class ActionsRow extends StatelessWidget {
-  const ActionsRow({super.key});
+  const ActionsRow({super.key,required this.order});
+  final OrderEntity order;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +22,7 @@ class ActionsRow extends StatelessWidget {
           ),
         ),
           CustomActionContainer(
-            onTap: () => Navigator.pushNamed(context, RoutesManager.sendOfferView),
+            onTap: () => Navigator.pushNamed(context, RoutesManager.sendOfferView, arguments:order ),
           title: "Send offers",
           icon: Icons.send,
           isOffer: true,
