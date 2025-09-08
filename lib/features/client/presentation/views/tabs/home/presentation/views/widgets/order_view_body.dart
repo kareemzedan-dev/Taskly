@@ -101,7 +101,7 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                       1,
                       orderViewModel.titleController,
                       (value) {
-                        orderViewModel.titleController.text = value ?? widget.title;
+                        orderViewModel.titleController.text = widget.title    ;
                       },
                     ),
 

@@ -19,10 +19,11 @@ class ActionsRow extends StatelessWidget {
           onTap: () => Navigator.pushNamed(
             context,
             RoutesManager.jobDetailsView,
+             arguments:order 
           ),
         ),
           CustomActionContainer(
-            onTap: () => Navigator.pushNamed(context, RoutesManager.sendOfferView, arguments:order ),
+            onTap: () => Navigator.pushNamed(context, RoutesManager.sendOfferView,   ),
           title: "Send offers",
           icon: Icons.send,
           isOffer: true,
