@@ -182,7 +182,7 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
                 ),
                 SizedBox(height: 48.h),
 
-                CustomBotton(
+                CustomButton(
                   title: AppLocalizations.of(context)!.createAccount,
                   ontap: () {
                     if (authViewModel.formKey.currentState!.validate()) {

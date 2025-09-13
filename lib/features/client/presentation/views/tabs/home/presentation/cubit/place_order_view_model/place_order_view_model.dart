@@ -42,61 +42,137 @@ class PlaceOrderViewModel extends Cubit<PlaceOrderViewModelStates> {
   TextEditingController descriptionController = TextEditingController();
   final clientId = SharedPrefHelper.getString("id");
   SupabaseService _supabaseService = SupabaseService();
+  Map<String, Future<String>?> uploadFutures = {};
 
-  Future<List<Attachment>> uploadAttachments(
-    List<File> files, {
-    Function(String filePath, double progress)? onProgress,
-  }) async {
-    emit(PlaceOrderViewModelStatesAttachmentsLoading());
+// في PlaceOrderViewModel
+// في PlaceOrderViewModel
+Future<List<Attachment>> uploadAttachments(
+  List<File> files, {
+  Function(String filePath, double progress)? onProgress,
+}) async {
+  if (isClosed) return [];
 
-    try {
-      List<Attachment> uploaded = [];
+  emit(PlaceOrderViewModelStatesAttachmentsLoading());
 
-      for (var file in List<File>.from(files)) {
-        final filePath = file.path;
+  try {
+    List<Attachment> uploaded = [];
 
-        if (uploadProgress[filePath] == 1.0) {
-          continue;
-        }
+    for (var file in files) {
+      if (isClosed) break;
 
-        uploadProgress[filePath] = 0.0;
+      final filePath = file.path;
+
+      if (uploadProgress[filePath] == 1.0) {
+        continue;
+      }
+
+      uploadProgress[filePath] = 0.0;
+      if (!isClosed) {
         emit(PlaceOrderViewModelStatesAttachmentsProgress(Map.from(uploadProgress)));
+      }
 
-        final url = await _supabaseService.uploadFile(
+      String url;
+      try {
+        url = await _supabaseService.uploadFile(
           file,
           onProgress: (sentBytes, totalBytes) {
+            if (isClosed) return;
+            
             final progress = sentBytes / totalBytes;
             uploadProgress[filePath] = progress;
-            emit(
-              PlaceOrderViewModelStatesAttachmentsProgress(Map.from(uploadProgress)),
-            );
+            if (!isClosed) {
+              emit(PlaceOrderViewModelStatesAttachmentsProgress(Map.from(uploadProgress)));
+            }
             if (onProgress != null) onProgress(filePath, progress);
           },
         );
-
-        uploadProgress[filePath] = 1.0;
-        emit(PlaceOrderViewModelStatesAttachmentsProgress(Map.from(uploadProgress)));
-
-        final fileName = file.path.split('/').last;
-        final newAttachment = Attachment(type: fileName, url: url);
-
-        if (!uploadedAttachments.any((att) => att.type == fileName)) {
-          uploaded.add(newAttachment);
+      } catch (e) {
+        if (!isClosed) {
+          emit(PlaceOrderViewModelStatesAttachmentsError('Failed to upload $filePath: $e'));
         }
+        continue;
       }
 
+      if (isClosed) break;
+
+      uploadProgress[filePath] = 1.0;
+      if (!isClosed) {
+        emit(PlaceOrderViewModelStatesAttachmentsProgress(Map.from(uploadProgress)));
+      }
+
+      final fileName = file.path.split('/').last;
+      final newAttachment = Attachment(type: fileName, url: url);
+
+      uploaded.add(newAttachment);
+    }
+
+    if (!isClosed) {
       uploadedAttachments.addAll(uploaded);
+      // إضافة state جديد للإشارة إلى اكتمال الرفع وتحديث القائمة
       emit(PlaceOrderViewModelStatesAttachmentsSuccess(uploadedAttachments));
-      return uploadedAttachments;
-    } catch (e) {
+      // إصدار state progress آخر للتأكد من تحديث الواجهة
+      emit(PlaceOrderViewModelStatesAttachmentsProgress(Map.from(uploadProgress)));
+    }
+    
+    return uploaded;
+  } catch (e) {
+    if (!isClosed) {
       emit(PlaceOrderViewModelStatesAttachmentsError(e.toString()));
-      return [];
+    }
+    return [];
+  }
+}
+  
+
+ // في PlaceOrderViewModel
+void cancelFileUpload(String filePath) {
+  // وضع progress = -1 للإشارة إلى أن الملف ملغى (بدلاً من 0.0)
+  uploadProgress[filePath] = -1.0;
+  
+  // إصدار state جديد للتحديث
+  if (!isClosed) {
+    emit(PlaceOrderViewModelStatesAttachmentsProgress(Map.from(uploadProgress)));
+  }
+}
+
+bool areAllRequiredFilesUploaded() {
+  if (localAttachments.isEmpty) {
+    print('No local attachments');
+    return false;
+  }
+  
+  print('Checking upload status:');
+  print('Local attachments: ${localAttachments.length}');
+  print('Upload progress: $uploadProgress');
+  print('Uploaded attachments: ${uploadedAttachments.length}');
+  
+  // التحقق من أن كل الملفات المحلية إما مرفوعة بالكامل أو ملغاة
+  bool allFilesProcessed = true;
+  
+  for (var file in localAttachments) {
+    final progress = uploadProgress[file.path] ?? 0.0;
+    
+    print('File: ${file.path}, Progress: $progress');
+    
+    // إذا كان الملف قيد الرفع (بين 0 و1) ولم يتم إلغاؤه
+    if (progress > 0.0 && progress < 1.0) {
+      print('File still uploading: ${file.path}');
+      allFilesProcessed = false;
+      break;
     }
   }
-
-  bool areAllAttachmentsUploaded() {
-    return uploadProgress.values.every((progress) => progress == 1.0);
-  }
+  
+  // التحقق من أن هناك على الأقل ملف واحد مرفوع بالكامل
+  final hasCompletedUpload = uploadProgress.values.any((p) => p == 1.0);
+  final hasUploadedAttachments = uploadedAttachments.isNotEmpty;
+  
+  print('All files processed: $allFilesProcessed');
+  print('Has completed upload: $hasCompletedUpload');
+  print('Has uploaded attachments: $hasUploadedAttachments');
+  
+  return allFilesProcessed && hasUploadedAttachments;
+}
+ 
 
   void clearUploadProgress() {
     uploadProgress.clear();

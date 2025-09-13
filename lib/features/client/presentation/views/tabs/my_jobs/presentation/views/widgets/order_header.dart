@@ -20,32 +20,39 @@ class OrderHeader extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Text(
-              orderName,
-              style: TextStyle(
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const Spacer(),
-            StatusBadge(
-              text: "Pending",
-              color: ColorsManager.primary,
-              icon: Icons.pending_actions_outlined,
-            ),
-            SizedBox(width: 5.w),
-            StatusBadge(
-              text: "Delete",
-              color: Colors.red,
-              icon: Icons.delete,
-            ),
-          ],
+ Row(
+  crossAxisAlignment: CrossAxisAlignment.start,
+  mainAxisAlignment: MainAxisAlignment.center ,
+  children: [
+    Expanded(
+      child: Text(
+        orderName,
+        style: TextStyle(
+          fontSize: 16.sp,
+          fontWeight: FontWeight.w600,
         ),
+        softWrap: true,  
+      ),
+    ),
+    SizedBox(width: 8.w),
+    StatusBadge(
+      text: "Pending",
+      color: ColorsManager.primary,
+      icon: Icons.pending_actions_outlined,
+    ),
+    SizedBox(width: 5.w),
+    StatusBadge(
+      text: "Delete",
+      color: Colors.red,
+      icon: Icons.delete,
+    ),
+  ],
+)
+,
         SizedBox(height: 3.h),
         Text(
-          "#${orderId.substring(0, 8)}",
+          "#${orderId }",
+          softWrap: true,
           style: Theme.of(context)
               .textTheme
               .bodyMedium

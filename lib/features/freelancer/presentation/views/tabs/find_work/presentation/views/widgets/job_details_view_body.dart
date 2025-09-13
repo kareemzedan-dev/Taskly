@@ -39,7 +39,7 @@ class JobDetailsViewBody extends StatelessWidget {
               ),
             ),
           ),
-          CustomBotton(title: "Send offer", ontap: () {}),
+          CustomButton(title: "Send offer", ontap: () {}),
           SizedBox(height: 30),
         ],
       ),

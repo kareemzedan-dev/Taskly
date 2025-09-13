@@ -23,12 +23,15 @@ class JobHeader extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              title,
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                fontWeight: FontWeight.w600,
-                fontSize: 18.sp,
-                color: Colors.black,
+            Expanded(
+              child: Text(
+                title,
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 18.sp,
+                  color: Colors.black,
+                ),
+                softWrap: true,
               ),
             ),
             Container(

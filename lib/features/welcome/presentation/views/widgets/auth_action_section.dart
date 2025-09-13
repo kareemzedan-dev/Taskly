@@ -16,7 +16,7 @@ class AuthActionSection extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: CustomBotton(
+          child: CustomButton(
             title:
                 selectedRole == UserRole.freelancer
                     ? AppLocalizations.of(context)!.createFreelancerAccount

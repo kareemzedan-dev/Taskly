@@ -3,8 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:taskly/core/utils/colors_manger.dart';
 
-class CustomBotton extends StatelessWidget {
-  CustomBotton({super.key, required this.title, required this.ontap});
+class CustomButton extends StatelessWidget {
+  CustomButton({super.key, required this.title, required this.ontap});
   String title;
   VoidCallback ontap;
   @override

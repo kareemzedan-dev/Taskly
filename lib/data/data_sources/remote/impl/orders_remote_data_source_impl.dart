@@ -4,12 +4,13 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:either_dart/src/either.dart';
 import 'package:injectable/injectable.dart';
 import 'package:taskly/core/errors/failures.dart';
+import 'package:taskly/core/services/supabase_service.dart';
 import 'package:taskly/data/data_sources/remote/orders_remote_data_source.dart';
 import 'package:taskly/data/models/order_dm/order_dm.dart';
 import 'package:taskly/domain/entities/order_entity/order_entity.dart';
-import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/order_view_body.dart';
 @Injectable(as: OrdersRemoteDataSource)
 class OrdersRemoteDataSourceImpl extends OrdersRemoteDataSource {
+  SupabaseService supabaseService = SupabaseService();
   @override
   Future<Either<Failures, List<OrderEntity>>> getUserOrdersByUserId(
     String userId,

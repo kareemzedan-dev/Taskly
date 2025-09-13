@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:taskly/features/client/presentation/views/tabs/home/presentation/cubit/place_order_view_model/place_order_view_model.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/order_view_body.dart';
 
 class TimeInputRaw extends StatefulWidget {
-  const TimeInputRaw({super.key});
+  const TimeInputRaw({super.key,});
 
   @override
   State<TimeInputRaw> createState() => _TimeInputRawState();
 }
 
 class _TimeInputRawState extends State<TimeInputRaw> {
+    
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -31,19 +34,19 @@ class _TimeInputRawState extends State<TimeInputRaw> {
                   focusedBorder: InputBorder.none,
                   enabledBorder: InputBorder.none,
                 ),
-                onChanged: (val) => orderViewModel.timeController.text = val,
+                onChanged: (val) => context.read<PlaceOrderViewModel>().timeController.text = val,
               ),
             ),
             SizedBox(width: 8),
             DropdownButton<String>(
-              value: orderViewModel.selectedTimeUnit,
+              value: context.read<PlaceOrderViewModel>().selectedTimeUnit,
               items:
-                  orderViewModel.timeUnits
+                  context.read<PlaceOrderViewModel>().timeUnits
                       .map((e) => DropdownMenuItem(value: e, child: Text(e)))
                       .toList(),
               onChanged:
                   (val) =>
-                      setState(() => orderViewModel.selectedTimeUnit = val!),
+                      setState(() => context.read<PlaceOrderViewModel>().selectedTimeUnit = val!),
             ),
           ],
         ),

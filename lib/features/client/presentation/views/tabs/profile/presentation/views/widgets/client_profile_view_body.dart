@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:taskly/config/routes/routes_manager.dart';
 import 'package:taskly/core/di/di.dart';
 import 'package:taskly/core/utils/assets_manager.dart';
 import 'package:taskly/features/client/presentation/cubit/client_info_view_model/client_info_view_model.dart';
@@ -62,6 +63,9 @@ class _ClientProfileViewBodyState extends State<ClientProfileViewBody> {
                 AccountItemRow(
                   image: Assets.assetsImagesTechSupport5109502,
                   text: "Technical Support",
+                  onTap: () {
+                    Navigator.pushNamed(context, RoutesManager.technicalSupportView);
+                  },
                 ),
               ],
             ),

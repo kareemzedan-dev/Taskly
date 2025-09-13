@@ -53,7 +53,7 @@ class OrderStatesCard extends StatelessWidget {
                 text: "Offers You’ve Received",
                 icon: Icons.local_offer_outlined,
                 color: ColorsManager.primary,
-                count: 3,
+                count: 0,
                 onTap: () {
                        showModalBottomSheet(
                     context: context,

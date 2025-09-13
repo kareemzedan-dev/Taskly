@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:taskly/core/components/dismissible_error_card.dart';
 import 'package:taskly/core/di/di.dart';
 import 'package:taskly/core/utils/assets_manager.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
@@ -47,17 +48,18 @@ class _LoginViewBodyState extends State<LoginViewBody> {
         }
         if (state is AuthLoginSuccessState) {
           if(widget.role == 'client'){
+                showTemporaryMessage(context, "Login successfully", MessageType.success);
+
             Navigator.pushNamedAndRemoveUntil(context, RoutesManager.clientHome, (_) => false);
           }else{
+               showTemporaryMessage(context, "Login successfully", MessageType.success);
             Navigator.pushNamedAndRemoveUntil(context, RoutesManager.freelancerHome, (_) => false);
             
           }
        
         }
         if (state is AuthLoginErrorState) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(state.error)));
+      showTemporaryMessage(context, state.error, MessageType.error);
         }
       },
       child: SingleChildScrollView(
@@ -106,7 +108,7 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                 ),
                 SizedBox(height: 24.h),
 
-                /// Password
+          
                 CustomTextFormField(
                   prefixIcon: Icon(CupertinoIcons.lock),
                   hintText: AppLocalizations.of(context)!.password,
@@ -132,7 +134,7 @@ class _LoginViewBodyState extends State<LoginViewBody> {
 
                 SizedBox(height: 48.h),
 
-                CustomBotton(
+                CustomButton(
                   title: AppLocalizations.of(context)!.login,
                   ontap: () {
                     if (authViewModel.formKey.currentState!.validate()) {

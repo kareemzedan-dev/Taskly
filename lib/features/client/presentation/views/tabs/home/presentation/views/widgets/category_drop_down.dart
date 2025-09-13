@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:taskly/features/client/presentation/views/tabs/home/presentation/cubit/place_order_view_model/place_order_view_model.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/custom_drop_down.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/order_view_body.dart';
 
@@ -21,13 +23,13 @@ class _CategoryDropDownState extends State<CategoryDropDown> {
         border: Border.all(color: Colors.grey.shade300),
       ),
       child: CustomDropdown(
-        value: orderViewModel.selectedCategory,
-        items: orderViewModel.categories,
+        value: context.read<PlaceOrderViewModel>().selectedCategory,
+        items: context.read<PlaceOrderViewModel>().categories,
 
         hint: widget.selectedCategory ?? "Select Category",
         onChanged: (value) {
           setState(() {
-            orderViewModel.selectedCategory = value ?? widget.selectedCategory;
+            context.read<PlaceOrderViewModel>().selectedCategory = value ?? widget.selectedCategory;
           });
         },
       ),

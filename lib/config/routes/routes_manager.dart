@@ -9,6 +9,7 @@ import 'package:taskly/features/client/presentation/views/tabs/messages/presenta
 import 'package:taskly/features/freelancer/presentation/views/freelancer_home_view.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/job_details_view.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/send_offer_view.dart';
+import 'package:taskly/features/shared/presentation/views/technical_support_view.dart';
 import 'package:taskly/features/splash/presentation/views/splash_view.dart';
 import 'package:taskly/features/welcome/presentation/views/welcome_view.dart';
 
@@ -23,6 +24,7 @@ class RoutesManager {
   static const String chatView = "chatView";
   static const String jobDetailsView = "jobDetailsView";
   static const String sendOfferView = "sendOfferView";
+  static const String technicalSupportView = "TechnicalSupportView";
 
   static Route onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -70,6 +72,8 @@ class RoutesManager {
 
       case sendOfferView:
         return MaterialPageRoute(builder: (_) => SendOfferView());
+        case technicalSupportView:
+        return MaterialPageRoute(builder: (_) => const TechnicalSupportView());
 
       default:
         return MaterialPageRoute(builder: (_) => const Placeholder());
