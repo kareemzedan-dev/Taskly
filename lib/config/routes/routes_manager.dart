@@ -7,6 +7,7 @@ import 'package:taskly/features/client/presentation/views/client_home_view.dart'
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/order_view.dart';
 import 'package:taskly/features/client/presentation/views/tabs/messages/presentation/views/chat_view.dart';
 import 'package:taskly/features/freelancer/presentation/views/freelancer_home_view.dart';
+import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/favourite_orders_view.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/job_details_view.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/send_offer_view.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/profile/presentation/views/freelancer_earning_view.dart';
@@ -35,6 +36,7 @@ class RoutesManager {
   static const String changePasswordView = "changePasswordView";
   static const String freelancerEarningView = "freelancerEarningView";
   static const String requestWithdrawalView = "requestWithdrawalView";
+  static const String favouriteOrdersView = "favouriteOrdersView";
   static Route onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case splash:
@@ -95,6 +97,9 @@ class RoutesManager {
 
       case requestWithdrawalView:
         return MaterialPageRoute(builder: (_) => const RequestWithdrawalView());
+
+      case favouriteOrdersView:
+        return MaterialPageRoute(builder: (_) => const FavouriteOrdersView());
 
       default:
         return MaterialPageRoute(builder: (_) => const Placeholder());

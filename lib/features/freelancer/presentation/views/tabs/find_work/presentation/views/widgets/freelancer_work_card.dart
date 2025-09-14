@@ -6,9 +6,16 @@ import 'package:taskly/domain/entities/order_entity/order_entity.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/action_row.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/delivery_info.dart';
 
-class FreelancerWorkCard extends StatelessWidget {
+class FreelancerWorkCard extends StatefulWidget {
   FreelancerWorkCard({super.key, required this.order});
-  OrderEntity order;
+  final OrderEntity order;
+
+  @override
+  State<FreelancerWorkCard> createState() => _FreelancerWorkCardState();
+}
+
+class _FreelancerWorkCardState extends State<FreelancerWorkCard> {
+  bool isFavorite = false;
 
   @override
   Widget build(BuildContext context) {
@@ -26,17 +33,25 @@ class FreelancerWorkCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _HeaderRow(order.createdAt.toRelative()),
+              _HeaderRow(
+                widget.order.createdAt.toRelative(),
+                isFavorite: isFavorite,
+                onFavoriteTap: () {
+                  setState(() {
+                    isFavorite = !isFavorite;
+                  });
+                },
+              ),
               SizedBox(height: 10),
-              _Title(order.title),
+              _Title(widget.order.title),
               SizedBox(height: 5),
-              _CategoryChip(order.category ?? "No category"),
+              _CategoryChip(widget.order.category ?? "No category"),
               SizedBox(height: 16),
-              _Description(order.description ?? "No description"),
+              _Description(widget.order.description ?? "No description"),
               SizedBox(height: 16),
               DeliveryInfo(),
               SizedBox(height: 16),
-              ActionsRow(order: order),
+              ActionsRow(order: widget.order),
             ],
           ),
         ),
@@ -46,8 +61,11 @@ class FreelancerWorkCard extends StatelessWidget {
 }
 
 class _HeaderRow extends StatelessWidget {
-  _HeaderRow(this.date);
-  String date;
+  const _HeaderRow(this.date, {required this.isFavorite, required this.onFavoriteTap});
+
+  final String date;
+  final bool isFavorite;
+  final VoidCallback onFavoriteTap;
 
   @override
   Widget build(BuildContext context) {
@@ -57,15 +75,22 @@ class _HeaderRow extends StatelessWidget {
         Text(
           "Posted $date",
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-            fontWeight: FontWeight.w500,
-            fontSize: 12.sp,
+                fontWeight: FontWeight.w500,
+                fontSize: 12.sp,
+              ),
+        ),
+        GestureDetector(
+          onTap: onFavoriteTap,
+          child: Icon(
+            isFavorite ? Icons.favorite : Icons.favorite_border_rounded,
+            color: isFavorite ? Colors.red : Colors.black,
           ),
         ),
-        const Icon(Icons.favorite_border_rounded, color: Colors.black),
       ],
     );
   }
 }
+
 
 class _Title extends StatelessWidget {
   const _Title(this.title);
