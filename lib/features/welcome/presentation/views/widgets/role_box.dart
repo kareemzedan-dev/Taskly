@@ -27,7 +27,7 @@ class RoleBox extends StatelessWidget {
         width: 150.w,
         padding: EdgeInsets.all(8.w),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(16.r),
           border: Border.all(
             color: isSelected ? ColorsManager.primary : Colors.grey,
@@ -44,13 +44,21 @@ class RoleBox extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(image, height: 50.h, width: 50.w),
+            Image.asset(
+              image,
+              height: 50.h,
+              width: 50.w,
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? Colors.white
+                  : Colors.black,
+            ),
+
             SizedBox(height: 8.h),
             Text(
               title,
               softWrap: true,
               textAlign: TextAlign.center,
-              style: AppTheme.lightTheme.textTheme.headlineSmall?.copyWith(
+              style:Theme.of(context).textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.bold,
                 fontSize: 18.sp,
               ),
@@ -60,7 +68,7 @@ class RoleBox extends StatelessWidget {
               subtitle,
               softWrap: true,
               textAlign: TextAlign.center,
-              style: AppTheme.lightTheme.textTheme.bodySmall?.copyWith(
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
                 fontSize: 12.sp,
                 color: Colors.grey[600],
               ),

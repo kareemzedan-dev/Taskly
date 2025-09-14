@@ -7,7 +7,7 @@ import 'package:taskly/features/shared/presentation/views/widgets/description_se
 import 'package:taskly/features/shared/presentation/views/widgets/job_header_section.dart';
 
 class OrderDetailsBottomSheetContent extends StatelessWidget {
-  OrderDetailsBottomSheetContent({super.key, required this.order});
+  const OrderDetailsBottomSheetContent({super.key, required this.order});
   final OrderEntity order;
 
   @override
@@ -16,7 +16,7 @@ class OrderDetailsBottomSheetContent extends StatelessWidget {
     final DateTime createdAt = parseSupabaseDate(order.createdAt.toString());
     final String relativeTime = createdAt.toRelative();
 
-    return Container(
+    return SizedBox(
       height: MediaQuery.of(context).size.height * 0.75,
       width: double.infinity,
       child: SingleChildScrollView(

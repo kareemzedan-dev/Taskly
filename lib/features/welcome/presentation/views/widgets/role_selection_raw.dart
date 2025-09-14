@@ -6,7 +6,7 @@ import 'package:taskly/features/welcome/presentation/views/widgets/role_box.dart
 import 'package:taskly/config/l10n/app_localizations.dart';
 
 class RoleSelectionRow extends StatelessWidget {
-  final UserRole? selectedRole; // null لو لسه مش مختار
+  final UserRole? selectedRole;
   final Function(UserRole) onRoleSelected;
 
   const RoleSelectionRow({

@@ -3,6 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/cache/shared_preferences.dart';
 import 'package:taskly/config/routes/routes_manager.dart';
 
+import '../../../../../core/utils/constants_manager.dart';
+import '../../../../../core/utils/strings_manager.dart';
+
 class SplashViewBody extends StatefulWidget {
   const SplashViewBody({super.key});
 
@@ -15,8 +18,8 @@ class _SplashViewBodyState extends State<SplashViewBody>
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
   late Animation<double> _scaleAnimation;
-  var token = SharedPrefHelper.getString("token");
-  var role = SharedPrefHelper.getString("role");
+  var token = SharedPrefHelper.getString(StringsManager.tokenKey);
+  var role = SharedPrefHelper.getString(StringsManager.roleKey);
 
   @override
   void initState() {
@@ -48,10 +51,10 @@ class _SplashViewBodyState extends State<SplashViewBody>
 
   @override
   Widget build(BuildContext context) {
-    Future.delayed(const Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds:  ConstantsManager.splashDelay), () {
       if (!mounted) return;
       if (token != null) {
-        if (role == "freelancer") {
+        if (role == StringsManager.freelancerRole) {
           Navigator.pushReplacementNamed(context, RoutesManager.freelancerHome);
         } else {
           Navigator.pushReplacementNamed(context, RoutesManager.clientHome);

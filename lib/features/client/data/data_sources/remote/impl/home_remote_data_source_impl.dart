@@ -9,7 +9,6 @@ import 'package:taskly/domain/entities/order_entity/order_entity.dart';
 import 'package:taskly/features/client/data/data_sources/remote/home_remote_data_source.dart';
 import 'package:taskly/features/client/data/models/home/freelancer_dm.dart';
 import 'package:taskly/features/client/data/models/home/service_response_dm.dart';
-import 'package:taskly/data/models/user_info_dm/user_info_response_dm.dart';
 import 'package:taskly/features/client/domain/entities/home/freelancer_entity.dart';
 import 'package:taskly/features/client/domain/entities/home/service_response_entity.dart';
 

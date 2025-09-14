@@ -5,7 +5,6 @@ import 'package:taskly/core/errors/failures.dart';
 import 'package:taskly/core/cache/shared_preferences.dart';
 import 'package:taskly/domain/entities/user_info_entity/user_info_entity.dart';
 import 'package:taskly/domain/use_cases/profile/profile_use_case.dart';
-import 'package:taskly/features/client/domain/use_cases/home/home_use_case.dart';
 import 'package:taskly/features/client/presentation/cubit/client_info_view_model/client_info_view_model_states.dart';
 
 @injectable 

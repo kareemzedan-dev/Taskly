@@ -5,7 +5,6 @@ import 'package:taskly/core/errors/failures.dart';
 import 'package:taskly/core/services/supabase_service.dart';
 import 'package:taskly/data/data_sources/remote/profile_remote_data_source.dart';
 import 'package:taskly/data/models/user_info_dm/user_info_response_dm.dart';
-import 'package:taskly/domain/entities/user_info_entity/user_info_entity.dart';
 @Injectable(as: ProfileRemoteDataSource)
 class ProfileRemoteDataSourceImpl extends ProfileRemoteDataSource{
     final SupabaseClient supabase;

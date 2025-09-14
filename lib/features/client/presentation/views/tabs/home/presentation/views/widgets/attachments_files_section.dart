@@ -157,7 +157,7 @@ class _AttachmentsFilesSectionState extends State<AttachmentsFilesSection> {
                       Expanded(
                         child: Text(
                           fileName,
-                          style: AppTextStyles.medium14.copyWith(
+                          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                             color: isCancelled ? Colors.grey : null,
                           ),
                           overflow: TextOverflow.ellipsis,

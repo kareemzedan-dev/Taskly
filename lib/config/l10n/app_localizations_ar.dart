@@ -60,6 +60,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get createAccount => 'إنشاء حسابي';
 
   @override
+  String get thisFieldIsRequired => 'هذا الحقل مطلوب';
+
+  @override
   String get welcomeBack => 'مرحباً بعودتك';
 
   @override

@@ -60,6 +60,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get createAccount => 'Create my account';
 
   @override
+  String get thisFieldIsRequired => 'This field is required';
+
+  @override
   String get welcomeBack => 'Welcome back';
 
   @override

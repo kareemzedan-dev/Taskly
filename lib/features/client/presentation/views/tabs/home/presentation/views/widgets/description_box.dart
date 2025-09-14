@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/cubit/place_order_view_model/place_order_view_model.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/build_text_field_widget.dart';
-import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/order_view_body.dart';
 
 class DescriptionBox extends StatelessWidget {
   const DescriptionBox({super.key});

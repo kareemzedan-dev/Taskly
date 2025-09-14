@@ -6,7 +6,6 @@ import 'package:taskly/core/cache/shared_preferences.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/cubit/get_order_view_model.dart/get_order_view_model.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/empty_state_animation.dart';
-import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/order_states_card.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/order_status_card_list_view.dart';
 
 class MyJobsTabView extends StatelessWidget {

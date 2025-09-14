@@ -1,7 +1,7 @@
 extension DateTimeRelative on DateTime {
   String toRelative() {
     final now = DateTime.now().toUtc(); // استخدام التوقيت العالمي
-    final thisUtc = this.toUtc(); // تحويل التاريخ إلى UTC
+    final thisUtc = toUtc(); // تحويل التاريخ إلى UTC
     
     final difference = now.difference(thisUtc);
     

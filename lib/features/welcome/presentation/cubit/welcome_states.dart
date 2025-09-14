@@ -4,7 +4,7 @@ enum WelcomeStatus { initial, loading, videoReady }
 enum UserRole { freelancer, client }
 
 class WelcomeState {
-  final UserRole? selectedRole; // null لو لسه ما اختارش
+  final UserRole? selectedRole;
   final WelcomeStatus status;
 
   WelcomeState({

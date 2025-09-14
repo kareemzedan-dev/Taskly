@@ -54,7 +54,7 @@ class Taskly extends StatelessWidget {
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
           ],
-          supportedLocales: const [Locale('en'), Locale('ar')],
+          supportedLocales: const [  Locale('ar')],
 
           theme: AppTheme.lightTheme,
 

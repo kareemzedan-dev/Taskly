@@ -51,7 +51,7 @@ class OrderHeader extends StatelessWidget {
 ,
         SizedBox(height: 3.h),
         Text(
-          "#${orderId }",
+          "#$orderId ",
           softWrap: true,
           style: Theme.of(context)
               .textTheme

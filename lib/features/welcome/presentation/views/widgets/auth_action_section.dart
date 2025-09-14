@@ -5,6 +5,8 @@ import 'package:taskly/core/components/custom_button.dart';
 import 'package:taskly/features/welcome/presentation/cubit/welcome_states.dart';
 import 'package:taskly/config/l10n/app_localizations.dart';
 
+import '../../../../../core/utils/strings_manager.dart';
+
 class AuthActionSection extends StatelessWidget {
   final UserRole selectedRole;
 
@@ -27,8 +29,8 @@ class AuthActionSection extends StatelessWidget {
                 RoutesManager.register,
                 arguments:
                     selectedRole == UserRole.freelancer
-                        ? "freelancer"
-                        : "client",
+                        ?  StringsManager.freelancerRole
+                        : StringsManager.clientRole,
               );
             },
           ),
@@ -55,8 +57,8 @@ class AuthActionSection extends StatelessWidget {
                     RoutesManager.login,
                     arguments:
                         selectedRole == UserRole.freelancer
-                            ? "freelancer"
-                            : "client",
+                            ?  StringsManager.freelancerRole
+                            : StringsManager.clientRole,
                   );
                 },
                 child: Text(

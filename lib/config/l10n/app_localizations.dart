@@ -197,6 +197,12 @@ abstract class AppLocalizations {
   /// **'Create my account'**
   String get createAccount;
 
+  /// No description provided for @thisFieldIsRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'This field is required'**
+  String get thisFieldIsRequired;
+
   /// No description provided for @welcomeBack.
   ///
   /// In en, this message translates to:

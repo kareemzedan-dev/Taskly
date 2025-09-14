@@ -41,7 +41,7 @@ class PlaceOrderViewModel extends Cubit<PlaceOrderViewModelStates> {
   String? selectedCategory;
   TextEditingController descriptionController = TextEditingController();
   final clientId = SharedPrefHelper.getString("id");
-  SupabaseService _supabaseService = SupabaseService();
+  final SupabaseService _supabaseService = SupabaseService();
   Map<String, Future<String>?> uploadFutures = {};
 
 // في PlaceOrderViewModel

@@ -7,7 +7,7 @@ import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/pre
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/delivery_info.dart';
 
 class FreelancerWorkCard extends StatefulWidget {
-  FreelancerWorkCard({super.key, required this.order});
+  const FreelancerWorkCard({super.key, required this.order});
   final OrderEntity order;
 
   @override

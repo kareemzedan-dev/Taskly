@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:svg_flutter/svg.dart';
 
+import '../../../../../core/utils/constants_manager.dart';
+
 class SocialLoginButton extends StatelessWidget {
   final String label;
   final String iconPath;
@@ -24,7 +26,7 @@ class SocialLoginButton extends StatelessWidget {
           backgroundColor: Colors.transparent,
           shape: RoundedRectangleBorder(
             side: const BorderSide(color: Colors.grey, width: 1),
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(ConstantsManager.defaultPadding),
           ),
         ),
         onPressed: onPressed,

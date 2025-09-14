@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:taskly/core/utils/assets_manager.dart';
 import 'package:video_player/video_player.dart';
 import 'welcome_states.dart';
 
@@ -14,7 +15,7 @@ class WelcomeViewModel extends Cubit<WelcomeState> {
   Future<void> _initVideo() async {
     emit(state.copyWith(status: WelcomeStatus.loading));
 
-    _controller = VideoPlayerController.asset("assets/videos/welcome_video.mp4");
+    _controller = VideoPlayerController.asset(Assets.welcomeVideo);
     await _controller.initialize();
 
     _controller

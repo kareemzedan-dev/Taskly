@@ -2,7 +2,7 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 
 class CustomSearchTextField extends StatefulWidget {
-    CustomSearchTextField({super.key, required this.hintTexts,  this.controller , this.onChanged});
+    const CustomSearchTextField({super.key, required this.hintTexts,  this.controller , this.onChanged});
 
   final List<String> hintTexts;
  final TextEditingController? controller ;

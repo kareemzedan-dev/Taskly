@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:taskly/core/utils/app_text_styles.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
 
+import '../../config/l10n/app_localizations.dart';
+
 class CustomTextFormField extends StatefulWidget {
   CustomTextFormField({
     super.key,
@@ -46,7 +48,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
               ? (value) => widget.validator!(value)
               : (value) {
                 if (value == null || value.isEmpty) {
-                  return "This field is required";
+                  return AppLocalizations.of(context)!.thisFieldIsRequired;
                 }
                 return null;
               },

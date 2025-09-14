@@ -7,7 +7,6 @@ import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentat
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/order_details_bottom_sheet_content.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/order_header.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/order_progress_time_line.dart';
-import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/job_details_view.dart';
 
 class OrderStatesCard extends StatelessWidget {
   const OrderStatesCard({super.key, required this.order});

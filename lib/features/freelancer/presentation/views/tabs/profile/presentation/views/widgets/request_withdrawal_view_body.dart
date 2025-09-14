@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:taskly/core/components/custom_tab_bar.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/profile/presentation/views/widgets/withdrawal_history_tab_content.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/profile/presentation/views/widgets/withdrawal_request_tab_content.dart';

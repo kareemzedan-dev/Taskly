@@ -10,6 +10,7 @@
   "createClientAccount": "Create Client Account",
   "alreadyHaveAccount": "Already have an account?",
   "login": "Log in",
+
     "registerFreelancerSubtitle": "Sign up to find work",
   "registerClientSubtitle": "Sign up to hire the best talent",
   "firstName": "First Name",
@@ -17,6 +18,7 @@
   "email": "Email",
   "password": "Password",
   "createAccount": "Create my account",
+  "thisFieldIsRequired" : "This field is required",
  
   "welcomeBack": "Welcome back",
   "dontHaveAccount": "Don't have an account?",

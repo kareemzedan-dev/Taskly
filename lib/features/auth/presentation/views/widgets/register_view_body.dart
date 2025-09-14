@@ -16,6 +16,8 @@ import 'package:taskly/features/auth/presentation/views/widgets/build_privacy_po
 import 'package:taskly/features/auth/presentation/views/widgets/social_login_button.dart';
 import 'package:taskly/config/l10n/app_localizations.dart';
 
+import '../../../../../core/utils/strings_manager.dart';
+
 class RegisterViewBody extends StatefulWidget {
   const RegisterViewBody({super.key, required this.role});
   final String role;
@@ -49,7 +51,7 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
           Navigator.pop(context);
         }
         if (state is AuthRegisterSuccessState) {
-         if(widget.role == "freelancer"){
+         if(widget.role ==  StringsManager.freelancerRole){
           Navigator.pushNamedAndRemoveUntil(context, RoutesManager.freelancerHome, (_) => false);
          }
          else{
@@ -85,7 +87,7 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
                 SizedBox(height: 16.h),
                 Center(
                   child: Text(
-                    widget.role == "freelancer"
+                    widget.role == StringsManager.freelancerRole
                         ? AppLocalizations.of(
                           context,
                         )!.registerFreelancerSubtitle
@@ -106,12 +108,12 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
                         autovalidateMode:
                             authViewModel.autovalidateMode ??
                             AutovalidateMode.onUserInteraction,
-                        hintText: "First Name",
+                        hintText:  AppLocalizations.of(context)!.firstName,
                         textEditingController: authViewModel.fNameController,
 
                         validator:
                             (p0) =>
-                                p0!.isEmpty ? 'This field is required' : null,
+                                p0!.isEmpty ? AppLocalizations.of(context)!.thisFieldIsRequired : null,
                         keyboardType: TextInputType.text,
                         onSaved: (p0) {
                           authViewModel.fNameController.text = p0!;
@@ -129,7 +131,7 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
                         textEditingController: authViewModel.lNameController,
                         validator:
                             (p0) =>
-                                p0!.isEmpty ? 'This field is required' : null,
+                                p0!.isEmpty ? AppLocalizations.of(context)!.thisFieldIsRequired: null,
                         keyboardType: TextInputType.text,
                         onSaved: (p0) {
                           authViewModel.lNameController.text = p0!;
@@ -148,7 +150,7 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
                   hintText: AppLocalizations.of(context)!.email,
                   textEditingController: authViewModel.emailController,
                   validator:
-                      (p0) => p0!.isEmpty ? 'This field is required' : null,
+                      (p0) => p0!.isEmpty ? AppLocalizations.of(context)!.thisFieldIsRequired : null,
                   keyboardType: TextInputType.emailAddress,
                   onSaved: (p0) {
                     authViewModel.emailController.text = p0!;
@@ -164,7 +166,7 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
                   textEditingController: authViewModel.passwordController,
                   iconShow: true,
                   validator:
-                      (p0) => p0!.isEmpty ? 'This field is required' : null,
+                      (p0) => p0!.isEmpty ? AppLocalizations.of(context)!.thisFieldIsRequired: null,
                   keyboardType: TextInputType.visiblePassword,
                   onSaved: (p0) {
                     authViewModel.passwordController.text = p0!;
@@ -219,16 +221,16 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
 
                     GestureDetector(
                       onTap: () {
-                        widget.role == "freelancer"
+                        widget.role == StringsManager.freelancerRole
                             ? Navigator.pushReplacementNamed(
                               context,
                               RoutesManager.login,
-                              arguments: "freelancer",
+                              arguments: StringsManager.freelancerRole,
                             )
                             : Navigator.pushReplacementNamed(
                               context,
                               RoutesManager.login,
-                              arguments: "client",
+                              arguments:StringsManager.clientRole,
                             );
                       },
                       child: Text(

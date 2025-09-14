@@ -11,6 +11,7 @@ import 'package:taskly/config/routes/routes_manager.dart';
 import 'package:taskly/core/components/custom_button.dart';
 import 'package:taskly/core/components/custom_text_field.dart';
 import 'package:taskly/core/components/or_divider.dart';
+import 'package:taskly/core/utils/strings_manager.dart';
 import 'package:taskly/features/auth/presentation/cubit/auth_states.dart';
 import 'package:taskly/features/auth/presentation/cubit/auth_view_model.dart';
 import 'package:taskly/features/auth/presentation/views/widgets/social_login_button.dart';
@@ -47,7 +48,7 @@ class _LoginViewBodyState extends State<LoginViewBody> {
           Navigator.pop(context);
         }
         if (state is AuthLoginSuccessState) {
-          if(widget.role == 'client'){
+          if(widget.role ==   StringsManager.clientRole){
                 showTemporaryMessage(context, "Login successfully", MessageType.success);
 
             Navigator.pushNamedAndRemoveUntil(context, RoutesManager.clientHome, (_) => false);
@@ -100,7 +101,7 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                   hintText: AppLocalizations.of(context)!.email,
                   textEditingController: authViewModel.emailController,
                   validator:
-                      (p0) => p0!.isEmpty ? 'This field is required' : null,
+                      (p0) => p0!.isEmpty ?  AppLocalizations.of(context)!.thisFieldIsRequired : null,
                   keyboardType: TextInputType.emailAddress,
                   onSaved: (p0) {
                     authViewModel.emailController.text = p0!;
@@ -115,7 +116,7 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                   textEditingController: authViewModel.passwordController,
                   iconShow: true,
                   validator:
-                      (p0) => p0!.isEmpty ? 'This field is required' : null,
+                      (p0) => p0!.isEmpty ? AppLocalizations.of(context)!.thisFieldIsRequired : null,
                   keyboardType: TextInputType.visiblePassword,
                   onSaved: (p0) {
                     authViewModel.passwordController.text = p0!;
@@ -168,16 +169,16 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                     SizedBox(width: 5.w,),
                     GestureDetector(
                       onTap: () {
-                           widget.role == "freelancer"
+                           widget.role ==  StringsManager.freelancerRole
                             ? Navigator.pushReplacementNamed(
                               context,
                               RoutesManager.register,
-                              arguments: "freelancer",
+                              arguments:  StringsManager.freelancerRole,
                             )
                             : Navigator.pushReplacementNamed(
                               context,
                               RoutesManager.register,
-                              arguments: "client",
+                              arguments:  StringsManager.clientRole,
                             );
                       },
 

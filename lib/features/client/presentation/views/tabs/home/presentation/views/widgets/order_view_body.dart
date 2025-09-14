@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:taskly/core/di/di.dart';
-import 'package:taskly/core/services/supabase_service.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
 import 'package:taskly/core/components/custom_button.dart';
 import 'package:taskly/core/components/dismissible_error_card.dart';
