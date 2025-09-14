@@ -220,12 +220,12 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
                     GestureDetector(
                       onTap: () {
                         widget.role == "freelancer"
-                            ? Navigator.pushNamed(
+                            ? Navigator.pushReplacementNamed(
                               context,
                               RoutesManager.login,
                               arguments: "freelancer",
                             )
-                            : Navigator.pushNamed(
+                            : Navigator.pushReplacementNamed(
                               context,
                               RoutesManager.login,
                               arguments: "client",

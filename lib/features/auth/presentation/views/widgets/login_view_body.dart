@@ -169,12 +169,12 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                     GestureDetector(
                       onTap: () {
                            widget.role == "freelancer"
-                            ? Navigator.pushNamed(
+                            ? Navigator.pushReplacementNamed(
                               context,
                               RoutesManager.register,
                               arguments: "freelancer",
                             )
-                            : Navigator.pushNamed(
+                            : Navigator.pushReplacementNamed(
                               context,
                               RoutesManager.register,
                               arguments: "client",
