@@ -1,12 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:taskly/config/routes/routes_manager.dart';
 import 'package:taskly/core/utils/assets_manager.dart';
 import 'package:taskly/features/client/presentation/views/tabs/profile/presentation/views/widgets/account_item_row.dart';
 import 'package:taskly/features/client/presentation/views/tabs/profile/presentation/views/widgets/user_info_section.dart';
+import 'package:taskly/features/shared/presentation/views/widgets/language_bottom_sheet_content.dart';
 import 'package:taskly/features/shared/presentation/views/widgets/profile_section.dart';
+import 'package:taskly/features/shared/presentation/views/widgets/theme_bottom_sheet_content.dart';
 
-class FreelancerProfileViewBody extends StatelessWidget {
+class FreelancerProfileViewBody extends StatefulWidget {
   const FreelancerProfileViewBody({super.key});
+
+  @override
+  State<FreelancerProfileViewBody> createState() =>
+      _FreelancerProfileViewBodyState();
+}
+
+class _FreelancerProfileViewBodyState extends State<FreelancerProfileViewBody> {
+  String _currentLanguage = "English";
+
+  String _currentTheme = "Light";
 
   @override
   Widget build(BuildContext context) {
@@ -17,9 +30,12 @@ class FreelancerProfileViewBody extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 20),
-            const UserInfoSection(
+            UserInfoSection(
               email: "Kareem@gmail.com",
               name: "kareem",
+              onTap: () {
+                Navigator.pushNamed(context, RoutesManager.userAccountView);
+              },
               isFreelancer: true,
             ),
 
@@ -30,11 +46,23 @@ class FreelancerProfileViewBody extends StatelessWidget {
                 AccountItemRow(
                   image: Assets.assetsImagesWallet2527857,
                   text: "Earnings",
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      RoutesManager.freelancerEarningView,
+                    );
+                  },
                 ),
                 SizedBox(height: 10.h),
                 AccountItemRow(
                   image: Assets.assetsImagesWithdrawal8211181,
                   text: "Withdraw Balance",
+                  onTap: () {
+                          Navigator.pushNamed(
+                context,
+                RoutesManager.requestWithdrawalView,
+              );
+                  },
                 ),
                 SizedBox(height: 10.h),
                 AccountItemRow(
@@ -61,31 +89,98 @@ class FreelancerProfileViewBody extends StatelessWidget {
                 AccountItemRow(
                   image: Assets.assetsImagesTechSupport5109502,
                   text: "Technical Support",
-                ),
-                SizedBox(height: 10.h),
-                AccountItemRow(
-                  image: Assets.assetsImagesFaq6736884,
-                  text: "FAQs",
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      RoutesManager.technicalSupportView,
+                    );
+                  },
                 ),
               ],
             ),
 
             ProfileSection(
-              title: "Settings",
+              title: "Account",
               children: [
                 AccountItemRow(
                   image: Assets.assetsImagesInternet2889312,
                   text: "Language",
+                  onTap: () async {
+                    final selected = await showModalBottomSheet<String>(
+                      context: context,
+                      backgroundColor: Colors.transparent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(12),
+                        ),
+                      ),
+                      builder: (context) {
+                        return LanguageBottomSheetContent(
+                          initialLanguage: _currentLanguage,
+                        );
+                      },
+                    );
+
+                    if (selected != null) {
+                      setState(() {
+                        _currentLanguage = selected;
+                      });
+                    }
+                  },
                 ),
-                SizedBox(height: 10.h),
                 AccountItemRow(
                   image: Assets.assetsImagesBrushes3450037,
                   text: "Theme",
+                  onTap: () async {
+                    final selectedTheme = await showModalBottomSheet<String>(
+                      context: context,
+                      backgroundColor: Colors.transparent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(12),
+                        ),
+                      ),
+                      builder: (context) {
+                        return ThemeBottomSheetContent(
+                          initialTheme: _currentTheme,
+                        );
+                      },
+                    );
+
+                    if (selectedTheme != null) {
+                      setState(() {
+                        _currentTheme = selectedTheme;
+                      });
+                    }
+                  },
                 ),
+                SizedBox(height: 10.h),
+
+                AccountItemRow(
+                  image: Assets.assetsImagesCahngePassword,
+                  text: "Change Password",
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      RoutesManager.changePasswordView,
+                    );
+                  },
+                ),
+              ],
+            ),
+            ProfileSection(
+              title: "Settings",
+              children: [
                 SizedBox(height: 10.h),
                 AccountItemRow(
                   image: Assets.assetsImagesAccount3166234,
                   text: "Privacy Policy",
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      RoutesManager.privacyPolicyView,
+                    );
+                  },
                 ),
                 SizedBox(height: 10.h),
                 AccountItemRow(

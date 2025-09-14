@@ -136,7 +136,7 @@ class TechnicalSupportViewBody extends StatelessWidget {
             SizedBox(height: 30.h),
             Text("FAQ", style: Theme.of(context).textTheme.headlineLarge),
             SizedBox(height: 16.h),
-            // FAQ List
+         
             ...faqs.map(
               (faq) => Padding(
                 padding: EdgeInsets.only(bottom: 12.h),

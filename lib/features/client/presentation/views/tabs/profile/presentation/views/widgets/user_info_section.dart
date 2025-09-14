@@ -10,6 +10,7 @@ class UserInfoSection extends StatelessWidget {
   final bool isFreelancer;
   final bool photoSizeSelected;
   final bool emailShow;
+  final VoidCallback? onTap;
 
   const UserInfoSection({
     super.key,
@@ -19,65 +20,69 @@ class UserInfoSection extends StatelessWidget {
     this.isFreelancer = false,
     this.photoSizeSelected = false,
     this.emailShow = true,
+      this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        CircleAvatar(
-          radius: photoSizeSelected ? 26.r : 40.r,
-          backgroundImage: AssetImage(
-            Assets.assetsImagesPortraitHappySmileyMan,
+    return GestureDetector(
+      onTap: onTap,
+      child: Row(
+        children: [
+          CircleAvatar(
+            radius: photoSizeSelected ? 26.r : 40.r,
+            backgroundImage: AssetImage(
+              Assets.assetsImagesPortraitHappySmileyMan,
+            ),
           ),
-        ),
-        const SizedBox(width: 20),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(name, style: AppTextStyles.bold20),
-            if (emailShow)
-              Text(
-                email,
-                style: AppTextStyles.bold16.copyWith(color: Colors.grey),
-              ),
-            Row(
-              children: [
-                ...List.generate(5, (index) {
-                  return Icon(
-                    index < rating.round()
-                        ? CupertinoIcons.star_fill
-                        : CupertinoIcons.star,
-                    color: Colors.amber,
-                    size: 14.sp,
-                  );
-                }),
-                SizedBox(width: 10.w),
+          const SizedBox(width: 20),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(name, style: AppTextStyles.bold20),
+              if (emailShow)
                 Text(
-                  '($rating)',
+                  email,
                   style: AppTextStyles.bold16.copyWith(color: Colors.grey),
                 ),
-              ],
-            ),
-            if (isFreelancer)
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Icon(
-                    Icons.verified_user_outlined,
-                    color: Colors.green,
-                    size: 14.sp,
-                  ),
-                  SizedBox(width: 5.w),
+                  ...List.generate(5, (index) {
+                    return Icon(
+                      index < rating.round()
+                          ? CupertinoIcons.star_fill
+                          : CupertinoIcons.star,
+                      color: Colors.amber,
+                      size: 14.sp,
+                    );
+                  }),
+                  SizedBox(width: 10.w),
                   Text(
-                    isFreelancer ? 'Verified Freelancer' : '',
-                    style: AppTextStyles.bold14.copyWith(color: Colors.grey),
+                    '($rating)',
+                    style: AppTextStyles.bold16.copyWith(color: Colors.grey),
                   ),
                 ],
               ),
-          ],
-        ),
-      ],
+              if (isFreelancer)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(
+                      Icons.verified_user_outlined,
+                      color: Colors.green,
+                      size: 14.sp,
+                    ),
+                    SizedBox(width: 5.w),
+                    Text(
+                      isFreelancer ? 'Verified Freelancer' : '',
+                      style: AppTextStyles.bold14.copyWith(color: Colors.grey),
+                    ),
+                  ],
+                ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

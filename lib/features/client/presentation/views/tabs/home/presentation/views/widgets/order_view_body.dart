@@ -235,24 +235,7 @@ class _OrderViewBodyState extends State<OrderViewBody> {
 
     print('Is uploading: $isUploading');
 
-    if (isUploading) {
-      return showTemporaryMessage(
-        context,
-        "Please wait until all attachments are uploaded",
-        MessageType.error,
-      );
-    }
-    
-    final allUploaded = context.read<PlaceOrderViewModel>().areAllRequiredFilesUploaded();
-    print('All required files uploaded: $allUploaded');
-    
-    if (!allUploaded) {
-      return showTemporaryMessage(
-        context,
-        "Please wait for at least one file to finish uploading",
-        MessageType.error,
-      );
-    }
+ 
                         if (orderViewModel.titleController.text.isEmpty) {
                           return showTemporaryMessage(
                             context,
@@ -302,7 +285,24 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                             MessageType.error,
                           );
                         }
-
+    if (isUploading) {
+      return showTemporaryMessage(
+        context,
+        "Please wait until all attachments are uploaded",
+        MessageType.error,
+      );
+    }
+    
+    final allUploaded = context.read<PlaceOrderViewModel>().areAllRequiredFilesUploaded();
+    print('All required files uploaded: $allUploaded');
+    
+    if (!allUploaded) {
+      return showTemporaryMessage(
+        context,
+        "Please wait for at least one file to finish uploading",
+        MessageType.error,
+      );
+    }
                         await context.read<PlaceOrderViewModel>().placeOrder(
                           OrderEntity(
                             id: orderViewModel.orderId,

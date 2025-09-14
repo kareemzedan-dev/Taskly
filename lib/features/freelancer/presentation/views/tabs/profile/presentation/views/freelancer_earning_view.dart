@@ -1,0 +1,40 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:taskly/features/freelancer/presentation/views/tabs/profile/presentation/views/widgets/freelancer_earning_view_body.dart';
+
+class FreelancerEarningView extends StatelessWidget {
+  const FreelancerEarningView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return  Scaffold(
+      appBar: AppBar(
+        surfaceTintColor: Colors.transparent,
+        backgroundColor: Colors.white,
+        title: Text(
+          'Earning',
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+            fontWeight: FontWeight.w700,
+            fontSize: 20.sp,
+          ),
+        ),
+   leading: GestureDetector(
+          onTap: () => Navigator.pop(context),
+          child: Icon(CupertinoIcons.back, color: Colors.black),
+        ),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1.0),
+          child: Container(color: Colors.grey.shade300, height: 1.0),
+        ),
+        elevation: 0,
+        shape: Border(
+          bottom: BorderSide(color: Colors.grey.shade300, width: 2),
+        ),
+      ),
+      backgroundColor: Colors.white,
+      body: SafeArea(child: FreelancerEarningViewBody()),
+    );
+  }
+}

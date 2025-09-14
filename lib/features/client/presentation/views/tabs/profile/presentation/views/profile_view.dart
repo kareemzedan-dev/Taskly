@@ -11,22 +11,19 @@ class ProfileViewTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        surfaceTintColor: Colors.transparent,
         backgroundColor: Colors.white,
         title: Text(
           'Profile',
-          style: Theme.of(
-            context,
-          ).textTheme.bodyLarge?.copyWith(     
-                   fontWeight: FontWeight.w700,
-            fontSize: 20.sp,),
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+            fontWeight: FontWeight.w700,
+            fontSize: 20.sp,
+          ),
         ),
-          elevation: 0, 
-  shape: Border(
-    bottom: BorderSide(
-      color: Colors.grey.shade300,
-      width: 2,  
-    ),
-  ),
+        elevation: 0,
+        shape: Border(
+          bottom: BorderSide(color: Colors.grey.shade300, width: 2),
+        ),
         actions: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -34,7 +31,7 @@ class ProfileViewTab extends StatelessWidget {
           ),
         ],
       ),
-backgroundColor: Colors.white,
+      backgroundColor: Colors.white,
       body: ClientProfileViewBody(),
     );
   }

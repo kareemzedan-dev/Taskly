@@ -8,7 +8,9 @@ import 'package:taskly/features/client/presentation/cubit/client_info_view_model
 import 'package:taskly/features/client/presentation/cubit/client_info_view_model/client_info_view_model_states.dart';
 import 'package:taskly/features/client/presentation/views/tabs/profile/presentation/views/widgets/account_item_row.dart';
 import 'package:taskly/features/client/presentation/views/tabs/profile/presentation/views/widgets/user_info_section.dart';
+import 'package:taskly/features/shared/presentation/views/widgets/language_bottom_sheet_content.dart';
 import 'package:taskly/features/shared/presentation/views/widgets/profile_section.dart';
+import 'package:taskly/features/shared/presentation/views/widgets/theme_bottom_sheet_content.dart';
 
 class ClientProfileViewBody extends StatefulWidget {
   const ClientProfileViewBody({super.key});
@@ -19,7 +21,8 @@ class ClientProfileViewBody extends StatefulWidget {
 
 class _ClientProfileViewBodyState extends State<ClientProfileViewBody> {
   late final ClientInfoViewModel _userInfoViewModel;
-
+  String _currentLanguage = "English";
+  String _currentTheme = "Light";
   @override
   void initState() {
     super.initState();
@@ -38,22 +41,28 @@ class _ClientProfileViewBodyState extends State<ClientProfileViewBody> {
             const SizedBox(height: 20),
             BlocProvider(
               create: (context) => _userInfoViewModel,
-              child: BlocBuilder<ClientInfoViewModel, ClientInfoViewModelStates>(
-                builder: (context, state) {
-                  if (state is ClientInfoViewModelLoading) {
-                    return const CircularProgressIndicator();
-                  } else if (state is ClientInfoViewModelSuccess) {
-                    return UserInfoSection(
-                      email: state.userInfoEntity.email,
-                      name: state.userInfoEntity.fullName!,
-                    
-                    );
-                  } else if (state is ClientInfoViewModelError) {
-                    return Text(state.errorMessage);
-                  }
-                  return Container();
-                },
-              ),
+              child:
+                  BlocBuilder<ClientInfoViewModel, ClientInfoViewModelStates>(
+                    builder: (context, state) {
+                      if (state is ClientInfoViewModelLoading) {
+                        return const CircularProgressIndicator();
+                      } else if (state is ClientInfoViewModelSuccess) {
+                        return UserInfoSection(
+                          onTap: () {
+                            Navigator.pushNamed(
+                              context,
+                              RoutesManager.userAccountView,
+                            );
+                          },
+                          email: state.userInfoEntity.email,
+                          name: state.userInfoEntity.fullName!,
+                        );
+                      } else if (state is ClientInfoViewModelError) {
+                        return Text(state.errorMessage);
+                      }
+                      return Container();
+                    },
+                  ),
             ),
 
             SizedBox(height: 40.h),
@@ -64,7 +73,10 @@ class _ClientProfileViewBodyState extends State<ClientProfileViewBody> {
                   image: Assets.assetsImagesTechSupport5109502,
                   text: "Technical Support",
                   onTap: () {
-                    Navigator.pushNamed(context, RoutesManager.technicalSupportView);
+                    Navigator.pushNamed(
+                      context,
+                      RoutesManager.technicalSupportView,
+                    );
                   },
                 ),
               ],
@@ -76,10 +88,66 @@ class _ClientProfileViewBodyState extends State<ClientProfileViewBody> {
                 AccountItemRow(
                   image: Assets.assetsImagesInternet2889312,
                   text: "Language",
+                  onTap: () async {
+                    final selected = await showModalBottomSheet<String>(
+                      context: context,
+                      backgroundColor: Colors.transparent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(12),
+                        ),
+                      ),
+                      builder: (context) {
+                        return LanguageBottomSheetContent(
+                          initialLanguage: _currentLanguage,
+                        );
+                      },
+                    );
+
+                    if (selected != null) {
+                      setState(() {
+                        _currentLanguage = selected;
+                      });
+                    }
+                  },
                 ),
                 AccountItemRow(
                   image: Assets.assetsImagesBrushes3450037,
                   text: "Theme",
+                  onTap: () async {
+                    final selectedTheme = await showModalBottomSheet<String>(
+                      context: context,
+                      backgroundColor: Colors.transparent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(12),
+                        ),
+                      ),
+                      builder: (context) {
+                        return ThemeBottomSheetContent(
+                          initialTheme: _currentTheme,
+                        );
+                      },
+                    );
+
+                    if (selectedTheme != null) {
+                      setState(() {
+                        _currentTheme = selectedTheme;
+                      });
+                    }
+                  },
+                ),
+                SizedBox(height: 10.h),
+
+                       AccountItemRow(
+                  image: Assets.assetsImagesCahngePassword,
+                  text: "Change Password",
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      RoutesManager.changePasswordView,
+                    );
+                  },
                 ),
               ],
             ),
@@ -87,10 +155,19 @@ class _ClientProfileViewBodyState extends State<ClientProfileViewBody> {
             ProfileSection(
               title: "Settings",
               children: [
+              
+
                 AccountItemRow(
                   image: Assets.assetsImagesAccount3166234,
                   text: "Privacy Policy",
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      RoutesManager.privacyPolicyView,
+                    );
+                  },
                 ),
+
                 SizedBox(height: 10.h),
                 AccountItemRow(
                   image: Assets.assetsImagesDocument10103871,
@@ -98,7 +175,6 @@ class _ClientProfileViewBodyState extends State<ClientProfileViewBody> {
                 ),
               ],
             ),
-
 
             Container(
               width: double.infinity,

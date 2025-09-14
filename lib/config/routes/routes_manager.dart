@@ -9,7 +9,12 @@ import 'package:taskly/features/client/presentation/views/tabs/messages/presenta
 import 'package:taskly/features/freelancer/presentation/views/freelancer_home_view.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/job_details_view.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/send_offer_view.dart';
+import 'package:taskly/features/freelancer/presentation/views/tabs/profile/presentation/views/freelancer_earning_view.dart';
+import 'package:taskly/features/freelancer/presentation/views/tabs/profile/presentation/views/request_withdrawal_view.dart';
+import 'package:taskly/features/shared/presentation/views/change_password_view.dart';
+import 'package:taskly/features/shared/presentation/views/privacy_policy_view.dart';
 import 'package:taskly/features/shared/presentation/views/technical_support_view.dart';
+import 'package:taskly/features/shared/presentation/views/user_account_view.dart';
 import 'package:taskly/features/splash/presentation/views/splash_view.dart';
 import 'package:taskly/features/welcome/presentation/views/welcome_view.dart';
 
@@ -24,8 +29,12 @@ class RoutesManager {
   static const String chatView = "chatView";
   static const String jobDetailsView = "jobDetailsView";
   static const String sendOfferView = "sendOfferView";
-  static const String technicalSupportView = "TechnicalSupportView";
-
+  static const String technicalSupportView = "technicalSupportView";
+  static const String privacyPolicyView = "privacyPolicyView";
+  static const String userAccountView = "userAccountView";
+  static const String changePasswordView = "changePasswordView";
+  static const String freelancerEarningView = "freelancerEarningView";
+  static const String requestWithdrawalView = "requestWithdrawalView";
   static Route onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case splash:
@@ -72,8 +81,20 @@ class RoutesManager {
 
       case sendOfferView:
         return MaterialPageRoute(builder: (_) => SendOfferView());
-        case technicalSupportView:
+      case technicalSupportView:
         return MaterialPageRoute(builder: (_) => const TechnicalSupportView());
+      case privacyPolicyView:
+        return MaterialPageRoute(builder: (_) => const PrivacyPolicyView());
+      case userAccountView:
+        return MaterialPageRoute(builder: (_) => const UserAccountView());
+      case changePasswordView:
+        return MaterialPageRoute(builder: (_) => const ChangePasswordView());
+
+      case freelancerEarningView:
+        return MaterialPageRoute(builder: (_) => const FreelancerEarningView());
+
+      case requestWithdrawalView:
+        return MaterialPageRoute(builder: (_) => const RequestWithdrawalView());
 
       default:
         return MaterialPageRoute(builder: (_) => const Placeholder());
