@@ -12,6 +12,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get appTitle => 'Taskly';
 
   @override
+  String get client => 'عميل';
+
+  @override
+  String get freelancer => 'مستقل';
+
+  @override
   String get welcomeMessage => 'رتب شغلك، تواصل،\n  وحقق النجاح!';
 
   @override
@@ -88,4 +94,38 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get or => 'او';
+
+  @override
+  String get noInternetConnection => 'لا يوجد اتصال بالإنترنت';
+
+  @override
+  String get emailAlreadyExists => 'البريد الإلكتروني موجود بالفعل أو لم يتم التأكيد. يرجى التحقق من بريدك الإلكتروني.';
+
+  @override
+  String get somethingWentWrong => 'حدث خطأ ما، يرجى المحاولة مرة أخرى';
+
+  @override
+  String get loginFailed => 'فشل تسجيل الدخول. يرجى التحقق من البريد الإلكتروني وكلمة المرور.';
+
+  @override
+  String notRegisteredAsRole(Object role) {
+    return 'أنت غير مسجل كـ $role. يرجى استخدام الحساب الصحيح.';
+  }
+
+  @override
+  String get googleLoginCancelled => 'تم إلغاء تسجيل الدخول باستخدام جوجل';
+
+  @override
+  String accountAlreadyRegistered(Object existingRole, Object role) {
+    return 'هذا الحساب مسجل بالفعل كـ $existingRole. لا يمكنك التسجيل كـ $role.';
+  }
+
+  @override
+  String get userRegisteredSuccessfully => 'تم تسجيل المستخدم بنجاح';
+
+  @override
+  String get userLoginSuccessfully => 'تم تسجيل الدخول بنجاح';
+
+  @override
+  String get googleLoginSuccessful => 'تم تسجيل الدخول باستخدام جوجل بنجاح';
 }

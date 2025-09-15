@@ -101,6 +101,18 @@ abstract class AppLocalizations {
   /// **'Taskly'**
   String get appTitle;
 
+  /// No description provided for @client.
+  ///
+  /// In en, this message translates to:
+  /// **'Client'**
+  String get client;
+
+  /// No description provided for @freelancer.
+  ///
+  /// In en, this message translates to:
+  /// **'Freelancer'**
+  String get freelancer;
+
   /// No description provided for @welcomeMessage.
   ///
   /// In en, this message translates to:
@@ -256,6 +268,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Or'**
   String get or;
+
+  /// No description provided for @noInternetConnection.
+  ///
+  /// In en, this message translates to:
+  /// **'No internet connection'**
+  String get noInternetConnection;
+
+  /// No description provided for @emailAlreadyExists.
+  ///
+  /// In en, this message translates to:
+  /// **'Email already exists or not confirmed. Please check your email.'**
+  String get emailAlreadyExists;
+
+  /// No description provided for @somethingWentWrong.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong, please try again'**
+  String get somethingWentWrong;
+
+  /// No description provided for @loginFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Login failed. Please check your email and password.'**
+  String get loginFailed;
+
+  /// No description provided for @notRegisteredAsRole.
+  ///
+  /// In en, this message translates to:
+  /// **'You are not registered as {role}. Please use the correct account.'**
+  String notRegisteredAsRole(Object role);
+
+  /// No description provided for @googleLoginCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Google login cancelled'**
+  String get googleLoginCancelled;
+
+  /// No description provided for @accountAlreadyRegistered.
+  ///
+  /// In en, this message translates to:
+  /// **'This account is already registered as {existingRole}. You cannot register as {role}.'**
+  String accountAlreadyRegistered(Object existingRole, Object role);
+
+  /// No description provided for @userRegisteredSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'User registered successfully'**
+  String get userRegisteredSuccessfully;
+
+  /// No description provided for @userLoginSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'User Login successfully'**
+  String get userLoginSuccessfully;
+
+  /// No description provided for @googleLoginSuccessful.
+  ///
+  /// In en, this message translates to:
+  /// **'Google login successful'**
+  String get googleLoginSuccessful;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

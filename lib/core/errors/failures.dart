@@ -1,40 +1,51 @@
 class Failures {
   final String message;
-  const Failures(this.message);
+  final Map<String, String>? params;
+
+  const Failures(this.message, [this.params]);
 }
 
 class ServerFailure extends Failures {
-  const ServerFailure(super.message);
+  const ServerFailure(String message, {Map<String, String>? params})
+      : super(message, params);
 }
 
 class CacheFailure extends Failures {
-  const CacheFailure(super.message);
+  const CacheFailure(String message, {Map<String, String>? params})
+      : super(message, params);
 }
 
 class NetworkFailure extends Failures {
-  const NetworkFailure(super.message);
+  const NetworkFailure(String message, {Map<String, String>? params})
+      : super(message, params);
 }
 
 class LocationFailure extends Failures {
-  const LocationFailure(super.message);
+  const LocationFailure(String message, {Map<String, String>? params})
+      : super(message, params);
 }
 
 class PermissionFailure extends Failures {
-  const PermissionFailure(super.message);
+  const PermissionFailure(String message, {Map<String, String>? params})
+      : super(message, params);
 }
 
 class CameraFailure extends Failures {
-  const CameraFailure(super.message);
+  const CameraFailure(String message, {Map<String, String>? params})
+      : super(message, params);
 }
 
 class AudioFailure extends Failures {
-  const AudioFailure(super.message);
+  const AudioFailure(String message, {Map<String, String>? params})
+      : super(message, params);
 }
 
 class VideoFailure extends Failures {
-  const VideoFailure(super.message);
+  const VideoFailure(String message, {Map<String, String>? params})
+      : super(message, params);
 }
 
 class OtherFailure extends Failures {
-  const OtherFailure(super.message);
+  const OtherFailure(String message, {Map<String, String>? params})
+      : super(message, params);
 }

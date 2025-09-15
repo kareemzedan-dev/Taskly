@@ -59,6 +59,7 @@ dependencies:
   shared_preferences: any
   bloc: any
   intl: any
+  google_sign_in: ^5.0.0
  
 dev_dependencies:
   flutter_test:

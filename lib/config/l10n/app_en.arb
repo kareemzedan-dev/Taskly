@@ -1,10 +1,16 @@
 {
   "@@locale": "en",
   "appTitle": "Taskly",
+
+  "client" : "Client",
+  "freelancer": "Freelancer",
+
+
 "welcomeMessage": "Organize work, connect,\n and succeed!",
   "freelancerTitle": "I'm a Freelancer",
   "freelancerSubtitle": "Find projects & grow your career",
   "clientTitle": "I'm a Client",
+
   "clientSubtitle": "Hire talents to get your work done",
     "createFreelancerAccount": "Create Freelancer Account",
   "createClientAccount": "Create Client Account",
@@ -28,5 +34,18 @@
   "privacyPolicy": "privacy policy",
   "termsAgreement": " and to the ",
   "termsOfUse": "terms of use",
-  "or":"Or"
+  "or":"Or",
+  "noInternetConnection": "No internet connection",
+  "emailAlreadyExists": "Email already exists or not confirmed. Please check your email.",
+  "somethingWentWrong": "Something went wrong, please try again",
+  "loginFailed": "Login failed. Please check your email and password.",
+  "notRegisteredAsRole": "You are not registered as {role}. Please use the correct account.",
+
+  "googleLoginCancelled": "Google login cancelled",
+  "accountAlreadyRegistered": "This account is already registered as {existingRole}. You cannot register as {role}.",
+
+
+  "userRegisteredSuccessfully": "User registered successfully",
+  "userLoginSuccessfully": "User Login successfully",
+  "googleLoginSuccessful": "Google login successful"
 }

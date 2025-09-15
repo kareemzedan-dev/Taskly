@@ -12,6 +12,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appTitle => 'Taskly';
 
   @override
+  String get client => 'Client';
+
+  @override
+  String get freelancer => 'Freelancer';
+
+  @override
   String get welcomeMessage => 'Organize work, connect,\n and succeed!';
 
   @override
@@ -88,4 +94,38 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get or => 'Or';
+
+  @override
+  String get noInternetConnection => 'No internet connection';
+
+  @override
+  String get emailAlreadyExists => 'Email already exists or not confirmed. Please check your email.';
+
+  @override
+  String get somethingWentWrong => 'Something went wrong, please try again';
+
+  @override
+  String get loginFailed => 'Login failed. Please check your email and password.';
+
+  @override
+  String notRegisteredAsRole(Object role) {
+    return 'You are not registered as $role. Please use the correct account.';
+  }
+
+  @override
+  String get googleLoginCancelled => 'Google login cancelled';
+
+  @override
+  String accountAlreadyRegistered(Object existingRole, Object role) {
+    return 'This account is already registered as $existingRole. You cannot register as $role.';
+  }
+
+  @override
+  String get userRegisteredSuccessfully => 'User registered successfully';
+
+  @override
+  String get userLoginSuccessfully => 'User Login successfully';
+
+  @override
+  String get googleLoginSuccessful => 'Google login successful';
 }

@@ -1,4 +1,5 @@
-import 'package:taskly/domain/entities/register_response_entity/register_response_entity.dart';
+
+import '../../../domain/entities/register_response_entity/register_response_entity.dart';
 
 class RegisterResponseDm extends RegisterResponseEntity {
   RegisterResponseDm({super.user, super.message, super.token});

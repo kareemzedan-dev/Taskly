@@ -1,5 +1,6 @@
 
-import 'package:taskly/domain/entities/login_response_entity/login_response_entity.dart';
+
+import '../../../domain/entities/login_response_entity/login_response_entity.dart';
 
 class LoginResponseDm extends LoginResponseEntity {
   LoginResponseDm({super.user, super.message, super.token});

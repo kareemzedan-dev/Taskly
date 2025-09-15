@@ -1,6 +1,8 @@
 {
   "@@locale": "ar",
   "appTitle": "Taskly",
+  "client" : "عميل",
+  "freelancer": "مستقل",
   "welcomeMessage": "رتب شغلك، تواصل،\n  وحقق النجاح!",
   "freelancerTitle": "أنا مستقل",
   "freelancerSubtitle": "ابحث عن مشاريع وطوّر مسيرتك",
@@ -28,5 +30,15 @@
   "privacyPolicy": "سياسة الخصوصية",
   "termsAgreement": " و\nعلى ",
   "termsOfUse": "شروط الاستخدام",
-  "or": "او"
+  "or": "او",
+  "noInternetConnection": "لا يوجد اتصال بالإنترنت",
+  "emailAlreadyExists": "البريد الإلكتروني موجود بالفعل أو لم يتم التأكيد. يرجى التحقق من بريدك الإلكتروني.",
+  "somethingWentWrong": "حدث خطأ ما، يرجى المحاولة مرة أخرى",
+  "loginFailed": "فشل تسجيل الدخول. يرجى التحقق من البريد الإلكتروني وكلمة المرور.",
+  "notRegisteredAsRole": "أنت غير مسجل كـ {role}. يرجى استخدام الحساب الصحيح.",
+  "googleLoginCancelled": "تم إلغاء تسجيل الدخول باستخدام جوجل",
+  "accountAlreadyRegistered": "هذا الحساب مسجل بالفعل كـ {existingRole}. لا يمكنك التسجيل كـ {role}.",
+  "userRegisteredSuccessfully": "تم تسجيل المستخدم بنجاح",
+  "userLoginSuccessfully": "تم تسجيل الدخول بنجاح",
+  "googleLoginSuccessful": "تم تسجيل الدخول باستخدام جوجل بنجاح"
 }

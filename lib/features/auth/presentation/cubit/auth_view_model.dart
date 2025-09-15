@@ -1,9 +1,11 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
+import 'package:taskly/core/errors/failures.dart';
 
-import 'package:taskly/domain/use_cases/auth/auth_use_case.dart';
 import 'package:taskly/features/auth/presentation/cubit/auth_states.dart';
+
+import '../../domain/use_cases/auth/auth_use_case.dart';
 
 @injectable
 class AuthViewModel extends Cubit<AuthStates> {
@@ -19,6 +21,7 @@ class AuthViewModel extends Cubit<AuthStates> {
   final TextEditingController fNameController = TextEditingController();
 
   final TextEditingController lNameController = TextEditingController();
+
   void registerUser({
     String? firstName,
     String? lastName,
@@ -35,13 +38,13 @@ class AuthViewModel extends Cubit<AuthStates> {
         password!,
         role!,
       );
-      result.fold((failure) => emit(AuthRegisterErrorState(failure.message)), (
+      result.fold((failure) => emit(AuthRegisterErrorState(failure)), (
         registerResponse,
       ) {
         emit(AuthRegisterSuccessState(registerResponse));
       });
     } catch (e) {
-      emit(AuthRegisterErrorState(e.toString()));
+      emit(AuthRegisterErrorState(ServerFailure(e.toString())));
     }
   }
 
@@ -54,11 +57,24 @@ class AuthViewModel extends Cubit<AuthStates> {
       emit(AuthLoginLoadingState());
       final result = await authUseCase.callLogin(email, password, role);
       result.fold(
-        (failure) => emit(AuthLoginErrorState(failure.message)),
+        (failure) => emit(AuthLoginErrorState(failure)),
         (user) => emit(AuthLoginSuccessState(user)),
       );
     } catch (e) {
-      emit(AuthLoginErrorState(e.toString()));
+      emit(AuthLoginErrorState(ServerFailure(e.toString())));
+    }
+  }
+  void googleLogin({required String role}) async {
+    try {
+      emit(AuthGoogleLoadingState());
+      final result = await authUseCase.callGoogleLogin(role);
+      result.fold(
+              (failure) => emit(AuthGoogleErrorState(failure)),
+
+              (googleResponse) => emit(AuthGoogleSuccessState(googleResponse)));
+    }catch(e){
+      emit(AuthGoogleErrorState( ServerFailure(e.toString())));
+
     }
   }
 }

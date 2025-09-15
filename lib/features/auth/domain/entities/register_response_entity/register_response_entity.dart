@@ -1,4 +1,5 @@
-import 'package:taskly/data/models/register_response_dm/register_response_dm.dart';
+
+import '../../../data/models/register_response_dm/register_response_dm.dart';
 
 class RegisterResponseEntity {
   String? token;

@@ -13,24 +13,25 @@ import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:supabase_flutter/supabase_flutter.dart' as _i454;
 
-import '../../data/data_sources/remote/auth_remote_data_source.dart' as _i865;
-import '../../data/data_sources/remote/impl/auth_remote_data_source_impl.dart'
-    as _i335;
 import '../../data/data_sources/remote/impl/orders_remote_data_source_impl.dart'
     as _i607;
 import '../../data/data_sources/remote/impl/profile_remote_data_source_impl.dart'
     as _i644;
 import '../../data/data_sources/remote/orders_remote_data_source.dart' as _i700;
 import '../../data/data_sources/remote/profile_remote_data_source.dart' as _i81;
-import '../../data/repos/auth/auth_repo_impl.dart' as _i291;
 import '../../data/repos/orders/orders_repo_impl.dart' as _i879;
 import '../../data/repos/profile/profile_repo_impl.dart' as _i549;
-import '../../domain/repos/auth/auth_repo.dart' as _i876;
 import '../../domain/repos/orders/orders_repo.dart' as _i145;
 import '../../domain/repos/profile/profile_repo.dart' as _i647;
-import '../../domain/use_cases/auth/auth_use_case.dart' as _i285;
 import '../../domain/use_cases/orders/orders_use_case.dart' as _i340;
 import '../../domain/use_cases/profile/profile_use_case.dart' as _i31;
+import '../../features/auth/data/data_sources/remote/auth_remote_data_source.dart'
+    as _i432;
+import '../../features/auth/data/data_sources_impl/remote/auth_remote_data_source_impl.dart'
+    as _i420;
+import '../../features/auth/data/repos_impl/auth/auth_repo_impl.dart' as _i529;
+import '../../features/auth/domain/repos/auth/auth_repo.dart' as _i746;
+import '../../features/auth/domain/use_cases/auth/auth_use_case.dart' as _i630;
 import '../../features/auth/presentation/cubit/auth_view_model.dart' as _i745;
 import '../../features/client/data/data_sources/remote/home_remote_data_source.dart'
     as _i307;
@@ -85,8 +86,8 @@ extension GetItInjectableX on _i174.GetIt {
             gh<_i297.FreelancerOrderRemoteDataSource>(),
       ),
     );
-    gh.factory<_i865.AuthRemoteDataSource>(
-      () => _i335.AuthRemoteDataSourceImpl(),
+    gh.factory<_i432.AuthRemoteDataSource>(
+      () => _i420.AuthRemoteDataSourceImpl(),
     );
     gh.factory<_i700.OrdersRemoteDataSource>(
       () => _i607.OrdersRemoteDataSourceImpl(),
@@ -94,11 +95,8 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i81.ProfileRemoteDataSource>(
       () => _i644.ProfileRemoteDataSourceImpl(gh<_i454.SupabaseClient>()),
     );
-    gh.factory<_i876.AuthRepo>(
-      () => _i291.AuthRepoImpl(gh<_i865.AuthRemoteDataSource>()),
-    );
-    gh.factory<_i285.AuthUseCase>(
-      () => _i285.AuthUseCase(gh<_i876.AuthRepo>()),
+    gh.factory<_i746.AuthRepo>(
+      () => _i529.AuthRepoImpl(gh<_i432.AuthRemoteDataSource>()),
     );
     gh.factory<_i171.FreelancerOrderUseCase>(
       () => _i171.FreelancerOrderUseCase(
@@ -109,8 +107,8 @@ extension GetItInjectableX on _i174.GetIt {
       () =>
           _i922.HomeRemoteDataSourceImpl(supabase: gh<_i454.SupabaseClient>()),
     );
-    gh.factory<_i745.AuthViewModel>(
-      () => _i745.AuthViewModel(authUseCase: gh<_i285.AuthUseCase>()),
+    gh.factory<_i630.AuthUseCase>(
+      () => _i630.AuthUseCase(gh<_i746.AuthRepo>()),
     );
     gh.factory<_i647.ProfileRepo>(
       () => _i549.ProfileRepoImpl(gh<_i81.ProfileRemoteDataSource>()),
@@ -124,6 +122,9 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i636.FreelancerPendingOrdersViewModel(
         gh<_i171.FreelancerOrderUseCase>(),
       ),
+    );
+    gh.factory<_i745.AuthViewModel>(
+      () => _i745.AuthViewModel(authUseCase: gh<_i630.AuthUseCase>()),
     );
     gh.factory<_i660.HomeRepos>(
       () => _i86.HomeRepoImpl(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:taskly/config/l10n/app_localizations_ext.dart';
 import 'package:taskly/core/di/di.dart';
 import 'package:taskly/core/utils/assets_manager.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
@@ -16,6 +17,7 @@ import 'package:taskly/features/auth/presentation/views/widgets/build_privacy_po
 import 'package:taskly/features/auth/presentation/views/widgets/social_login_button.dart';
 import 'package:taskly/config/l10n/app_localizations.dart';
 
+import '../../../../../core/components/dismissible_error_card.dart';
 import '../../../../../core/utils/strings_manager.dart';
 
 class RegisterViewBody extends StatefulWidget {
@@ -32,38 +34,52 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<AuthViewModel, AuthStates>(
-      listener: (context, state) {
-        if (state is AuthRegisterLoadingState) {
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder:
-                (_) => Center(
-                  child: LoadingAnimationWidget.threeRotatingDots(
-                    size: 60,
-                    color: ColorsManager.primary,
-                  ),
+        listener: (context, state) {
+          // Loading dialog
+          if (state is AuthRegisterLoadingState || state is AuthGoogleLoadingState) {
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (_) => Center(
+                child: LoadingAnimationWidget.threeRotatingDots(
+                  size: 60,
+                  color: ColorsManager.primary,
                 ),
-          );
-        }
+              ),
+            );
+          }
 
-        if (state is! AuthRegisterLoadingState) {
-          Navigator.pop(context);
-        }
-        if (state is AuthRegisterSuccessState) {
-         if(widget.role ==  StringsManager.freelancerRole){
-          Navigator.pushNamedAndRemoveUntil(context, RoutesManager.freelancerHome, (_) => false);
-         }
-         else{
-          Navigator.pushNamedAndRemoveUntil(context, RoutesManager.clientHome, (_) => false);
-         }
-        }
-        if (state is AuthRegisterErrorState) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(state.error)));
-        }
-      },
+          // Success states
+          if (state is AuthRegisterSuccessState || state is AuthGoogleSuccessState) {
+            if (mounted) Navigator.pop(context); // close dialog first
+            if (mounted) {
+              if (widget.role == StringsManager.freelancerRole) {
+                Navigator.pushNamedAndRemoveUntil(
+                    context, RoutesManager.freelancerHome, (_) => false);
+              } else {
+                Navigator.pushNamedAndRemoveUntil(
+                    context, RoutesManager.clientHome, (_) => false);
+              }
+            }
+          }
+
+          // Error states
+          if (state is AuthRegisterErrorState || state is AuthGoogleErrorState) {
+            if (mounted) Navigator.pop(context);
+
+            final failure = state is AuthRegisterErrorState
+                ? state.error
+                : (state as AuthGoogleErrorState).error;
+
+            final errorMessage = AppLocalizations.of(context)!.translate(
+              failure.message,
+              params: failure.params,
+            );
+
+            showTemporaryMessage(context, errorMessage, MessageType.error);
+          }
+
+        },
       child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -180,7 +196,9 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
                 SocialLoginButton(
                   label: AppLocalizations.of(context)!.continueWithGoogle,
                   iconPath: Assets.assetsImagesIcGoogle,
-                  onPressed: () {},
+                  onPressed: () {
+                    context.read<AuthViewModel>().googleLogin(role: widget.role);
+                  },
                 ),
                 SizedBox(height: 48.h),
 

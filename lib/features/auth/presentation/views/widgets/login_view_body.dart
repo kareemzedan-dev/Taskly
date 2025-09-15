@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:taskly/config/l10n/app_localizations_ext.dart';
 import 'package:taskly/core/components/dismissible_error_card.dart';
 import 'package:taskly/core/di/di.dart';
 import 'package:taskly/core/utils/assets_manager.dart';
@@ -60,7 +61,13 @@ class _LoginViewBodyState extends State<LoginViewBody> {
        
         }
         if (state is AuthLoginErrorState) {
-      showTemporaryMessage(context, state.error, MessageType.error);
+          final failure = state.error;
+
+          final errorMessage = AppLocalizations.of(context)!.translate(
+            failure.message,
+            params: failure.params,
+          );
+      showTemporaryMessage(context,errorMessage, MessageType.error);
         }
       },
       child: SingleChildScrollView(

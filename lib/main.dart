@@ -54,13 +54,13 @@ class Taskly extends StatelessWidget {
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
           ],
-          supportedLocales: const [  Locale('ar')],
+          supportedLocales: const [Locale('en'), Locale('ar')],
 
           theme: AppTheme.lightTheme,
 
           onGenerateRoute:
               (settings) => RoutesManager.onGenerateRoute(settings),
-          initialRoute: RoutesManager.splash,
+          initialRoute: RoutesManager.welcome,
         );
       },
     );
