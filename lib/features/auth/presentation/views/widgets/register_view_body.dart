@@ -35,7 +35,7 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
   Widget build(BuildContext context) {
     return BlocListener<AuthViewModel, AuthStates>(
         listener: (context, state) {
-          // Loading dialog
+
           if (state is AuthRegisterLoadingState || state is AuthGoogleLoadingState) {
             showDialog(
               context: context,

@@ -32,43 +32,50 @@ class _LoginViewBodyState extends State<LoginViewBody> {
   Widget build(BuildContext context) {
     return BlocListener<AuthViewModel, AuthStates>(
       listener: (context, state) {
-        if (state is AuthLoginLoadingState) {
+
+        if (state is AuthLoginLoadingState || state is AuthGoogleLoadingState) {
           showDialog(
             context: context,
             barrierDismissible: false,
-            builder:
-                (_) => Center(
-                  child: LoadingAnimationWidget.threeRotatingDots(
-                    size: 60,
-                    color: ColorsManager.primary,
-                  ),
-                ),
+            builder: (_) => Center(
+              child: LoadingAnimationWidget.threeRotatingDots(
+                size: 60,
+                color: ColorsManager.primary,
+              ),
+            ),
           );
         }
-        if (state is! AuthLoginLoadingState) {
-          Navigator.pop(context);
-        }
-        if (state is AuthLoginSuccessState) {
-          if(widget.role ==   StringsManager.clientRole){
-                showTemporaryMessage(context, "Login successfully", MessageType.success);
 
-            Navigator.pushNamedAndRemoveUntil(context, RoutesManager.clientHome, (_) => false);
-          }else{
-               showTemporaryMessage(context, "Login successfully", MessageType.success);
-            Navigator.pushNamedAndRemoveUntil(context, RoutesManager.freelancerHome, (_) => false);
-            
+        // Success states
+        if (state is AuthLoginSuccessState || state is AuthGoogleSuccessState) {
+          if (mounted) Navigator.pop(context); // close dialog first
+          if (mounted) {
+            if (widget.role == StringsManager.freelancerRole) {
+              Navigator.pushNamedAndRemoveUntil(
+                  context, RoutesManager.freelancerHome, (_) => false);
+            } else {
+              Navigator.pushNamedAndRemoveUntil(
+                  context, RoutesManager.clientHome, (_) => false);
+            }
           }
-       
         }
-        if (state is AuthLoginErrorState) {
-          final failure = state.error;
+
+        // Error states
+        if (state is AuthLoginErrorState || state is AuthGoogleErrorState) {
+          if (mounted) Navigator.pop(context);
+
+          final failure = state is AuthRegisterErrorState
+              ? state.error
+              : (state as AuthGoogleErrorState).error;
 
           final errorMessage = AppLocalizations.of(context)!.translate(
             failure.message,
             params: failure.params,
           );
-      showTemporaryMessage(context,errorMessage, MessageType.error);
+
+          showTemporaryMessage(context, errorMessage, MessageType.error);
         }
+
       },
       child: SingleChildScrollView(
         child: Padding(
@@ -137,7 +144,9 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                 SocialLoginButton(
                   label: AppLocalizations.of(context)!.continueWithGoogle,
                   iconPath: Assets.assetsImagesIcGoogle,
-                  onPressed: () {},
+                  onPressed: () {
+                    context.read<AuthViewModel>().googleLogin(role:  widget.role);
+                  },
                 ),
 
                 SizedBox(height: 48.h),
