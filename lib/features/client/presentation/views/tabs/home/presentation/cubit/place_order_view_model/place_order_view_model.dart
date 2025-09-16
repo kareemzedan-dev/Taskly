@@ -12,6 +12,8 @@ import 'package:taskly/features/client/domain/use_cases/home/home_use_case.dart'
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/cubit/place_order_view_model/place_order_view_model_states.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../../../../../data/models/home/attaachments_dm.dart';
+
 @injectable
 class PlaceOrderViewModel extends Cubit<PlaceOrderViewModelStates> {
   HomeUseCase homeUseCase;
@@ -32,7 +34,7 @@ class PlaceOrderViewModel extends Cubit<PlaceOrderViewModelStates> {
   ];
   TextEditingController titleController = TextEditingController();
   List<File> localAttachments = [];
-  List<Attachment> uploadedAttachments = [];
+  List<AttachmentModel> uploadedAttachments = [];
   TextEditingController timeController = TextEditingController();
   final orderId = Uuid().v4();
   Map<String, double> uploadProgress = {};
@@ -41,143 +43,10 @@ class PlaceOrderViewModel extends Cubit<PlaceOrderViewModelStates> {
   String? selectedCategory;
   TextEditingController descriptionController = TextEditingController();
   final clientId = SharedPrefHelper.getString("id");
-  final SupabaseService _supabaseService = SupabaseService();
-  Map<String, Future<String>?> uploadFutures = {};
 
-// في PlaceOrderViewModel
-// في PlaceOrderViewModel
-Future<List<Attachment>> uploadAttachments(
-  List<File> files, {
-  Function(String filePath, double progress)? onProgress,
-}) async {
-  if (isClosed) return [];
 
-  emit(PlaceOrderViewModelStatesAttachmentsLoading());
 
-  try {
-    List<Attachment> uploaded = [];
-
-    for (var file in files) {
-      if (isClosed) break;
-
-      final filePath = file.path;
-
-      if (uploadProgress[filePath] == 1.0) {
-        continue;
-      }
-
-      uploadProgress[filePath] = 0.0;
-      if (!isClosed) {
-        emit(PlaceOrderViewModelStatesAttachmentsProgress(Map.from(uploadProgress)));
-      }
-
-      String url;
-      try {
-        url = await _supabaseService.uploadFile(
-          file,
-          onProgress: (sentBytes, totalBytes) {
-            if (isClosed) return;
-            
-            final progress = sentBytes / totalBytes;
-            uploadProgress[filePath] = progress;
-            if (!isClosed) {
-              emit(PlaceOrderViewModelStatesAttachmentsProgress(Map.from(uploadProgress)));
-            }
-            if (onProgress != null) onProgress(filePath, progress);
-          },
-        );
-      } catch (e) {
-        if (!isClosed) {
-          emit(PlaceOrderViewModelStatesAttachmentsError('Failed to upload $filePath: $e'));
-        }
-        continue;
-      }
-
-      if (isClosed) break;
-
-      uploadProgress[filePath] = 1.0;
-      if (!isClosed) {
-        emit(PlaceOrderViewModelStatesAttachmentsProgress(Map.from(uploadProgress)));
-      }
-
-      final fileName = file.path.split('/').last;
-      final newAttachment = Attachment(type: fileName, url: url);
-
-      uploaded.add(newAttachment);
-    }
-
-    if (!isClosed) {
-      uploadedAttachments.addAll(uploaded);
-      // إضافة state جديد للإشارة إلى اكتمال الرفع وتحديث القائمة
-      emit(PlaceOrderViewModelStatesAttachmentsSuccess(uploadedAttachments));
-      // إصدار state progress آخر للتأكد من تحديث الواجهة
-      emit(PlaceOrderViewModelStatesAttachmentsProgress(Map.from(uploadProgress)));
-    }
-    
-    return uploaded;
-  } catch (e) {
-    if (!isClosed) {
-      emit(PlaceOrderViewModelStatesAttachmentsError(e.toString()));
-    }
-    return [];
-  }
-}
-  
-
- // في PlaceOrderViewModel
-void cancelFileUpload(String filePath) {
-  // وضع progress = -1 للإشارة إلى أن الملف ملغى (بدلاً من 0.0)
-  uploadProgress[filePath] = -1.0;
-  
-  // إصدار state جديد للتحديث
-  if (!isClosed) {
-    emit(PlaceOrderViewModelStatesAttachmentsProgress(Map.from(uploadProgress)));
-  }
-}
-
-bool areAllRequiredFilesUploaded() {
-  if (localAttachments.isEmpty) {
-    print('No local attachments');
-    return false;
-  }
-  
-  print('Checking upload status:');
-  print('Local attachments: ${localAttachments.length}');
-  print('Upload progress: $uploadProgress');
-  print('Uploaded attachments: ${uploadedAttachments.length}');
-  
-  // التحقق من أن كل الملفات المحلية إما مرفوعة بالكامل أو ملغاة
-  bool allFilesProcessed = true;
-  
-  for (var file in localAttachments) {
-    final progress = uploadProgress[file.path] ?? 0.0;
-    
-    print('File: ${file.path}, Progress: $progress');
-    
-    // إذا كان الملف قيد الرفع (بين 0 و1) ولم يتم إلغاؤه
-    if (progress > 0.0 && progress < 1.0) {
-      print('File still uploading: ${file.path}');
-      allFilesProcessed = false;
-      break;
-    }
-  }
-  
-  // التحقق من أن هناك على الأقل ملف واحد مرفوع بالكامل
-  final hasCompletedUpload = uploadProgress.values.any((p) => p == 1.0);
-  final hasUploadedAttachments = uploadedAttachments.isNotEmpty;
-  
-  print('All files processed: $allFilesProcessed');
-  print('Has completed upload: $hasCompletedUpload');
-  print('Has uploaded attachments: $hasUploadedAttachments');
-  
-  return allFilesProcessed && hasUploadedAttachments;
-}
  
-
-  void clearUploadProgress() {
-    uploadProgress.clear();
-    emit(PlaceOrderViewModelStatesAttachmentsProgress(Map.from(uploadProgress)));
-  }
 
   Future<Either<Failures, OrderEntity>> placeOrder(
     OrderEntity orderEntity,

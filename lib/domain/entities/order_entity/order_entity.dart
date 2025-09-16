@@ -1,3 +1,5 @@
+import '../../../features/client/data/models/home/attaachments_dm.dart';
+
 class OrderEntity {
   final String id;
   final String clientId;
@@ -5,7 +7,7 @@ class OrderEntity {
   final String title;
   final String? description;
   final String?category ;
-  final List<Attachment> attachments;
+  final List<AttachmentModel> attachments;
   final ServiceType serviceType;
   final double? budget;
   final OrderStatus status;
@@ -34,23 +36,3 @@ enum ServiceType { public, private }
 
 enum OrderStatus { pending, accepted, inProgress, completed, cancelled }
 
-class Attachment {
-  final String type;  
-  final String url;
-
-  Attachment({required this.type, required this.url});
-
-  factory Attachment.fromJson(Map<String, dynamic> json) {
-    return Attachment(
-      type: json['type'] as String,
-      url: json['url'] as String,
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'type': type,
-      'url': url,
-    };
-  }
-}

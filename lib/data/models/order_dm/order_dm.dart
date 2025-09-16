@@ -1,5 +1,7 @@
 import 'package:taskly/domain/entities/order_entity/order_entity.dart';
 
+import '../../../features/client/data/models/home/attaachments_dm.dart';
+
 class OrderDm extends OrderEntity {
   OrderDm({
     required super.id,
@@ -27,7 +29,7 @@ class OrderDm extends OrderEntity {
       category: json['category'] as String?,
       attachments: json['attachments'] != null
           ? (json['attachments'] as List)
-              .map((e) => Attachment.fromJson(e))
+              .map((e) => AttachmentModel.fromJson(e))
               .toList()
           : [],
       serviceType: (json['service_type'] as String) == 'private'

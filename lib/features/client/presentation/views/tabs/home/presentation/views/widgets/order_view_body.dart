@@ -17,7 +17,9 @@ import 'package:taskly/features/client/presentation/views/tabs/home/presentation
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/private_hire_section.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/time_input_raw.dart';
 
- 
+import '../../../../../../../../../core/di/di.dart';
+import '../../../../../../../data/models/home/attaachments_dm.dart';
+import '../../cubit/upload_attachments_view_model/upload_attachments_view_model.dart';
 
 class OrderViewBody extends StatefulWidget {
   const OrderViewBody({
@@ -25,6 +27,7 @@ class OrderViewBody extends StatefulWidget {
     required this.title,
     required this.selectedCategory,
   });
+
   final String title, selectedCategory;
 
   @override
@@ -35,64 +38,44 @@ class _OrderViewBodyState extends State<OrderViewBody> {
   @override
   void initState() {
     super.initState();
-      final orderViewModel = context.read<PlaceOrderViewModel>();
-    orderViewModel.clearUploadProgress();
+    final orderViewModel = context.read<PlaceOrderViewModel>();
     orderViewModel.titleController.text = widget.title;
     orderViewModel.selectedCategory = widget.selectedCategory;
   }
 
   int selectedHireMethodIndex = -1;
-  List<Attachment> uploadedAttachments = [];
-  Map<String, double> uploadProgress = {};
+  List<AttachmentModel> uploadedAttachments = [];
+
+  UploadAttachmentsViewModel uploadAttachmentsViewModel = getIt<UploadAttachmentsViewModel>();
+
   @override
   Widget build(BuildContext context) {
-      final orderViewModel = context.read<PlaceOrderViewModel>();
+    final orderViewModel = context.read<PlaceOrderViewModel>();
     return BlocConsumer<PlaceOrderViewModel, PlaceOrderViewModelStates>(
       listener: (context, state) {
-    if (state is PlaceOrderViewModelStatesSuccess) {
-    showTemporaryMessage(
-      context,
-      "Order created successfully",
-      MessageType.success,
-    );
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (context) => const ClientHomeView()),
-      (_) => false,
-    );
-  }
+        if (state is PlaceOrderViewModelStatesSuccess) {
+          showTemporaryMessage(
+            context,
+            "Order created successfully",
+            MessageType.success,
+          );
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const ClientHomeView()),
+            (_) => false,
+          );
+        }
 
-  if (state is PlaceOrderViewModelStatesError) {
-    showTemporaryMessage(
-      context,
-      "Something went wrong, try again later",
-      MessageType.error,
-    );
-  }
-
-  if (state is PlaceOrderViewModelStatesAttachmentsError) {
-    showTemporaryMessage(context, state.message, MessageType.error);
-  }
-  
-  if (state is PlaceOrderViewModelStatesAttachmentsProgress) {
-    setState(() {
-      uploadProgress = state.progressMap;
-    });
-  }
-  
-  // إضافة listener لstate النجاح
-  if (state is PlaceOrderViewModelStatesAttachmentsSuccess) {
-    setState(() {
-      uploadedAttachments = state.attachments;
-      print('Attachments updated: ${uploadedAttachments.length}');
-    });
-  }
-        
+        if (state is PlaceOrderViewModelStatesError) {
+          showTemporaryMessage(
+            context,
+            "Something went wrong, try again later",
+            MessageType.error,
+          );
+        }
       },
       builder: (context, state) {
-        final isLoading =
-            state is PlaceOrderViewModelStatesLoading ||
-            state is PlaceOrderViewModelStatesAttachmentsLoading;
+        final isLoading = state is PlaceOrderViewModelStatesLoading;
 
         return Stack(
           children: [
@@ -164,40 +147,11 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                     ),
                     SizedBox(height: 16.h),
 
-                 AttachmentsFilesSection(
-  onFilesSelected: (files) async {
-    print('Files selected: ${files.length}');
-    orderViewModel.localAttachments = files;
-    orderViewModel.clearUploadProgress();
+                    AttachmentsFilesSection(
+                      uploadAttachmentsViewModel: uploadAttachmentsViewModel,
+                    ),
 
-    // بدء رفع الملفات
-    print('Starting upload...');
-    try {
-      final uploadFuture = context
-          .read<PlaceOrderViewModel>()
-          .uploadAttachments(orderViewModel.localAttachments);
 
-      final result = await uploadFuture;
-      print('Upload future completed. Result: ${result.length} files');
-
-      // لا نحتاج إلى setState هنا لأن الـ listener سيتولى التحديث
-    } catch (e) {
-      print('Upload error: $e');
-    }
-  },
-  uploadProgress: uploadProgress,
-  onClearAll: () {
-    orderViewModel.clearUploadProgress();
-    setState(() {
-      uploadProgress.clear();
-      uploadedAttachments.clear();
-    });
-  },
-  onCancelUpload: (filePath) {
-    context.read<PlaceOrderViewModel>().cancelFileUpload(filePath);
-    setState(() {});
-  },
-),
                     SizedBox(height: 28.h),
                     Text(
                       "Hiring Method",
@@ -222,18 +176,8 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                     CustomButton(
                       title: "Submit",
                       ontap: () async {
-                        print('Submit button pressed');
-    print('Upload progress: $uploadProgress');
-    print('Uploaded attachments: ${uploadedAttachments.length}');
-    print('Local attachments: ${orderViewModel.localAttachments.length}');
 
-    final isUploading = uploadProgress.values.any(
-      (p) => p < 1.0 && p > 0.0,
-    );
 
-    print('Is uploading: $isUploading');
-
- 
                         if (orderViewModel.titleController.text.isEmpty) {
                           return showTemporaryMessage(
                             context,
@@ -262,7 +206,7 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                             MessageType.error,
                           );
                         }
-                        if (orderViewModel.localAttachments.isEmpty) {
+                        if (uploadAttachmentsViewModel.files.isEmpty) {
                           return showTemporaryMessage(
                             context,
                             "Please add attachments",
@@ -276,31 +220,16 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                             MessageType.error,
                           );
                         }
-                        if (orderViewModel.localAttachments.isEmpty) {
+                        if (uploadAttachmentsViewModel.files.isNotEmpty &&
+                            uploadAttachmentsViewModel.files.length != uploadAttachmentsViewModel.uploadedFileHashes.length) {
                           return showTemporaryMessage(
                             context,
-                            "Please upload attachments",
+                            "Please wait until all attachments are uploaded",
                             MessageType.error,
                           );
                         }
-    if (isUploading) {
-      return showTemporaryMessage(
-        context,
-        "Please wait until all attachments are uploaded",
-        MessageType.error,
-      );
-    }
-    
-    final allUploaded = context.read<PlaceOrderViewModel>().areAllRequiredFilesUploaded();
-    print('All required files uploaded: $allUploaded');
-    
-    if (!allUploaded) {
-      return showTemporaryMessage(
-        context,
-        "Please wait for at least one file to finish uploading",
-        MessageType.error,
-      );
-    }
+
+
                         await context.read<PlaceOrderViewModel>().placeOrder(
                           OrderEntity(
                             id: orderViewModel.orderId,
@@ -308,9 +237,9 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                             freelancerId: null,
                             title: orderViewModel.titleController.text,
                             description:
-                                orderViewModel.descriptionController.text,
+                            orderViewModel.descriptionController.text,
                             category: orderViewModel.selectedCategory,
-                            attachments: uploadedAttachments,
+                            attachments: uploadAttachmentsViewModel.uploadedAttachments,
                             serviceType: ServiceType.public,
                             status: OrderStatus.pending,
                             deadline: orderViewModel.calculateDeadline(

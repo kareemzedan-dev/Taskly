@@ -194,20 +194,38 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
       return Left(ServerFailure( StringsManager.somethingWentWrong));
     }
   }
-
   @override
   Future<Either<Failures, GoogleAuthResponseEntity>> googleLogin(String role) async {
     try {
-      if (!await NetworkUtils.hasInternet()) return Left(NetworkFailure(StringsManager.noInternetConnection));
+      if (!await NetworkUtils.hasInternet()) {
+        return Left(NetworkFailure(StringsManager.noInternetConnection));
+      }
 
       final GoogleSignInAccount? account = await _googleSignIn.signIn();
-      if (account == null) return Left(ServerFailure( StringsManager.googleLoginCancelled));
+      if (account == null) {
+        return Left(ServerFailure(StringsManager.googleLoginCancelled));
+      }
 
-      final GoogleSignInAuthentication auth = await account.authentication;
-      final token = auth.idToken ?? '';
+      final GoogleSignInAuthentication googleAuth = await account.authentication;
+
+
+      final res = await Supabase.instance.client.auth.signInWithIdToken(
+        provider: OAuthProvider.google,
+        idToken: googleAuth.idToken!,
+        accessToken: googleAuth.accessToken,
+      );
+
+      if (res.user == null || res.session == null) {
+        return Left(ServerFailure(StringsManager.loginFailed));
+      }
+
+      final supabaseUser = res.user!;
+      final supabaseToken = res.session!.accessToken;
+
       final email = account.email;
       final fullName = account.displayName ?? '';
       final avatarUrl = account.photoUrl;
+
 
       final existingUser = await supabase.from('users').select().eq('email', email).maybeSingle();
       if (existingUser != null && existingUser['role'] != role) {
@@ -220,14 +238,13 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
         ));
       }
 
-
-      final userId = existingUser != null ? existingUser['id'] : Uuid().v4();
+      final userId = existingUser != null ? existingUser['id'] : supabaseUser.id;
 
       await _handleUserAfterAuth(
         id: userId,
         fullName: fullName,
         email: email,
-        token: token,
+        token: supabaseToken,
         role: role,
         avatarUrl: avatarUrl,
       );
@@ -241,7 +258,7 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
       );
 
       final googleResponse = GoogleAuthResponseDm(
-        token: token,
+        token: supabaseToken,
         user: googleUser,
         message: StringsManager.googleLoginSuccessful,
       );
@@ -252,4 +269,5 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
       return Left(ServerFailure(StringsManager.somethingWentWrong));
     }
   }
+
 }

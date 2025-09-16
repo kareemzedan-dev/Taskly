@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
@@ -9,8 +11,10 @@ import 'package:taskly/domain/entities/order_entity/order_entity.dart';
 import 'package:taskly/features/client/data/data_sources/remote/home_remote_data_source.dart';
 import 'package:taskly/features/client/data/models/home/freelancer_dm.dart';
 import 'package:taskly/features/client/data/models/home/service_response_dm.dart';
+import 'package:taskly/features/client/domain/entities/home/attaachments_entity.dart';
 import 'package:taskly/features/client/domain/entities/home/freelancer_entity.dart';
 import 'package:taskly/features/client/domain/entities/home/service_response_entity.dart';
+import 'package:uuid/uuid.dart';
 
 @Injectable(as: HomeRemoteDataSource)
 class HomeRemoteDataSourceImpl extends HomeRemoteDataSource {
@@ -113,6 +117,60 @@ class HomeRemoteDataSourceImpl extends HomeRemoteDataSource {
       }
     } catch (e) {
       return Left(ServerFailure(e.toString()));
+    }
+  }
+
+
+  @override
+  Future<Either<Failures, List<AttachmentEntity>>> uploadAttachments(List<File> files) async {
+    try {
+      final supabase = supabaseService.supabase;
+      final uuid = const Uuid();
+      List<AttachmentEntity> uploadedAttachments = [];
+
+      for (var file in files) {
+        final fileName = file.path.split('/').last;
+        final uniqueName = "${uuid.v4()}_$fileName";
+        final fileBytes = await file.readAsBytes();
+
+        await supabase.storage
+            .from('order-attachments')
+            .uploadBinary(uniqueName, fileBytes);
+
+        final url = supabase.storage
+            .from('order-attachments')
+            .getPublicUrl(uniqueName);
+
+        uploadedAttachments.add(
+          AttachmentEntity(
+            id: uuid.v4(),
+            name: fileName,
+            url: url,
+            size: file.lengthSync(),
+            type: _getMimeType(fileName),
+          ),
+        );
+      }
+
+      return Right(uploadedAttachments);
+    } catch (e) {
+      return Left(ServerFailure("Upload failed: ${e.toString()}"));
+    }
+  }
+
+
+  String _getMimeType(String fileName) {
+    final ext = fileName.split('.').last.toLowerCase();
+    switch (ext) {
+      case 'jpg':
+      case 'jpeg':
+        return 'image/jpeg';
+      case 'png':
+        return 'image/png';
+      case 'pdf':
+        return 'application/pdf';
+      default:
+        return 'application/octet-stream';
     }
   }
 }

@@ -18,20 +18,3 @@ class PlaceOrderViewModelStatesSuccess extends PlaceOrderViewModelStates {
 
   PlaceOrderViewModelStatesSuccess(this.orderEntity);
 }
-class PlaceOrderViewModelStatesAttachmentsProgress extends PlaceOrderViewModelStates {
-  final Map<String, double> progressMap;
-  
-  PlaceOrderViewModelStatesAttachmentsProgress(this.progressMap);
-}
-
-class PlaceOrderViewModelStatesAttachmentsLoading extends PlaceOrderViewModelStates {}
-
-class PlaceOrderViewModelStatesAttachmentsSuccess extends PlaceOrderViewModelStates {
-  final List<Attachment> attachments;
-  PlaceOrderViewModelStatesAttachmentsSuccess(this.attachments);
-}
-
-class PlaceOrderViewModelStatesAttachmentsError extends PlaceOrderViewModelStates {
-  final String message;
-  PlaceOrderViewModelStatesAttachmentsError(this.message);
-}
