@@ -19,4 +19,5 @@ class HomeUseCase {
   Future<Either<Failures,OrderEntity>> callPlaceOrder(OrderEntity orderEntity) => homeRepos.placeOrder(orderEntity);
   Future<Either<Failures, List<FreelancerEntity>>> callGetFreelancer() => homeRepos.getAllFreelancer();
   Future <Either<Failures,List<AttachmentEntity>>> callUploadAttachments(List<File> files) => homeRepos.uploadAttachments(files);
+Future<Either<Failures,void>> callDeleteAttachment(String attachmentId) => homeRepos.deleteAttachment(attachmentId);
 }

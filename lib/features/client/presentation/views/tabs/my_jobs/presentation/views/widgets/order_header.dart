@@ -8,11 +8,13 @@ import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentat
 class OrderHeader extends StatelessWidget {
   final String orderName;
   final String orderId;
+  final String orderStatus;
 
   const OrderHeader({
     super.key,
     required this.orderName,
     required this.orderId,
+    required this.orderStatus,
   });
 
   @override
@@ -36,7 +38,7 @@ class OrderHeader extends StatelessWidget {
     ),
     SizedBox(width: 8.w),
     StatusBadge(
-      text: "Pending",
+      text:  orderStatus,
       color: ColorsManager.primary,
       icon: Icons.pending_actions_outlined,
     ),

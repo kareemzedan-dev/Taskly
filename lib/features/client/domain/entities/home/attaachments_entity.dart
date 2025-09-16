@@ -1,11 +1,12 @@
 import 'dart:io';
 
 class AttachmentEntity {
-  final String id;    
+  final String id;
   final String name;
   final String url;
   final int size;
   final String type;
+  final String storagePath; // <--- مهم للحذف من Supabase
 
   const AttachmentEntity({
     required this.id,
@@ -13,8 +14,10 @@ class AttachmentEntity {
     required this.url,
     required this.size,
     required this.type,
+    required this.storagePath, // <--- أضفته
   });
 }
+
 class AttachmentFile {
   final File file;
   final bool isUploaded;

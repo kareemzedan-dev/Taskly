@@ -19,6 +19,7 @@ class UserInfoEntity {
   final String? bio;
   final List<String>? skills;
   final double? hourlyRate;
+  final double ? rating;
   final DateTime? createdAt;
 
   UserInfoEntity({
@@ -30,6 +31,7 @@ class UserInfoEntity {
     this.profileImage,
     this.bio,
     this.skills,
+    this.rating,
     this.hourlyRate,
     this.createdAt,
   });

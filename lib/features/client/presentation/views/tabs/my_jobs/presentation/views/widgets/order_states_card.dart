@@ -38,6 +38,7 @@ class OrderStatesCard extends StatelessWidget {
                 OrderHeader(
                 orderName:order.title  ,
                 orderId:order.id,
+                  orderStatus: order.status.name,
               ),
 
               SizedBox(height: 20.h),

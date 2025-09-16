@@ -4,9 +4,13 @@ import 'package:injectable/injectable.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
 import 'package:async/async.dart';
+
+typedef RealtimeCallback = void Function(Map<String, dynamic> record, String action);
+
 @singleton
 class SupabaseService {
   final supabase = Supabase.instance.client;
+  final Map<String, RealtimeChannel> _channels = {};
 
   Future<Map<String, dynamic>?> sendDataToSupabase({
     required String tableName,
@@ -99,5 +103,65 @@ Future<String> _uploadFileInternal(
 
   return publicUrl;
 }
+  RealtimeChannel subscribe({
+    required String table,
+    required RealtimeCallback onChange,
+    List<PostgresChangeEvent> events = const [
+      PostgresChangeEvent.insert,
+      PostgresChangeEvent.update,
+      PostgresChangeEvent.delete,
+    ],
+    Map<String, dynamic>? filters,
+  }) {
+    final channelName = 'public:$table';
 
+
+    if (_channels.containsKey(channelName)) {
+      unsubscribe(table: table);
+    }
+
+    final channel = supabase.channel(channelName);
+
+    for (var event in events) {
+      channel.onPostgresChanges(
+        event: event,
+        schema: 'public',
+        table: table,
+        filter: filters != null
+            ? PostgresChangeFilter(
+          type: PostgresChangeFilterType.eq,
+          column: filters.keys.first,
+          value: filters.values.first,
+        )
+            : null,
+        callback: (payload) {
+          final record = event == PostgresChangeEvent.delete
+              ? payload.oldRecord
+              : payload.newRecord;
+          onChange(record, event.name);
+        },
+      );
+    }
+
+    channel.subscribe();
+    _channels[channelName] = channel;
+    return channel;
+  }
+
+  /// Unsubscribe from a table
+  void unsubscribe({required String table}) {
+    final channelName = 'public:$table';
+    if (_channels.containsKey(channelName)) {
+      supabase.removeChannel(_channels[channelName]!);
+      _channels.remove(channelName);
+    }
+  }
+
+  /// Unsubscribe from all channels
+  void unsubscribeAll() {
+    for (var channel in _channels.values) {
+      supabase.removeChannel(channel);
+    }
+    _channels.clear();
+  }
 }

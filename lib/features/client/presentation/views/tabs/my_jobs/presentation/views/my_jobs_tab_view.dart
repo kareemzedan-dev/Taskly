@@ -51,10 +51,7 @@ class MyJobsTabView extends StatelessWidget {
         backgroundColor: Colors.white,
         body: TabBarView(
           children: [
-            // EmptyStateAnimation(
-            //   animationPath: "assets/lotties/Loading.json",
-            //   message: "No pending orders",
-            // ),
+
             Padding(
               padding: EdgeInsets.all(8.0),
               child: Column(

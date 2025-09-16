@@ -1,10 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:taskly/core/helper/date_time_formatter.dart'; // تأكد من وجود parseSupabaseDate هنا
+import 'package:taskly/core/helper/date_time_formatter.dart';
 import 'package:taskly/domain/entities/order_entity/order_entity.dart';
 import 'package:taskly/features/shared/presentation/views/widgets/attachments_section.dart';
 import 'package:taskly/features/shared/presentation/views/widgets/description_section.dart';
 import 'package:taskly/features/shared/presentation/views/widgets/job_header_section.dart';
+
 
 class OrderDetailsBottomSheetContent extends StatelessWidget {
   const OrderDetailsBottomSheetContent({super.key, required this.order});
@@ -12,10 +15,8 @@ class OrderDetailsBottomSheetContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  
-    final DateTime createdAt = parseSupabaseDate(order.createdAt.toString());
-    final String relativeTime = createdAt.toRelative();
-
+    DateTime createdAtLocal = order.createdAt;
+    String timeAgo = createdAtLocal.toTimeAgo();
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.75,
       width: double.infinity,
@@ -28,14 +29,15 @@ class OrderDetailsBottomSheetContent extends StatelessWidget {
               JobHeader(
                 title: order.title,
                 category: order.category ?? "No category",
-                date: relativeTime, 
+                date:timeAgo ,
+
               ),
-             
+
               SizedBox(height: 16.h),
 
               DescriptionSection(description: order.description),
               SizedBox(height: 16.h),
-              AttachmentsSection(),
+              AttachmentsSection(attachmentEntity: order.attachments,),
               SizedBox(height: 16.h),
             ],
           ),

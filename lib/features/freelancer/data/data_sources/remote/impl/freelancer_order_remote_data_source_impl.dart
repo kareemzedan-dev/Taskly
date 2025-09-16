@@ -13,14 +13,14 @@ import 'package:taskly/features/freelancer/data/data_sources/remote/freelancer_o
 @Injectable(as: FreelancerOrderRemoteDataSource)
 class FreelancerOrderRemoteDataSourceImpl
     extends FreelancerOrderRemoteDataSource {
+
   final SupabaseService supabaseService = SupabaseService();
   final SupabaseClient _supabase = Supabase.instance.client;
-
   RealtimeChannel? _ordersChannel;
 
+  // Fetch pending orders
   @override
-  Future<Either<Failures, List<OrderEntity>>>
-  fetchPendingFreelancerOrders() async {
+  Future<Either<Failures, List<OrderEntity>>> fetchPendingFreelancerOrders() async {
     try {
       var result = await Connectivity().checkConnectivity();
       if (result.contains(ConnectivityResult.wifi) ||
@@ -34,10 +34,9 @@ class FreelancerOrderRemoteDataSourceImpl
           return Right([]);
         }
 
-        final orders =
-            response.map<OrderEntity>((json) {
-              return OrderDm.fromJson(json);
-            }).toList();
+        final orders = response.map<OrderEntity>((json) {
+          return OrderDm.fromJson(json);
+        }).toList();
 
         return Right(orders);
       } else {
@@ -48,62 +47,27 @@ class FreelancerOrderRemoteDataSourceImpl
     }
   }
 
+  // Subscribe to pending orders
   @override
   RealtimeChannel subscribeToPendingOrders(
-    void Function(OrderEntity, String action) onChange,
-  ) {
-    final channel =
-        _supabase.channel('public:orders')
-          ..onPostgresChanges(
-            event: PostgresChangeEvent.insert,
-            schema: 'public',
-            table: 'orders',
-            filter: PostgresChangeFilter(
-              type: PostgresChangeFilterType.eq,
-              column: 'status',
-              value: 'pending',
-            ),
-            callback: (payload) {
-              final order = OrderDm.fromJson(payload.newRecord);
-              onChange(order, 'insert');
-            },
-          )
-          ..onPostgresChanges(
-            event: PostgresChangeEvent.update,
-            schema: 'public',
-            table: 'orders',
-            filter: PostgresChangeFilter(
-              type: PostgresChangeFilterType.eq,
-              column: 'status',
-              value: 'pending',
-            ),
-            callback: (payload) {
-              final order = OrderDm.fromJson(payload.newRecord);
-              onChange(order, 'update');
-            },
-          )
-          ..onPostgresChanges(
-            event: PostgresChangeEvent.delete,
-            schema: 'public',
-            table: 'orders',
-            filter: PostgresChangeFilter(
-              type: PostgresChangeFilterType.eq,
-              column: 'status',
-              value: 'pending',
-            ),
-            callback: (payload) {
-              final order = OrderDm.fromJson(payload.oldRecord);
-              onChange(order, 'delete');
-            },
-          );
-    channel.subscribe();
-    return channel;
+      void Function(OrderEntity order, String action) onChange,
+      ) {
+    _ordersChannel = supabaseService.subscribe(
+      table: 'orders',
+      filters: {'status': 'pending'},
+      onChange: (record, action) {
+        final order = OrderDm.fromJson(record);
+        onChange(order, action);
+      },
+    );
+
+    return _ordersChannel!;
   }
 
-  void unsubscribe() {
-    if (_ordersChannel != null) {
-      _supabase.removeChannel(_ordersChannel!);
-      _ordersChannel = null;
-    }
+
+  // Unsubscribe
+  void unsubscribeFromPendingOrders() {
+    supabaseService.unsubscribe(table: 'orders');
+    _ordersChannel = null;
   }
 }

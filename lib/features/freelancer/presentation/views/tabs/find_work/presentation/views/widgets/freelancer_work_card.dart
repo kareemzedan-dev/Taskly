@@ -13,6 +13,42 @@ class FreelancerWorkCard extends StatefulWidget {
   @override
   State<FreelancerWorkCard> createState() => _FreelancerWorkCardState();
 }
+extension RelativeTime on DateTime {
+  String toRelative() {
+    final now = DateTime.now();
+    final difference = this.difference(now);
+
+    bool isPast = difference.isNegative;
+
+    final seconds = difference.inSeconds.abs();
+    final minutes = difference.inMinutes.abs();
+    final hours = difference.inHours.abs();
+    final days = difference.inDays.abs();
+
+    String suffix = isPast ? " ago" : " left";
+
+    if (seconds < 60) {
+      return "just now";
+    } else if (minutes < 60) {
+      return "$minutes minute${minutes > 1 ? 's' : ''}$suffix";
+    } else if (hours < 24) {
+      return "$hours hour${hours > 1 ? 's' : ''}$suffix";
+    } else if (days < 7) {
+      return "$days day${days > 1 ? 's' : ''}$suffix";
+    } else if (days < 30) {
+      final weeks = (days / 7).floor();
+      return "$weeks week${weeks > 1 ? 's' : ''}$suffix";
+    } else if (days < 365) {
+      final months = (days / 30).floor();
+      return "$months month${months > 1 ? 's' : ''}$suffix";
+    } else {
+      final years = (days / 365).floor();
+      return "$years year${years > 1 ? 's' : ''}$suffix";
+    }
+  }
+}
+
+
 
 class _FreelancerWorkCardState extends State<FreelancerWorkCard> {
   bool isFavorite = false;
@@ -34,7 +70,7 @@ class _FreelancerWorkCardState extends State<FreelancerWorkCard> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _HeaderRow(
-                widget.order.createdAt.toRelative(),
+                widget.order.createdAt.toTimeAgo(),
                 isFavorite: isFavorite,
                 onFavoriteTap: () {
                   setState(() {
@@ -49,7 +85,7 @@ class _FreelancerWorkCardState extends State<FreelancerWorkCard> {
               SizedBox(height: 16),
               _Description(widget.order.description ?? "No description"),
               SizedBox(height: 16),
-              DeliveryInfo(),
+              DeliveryInfo( deliveryTime: widget.order.deadline!.toRelative(),),
               SizedBox(height: 16),
               ActionsRow(order: widget.order),
             ],

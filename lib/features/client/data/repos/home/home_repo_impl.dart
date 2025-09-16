@@ -37,4 +37,9 @@ class HomeRepoImpl extends HomeRepos {
   Future<Either<Failures, List<AttachmentEntity>>> uploadAttachments(List<File> files) {
  return homeremoteDataSource.uploadAttachments(files);
   }
+
+  @override
+  Future<Either<Failures, void>> deleteAttachment(String attachmentId) {
+   return homeremoteDataSource.deleteAttachment(attachmentId);
+  }
 }

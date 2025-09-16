@@ -82,7 +82,24 @@ class UploadAttachmentsViewModel extends Cubit<UploadAttachmentsViewModelStates>
     } catch (e) {
       emit(UploadAttachmentsViewModelStatesError(message: e.toString()));
     }
+  }  void removeFileFromQueue(File file) async {
+    final fileHash = await generateFileHash(file);
+
+    // إزالة من قائمة الملفات الجاهزة للرفع
+    files.remove(file);
+
+    // إزالة المفتاح الداخلي
+    _fileKeys.remove(file);
+
+    // إزالة hash لو كان موجود (يعني تم رفعه سابقاً)
+    uploadedFileHashes.remove(fileHash);
+
+    // إزالة من الـ attachments لو كان تم رفعه مسبقاً
+    uploadedAttachments.removeWhere((e) => e.name == file.path.split('/').last);
+
+    emit(UploadAttachmentsViewModelStatesInitial());
   }
+
 
   Future<Either<Failures, List<AttachmentEntity>>> uploadAttachments() async {
     try {
@@ -125,6 +142,7 @@ class UploadAttachmentsViewModel extends Cubit<UploadAttachmentsViewModelStates>
               size: e.size,
               type: e.type,
               url: e.url,
+              storagePath: e.storagePath,
             )),
           );
 

@@ -66,13 +66,16 @@ class OrderDm extends OrderEntity {
 
   static OrderStatus _orderStatusFromString(String? status) {
     switch (status) {
-      case 'accepted':
+      case 'Accepted':
         return OrderStatus.accepted;
-      case 'in_progress':
+        case 'Paid':
+          return OrderStatus.paid;
+      case 'In progress':
         return OrderStatus.inProgress;
-      case 'completed':
+
+      case 'Completed':
         return OrderStatus.completed;
-      case 'cancelled':
+      case 'Cancelled':
         return OrderStatus.cancelled;
       default:
         return OrderStatus.pending;
@@ -82,15 +85,17 @@ class OrderDm extends OrderEntity {
   static String _orderStatusToString(OrderStatus status) {
     switch (status) {
       case OrderStatus.accepted:
-        return 'accepted';
+        return 'Accepted';
+        case OrderStatus.paid:
+          return 'Paid';
       case OrderStatus.inProgress:
-        return 'in_progress';
+        return 'In progress';
       case OrderStatus.completed:
-        return 'completed';
+        return 'Completed';
       case OrderStatus.cancelled:
-        return 'cancelled';
+        return 'Cancelled';
       default:
-        return 'pending';
+        return 'Pending';
     }
   }
 

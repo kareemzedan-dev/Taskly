@@ -60,6 +60,9 @@ dependencies:
   bloc: any
   intl: any
   google_sign_in: ^5.0.0
+  open_file: ^3.5.10
+  syncfusion_flutter_pdfviewer: ^31.1.19
+  timeago: ^3.7.1
  
 dev_dependencies:
   flutter_test:

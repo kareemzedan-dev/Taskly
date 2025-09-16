@@ -61,9 +61,10 @@ class _OrderViewBodyState extends State<OrderViewBody> {
           );
           Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => const ClientHomeView()),
-            (_) => false,
+            MaterialPageRoute(builder: (context) => ClientHomeView(initialIndex: 1)),
+                (_) => false,
           );
+
         }
 
         if (state is PlaceOrderViewModelStatesError) {
@@ -248,7 +249,9 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                             ),
                             createdAt: DateTime.now(),
                             updatedAt: DateTime.now(),
+
                           ),
+
                         );
                       },
                     ),

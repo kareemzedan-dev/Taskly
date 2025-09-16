@@ -16,5 +16,7 @@ HomeRemoteDataSource {
  Future<Either<Failures,OrderEntity>> placeOrder(OrderEntity orderEntity);
  Future<Either<Failures,List<FreelancerEntity>>> getAllFreelancerInfo();
  Future <Either<Failures,List<AttachmentEntity>>> uploadAttachments(List<File> files);
+
+ Future<Either<Failures, void>> deleteAttachment(String attachmentId);
  }
  

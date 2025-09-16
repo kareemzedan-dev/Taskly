@@ -8,6 +8,8 @@ class AttachmentModel extends AttachmentEntity {
     required super.url,
     required super.size,
     required super.type,
+    required super.storagePath,
+    
   });
 
   factory AttachmentModel.fromJson(Map<String, dynamic> json) {
@@ -17,6 +19,7 @@ class AttachmentModel extends AttachmentEntity {
       url: json['url'] ?? '',
       size: json['size'] ?? 0,
       type: json['type'] ?? '',
+      storagePath: json['storagePath'] ?? '',
     );
   }
 
@@ -27,6 +30,7 @@ class AttachmentModel extends AttachmentEntity {
       'url': url,
       'size': size,
       'type': type,
+      'storagePath': storagePath,
     };
   }
 }

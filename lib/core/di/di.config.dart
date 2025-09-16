@@ -43,6 +43,8 @@ import '../../features/client/domain/use_cases/home/home_use_case.dart'
     as _i213;
 import '../../features/client/presentation/cubit/client_info_view_model/client_info_view_model.dart'
     as _i449;
+import '../../features/client/presentation/views/tabs/home/presentation/cubit/delete_attachments_view_model/delete_attachments_view_model.dart'
+    as _i258;
 import '../../features/client/presentation/views/tabs/home/presentation/cubit/freelancers_view_model/freelancers_view_model.dart'
     as _i392;
 import '../../features/client/presentation/views/tabs/home/presentation/cubit/place_order_view_model/place_order_view_model.dart'
@@ -144,6 +146,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i442.UploadAttachmentsViewModel>(
       () => _i442.UploadAttachmentsViewModel(gh<_i213.HomeUseCase>()),
+    );
+    gh.factory<_i258.DeleteAttachmentsViewModel>(
+      () => _i258.DeleteAttachmentsViewModel(gh<_i213.HomeUseCase>()),
     );
     gh.factory<_i31.ProfileUseCase>(
       () => _i31.ProfileUseCase(gh<_i647.ProfileRepo>()),

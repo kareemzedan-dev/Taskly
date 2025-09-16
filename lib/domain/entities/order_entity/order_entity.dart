@@ -15,6 +15,7 @@ class OrderEntity {
   final DateTime createdAt;
   final DateTime updatedAt;
 
+
   OrderEntity({
     required this.id,
     required this.clientId,
@@ -34,5 +35,5 @@ class OrderEntity {
 
 enum ServiceType { public, private }
 
-enum OrderStatus { pending, accepted, inProgress, completed, cancelled }
+enum OrderStatus { pending, paid ,accepted, inProgress, completed, cancelled }
 

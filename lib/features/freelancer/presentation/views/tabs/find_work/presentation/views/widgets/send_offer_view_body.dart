@@ -48,7 +48,7 @@ class SendOfferViewBody extends StatelessWidget {
                               ),
                         ),
                       ),
-                      const DeliveryInfo(),
+                     // const DeliveryInfo(),
                     ],
                   ),
                   SizedBox(height: 8.h),

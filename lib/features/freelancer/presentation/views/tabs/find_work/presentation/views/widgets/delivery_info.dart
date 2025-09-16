@@ -3,7 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class DeliveryInfo extends StatelessWidget {
-  const DeliveryInfo({super.key});
+  const DeliveryInfo({super.key,required this.deliveryTime});
+  final String deliveryTime;
 
   @override
   Widget build(BuildContext context) {
@@ -15,9 +16,11 @@ class DeliveryInfo extends StatelessWidget {
           size: 15.sp,
         ),
         SizedBox(width: 5.w),
-        Text(
-          "Delivery time: 1 day",
-          style: Theme.of(context).textTheme.bodyLarge?.copyWith(),
+        Expanded(
+          child: Text(
+            "Delivery time: $deliveryTime",
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(),
+          ),
         ),
       ],
     );

@@ -6,21 +6,28 @@ import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentat
 import 'package:taskly/features/client/presentation/views/tabs/profile/presentation/views/profile_view.dart';
 
 class ClientHomeView extends StatefulWidget {
-  const ClientHomeView({super.key});
+  final int initialIndex;
+  const ClientHomeView({super.key, this.initialIndex = 0});
 
   @override
   State<ClientHomeView> createState() => _ClientHomeViewState();
 }
 
 class _ClientHomeViewState extends State<ClientHomeView> {
-  int currentIndex = 0;
+  late int currentIndex;
 
   List<Widget> items = [
     const HomeTabView(),
-      MyJobsTabView(),
+    MyJobsTabView(),
     const MessagesTabView(),
     const ProfileViewTab(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    currentIndex = widget.initialIndex;
+  }
 
   @override
   Widget build(BuildContext context) {

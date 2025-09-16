@@ -25,13 +25,13 @@ class JobDetailsViewBody extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children:   [
-                    JobHeader(title: orderEntity.title ,category: orderEntity.category!,date: orderEntity.deadline!.toRelative(),),
+                    JobHeader(title: orderEntity.title ,category: orderEntity.category!,date: orderEntity.createdAt.toTimeAgo(),),
                     Divider(thickness: 1, color: Colors.grey),
                     DescriptionSection(description:orderEntity.description ,),
                     Divider(thickness: 1, color: Colors.grey),
                     ClientDetailsSection(),
                     Divider(thickness: 1, color: Colors.grey),
-                    AttachmentsSection(),
+                   // AttachmentsSection(),
                     Divider(thickness: 1, color: Colors.grey),
                     AboutJobSection(),
                   ],

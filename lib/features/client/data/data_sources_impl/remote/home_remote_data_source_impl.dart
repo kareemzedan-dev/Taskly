@@ -140,16 +140,17 @@ class HomeRemoteDataSourceImpl extends HomeRemoteDataSource {
         final url = supabase.storage
             .from('order-attachments')
             .getPublicUrl(uniqueName);
-
         uploadedAttachments.add(
           AttachmentEntity(
-            id: uuid.v4(),
+            id: uuid.v4(),           // ID داخلي للكيان
             name: fileName,
+            storagePath: uniqueName, // <--- مهم للحذف
             url: url,
             size: file.lengthSync(),
             type: _getMimeType(fileName),
           ),
         );
+
       }
 
       return Right(uploadedAttachments);
@@ -173,4 +174,28 @@ class HomeRemoteDataSourceImpl extends HomeRemoteDataSource {
         return 'application/octet-stream';
     }
   }
+  Future<Either<Failures, void>> deleteAttachment(String storagePath) async {
+    try {
+      final removedFiles = await supabase.storage
+          .from('order-attachments')
+          .remove([storagePath]);
+
+      print('Supabase remove response: $removedFiles');
+
+      if (removedFiles.isEmpty) {
+        print('Warning: file not found or already deleted');
+        return Left(ServerFailure('File not found or already deleted'));
+      }
+
+      print('File deleted successfully');
+      return const Right(null);
+    } catch (e, st) {
+      print('Error deleting file: $e');
+      print('Stack trace: $st');
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
+
+
 }

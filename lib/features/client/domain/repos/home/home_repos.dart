@@ -14,4 +14,5 @@ abstract class HomeRepos {
   Future<Either<Failures,OrderEntity>> placeOrder(OrderEntity orderEntity);
   Future<Either<Failures, List<FreelancerEntity>>> getAllFreelancer();
   Future<Either<Failures, List<AttachmentEntity>>> uploadAttachments(List<File> files);
+  Future<Either<Failures, void>> deleteAttachment(String attachmentId);
 }
