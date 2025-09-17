@@ -3,81 +3,102 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/utils/assets_manager.dart';
-class ClientDetailsSection extends StatelessWidget {
-  const ClientDetailsSection({super.key});
+import 'package:taskly/features/client/presentation/cubit/client_info_view_model/client_info_view_model_states.dart';
+import 'package:taskly/features/profile/domain/entities/user_info_entity/user_info_entity.dart';
 
+import '../../../../../../../../../core/di/di.dart';
+import '../../../../../../../../client/presentation/cubit/client_info_view_model/client_info_view_model.dart';
+class ClientDetailsSection extends StatelessWidget {
+  const ClientDetailsSection({super.key, required this.userId});
+final String userId;
   @override
   Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => getIt<ClientInfoViewModel>()..getUserInfo(
+        userId,
+        "client"
+      ), // ⬅️ هات بيانات الكلاينت
+      child: BlocBuilder<ClientInfoViewModel, ClientInfoViewModelStates>(
+        builder: (context, state) {
+          if (state is ClientInfoViewModelLoading) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is ClientInfoViewModelError) {
+            return Text(state.errorMessage, style: const TextStyle(color: Colors.red));
+          } else if (state is  ClientInfoViewModelSuccess) {
+            final UserInfoEntity client = state.userInfoEntity;
 
-
-
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 16.h),
-            Text(
-              "Client Details",
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 16.h),
+                Text(
+                  "Client Details",
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     fontWeight: FontWeight.w600,
                     fontSize: 16.sp,
                     color: Colors.black,
                   ),
-            ),
-            SizedBox(height: 8.h),
-            Row(
-              children: [
-                CircleAvatar(
-                  radius: 30.r,
-                  backgroundColor: Colors.grey.shade300,
-                  backgroundImage: const AssetImage(
-                    Assets.assetsImagesPortraitHappySmileyMan,
-                  ),
                 ),
-                SizedBox(width: 16.w),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                SizedBox(height: 8.h),
+                Row(
                   children: [
-                    Text(
-                      "John Doe",
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    CircleAvatar(
+                      radius: 30.r,
+                      backgroundColor: Colors.grey.shade300,
+                      backgroundImage: client.profileImage != null
+                          ? NetworkImage(client.profileImage!)
+                          : const AssetImage(Assets.assetsImagesPortraitHappySmileyMan)
+                      as ImageProvider,
+                    ),
+                    SizedBox(width: 16.w),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          client.fullName ?? "Unknown Client",
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             fontWeight: FontWeight.w500,
                             fontSize: 14.sp,
                             color: Colors.grey.shade800,
                           ),
-                    ),
-                    SizedBox(height: 4.h),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        const Icon(CupertinoIcons.star_fill, color: Colors.amber),
-                        SizedBox(width: 4.h),
-                        Text(
-                          "4.5",
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        ),
+                        SizedBox(height: 4.h),
+                        Row(
+                          children: [
+                              Icon(CupertinoIcons.star_fill, color: Colors.amber,size: 16.sp,),
+                            SizedBox(width: 4.h),
+                            Text(
+                              "${client.rating ?? 0.0}",
+                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                 fontWeight: FontWeight.w500,
                                 fontSize: 12.sp,
                                 color: Colors.grey.shade800,
                               ),
-                        ),
-                        SizedBox(width: 16.w),
-                        Text(
-                          "199 jobs Posted",
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            ),
+                            SizedBox(width: 16.w),
+                            Text(
+                              "0 jobs posted",
+                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                 fontWeight: FontWeight.w500,
                                 fontSize: 14.sp,
                                 color: Colors.grey.shade800,
                               ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
                   ],
                 ),
+                SizedBox(height: 16.h),
               ],
-            ),
-            SizedBox(height: 16.h),
-          ],
+            );
+          }
 
-
+          // Default حالة مبدئية
+          return const SizedBox.shrink();
+        },
+      ),
     );
   }
 }

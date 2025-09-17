@@ -15,7 +15,7 @@ class FreelancerOrderUseCase {
   Future<Either<Failures, List<OrderEntity>>> fetchPendingFreelancerOrders() =>
       freelancerOrderRepo.fetchPendingFreelancerOrders();
 
-  /// New Realtime subscription
+
   RealtimeChannel  subscribeToPendingOrders(
     void Function(OrderEntity order, String action) onChange,
   ) {

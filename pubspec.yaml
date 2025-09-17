@@ -63,7 +63,8 @@ dependencies:
   open_file: ^3.5.10
   syncfusion_flutter_pdfviewer: ^31.1.19
   timeago: ^3.7.1
- 
+  path_provider: ^2.1.5
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

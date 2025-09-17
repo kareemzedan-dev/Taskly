@@ -15,16 +15,10 @@ import 'package:supabase_flutter/supabase_flutter.dart' as _i454;
 
 import '../../data/data_sources/remote/impl/orders_remote_data_source_impl.dart'
     as _i607;
-import '../../data/data_sources/remote/impl/profile_remote_data_source_impl.dart'
-    as _i644;
 import '../../data/data_sources/remote/orders_remote_data_source.dart' as _i700;
-import '../../data/data_sources/remote/profile_remote_data_source.dart' as _i81;
 import '../../data/repos/orders/orders_repo_impl.dart' as _i879;
-import '../../data/repos/profile/profile_repo_impl.dart' as _i549;
 import '../../domain/repos/orders/orders_repo.dart' as _i145;
-import '../../domain/repos/profile/profile_repo.dart' as _i647;
 import '../../domain/use_cases/orders/orders_use_case.dart' as _i340;
-import '../../domain/use_cases/profile/profile_use_case.dart' as _i31;
 import '../../features/auth/data/data_sources/remote/auth_remote_data_source.dart'
     as _i432;
 import '../../features/auth/data/data_sources_impl/remote/auth_remote_data_source_impl.dart'
@@ -69,6 +63,16 @@ import '../../features/freelancer/presentation/cubit/freelancer_info_view_model/
     as _i776;
 import '../../features/freelancer/presentation/views/tabs/find_work/presentation/cubit/freelancer_pending_order_view_model/freelancer_pending_order_view_model.dart'
     as _i636;
+import '../../features/profile/data/data_sources/profile_remote_data_source.dart'
+    as _i1012;
+import '../../features/profile/data/data_sources_implem/profile_remote_data_source_impl.dart'
+    as _i51;
+import '../../features/profile/data/repositories/profile/profile_repo_impl.dart'
+    as _i541;
+import '../../features/profile/domain/repositories/profile/profile_repo.dart'
+    as _i821;
+import '../../features/profile/domain/use_cases/profile/profile_use_case.dart'
+    as _i585;
 import '../services/file_uploaded_services.dart' as _i383;
 import '../services/supabase_service.dart' as _i374;
 
@@ -90,14 +94,17 @@ extension GetItInjectableX on _i174.GetIt {
             gh<_i297.FreelancerOrderRemoteDataSource>(),
       ),
     );
+    gh.factory<_i1012.ProfileRemoteDataSource>(
+      () => _i51.ProfileRemoteDataSourceImpl(gh<_i454.SupabaseClient>()),
+    );
     gh.factory<_i432.AuthRemoteDataSource>(
       () => _i420.AuthRemoteDataSourceImpl(),
     );
+    gh.factory<_i821.ProfileRepo>(
+      () => _i541.ProfileRepoImpl(gh<_i1012.ProfileRemoteDataSource>()),
+    );
     gh.factory<_i700.OrdersRemoteDataSource>(
       () => _i607.OrdersRemoteDataSourceImpl(),
-    );
-    gh.factory<_i81.ProfileRemoteDataSource>(
-      () => _i644.ProfileRemoteDataSourceImpl(gh<_i454.SupabaseClient>()),
     );
     gh.factory<_i307.HomeRemoteDataSource>(
       () =>
@@ -116,11 +123,11 @@ extension GetItInjectableX on _i174.GetIt {
         freelancerOrderRepo: gh<_i75.FreelancerOrderRepo>(),
       ),
     );
+    gh.factory<_i585.ProfileUseCase>(
+      () => _i585.ProfileUseCase(gh<_i821.ProfileRepo>()),
+    );
     gh.factory<_i630.AuthUseCase>(
       () => _i630.AuthUseCase(gh<_i746.AuthRepo>()),
-    );
-    gh.factory<_i647.ProfileRepo>(
-      () => _i549.ProfileRepoImpl(gh<_i81.ProfileRemoteDataSource>()),
     );
     gh.factory<_i145.OrdersRepo>(
       () => _i879.OrdersRepoImpl(
@@ -130,6 +137,12 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i213.HomeUseCase>(
       () => _i213.HomeUseCase(gh<_i660.HomeRepos>()),
     );
+    gh.factory<_i449.ClientInfoViewModel>(
+      () => _i449.ClientInfoViewModel(gh<_i585.ProfileUseCase>()),
+    );
+    gh.factory<_i776.FreelancerInfoViewModel>(
+      () => _i776.FreelancerInfoViewModel(gh<_i585.ProfileUseCase>()),
+    );
     gh.factory<_i636.FreelancerPendingOrdersViewModel>(
       () => _i636.FreelancerPendingOrdersViewModel(
         gh<_i171.FreelancerOrderUseCase>(),
@@ -137,6 +150,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i745.AuthViewModel>(
       () => _i745.AuthViewModel(authUseCase: gh<_i630.AuthUseCase>()),
+    );
+    gh.factory<_i258.DeleteAttachmentsViewModel>(
+      () => _i258.DeleteAttachmentsViewModel(gh<_i213.HomeUseCase>()),
     );
     gh.factory<_i399.PlaceOrderViewModel>(
       () => _i399.PlaceOrderViewModel(gh<_i213.HomeUseCase>()),
@@ -147,12 +163,6 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i442.UploadAttachmentsViewModel>(
       () => _i442.UploadAttachmentsViewModel(gh<_i213.HomeUseCase>()),
     );
-    gh.factory<_i258.DeleteAttachmentsViewModel>(
-      () => _i258.DeleteAttachmentsViewModel(gh<_i213.HomeUseCase>()),
-    );
-    gh.factory<_i31.ProfileUseCase>(
-      () => _i31.ProfileUseCase(gh<_i647.ProfileRepo>()),
-    );
     gh.factory<_i340.OrdersUseCase>(
       () => _i340.OrdersUseCase(gh<_i145.OrdersRepo>()),
     );
@@ -161,12 +171,6 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i772.GetOrderViewModel>(
       () => _i772.GetOrderViewModel(gh<_i340.OrdersUseCase>()),
-    );
-    gh.factory<_i449.ClientInfoViewModel>(
-      () => _i449.ClientInfoViewModel(gh<_i31.ProfileUseCase>()),
-    );
-    gh.factory<_i776.FreelancerInfoViewModel>(
-      () => _i776.FreelancerInfoViewModel(gh<_i31.ProfileUseCase>()),
     );
     return this;
   }

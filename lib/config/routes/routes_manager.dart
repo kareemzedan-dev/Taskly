@@ -67,6 +67,7 @@ class RoutesManager {
         return MaterialPageRoute(builder: (_) => ChatView());
       case jobDetailsView:
         final args = settings.arguments;
+        final user = settings.arguments;
         if (args is OrderEntity) {
           return MaterialPageRoute(
             builder: (_) => JobDetailsView(orderEntity: args),

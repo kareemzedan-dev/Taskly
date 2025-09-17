@@ -21,6 +21,8 @@ class UserInfoEntity {
   final double? hourlyRate;
   final double ? rating;
   final DateTime? createdAt;
+  final BillingInfo? billingInfo;
+  final double? balance;
 
   UserInfoEntity({
     required this.id,
@@ -32,7 +34,36 @@ class UserInfoEntity {
     this.bio,
     this.skills,
     this.rating,
+    this.billingInfo,
+    this.balance,
     this.hourlyRate,
     this.createdAt,
   });
+}
+class BillingInfo {
+  final String name;
+  final String address;
+  final String paymentMethod;
+
+  BillingInfo({
+    required this.name,
+    required this.address,
+    required this.paymentMethod,
+  });
+
+  factory BillingInfo.fromJson(Map<String, dynamic> json) {
+    return BillingInfo(
+      name: json['name'] ?? '',
+      address: json['address'] ?? '',
+      paymentMethod: json['paymentMethod'] ?? '',
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'address': address,
+      'paymentMethod': paymentMethod,
+    };
+  }
 }

@@ -1,4 +1,5 @@
-import 'package:taskly/domain/entities/user_info_entity/user_info_entity.dart';
+
+import '../../../../profile/domain/entities/user_info_entity/user_info_entity.dart';
 
 class ClientInfoViewModelStates {
 

@@ -12,8 +12,11 @@ class JobDetailsViewBody extends StatelessWidget {
   const JobDetailsViewBody({super.key,required this.orderEntity});
   final OrderEntity orderEntity ;
 
+
   @override
   Widget build(BuildContext context) {
+
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -29,9 +32,10 @@ class JobDetailsViewBody extends StatelessWidget {
                     Divider(thickness: 1, color: Colors.grey),
                     DescriptionSection(description:orderEntity.description ,),
                     Divider(thickness: 1, color: Colors.grey),
-                    ClientDetailsSection(),
+                    ClientDetailsSection(userId: orderEntity.clientId,),
+
                     Divider(thickness: 1, color: Colors.grey),
-                   // AttachmentsSection(),
+                    AttachmentsSection(attachmentEntity: orderEntity.attachments,isFreelancer: true,),
                     Divider(thickness: 1, color: Colors.grey),
                     AboutJobSection(),
                   ],
@@ -47,4 +51,3 @@ class JobDetailsViewBody extends StatelessWidget {
   }
 }
 
- 

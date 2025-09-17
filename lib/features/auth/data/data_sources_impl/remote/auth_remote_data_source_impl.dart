@@ -60,6 +60,7 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
         'email': email,
         'role': role,
         'profile_image': avatarUrl,
+        'rating': 0.0,
       },
       conflictColumn: 'email',
     );

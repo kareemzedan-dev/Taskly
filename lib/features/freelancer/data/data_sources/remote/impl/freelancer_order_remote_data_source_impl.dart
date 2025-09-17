@@ -27,7 +27,7 @@ class FreelancerOrderRemoteDataSourceImpl
           result.contains(ConnectivityResult.mobile)) {
         final response = await supabaseService.getDataFromSupabase(
           tableName: "orders",
-          filters: {"status": "pending"},
+          filters: {"status": "Pending"},
         );
 
         if (response == null || response.isEmpty) {
@@ -54,7 +54,7 @@ class FreelancerOrderRemoteDataSourceImpl
       ) {
     _ordersChannel = supabaseService.subscribe(
       table: 'orders',
-      filters: {'status': 'pending'},
+      filters: {'status':"Pending"},
       onChange: (record, action) {
         final order = OrderDm.fromJson(record);
         onChange(order, action);

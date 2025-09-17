@@ -25,7 +25,7 @@ class _ClientHomeTabViewBodyState extends State<ClientHomeTabViewBody> {
   void initState() {
     super.initState();
     _userInfoViewModel = getIt<ClientInfoViewModel>();
-    _userInfoViewModel.loadUserInfo();
+   // _userInfoViewModel.loadUserInfo();
 
     _searchController = TextEditingController();
   }

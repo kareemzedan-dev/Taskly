@@ -37,7 +37,7 @@ class OrderDetailsBottomSheetContent extends StatelessWidget {
 
               DescriptionSection(description: order.description),
               SizedBox(height: 16.h),
-              AttachmentsSection(attachmentEntity: order.attachments,),
+              AttachmentsSection(attachmentEntity: order.attachments,isFreelancer: false,),
               SizedBox(height: 16.h),
             ],
           ),

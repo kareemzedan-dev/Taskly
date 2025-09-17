@@ -27,7 +27,7 @@ class _ClientProfileViewBodyState extends State<ClientProfileViewBody> {
   void initState() {
     super.initState();
     _userInfoViewModel = getIt<ClientInfoViewModel>();
-    _userInfoViewModel.loadUserInfo();
+   // _userInfoViewModel.loadUserInfo();
   }
 
   @override
