@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
-import 'package:taskly/features/client/domain/entities/home/attaachments_entity.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../../../../data/models/home/attaachments_dm.dart';
+import '../../../../core/di/di.dart';
+import '../../data/models/attachments_dm/attachments_dm.dart';
+import '../manager/download_attachments_view_model/download_attachments_view_model.dart';
 import 'attachment_card_viewer.dart';
 
 class AttachmentCardViewerListView extends StatelessWidget {
@@ -23,11 +25,14 @@ class AttachmentCardViewerListView extends StatelessWidget {
         itemBuilder: (context, index) {
           return Padding(
             padding: const EdgeInsets.all(8.0),
-            child: AttachmentItemViewer(
-              attachmentName: attachmentEntity[index].name,
-              attachmentPath: attachmentEntity[index].url,
-              isFreelancer: isFreelancer,
-            ),
+            child: BlocProvider(
+              create: (context) =>  getIt<DownloadAttachmentsViewModel>(),
+              child: AttachmentItemViewer(
+                attachmentName: attachmentEntity[index].name,
+                attachmentPath: attachmentEntity[index].url,
+                isFreelancer: true,
+              ),
+            )
           );
         },
       ),

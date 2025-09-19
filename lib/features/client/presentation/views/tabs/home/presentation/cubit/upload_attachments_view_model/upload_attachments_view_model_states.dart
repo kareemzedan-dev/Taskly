@@ -1,4 +1,5 @@
-import '../../../../../../../domain/entities/home/attaachments_entity.dart';
+
+import '../../../../../../../../attachments/domain/entities/attachment_entity/attaachments_entity.dart';
 
 class UploadAttachmentsViewModelStates {}
 class UploadAttachmentsViewModelStatesInitial extends UploadAttachmentsViewModelStates {}

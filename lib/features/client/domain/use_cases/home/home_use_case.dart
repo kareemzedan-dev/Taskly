@@ -9,7 +9,9 @@ import 'package:taskly/features/client/domain/entities/home/freelancer_entity.da
 import 'package:taskly/features/client/domain/entities/home/service_response_entity.dart';
 import 'package:taskly/features/client/domain/repos/home/home_repos.dart';
 
-import '../../entities/home/attaachments_entity.dart';
+import '../../../../attachments/domain/entities/attachment_entity/attaachments_entity.dart';
+
+
 @injectable
 class HomeUseCase {
   HomeRepos homeRepos;
@@ -20,4 +22,5 @@ class HomeUseCase {
   Future<Either<Failures, List<FreelancerEntity>>> callGetFreelancer() => homeRepos.getAllFreelancer();
   Future <Either<Failures,List<AttachmentEntity>>> callUploadAttachments(List<File> files) => homeRepos.uploadAttachments(files);
 Future<Either<Failures,void>> callDeleteAttachment(String attachmentId) => homeRepos.deleteAttachment(attachmentId);
+
 }

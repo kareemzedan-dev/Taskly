@@ -18,7 +18,7 @@ import 'package:taskly/features/client/presentation/views/tabs/home/presentation
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/time_input_raw.dart';
 
 import '../../../../../../../../../core/di/di.dart';
-import '../../../../../../../data/models/home/attaachments_dm.dart';
+import '../../../../../../../../attachments/data/models/attachments_dm/attachments_dm.dart';
 import '../../cubit/upload_attachments_view_model/upload_attachments_view_model.dart';
 
 class OrderViewBody extends StatefulWidget {

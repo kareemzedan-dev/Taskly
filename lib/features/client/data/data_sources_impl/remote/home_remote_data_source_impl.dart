@@ -11,10 +11,11 @@ import 'package:taskly/domain/entities/order_entity/order_entity.dart';
 import 'package:taskly/features/client/data/data_sources/remote/home_remote_data_source.dart';
 import 'package:taskly/features/client/data/models/home/freelancer_dm.dart';
 import 'package:taskly/features/client/data/models/home/service_response_dm.dart';
-import 'package:taskly/features/client/domain/entities/home/attaachments_entity.dart';
 import 'package:taskly/features/client/domain/entities/home/freelancer_entity.dart';
 import 'package:taskly/features/client/domain/entities/home/service_response_entity.dart';
 import 'package:uuid/uuid.dart';
+
+import '../../../../attachments/domain/entities/attachment_entity/attaachments_entity.dart';
 
 @Injectable(as: HomeRemoteDataSource)
 class HomeRemoteDataSourceImpl extends HomeRemoteDataSource {

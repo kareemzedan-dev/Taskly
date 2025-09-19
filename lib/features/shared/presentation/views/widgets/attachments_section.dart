@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../client/data/models/home/attaachments_dm.dart';
-import '../../../../client/presentation/views/tabs/my_jobs/presentation/views/widgets/attachment_card_viewer_list_view.dart';
+import '../../../../attachments/data/models/attachments_dm/attachments_dm.dart';
+import '../../../../attachments/presentation/widgets/attachment_card_viewer_list_view.dart';
 
 class AttachmentsSection extends StatelessWidget {
   const AttachmentsSection({

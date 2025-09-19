@@ -6,7 +6,8 @@ import 'package:taskly/domain/entities/order_entity/order_entity.dart';
 import 'package:taskly/features/client/domain/entities/home/freelancer_entity.dart';
 import 'package:taskly/features/client/domain/entities/home/service_response_entity.dart';
 
-import '../../../domain/entities/home/attaachments_entity.dart';
+import '../../../../attachments/domain/entities/attachment_entity/attaachments_entity.dart';
+
 
 abstract class 
 HomeRemoteDataSource {

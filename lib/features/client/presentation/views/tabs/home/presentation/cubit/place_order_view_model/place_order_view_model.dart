@@ -12,7 +12,7 @@ import 'package:taskly/features/client/domain/use_cases/home/home_use_case.dart'
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/cubit/place_order_view_model/place_order_view_model_states.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../../../../../data/models/home/attaachments_dm.dart';
+import '../../../../../../../../attachments/data/models/attachments_dm/attachments_dm.dart';
 
 @injectable
 class PlaceOrderViewModel extends Cubit<PlaceOrderViewModelStates> {

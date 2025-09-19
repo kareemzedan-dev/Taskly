@@ -1,4 +1,4 @@
-import '../../../features/client/data/models/home/attaachments_dm.dart';
+import '../../../features/attachments/data/models/attachments_dm/attachments_dm.dart';
 
 class OrderEntity {
   final String id;

@@ -1,5 +1,5 @@
 
-import '../../../domain/entities/home/attaachments_entity.dart';
+import 'package:taskly/features/attachments/domain/entities/attachment_entity/attaachments_entity.dart';
 
 class AttachmentModel extends AttachmentEntity {
   const AttachmentModel({

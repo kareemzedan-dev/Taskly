@@ -7,8 +7,8 @@ import 'package:injectable/injectable.dart';
 import 'package:taskly/core/errors/failures.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/cubit/upload_attachments_view_model/upload_attachments_view_model_states.dart';
 
-import '../../../../../../../data/models/home/attaachments_dm.dart';
-import '../../../../../../../domain/entities/home/attaachments_entity.dart';
+import '../../../../../../../../attachments/data/models/attachments_dm/attachments_dm.dart';
+import '../../../../../../../../attachments/domain/entities/attachment_entity/attaachments_entity.dart';
 import '../../../../../../../domain/use_cases/home/home_use_case.dart';
 
 @injectable

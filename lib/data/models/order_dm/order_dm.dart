@@ -1,6 +1,6 @@
 import 'package:taskly/domain/entities/order_entity/order_entity.dart';
 
-import '../../../features/client/data/models/home/attaachments_dm.dart';
+import '../../../features/attachments/data/models/attachments_dm/attachments_dm.dart';
 
 class OrderDm extends OrderEntity {
   OrderDm({

@@ -9,6 +9,7 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'package:dio/dio.dart' as _i361;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:supabase_flutter/supabase_flutter.dart' as _i454;
@@ -19,6 +20,18 @@ import '../../data/data_sources/remote/orders_remote_data_source.dart' as _i700;
 import '../../data/repos/orders/orders_repo_impl.dart' as _i879;
 import '../../domain/repos/orders/orders_repo.dart' as _i145;
 import '../../domain/use_cases/orders/orders_use_case.dart' as _i340;
+import '../../features/attachments/data/data_sources/local/attachments_remote_data_source/attachments_remote_data_source.dart'
+    as _i687;
+import '../../features/attachments/data/data_sources_impl/local/attachments_remote_data_source_impl/attachments_remote_data_source_impl.dart'
+    as _i45;
+import '../../features/attachments/data/repositories/attachments_repository_impl/attachments_repository_impl.dart'
+    as _i727;
+import '../../features/attachments/domain/repositories/attachments_repository/attachments_repository.dart'
+    as _i345;
+import '../../features/attachments/domain/use_cases/download_attachments/download_attachments.dart'
+    as _i197;
+import '../../features/attachments/presentation/manager/download_attachments_view_model/download_attachments_view_model.dart'
+    as _i338;
 import '../../features/auth/data/data_sources/remote/auth_remote_data_source.dart'
     as _i432;
 import '../../features/auth/data/data_sources_impl/remote/auth_remote_data_source_impl.dart'
@@ -88,6 +101,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i297.FreelancerOrderRemoteDataSource>(
       () => _i800.FreelancerOrderRemoteDataSourceImpl(),
     );
+    gh.factory<_i687.AttachmentsRemoteDataSource>(
+      () => _i45.AttachmentsRemoteDataSourceImpl(gh<_i361.Dio>()),
+    );
     gh.factory<_i75.FreelancerOrderRepo>(
       () => _i535.FreelancerOrderRepoImpl(
         freelancerOrderRemoteDataSource:
@@ -115,12 +131,25 @@ extension GetItInjectableX on _i174.GetIt {
         homeremoteDataSource: gh<_i307.HomeRemoteDataSource>(),
       ),
     );
+    gh.factory<_i345.AttachmentsRepository>(
+      () => _i727.AttachmentsRepositoryImpl(
+        gh<_i687.AttachmentsRemoteDataSource>(),
+      ),
+    );
+    gh.factory<_i197.DownloadAttachmentsUseCase>(
+      () => _i197.DownloadAttachmentsUseCase(gh<_i345.AttachmentsRepository>()),
+    );
     gh.factory<_i746.AuthRepo>(
       () => _i529.AuthRepoImpl(gh<_i432.AuthRemoteDataSource>()),
     );
     gh.factory<_i171.FreelancerOrderUseCase>(
       () => _i171.FreelancerOrderUseCase(
         freelancerOrderRepo: gh<_i75.FreelancerOrderRepo>(),
+      ),
+    );
+    gh.factory<_i338.DownloadAttachmentsViewModel>(
+      () => _i338.DownloadAttachmentsViewModel(
+        gh<_i197.DownloadAttachmentsUseCase>(),
       ),
     );
     gh.factory<_i585.ProfileUseCase>(
