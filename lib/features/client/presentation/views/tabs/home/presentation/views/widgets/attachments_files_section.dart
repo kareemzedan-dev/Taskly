@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/di/di.dart';
-import 'package:taskly/features/client/presentation/views/tabs/home/presentation/cubit/upload_attachments_view_model/upload_attachments_view_model_states.dart';
+import 'package:taskly/features/attachments/presentation/manager/upload_attachments_view_model/upload_attachments_view_model_states.dart';
 
 import '../../../../../../../../attachments/data/models/attachments_dm/attachments_dm.dart';
-import '../../cubit/delete_attachments_view_model/delete_attachments_view_model.dart';
-import '../../cubit/delete_attachments_view_model/delete_attachments_view_model_states.dart';
-import '../../cubit/upload_attachments_view_model/upload_attachments_view_model.dart';
+ 
+import '../../../../../../../../attachments/presentation/manager/delete_attachments_view_model/delete_attachments_view_model.dart';
+import '../../../../../../../../attachments/presentation/manager/delete_attachments_view_model/delete_attachments_view_model_states.dart';
+import '../../../../../../../../attachments/presentation/manager/upload_attachments_view_model/upload_attachments_view_model.dart';
 import '../../../../../../../../../core/components/dismissible_error_card.dart';
 
 class AttachmentsFilesSection extends StatefulWidget {

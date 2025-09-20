@@ -5,6 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/utils/assets_manager.dart';
 import 'package:taskly/features/client/presentation/cubit/client_info_view_model/client_info_view_model_states.dart';
 import 'package:taskly/features/profile/domain/entities/user_info_entity/user_info_entity.dart';
+import 'package:taskly/features/profile/presentation/manager/profile_view_model/profile_view_model.dart';
+import 'package:taskly/features/profile/presentation/manager/profile_view_model/profile_view_model_states.dart';
 
 import '../../../../../../../../../core/di/di.dart';
 import '../../../../../../../../client/presentation/cubit/client_info_view_model/client_info_view_model.dart';
@@ -14,17 +16,17 @@ final String userId;
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => getIt<ClientInfoViewModel>()..getUserInfo(
+      create: (context) => getIt<ProfileViewModel>()..getUserInfo(
         userId,
         "client"
-      ), // ⬅️ هات بيانات الكلاينت
-      child: BlocBuilder<ClientInfoViewModel, ClientInfoViewModelStates>(
+      ),
+      child: BlocBuilder<ProfileViewModel, ProfileViewModelStates>(
         builder: (context, state) {
-          if (state is ClientInfoViewModelLoading) {
+          if (state is ProfileViewModelStatesLoading) {
             return const Center(child: CircularProgressIndicator());
-          } else if (state is ClientInfoViewModelError) {
-            return Text(state.errorMessage, style: const TextStyle(color: Colors.red));
-          } else if (state is  ClientInfoViewModelSuccess) {
+          } else if (state is ProfileViewModelStatesError) {
+            return Text(state.message, style: const TextStyle(color: Colors.red));
+          } else if (state is  ProfileViewModelStatesSuccess) {
             final UserInfoEntity client = state.userInfoEntity;
 
             return Column(
@@ -55,13 +57,16 @@ final String userId;
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          client.fullName ?? "Unknown Client",
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          (client.fullName != null && client.fullName!.isNotEmpty)
+                              ? client.fullName!
+                              : "Unknown Client",
+                          style: TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 14.sp,
-                            color: Colors.grey.shade800,
+                            color: Colors.black,
                           ),
                         ),
+
                         SizedBox(height: 4.h),
                         Row(
                           children: [

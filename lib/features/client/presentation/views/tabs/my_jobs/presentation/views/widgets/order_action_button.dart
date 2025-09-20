@@ -24,6 +24,7 @@ class OrderActionButton extends StatelessWidget {
     final bool hasCount = count != null;
 
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: onTap,
       child: Container(
         width: double.infinity,

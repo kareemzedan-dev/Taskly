@@ -1,4 +1,4 @@
-import 'package:taskly/domain/entities/order_entity/order_entity.dart';
+import 'package:taskly/features/shared/domain/entities/order_entity/order_entity.dart';
 
 class FreelancerPendingOrdersState {}
 

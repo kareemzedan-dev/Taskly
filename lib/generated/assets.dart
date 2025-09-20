@@ -14,6 +14,7 @@ class Assets {
   static const String fontsDMSansMedium = 'assets/fonts/DMSans-Medium.ttf';
   static const String fontsDMSansRegular = 'assets/fonts/DMSans-Regular.ttf';
   static const String fontsDMSansSemiBold = 'assets/fonts/DMSans-SemiBold.ttf';
+  static const String images9318688 = 'assets/images/no_order.jpg';
   static const String imagesAccount3166234 = 'assets/images/account_3166234.png';
   static const String imagesArabicFlag = 'assets/images/arabic_flag.png';
   static const String imagesBrushes3450037 = 'assets/images/brushes_3450037.png';

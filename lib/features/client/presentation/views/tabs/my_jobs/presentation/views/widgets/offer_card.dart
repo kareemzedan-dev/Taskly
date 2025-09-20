@@ -1,12 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:taskly/core/components/custom_button.dart';
+import 'package:taskly/core/di/di.dart';
+import 'package:taskly/core/helper/convert_to_days.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/offer_actions.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/price_duration_section.dart';
 import 'package:taskly/features/client/presentation/views/tabs/profile/presentation/views/widgets/user_info_section.dart';
+import 'package:taskly/features/freelancer/domain/entities/offer_entity/offer_entity.dart';
+import 'package:taskly/features/profile/presentation/manager/profile_view_model/profile_view_model.dart';
+import 'package:taskly/features/profile/presentation/manager/profile_view_model/profile_view_model_states.dart';
+
+import 'order_action_button.dart';
 
 class OfferCard extends StatelessWidget {
-  const OfferCard({super.key});
+  final OfferEntity offer;
+  final void Function()? onAcceptOffer;
+  const OfferCard({super.key, required this.offer,required this.onAcceptOffer});
 
   @override
   Widget build(BuildContext context) {
@@ -22,26 +33,41 @@ class OfferCard extends StatelessWidget {
             border: Border.all(color: ColorsManager.primary, width: 1.w),
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            padding: const EdgeInsets.all(  8.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-            
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const UserInfoSection(
-                        name: "John Doe",
-                        email: "johndoe@ex.com",
-                        rating: 4.5,
-                        emailShow: false,
-                        photoSizeSelected: true,
+                      BlocProvider(
+                        create: (context) => getIt<ProfileViewModel>()..getUserInfo(offer.freelancerId, "freelancer"),
+                        child:BlocBuilder<ProfileViewModel,ProfileViewModelStates>(
+                          
+                            
+                            builder: (context, state) {
+                              if(state is ProfileViewModelStatesLoading){
+                                return const Center(child: CircularProgressIndicator());
+                              }else if(state is ProfileViewModelStatesError){
+                                return Center(child: Text(state.message));
+                              }else if(state is ProfileViewModelStatesSuccess){
+                                 return
+                               UserInfoSection(
+                                 photoSizeSelected: true,
+                           userInfo: state.userInfoEntity,
+                            );
+                              }
+                              return const Center(child: CircularProgressIndicator());
+                             
+                            }
+                             
+                          )
                       ),
-                      const PriceDurationSection(
-                        price: "1200 \$",
-                        duration: "1 day",
+                      PriceDurationSection(
+                        price: "\$${offer.offerAmount} SAR",
+                        duration:  offer.offerDeliveryTime.formatMinutes(),
                       ),
                     ],
                   ),
@@ -51,7 +77,7 @@ class OfferCard extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: Text(
-                    "I can create a detailed mind map for your project within 1 day. Please let me know if you are interested in this offer.",
+                    offer.offerDescription ?? "No description provided",
                     style: Theme.of(context)
                         .textTheme
                         .bodyLarge
@@ -71,7 +97,23 @@ class OfferCard extends StatelessWidget {
                 ),
                 SizedBox(height: 10.h),
 
-                const OfferActions(),
+            
+                  OfferActions(offerId: offer.id,onAcceptOffer:onAcceptOffer! ,),
+                SizedBox(height: 10.h),
+                OrderActionButton(
+                  text: "View Reviews ",
+                  icon: Icons.reviews,
+                  color: ColorsManager.primary,
+                  onTap: (){},
+
+                ),
+                SizedBox(height: 10.h),
+                OrderActionButton(
+                  text: "Decline Offer",
+                  icon: Icons.close,
+                  color: Colors.red,
+                 onTap: (){},
+                ),
               ],
             ),
           ),
@@ -80,8 +122,3 @@ class OfferCard extends StatelessWidget {
     );
   }
 }
-
- 
-  
-
-  

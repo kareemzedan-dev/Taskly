@@ -31,29 +31,34 @@ class UserInfoDm extends UserInfoEntity {
 
   factory UserInfoDm.fromJson(Map<String, dynamic> json) {
     return UserInfoDm(
-      id: json['uuid'],
-      fullName: json['full_name'],
-      email: json['email'],
+      id: json['uuid'] ?? json['id'] ?? '',   // fallback to empty string
+      fullName: json['full_name'] ?? '',
+      email: json['email'] ?? '',
       phoneNumber: json['phone_number'],
-      role: json['role'],
+      role: json['role'] ?? '',
       profileImage: json['profile_image'],
       bio: json['bio'],
-      skills: json['skills'] != null ? List<String>.from(json['skills']) : null,
-      hourlyRate:
-          json['hourly_rate'] != null
-              ? (json['hourly_rate'] as num).toDouble()
-              : null,
-      rating: json['rating'] != null ? (json['rating'] as num).toDouble() : null,
-      createdAt:
-          json['created_at'] != null
-              ? DateTime.parse(json['created_at'])
-              : null,
+      skills: json['skills'] != null
+          ? List<String>.from(json['skills'])
+          : [],
+      hourlyRate: json['hourly_rate'] != null
+          ? (json['hourly_rate'] as num).toDouble()
+          : null,
+      rating: json['rating'] != null
+          ? (json['rating'] as num).toDouble()
+          : 0.0,
+      createdAt: json['created_at'] != null
+          ? DateTime.tryParse(json['created_at'])
+          : null,
       billingInfo: json['billing_info'] != null
           ? BillingInfo.fromJson(json['billing_info'])
           : null,
-      balance: json['balance'] != null ? (json['balance'] as num).toDouble() : null,
+      balance: json['balance'] != null
+          ? (json['balance'] as num).toDouble()
+          : 0.0,
     );
   }
+
 
   Map<String, dynamic> toJson() {
     return {
@@ -69,5 +74,37 @@ class UserInfoDm extends UserInfoEntity {
       'hourly_rate': hourlyRate,
       'created_at': createdAt?.toIso8601String(),
     };
+  }
+
+  UserInfoDm copyWith({
+    String? id,
+    String? fullName,
+    String? email,
+    String? phoneNumber,
+    String? role,
+    String? profileImage,
+    String? bio,
+    List<String>? skills,
+    double? hourlyRate,
+    double? rating,
+    DateTime? createdAt,
+    BillingInfo? billingInfo,
+    double? balance,
+  }) {
+    return UserInfoDm(
+      id: id ?? this.id,
+      fullName: fullName ?? this.fullName,
+      email: email ?? this.email,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      role: role ?? this.role,
+      profileImage: profileImage ?? this.profileImage,
+      bio: bio ?? this.bio,
+      skills: skills ?? this.skills,
+      hourlyRate: hourlyRate ?? this.hourlyRate,
+      rating: rating ?? this.rating,
+      createdAt: createdAt ?? this.createdAt,
+      billingInfo: billingInfo ?? this.billingInfo,
+      balance: balance ?? this.balance,
+    );
   }
 }

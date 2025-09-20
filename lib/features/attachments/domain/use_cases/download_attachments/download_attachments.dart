@@ -12,6 +12,7 @@ class DownloadAttachmentsUseCase {
   DownloadAttachmentsUseCase(this.repository);
 
   Future<Either<Failures, File>> callDownloadAttachments(String url, String fileName) {
-    return repository.download(url, fileName);
+ 
+    return repository.downloadAttachments(url, fileName);
   }
 }

@@ -1,47 +1,119 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:taskly/core/cache/shared_preferences.dart';
+import 'package:taskly/core/di/di.dart';
+import 'package:taskly/core/utils/strings_manager.dart';
+import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/cubit/get_offers_view_model/get_offers_view_model.dart';
+import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/cubit/get_offers_view_model/get_offers_view_model_states.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/empty_state_animation.dart';
+import 'package:taskly/features/freelancer/presentation/cubit/get_freelancer_offers_view_model/get_freelancer_offers_states.dart';
+import 'package:taskly/features/freelancer/presentation/cubit/get_freelancer_offers_view_model/get_freelancer_offers_view_model.dart';
+import 'package:taskly/features/freelancer/presentation/views/tabs/my_jobs/presentation/views/widgets/pending_offers_list_view.dart';
+import '../../../../../../../../../core/components/custom_tab_bar.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-class MyJobsTabViewBody extends StatelessWidget {
+import '../../../../../../../../../core/helper/notifications_helper.dart';
+
+class MyJobsTabViewBody extends StatefulWidget {
   const MyJobsTabViewBody({super.key});
 
   @override
+  State<MyJobsTabViewBody> createState() => _MyJobsTabViewBodyState();
+}
+
+class _MyJobsTabViewBodyState extends State<MyJobsTabViewBody> {
+  late final GetFreelancerOffersViewModel viewModel;
+  RealtimeChannel? _subscriptionChannel;
+
+  @override
+  void initState() {
+    super.initState();
+    final freelancerId = SharedPrefHelper.getString(StringsManager.idKey)!;
+    viewModel = getIt<GetFreelancerOffersViewModel>();
+
+    viewModel.getFreelancerOffers(freelancerId);
+
+    _subscriptionChannel = viewModel.subscribeToOffers(freelancerId, (offer, action) {
+      viewModel.getFreelancerOffers(freelancerId);
+
+
+      if (offer.offerStatus == 'accepted') {
+        NotificationHelper.showNotification(context, "Your offer got accepted!");
+      } else if (offer.offerStatus == 'rejected') {
+        NotificationHelper.showNotification(context, "Your offer was rejected!");
+      } else if (offer.offerStatus == 'pending') {
+        NotificationHelper.showNotification(context, "New pending offer!");
+      }
+    });
+  }
+
+
+  @override
+  void dispose() {
+    viewModel.unsubscribeFromOffers();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          Expanded(
-            child: TabBarView(
-              children: [
-                Center(
-                  child: EmptyStateAnimation(
+    return TabBarView(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: BlocBuilder<
+              GetFreelancerOffersViewModel,
+              GetFreelancerOffersStates
+          >(
+            bloc: viewModel,
+            builder: (context, state) {
+              if (state is GetFreelancerOffersLoadingState) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              if (state is GetFreelancerOffersErrorState) {
+                return Center(child: Text(state.message));
+              }
+              if (state is GetFreelancerOffersSuccessState) {
+                if (state.offers.isEmpty) {
+                  return const EmptyStateAnimation(
                     animationPath: 'assets/lotties/Loading.json',
-                    message: 'No pending Offers',
-                  ),
-                ),
-                Center(
-                  child: EmptyStateAnimation(
-                    animationPath: 'assets/lotties/Progress.json',
-                    message: 'No accepted Offers',
-                  ),
-                ),
-                Center(
-                  child: EmptyStateAnimation(
-                    animationPath: 'assets/lotties/Success.json',
-                    message: 'No completed projects yet',
-                  ),
-                ),
-                Center(
-                  child: EmptyStateAnimation(
-                    animationPath: 'assets/lotties/cancelled.json',
-                    message: 'No rejected offers',
-                  ),
-                ),
-              ],
-            ),
+                    message: 'No pending offers',
+                  );
+                }
+                return PendingOffersListView(offer: state.offers);
+              }
+              return const Center(child: Text("No offers"));
+            },
           ),
-        ],
-      ),
+        ),
+
+
+        // Accepted tab
+        const Center(
+          child: EmptyStateAnimation(
+            animationPath: 'assets/lotties/Progress.json',
+            message: 'No accepted Offers',
+          ),
+        ),
+
+        // Completed tab
+        const Center(
+          child: EmptyStateAnimation(
+            animationPath: 'assets/lotties/Success.json',
+            message: 'No completed projects yet',
+          ),
+        ),
+
+        // Rejected tab
+        const Center(
+          child: EmptyStateAnimation(
+            animationPath: 'assets/lotties/cancelled.json',
+            message: 'No rejected offers',
+          ),
+        ),
+      ],
     );
   }
 }

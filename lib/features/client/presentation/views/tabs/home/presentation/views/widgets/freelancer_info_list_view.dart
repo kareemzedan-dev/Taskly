@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/cubit/freelancers_view_model/freelancers_view_model.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/cubit/freelancers_view_model/freelancers_view_model_states.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/freelancer_info_card_for_hire.dart';
+import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/reviews_card.dart';
 
 class FreelancerInfoListView extends StatefulWidget {
   const FreelancerInfoListView({super.key});
@@ -30,6 +31,11 @@ class _FreelancerInfoListViewState extends State<FreelancerInfoListView> {
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: FreelancerInfoCardForHire(
+                  onReviewsTap: (){
+                    showModalBottomSheet(context: context, builder: (context) {
+                      return ReviewsCard();
+                    },);
+                  },
                   freelancer: freelancer,
                   isSelected: freelancer.id == selectedId,
                   onTap: () {

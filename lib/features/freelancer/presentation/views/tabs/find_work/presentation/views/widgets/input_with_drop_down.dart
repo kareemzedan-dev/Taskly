@@ -1,21 +1,27 @@
-
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:taskly/core/utils/colors_manger.dart';
 
 class InputWithDropdown extends StatelessWidget {
   final String hint;
   final String selectedValue;
   final List<String> items;
-  final ValueChanged<String?> onChanged;
+  final ValueChanged<String?> onUnitChanged; // ✅ للوحدة (Days/Hours/Weeks)
+  final ValueChanged<String>? onNumberChanged; // ✅ للرقم (2 أو 5 أو غيره)
+  final TextEditingController? controller;
+  final String? errorText;
 
   const InputWithDropdown({
     super.key,
     required this.hint,
     required this.selectedValue,
     required this.items,
-    required this.onChanged,
+    required this.onUnitChanged,
+    this.onNumberChanged,
+    required this.controller,
+    this.errorText,
   });
 
   @override
@@ -32,18 +38,21 @@ class InputWithDropdown extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            child: TextField(
+            child: TextFormField(
+              controller: controller,
               keyboardType: TextInputType.number,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              onChanged: onNumberChanged, // ✅ ده للرقم فقط
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: hint,
+                errorText: errorText,
               ),
             ),
           ),
           SizedBox(width: 8.w),
           DropdownButton2<String>(
-            value: selectedValue,
+            value: selectedValue, // ✅ يفضل يبقى Hours/Days/Weeks
             underline: const SizedBox(),
             isExpanded: false,
             items: items
@@ -52,7 +61,7 @@ class InputWithDropdown extends StatelessWidget {
                       child: Text(val),
                     ))
                 .toList(),
-            onChanged: onChanged,
+            onChanged: onUnitChanged, // ✅ ده للوحدة فقط
             buttonStyleData: ButtonStyleData(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               height: 40.h,

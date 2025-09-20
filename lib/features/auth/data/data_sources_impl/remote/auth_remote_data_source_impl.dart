@@ -66,22 +66,25 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
     );
   }
 
-  // Helper method to insert role-specific data
   Future<void> _insertRoleData(String id, String role) async {
-    if (role ==  StringsManager.clientRole) {
+    final now = DateTime.now().toIso8601String();
+
+    if (role == StringsManager.clientRole) {
       await supabaseService.sendDataToSupabase(
         tableName: 'clients',
-        data: {'id': id, 'billing_info': '', 'balance': 0, 'created_at': DateTime.now().toIso8601String()},
+        data: {'id': id, 'billing_info': '', 'balance': 0, 'created_at': now},
         conflictColumn: 'id',
       );
-    } else if (role ==  StringsManager.freelancerRole) {
+    } else if (role == StringsManager.freelancerRole) {
       await supabaseService.sendDataToSupabase(
         tableName: 'freelancers',
-        data: {'id': id, 'created_at': DateTime.now().toIso8601String()},
+        data: {'id': id, 'created_at': now},
         conflictColumn: 'id',
       );
     }
   }
+
+
 
   Future<void> _handleUserAfterAuth({
     required String id,

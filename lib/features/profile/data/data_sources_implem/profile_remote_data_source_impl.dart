@@ -67,9 +67,9 @@ class ProfileRemoteDataSourceImpl extends ProfileRemoteDataSource{
 
 
 
-          // billingInfo: role == "client" && extraResponse?['billing_info'] != null
-          //     ? BillingInfo.fromJson(jsonDecode(extraResponse!['billing_info']))
-          //     : null,
+          billingInfo: role == "client" && extraResponse?['billing_info'] != null
+              ? BillingInfo.fromJson(jsonDecode(extraResponse!['billing_info']))
+              : null,
 
           balance: role == "client"
               ? (extraResponse != null ? extraResponse['balance'] : null)

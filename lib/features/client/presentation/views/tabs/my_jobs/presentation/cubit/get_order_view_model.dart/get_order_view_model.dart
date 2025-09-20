@@ -2,8 +2,8 @@ import 'package:either_dart/either.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:taskly/core/errors/failures.dart';
-import 'package:taskly/domain/entities/order_entity/order_entity.dart';
-import 'package:taskly/domain/use_cases/orders/orders_use_case.dart';
+import 'package:taskly/features/shared/domain/entities/order_entity/order_entity.dart';
+import 'package:taskly/features/shared/domain/use_cases/orders/orders_use_case.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/cubit/get_order_view_model.dart/get_order_view_model_states.dart';
 @injectable
 class GetOrderViewModel extends Cubit<GetOrderViewModelStates> {

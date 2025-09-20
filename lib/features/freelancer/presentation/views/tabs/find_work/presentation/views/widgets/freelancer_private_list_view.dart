@@ -5,6 +5,8 @@ import 'package:taskly/core/utils/colors_manger.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/cubit/get_order_view_model.dart/get_order_view_model_states.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/freelancer_work_card.dart';
 
+import '../../../../../../../../../core/utils/assets_manager.dart';
+
 class FreelancerPrivateOrdersList extends StatelessWidget {
   final GetOrderViewModelStates state;
 
@@ -29,13 +31,17 @@ class FreelancerPrivateOrdersList extends StatelessWidget {
           physics: const AlwaysScrollableScrollPhysics(),
           children: [
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.5,
-              child: const Center(
-                child: Text(
-                  'No private orders',
-                  style: TextStyle(fontSize: 18),
-                ),
-              ),
+              height: MediaQuery.of(context).size.height * 0.5,   child: Center(
+            child: Column(
+            children: [
+            Image.asset(Assets.noOrderImage,width: 240.w,height: 240.h,),
+            SizedBox(height: 10.h),
+            Text(
+              'No private orders',
+              style: TextStyle(fontSize: 18.sp),
+            ),
+          ],
+    ),   ),
             ),
           ],
         );

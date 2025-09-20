@@ -9,6 +9,7 @@ android {
     namespace = "com.example.taskly"
     compileSdk = flutter.compileSdkVersion
      ndkVersion = "29.0.13113456"
+     //     ndkVersion = "29.0.13113456"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11

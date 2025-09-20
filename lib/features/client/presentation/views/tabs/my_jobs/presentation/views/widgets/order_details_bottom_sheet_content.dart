@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/helper/date_time_formatter.dart';
-import 'package:taskly/domain/entities/order_entity/order_entity.dart';
+import 'package:taskly/features/shared/domain/entities/order_entity/order_entity.dart';
 import 'package:taskly/features/shared/presentation/views/widgets/attachments_section.dart';
 import 'package:taskly/features/shared/presentation/views/widgets/description_section.dart';
 import 'package:taskly/features/shared/presentation/views/widgets/job_header_section.dart';

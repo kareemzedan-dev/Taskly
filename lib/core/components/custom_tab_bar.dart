@@ -7,6 +7,7 @@ class CustomTabBar extends StatelessWidget implements PreferredSizeWidget {
   final Color? labelColor;
   final Color? unselectedLabelColor;
   final Color? indicatorColor;
+  final List<int>? numbers;
 
   const CustomTabBar({
     super.key,
@@ -14,6 +15,7 @@ class CustomTabBar extends StatelessWidget implements PreferredSizeWidget {
     this.labelColor,
     this.unselectedLabelColor,
     this.indicatorColor,
+    this.numbers,
   });
 
   @override
@@ -31,7 +33,42 @@ class CustomTabBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       indicatorColor: indicatorColor ?? ColorsManager.primary,
       indicatorWeight: 4,
-      tabs: tabs.map((title) => Tab(text: title)).toList(),
+      tabs: List.generate(tabs.length, (index) {
+        return Tab(
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(tabs[index]),
+                SizedBox(width: 6.w),
+                if (numbers != null)
+                  Container(
+                    constraints: BoxConstraints(
+                      maxWidth: 24.w,
+                      maxHeight: 24.h,
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(12.r),
+                    ),
+                    alignment: Alignment.center,
+                    child: Text(
+                      numbers![index].toString() ,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        );
+      }),
     );
   }
 

@@ -7,14 +7,15 @@ import 'package:taskly/features/freelancer/presentation/views/tabs/my_jobs/prese
 import 'package:taskly/features/freelancer/presentation/views/tabs/profile/presentation/views/profile_view.dart';
 
 class FreelancerHomeView extends StatefulWidget {
-  const FreelancerHomeView({super.key});
+    final int initialIndex;
+  const FreelancerHomeView({super.key,  this.initialIndex = 0});
 
   @override
   State<FreelancerHomeView> createState() => _FreelancerHomeView();
 }
 
 class _FreelancerHomeView extends State<FreelancerHomeView> {
-  int currentIndex = 0;
+  late int currentIndex;
 
   List<Widget> items = [
    FreelancerHomeTabView(),
@@ -23,9 +24,14 @@ class _FreelancerHomeView extends State<FreelancerHomeView> {
    FreelancerProfileViewTab(),
  
   ];
-
+  @override
+  void initState() {
+    super.initState();
+    currentIndex = widget.initialIndex;
+  }
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(child: items[currentIndex]),

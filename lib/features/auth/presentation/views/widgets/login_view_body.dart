@@ -60,21 +60,22 @@ class _LoginViewBodyState extends State<LoginViewBody> {
           }
         }
 
-        // Error states
-        if (state is AuthLoginErrorState || state is AuthGoogleErrorState) {
-          if (mounted) Navigator.pop(context);
+   // Error states
+if (state is AuthLoginErrorState || state is AuthGoogleErrorState) {
+  if (mounted) Navigator.pop(context);
 
-          final failure = state is AuthRegisterErrorState
-              ? state.error
-              : (state as AuthGoogleErrorState).error;
+  final failure = state is AuthLoginErrorState
+      ? state.error
+      : (state as AuthGoogleErrorState).error;
 
-          final errorMessage = AppLocalizations.of(context)!.translate(
-            failure.message,
-            params: failure.params,
-          );
+  final errorMessage = AppLocalizations.of(context)!.translate(
+    failure.message,
+    params: failure.params,
+  );
 
-          showTemporaryMessage(context, errorMessage, MessageType.error);
-        }
+  showTemporaryMessage(context, errorMessage, MessageType.error);
+}
+
 
       },
       child: SingleChildScrollView(

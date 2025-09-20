@@ -7,7 +7,7 @@ import 'package:injectable/injectable.dart';
 import 'package:taskly/core/errors/failures.dart';
 import 'package:taskly/core/cache/shared_preferences.dart';
 import 'package:taskly/core/services/supabase_service.dart';
-import 'package:taskly/domain/entities/order_entity/order_entity.dart';
+import 'package:taskly/features/shared/domain/entities/order_entity/order_entity.dart';
 import 'package:taskly/features/client/domain/use_cases/home/home_use_case.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/cubit/place_order_view_model/place_order_view_model_states.dart';
 import 'package:uuid/uuid.dart';

@@ -3,28 +3,35 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/utils/app_text_styles.dart';
 import 'package:taskly/core/utils/assets_manager.dart';
+import 'package:taskly/features/profile/domain/entities/user_info_entity/user_info_entity.dart';
 
 class UserInfoSection extends StatelessWidget {
-  final String name, email;
+  final String? name, email;
   final double rating;
   final bool isFreelancer;
   final bool photoSizeSelected;
   final bool emailShow;
   final VoidCallback? onTap;
+  final UserInfoEntity? userInfo;
 
   const UserInfoSection({
     super.key,
-    required this.name,
-    required this.email,
+    this.name,
+    this.email,
     this.rating = 1.0,
     this.isFreelancer = false,
     this.photoSizeSelected = false,
     this.emailShow = true,
-      this.onTap,
+    this.onTap,
+    this.userInfo,
   });
 
   @override
   Widget build(BuildContext context) {
+    final displayName = userInfo?.fullName ?? name ?? "Unknown";
+    final displayEmail = userInfo?.email ?? email ?? "Unknown";
+    final displayRating = userInfo?.rating ?? rating;
+
     return GestureDetector(
       onTap: onTap,
       child: Row(
@@ -35,21 +42,36 @@ class UserInfoSection extends StatelessWidget {
               Assets.assetsImagesPortraitHappySmileyMan,
             ),
           ),
-          const SizedBox(width: 20),
+          SizedBox(width: 20.w),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(name, style: AppTextStyles.bold20),
+              Text(
+                displayName,
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
               if (emailShow)
                 Text(
-                  email,
-                  style: AppTextStyles.bold16.copyWith(color: Colors.grey),
+                  displayEmail,
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
               Row(
                 children: [
                   ...List.generate(5, (index) {
                     return Icon(
-                      index < rating.round()
+                      index < displayRating.round()
                           ? CupertinoIcons.star_fill
                           : CupertinoIcons.star,
                       color: Colors.amber,
@@ -58,7 +80,7 @@ class UserInfoSection extends StatelessWidget {
                   }),
                   SizedBox(width: 10.w),
                   Text(
-                    '($rating)',
+                    displayRating.toStringAsFixed(1),
                     style: AppTextStyles.bold16.copyWith(color: Colors.grey),
                   ),
                 ],
@@ -74,7 +96,7 @@ class UserInfoSection extends StatelessWidget {
                     ),
                     SizedBox(width: 5.w),
                     Text(
-                      isFreelancer ? 'Verified Freelancer' : '',
+                      'Verified Freelancer',
                       style: AppTextStyles.bold14.copyWith(color: Colors.grey),
                     ),
                   ],

@@ -10,19 +10,29 @@ class CustomActionContainer extends StatelessWidget {
     this.isOffer = false,
     this.onTap,
   });
-  String title;
-  IconData icon;
-  bool isOffer;
-  VoidCallback? onTap;
+
+  final String title;
+  final IconData icon;
+  final bool isOffer;
+  final VoidCallback? onTap;
+
   @override
   Widget build(BuildContext context) {
+    final isWithdraw = title.toLowerCase().contains('withdraw');
+
+    // Container أبيض دائمًا لو withdraw
+    final containerColor = isWithdraw ? Colors.white : (isOffer ? ColorsManager.primary : Colors.white);
+    // النص والأيقونة أحمر لو withdraw
+    final iconColor = isWithdraw ? Colors.red : (isOffer ? Colors.white : ColorsManager.primary);
+    final textColor = isWithdraw ? Colors.red : (isOffer ? Colors.white : ColorsManager.primary);
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
         height: 40.h,
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey.shade300, width: 2.w,),
-          color: !isOffer ?Colors.white:ColorsManager.primary,
+          border: Border.all(color: Colors.grey.shade300, width: 2.w),
+          color: containerColor,
           borderRadius: BorderRadius.circular(16.r),
         ),
         child: Padding(
@@ -31,18 +41,16 @@ class CustomActionContainer extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              if (!isOffer) Icon(icon, color: ColorsManager.primary),
+              Icon(icon, color: iconColor),
               SizedBox(width: 5.w),
               Text(
                 title,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   fontWeight: FontWeight.w500,
                   fontSize: 14.sp,
-                  color:isOffer?Colors.white: ColorsManager.primary,
+                  color: textColor,
                 ),
               ),
-                  SizedBox(width: 5.w),
-              if (isOffer) Icon(icon, color: ColorsManager.white),
             ],
           ),
         ),

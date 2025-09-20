@@ -4,15 +4,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
-class PdfViewerView extends StatelessWidget {
-  final String pdfPath;
+class FileViewerView extends StatelessWidget {
+  final String filePath;
   final bool isNetwork;
 
-  const PdfViewerView({
+  const FileViewerView({
     super.key,
-    required this.pdfPath,
-    required this.isNetwork,
+    required this.filePath,
+    this.isNetwork = false,
   });
+
+  bool get isPdf => filePath.toLowerCase().endsWith('.pdf');
+  bool get isImage =>
+      filePath.toLowerCase().endsWith('.png') ||
+          filePath.toLowerCase().endsWith('.jpg') ||
+          filePath.toLowerCase().endsWith('.jpeg') ||
+          filePath.toLowerCase().endsWith('.gif');
 
   @override
   Widget build(BuildContext context) {
@@ -29,19 +36,35 @@ class PdfViewerView extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
-          'PDF Viewer',
+          'File Viewer',
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
             fontWeight: FontWeight.w700,
             fontSize: 20.sp,
           ),
         ),
       ),
-      // استخدم Expanded عشان ياخد كل المساحة المتاحة
       body: SafeArea(
         child: SizedBox.expand(
-          child: isNetwork
-              ? SfPdfViewer.network(pdfPath)
-              : SfPdfViewer.file(File(pdfPath)),
+          child: Builder(
+            builder: (context) {
+              if (isPdf) {
+                return isNetwork
+                    ? SfPdfViewer.network(filePath)
+                    : SfPdfViewer.file(File(filePath));
+              } else if (isImage) {
+                return isNetwork
+                    ? Image.network(filePath, fit: BoxFit.contain)
+                    : Image.file(File(filePath), fit: BoxFit.contain);
+              } else {
+                return Center(
+                  child: Text(
+                    'Cannot preview this file type',
+                    style: TextStyle(fontSize: 16.sp, color: Colors.grey),
+                  ),
+                );
+              }
+            },
+          ),
         ),
       ),
     );

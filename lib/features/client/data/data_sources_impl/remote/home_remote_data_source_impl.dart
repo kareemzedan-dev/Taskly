@@ -6,16 +6,14 @@ import 'package:injectable/injectable.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:taskly/core/errors/failures.dart';
 import 'package:taskly/core/services/supabase_service.dart';
-import 'package:taskly/data/models/order_dm/order_dm.dart';
-import 'package:taskly/domain/entities/order_entity/order_entity.dart';
-import 'package:taskly/features/client/data/data_sources/remote/home_remote_data_source.dart';
-import 'package:taskly/features/client/data/models/home/freelancer_dm.dart';
-import 'package:taskly/features/client/data/models/home/service_response_dm.dart';
-import 'package:taskly/features/client/domain/entities/home/freelancer_entity.dart';
 import 'package:taskly/features/client/domain/entities/home/service_response_entity.dart';
-import 'package:uuid/uuid.dart';
-
-import '../../../../attachments/domain/entities/attachment_entity/attaachments_entity.dart';
+import 'package:taskly/features/profile/data/models/user_info_dm/user_info_response_dm.dart';
+import 'package:taskly/features/profile/domain/entities/user_info_entity/user_info_entity.dart';
+import 'package:taskly/features/shared/data/models/order_dm/order_dm.dart';
+import 'package:taskly/features/shared/domain/entities/order_entity/order_entity.dart';
+import 'package:taskly/features/client/data/data_sources/remote/home_remote_data_source.dart';
+import 'package:taskly/features/client/data/models/home/service_response_dm.dart';
+ 
 
 @Injectable(as: HomeRemoteDataSource)
 class HomeRemoteDataSourceImpl extends HomeRemoteDataSource {
@@ -74,13 +72,13 @@ class HomeRemoteDataSourceImpl extends HomeRemoteDataSource {
   }
 
   @override
-  Future<Either<Failures, List<FreelancerEntity>>>
+  Future<Either<Failures, List<UserInfoEntity>>>
   getAllFreelancerInfo() async {
     try {
       var result = await Connectivity().checkConnectivity();
       if (result.contains(ConnectivityResult.wifi) ||
           result.contains(ConnectivityResult.mobile)) {
-       
+
         final userResponse = await supabaseService.getDataFromSupabase(
           tableName: "users",
           filters: {"role": "freelancer"},
@@ -90,8 +88,8 @@ class HomeRemoteDataSourceImpl extends HomeRemoteDataSource {
           return Left(ServerFailure("No freelancers found"));
         }
 
-     
-        List<FreelancerEntity> freelancers = [];
+
+        List<UserInfoEntity> freelancers = [];
         for (final userData in userResponse) {
           final freelancerResponse = await supabaseService.getDataFromSupabase(
             tableName: "freelancers",
@@ -103,10 +101,15 @@ class HomeRemoteDataSourceImpl extends HomeRemoteDataSource {
                   ? freelancerResponse.first
                   : null;
 
-          final freelancer = FreelancerDm.fromJson(userData);
+          final freelancer = UserInfoDm.fromJson(userData);
 
           final mergedFreelancer = freelancer.copyWith(
-            rating: freelancerData?['rating'] ?? 0.0,
+            rating: (freelancerData?['rating'] as num?)?.toDouble() ?? 0.0,
+            hourlyRate: (freelancerData?['hourly_rate'] as num?)?.toDouble(),
+            skills: freelancerData?['skills'] != null
+                ? List<String>.from(freelancerData!['skills'])
+                : [],
+
           );
 
           freelancers.add(mergedFreelancer);
@@ -121,82 +124,6 @@ class HomeRemoteDataSourceImpl extends HomeRemoteDataSource {
     }
   }
 
-
-  @override
-  Future<Either<Failures, List<AttachmentEntity>>> uploadAttachments(List<File> files) async {
-    try {
-      final supabase = supabaseService.supabase;
-      final uuid = const Uuid();
-      List<AttachmentEntity> uploadedAttachments = [];
-
-      for (var file in files) {
-        final fileName = file.path.split('/').last;
-        final uniqueName = "${uuid.v4()}_$fileName";
-        final fileBytes = await file.readAsBytes();
-
-        await supabase.storage
-            .from('order-attachments')
-            .uploadBinary(uniqueName, fileBytes);
-
-        final url = supabase.storage
-            .from('order-attachments')
-            .getPublicUrl(uniqueName);
-        uploadedAttachments.add(
-          AttachmentEntity(
-            id: uuid.v4(),           // ID داخلي للكيان
-            name: fileName,
-            storagePath: uniqueName, // <--- مهم للحذف
-            url: url,
-            size: file.lengthSync(),
-            type: _getMimeType(fileName),
-          ),
-        );
-
-      }
-
-      return Right(uploadedAttachments);
-    } catch (e) {
-      return Left(ServerFailure("Upload failed: ${e.toString()}"));
-    }
-  }
-
-
-  String _getMimeType(String fileName) {
-    final ext = fileName.split('.').last.toLowerCase();
-    switch (ext) {
-      case 'jpg':
-      case 'jpeg':
-        return 'image/jpeg';
-      case 'png':
-        return 'image/png';
-      case 'pdf':
-        return 'application/pdf';
-      default:
-        return 'application/octet-stream';
-    }
-  }
-  Future<Either<Failures, void>> deleteAttachment(String storagePath) async {
-    try {
-      final removedFiles = await supabase.storage
-          .from('order-attachments')
-          .remove([storagePath]);
-
-      print('Supabase remove response: $removedFiles');
-
-      if (removedFiles.isEmpty) {
-        print('Warning: file not found or already deleted');
-        return Left(ServerFailure('File not found or already deleted'));
-      }
-
-      print('File deleted successfully');
-      return const Right(null);
-    } catch (e, st) {
-      print('Error deleting file: $e');
-      print('Stack trace: $st');
-      return Left(ServerFailure(e.toString()));
-    }
-  }
-
-
+ 
 
 }

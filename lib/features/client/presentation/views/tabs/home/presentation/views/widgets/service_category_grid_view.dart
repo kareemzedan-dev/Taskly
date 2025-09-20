@@ -7,6 +7,7 @@ import 'package:taskly/config/routes/routes_manager.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/cubit/services_view_model/services_view_model.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/cubit/services_view_model/services_view_model_states.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/service_category.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ServiceCategoryGridView extends StatelessWidget {
   ServiceCategoryGridView({super.key});
@@ -20,8 +21,34 @@ class ServiceCategoryGridView extends StatelessWidget {
       child: BlocBuilder<ServicesViewModel, ServicesViewModelStates>(
         builder: (context, state) {
           if (state is ServicesViewModelStatesLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w),
+              child: GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: 11,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 16.w,
+                  mainAxisSpacing: 16.h,
+                  childAspectRatio: 0.75,
+                ),
+                itemBuilder: (context, index) {
+                  return Shimmer.fromColors(
+                    baseColor: Colors.grey.shade300,
+                    highlightColor: Colors.grey.shade100,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12.r),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            );
           }
+
 
           if (state is ServicesViewModelStatesSuccess) {
             if (state.services.isEmpty) {

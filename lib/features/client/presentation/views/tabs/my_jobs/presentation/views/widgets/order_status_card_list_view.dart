@@ -25,7 +25,7 @@ class OrderStatusCardListView extends StatelessWidget {
             );
           } else if (state is GetOrderViewModelStatesSuccess) {
             if (state.orderEntity.isEmpty) {
-              // لو مفيش داتا نعرض EmptyStateAnimation
+
               return Center(
                 child: EmptyStateAnimation(
                   animationPath: "assets/lotties/Loading.json",

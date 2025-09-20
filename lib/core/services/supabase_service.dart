@@ -11,7 +11,9 @@ typedef RealtimeCallback = void Function(Map<String, dynamic> record, String act
 class SupabaseService {
   final supabase = Supabase.instance.client;
   final Map<String, RealtimeChannel> _channels = {};
+  final SupabaseClient _client = Supabase.instance.client;
 
+  SupabaseClient get client => _client;
   Future<Map<String, dynamic>?> sendDataToSupabase({
     required String tableName,
     required Map<String, dynamic> data,
@@ -51,6 +53,28 @@ class SupabaseService {
       return (response as List).cast<Map<String, dynamic>>();
     } catch (e) {
       print('Exception fetching from $tableName: $e');
+      return null;
+    }
+  }
+  Future<Map<String, dynamic>?> updateDataInSupabase({
+    required String tableName,
+    required Map<String, dynamic> data,
+    required Map<String, dynamic> match,
+  }) async {
+    try {
+      var query = supabase.from(tableName).update(data);
+
+
+      match.forEach((key, value) {
+        query = query.eq(key, value);
+      });
+
+      final updatedData = await query.select().maybeSingle();
+
+      print('Data updated successfully in $tableName: $updatedData');
+      return updatedData;
+    } catch (e) {
+      print('Exception updating in $tableName: $e');
       return null;
     }
   }

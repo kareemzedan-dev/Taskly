@@ -73,10 +73,12 @@ class AttachmentItemViewer extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => PdfViewerView(
-                            pdfPath: attachmentPath,
+                      
+                          builder: (_) => FileViewerView (
+                            filePath: File(attachmentPath).path,
                             isNetwork: true,
                           ),
+
                         ),
                       );
                     },

@@ -14,6 +14,9 @@ import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/pre
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/freelancer_public_orders_list.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/freelancer_private_list_view.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/search_bar_with_favorite.dart';
+import 'package:taskly/features/profile/presentation/manager/profile_view_model/profile_view_model_states.dart';
+
+import '../../../../../../../../profile/presentation/manager/profile_view_model/profile_view_model.dart';
 
 class FreelancerHomeTabViewBody extends StatefulWidget {
   const FreelancerHomeTabViewBody({super.key});
@@ -24,7 +27,7 @@ class FreelancerHomeTabViewBody extends StatefulWidget {
 }
 
 class _FreelancerHomeTabViewBodyState extends State<FreelancerHomeTabViewBody> {
-  late final FreelancerInfoViewModel _freelancerInfoViewModel;
+  late final ProfileViewModel _freelancerInfoViewModel;
   late final FreelancerPendingOrdersViewModel _pendingOrdersViewModel;
   late final GetOrderViewModel _privateOrderViewModel;
 
@@ -34,8 +37,8 @@ class _FreelancerHomeTabViewBodyState extends State<FreelancerHomeTabViewBody> {
   @override
   void initState() {
     super.initState();
-    _freelancerInfoViewModel = getIt<FreelancerInfoViewModel>();
-    _freelancerInfoViewModel.loadUserInfo();
+    _freelancerInfoViewModel = getIt<ProfileViewModel>()..getUserInfo(userId, "freelancer");
+
 
     _pendingOrdersViewModel = getIt<FreelancerPendingOrdersViewModel>();
     _pendingOrdersViewModel.fetchPendingFreelancerOrders();
@@ -59,18 +62,18 @@ class _FreelancerHomeTabViewBodyState extends State<FreelancerHomeTabViewBody> {
           child: Column(
             children: [
               BlocBuilder<
-                FreelancerInfoViewModel,
-                FreelancerInfoViewModelStates
+                ProfileViewModel,
+                  ProfileViewModelStates
               >(
                 builder: (context, state) {
-                  if (state is FreelancerInfoViewModelLoading) {
+                  if (state is ProfileViewModelStatesLoading) {
                     return const CircularProgressIndicator();
-                  } else if (state is FreelancerInfoViewModelSuccess) {
+                  } else if (state is ProfileViewModelStatesSuccess) {
                     return UserInfoHomeHeader(
                       fullName: state.userInfoEntity.fullName,
                     );
-                  } else if (state is FreelancerInfoViewModelError) {
-                    return Text(state.errorMessage);
+                  } else if (state is ProfileViewModelStatesError) {
+                    return Text(state.message);
                   }
                   return const SizedBox.shrink();
                 },

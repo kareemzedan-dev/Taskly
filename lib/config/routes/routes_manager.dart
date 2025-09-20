@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:taskly/domain/entities/order_entity/order_entity.dart';
+import 'package:taskly/features/shared/domain/entities/order_entity/order_entity.dart';
 import 'package:taskly/features/auth/presentation/views/login_view.dart';
 import 'package:taskly/features/auth/presentation/views/register_view.dart';
 import 'package:taskly/features/client/presentation/views/client_home_view.dart';
@@ -17,6 +17,8 @@ import 'package:taskly/features/shared/presentation/views/technical_support_view
 import 'package:taskly/features/shared/presentation/views/user_account_view.dart';
 import 'package:taskly/features/splash/presentation/views/splash_view.dart';
 import 'package:taskly/features/welcome/presentation/views/welcome_view.dart';
+
+import '../../features/freelancer/presentation/views/tabs/my_jobs/presentation/views/offer_details_view.dart';
 
 class RoutesManager {
   static const String splash = "/";
@@ -36,6 +38,7 @@ class RoutesManager {
   static const String freelancerEarningView = "freelancerEarningView";
   static const String requestWithdrawalView = "requestWithdrawalView";
   static const String favouriteOrdersView = "favouriteOrdersView";
+  static const String offerDetailsView = "offerDetailsView";
   static Route onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case splash:
@@ -82,7 +85,8 @@ class RoutesManager {
         }
 
       case sendOfferView:
-        return MaterialPageRoute(builder: (_) => SendOfferView());
+      final OrderEntity args = settings.arguments as OrderEntity;
+        return MaterialPageRoute(builder: (_) => SendOfferView(orderEntity: args,));
       case technicalSupportView:
         return MaterialPageRoute(builder: (_) => const TechnicalSupportView());
       case privacyPolicyView:
@@ -100,6 +104,10 @@ class RoutesManager {
 
       case favouriteOrdersView:
         return MaterialPageRoute(builder: (_) => const FavouriteOrdersView());
+        case offerDetailsView:
+          final args = settings.arguments as Map<String, dynamic>;
+          final orderId = args['orderId'] as String;
+           return MaterialPageRoute(builder: (_) =>   OfferDetailsView(orderId: orderId,));
 
       default:
         return MaterialPageRoute(builder: (_) => const Placeholder());

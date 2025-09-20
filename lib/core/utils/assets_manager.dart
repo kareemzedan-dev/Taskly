@@ -103,5 +103,7 @@ class Assets {
   static const String assetsImagesWork = "assets/images/work.png";
 
   static const String welcomeVideo = "assets/videos/muslim_business.mp4";
+
+  static const String noOrderImage = 'assets/images/no_order.jpg';
 }
 

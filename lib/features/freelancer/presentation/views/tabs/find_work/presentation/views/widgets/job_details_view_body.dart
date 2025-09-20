@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:taskly/config/routes/routes_manager.dart';
 import 'package:taskly/core/components/custom_button.dart';
 import 'package:taskly/core/helper/date_time_formatter.dart';
-import 'package:taskly/domain/entities/order_entity/order_entity.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/about_job_section.dart';
+import 'package:taskly/features/shared/domain/entities/order_entity/order_entity.dart';
 import 'package:taskly/features/shared/presentation/views/widgets/attachments_section.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/client_details_section.dart';
 import 'package:taskly/features/shared/presentation/views/widgets/description_section.dart';
@@ -43,7 +44,9 @@ class JobDetailsViewBody extends StatelessWidget {
               ),
             ),
           ),
-          CustomButton(title: "Send offer", ontap: () {}),
+          CustomButton(title: "Send offer", ontap: () {
+            Navigator.pushNamed(context, RoutesManager.sendOfferView, arguments:orderEntity);
+          }),
           SizedBox(height: 30),
         ],
       ),

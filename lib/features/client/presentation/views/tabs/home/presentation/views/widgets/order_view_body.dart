@@ -5,7 +5,8 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
 import 'package:taskly/core/components/custom_button.dart';
 import 'package:taskly/core/components/dismissible_error_card.dart';
-import 'package:taskly/domain/entities/order_entity/order_entity.dart';
+import 'package:taskly/features/attachments/presentation/manager/upload_attachments_view_model/upload_attachments_view_model.dart';
+import 'package:taskly/features/shared/domain/entities/order_entity/order_entity.dart';
 import 'package:taskly/features/client/presentation/views/client_home_view.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/cubit/place_order_view_model/place_order_view_model.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/cubit/place_order_view_model/place_order_view_model_states.dart';
@@ -19,8 +20,7 @@ import 'package:taskly/features/client/presentation/views/tabs/home/presentation
 
 import '../../../../../../../../../core/di/di.dart';
 import '../../../../../../../../attachments/data/models/attachments_dm/attachments_dm.dart';
-import '../../cubit/upload_attachments_view_model/upload_attachments_view_model.dart';
-
+ 
 class OrderViewBody extends StatefulWidget {
   const OrderViewBody({
     super.key,
@@ -242,13 +242,14 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                             category: orderViewModel.selectedCategory,
                             attachments: uploadAttachmentsViewModel.uploadedAttachments,
                             serviceType: ServiceType.public,
-                            status: OrderStatus.pending,
+                            status: OrderStatus.Pending,
                             deadline: orderViewModel.calculateDeadline(
                               orderViewModel.timeController.text,
                               orderViewModel.selectedTimeUnit,
                             ),
                             createdAt: DateTime.now(),
                             updatedAt: DateTime.now(),
+                            offersCount: 0,
 
 
                           ),

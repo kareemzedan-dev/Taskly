@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:taskly/core/utils/assets_manager.dart';
 
 class UserInfoHomeHeader extends StatelessWidget {
@@ -34,6 +35,47 @@ class UserInfoHomeHeader extends StatelessWidget {
           backgroundImage: AssetImage(Assets.assetsImagesIntialAvatar),
         ),
       ],
+    );
+  }
+}
+
+class UserInfoHomeHeaderShimmer extends StatelessWidget {
+  const UserInfoHomeHeaderShimmer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey.shade300,
+      highlightColor: Colors.grey.shade100,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 120.w,
+                height: 16.h,
+                color: Colors.white,
+              ),
+              SizedBox(height: 8.h),
+              Container(
+                width: 180.w,
+                height: 20.h,
+                color: Colors.white,
+              ),
+            ],
+          ),
+          Container(
+            width: 60.r,
+            height: 60.r,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

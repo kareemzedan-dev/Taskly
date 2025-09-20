@@ -1,10 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:taskly/core/di/di.dart';
+import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/cubit/send_offer_view_model/send_offer_view_model.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/send_offer_view_body.dart';
+import 'package:taskly/features/shared/domain/entities/order_entity/order_entity.dart';
 
 class SendOfferView extends StatelessWidget {
-  const SendOfferView({super.key});
+    SendOfferView({super.key,required this.orderEntity});
+  OrderEntity orderEntity  ;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +30,11 @@ class SendOfferView extends StatelessWidget {
         ),
       ),
       backgroundColor: Colors.white,
-      body: SendOfferViewBody(),
+      body:   BlocProvider(
+  create: (context) => getIt<SendOfferViewModel>(),
+  child: SendOfferViewBody(orderEntity: orderEntity),
+)
+
     );
   }
 }

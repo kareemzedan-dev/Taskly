@@ -1,4 +1,5 @@
-import 'package:taskly/features/client/domain/entities/home/freelancer_entity.dart';
+
+import '../../../../../../../../profile/domain/entities/user_info_entity/user_info_entity.dart';
 
 class FreelancersViewModelStates {}
 
@@ -12,6 +13,6 @@ class FreelancersViewModelStatesError extends FreelancersViewModelStates {
 }
 
 class FreelancersViewModelStatesSuccess extends FreelancersViewModelStates {
-  final List<FreelancerEntity> freelancers;
+  final List<UserInfoEntity> freelancers;
   FreelancersViewModelStatesSuccess(this.freelancers);
 }
