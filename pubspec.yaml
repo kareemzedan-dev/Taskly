@@ -64,6 +64,7 @@ dependencies:
   syncfusion_flutter_pdfviewer: ^31.1.19
   timeago: ^3.7.1
   path_provider: ^2.1.5
+  shimmer: ^3.0.0
 
 dev_dependencies:
   flutter_test:
