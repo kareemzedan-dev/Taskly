@@ -17,7 +17,6 @@ class GetOffersViewModel extends Cubit<GetOffersViewModelStates> {
   List<OfferEntity> _offers = [];
   int _offersCount = 0;
 
-
   GetOffersViewModel(this.myJobsUseCases) : super(GetOffersViewModelInitial());
 
   void init(String orderId) async {
@@ -45,7 +44,6 @@ class GetOffersViewModel extends Cubit<GetOffersViewModelStates> {
       result.fold(
             (failure) => emit(GetOffersViewModelError(failure.message)),
             (offers) {
-
           _offers = offers;
           _offersCount = offers.length;
           emit(GetOffersViewModelSuccess(List.from(_offers), offersCount: _offersCount));
@@ -88,7 +86,7 @@ class GetOffersViewModel extends Cubit<GetOffersViewModelStates> {
   void _subscribeToOffersCountRealtime(String orderId) {
     _offersCountChannel?.unsubscribe();
 
-    // الطريقة الصحيحة حسب إصدار supabase_flutter
+ 
     _offersCountChannel = Supabase.instance.client
         .channel('offers_count_$orderId')
         .onPostgresChanges(

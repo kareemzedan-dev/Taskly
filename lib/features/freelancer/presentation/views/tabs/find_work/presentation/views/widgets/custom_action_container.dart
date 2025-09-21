@@ -20,9 +20,7 @@ class CustomActionContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     final isWithdraw = title.toLowerCase().contains('withdraw');
 
-    // Container أبيض دائمًا لو withdraw
     final containerColor = isWithdraw ? Colors.white : (isOffer ? ColorsManager.primary : Colors.white);
-    // النص والأيقونة أحمر لو withdraw
     final iconColor = isWithdraw ? Colors.red : (isOffer ? Colors.white : ColorsManager.primary);
     final textColor = isWithdraw ? Colors.red : (isOffer ? Colors.white : ColorsManager.primary);
 

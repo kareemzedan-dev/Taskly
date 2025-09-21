@@ -6,9 +6,21 @@ class Assets {
   /// assets/images/account_3166234.png
   static const String assetsImagesAccount3166234 = "assets/images/account_3166234.png";
 
+  /// Assets for assetsImagesAccountName
+  /// assets/images/account_name.png
+  static const String assetsImagesAccountName = "assets/images/account_name.png";
+
+  /// Assets for assetsImagesAccountNumber
+  /// assets/images/account_number.png
+  static const String assetsImagesAccountNumber = "assets/images/account_number.png";
+
   /// Assets for assetsImagesArabicFlag
   /// assets/images/arabic_flag.png
   static const String assetsImagesArabicFlag = "assets/images/arabic_flag.png";
+
+  /// Assets for assetsImagesBankAccount
+  /// assets/images/bank_account.png
+  static const String assetsImagesBankAccount = "assets/images/bank_account.png";
 
   /// Assets for assetsImagesBrushes3450037
   /// assets/images/brushes_3450037.png
@@ -17,6 +29,10 @@ class Assets {
   /// Assets for assetsImagesCahngePassword
   /// assets/images/cahnge_password.png
   static const String assetsImagesCahngePassword = "assets/images/cahnge_password.png";
+
+  /// Assets for assetsImagesCallCenterService16343600
+  /// assets/images/call-center-service_16343600.png
+  static const String assetsImagesCallCenterService16343600 = "assets/images/call-center-service_16343600.png";
 
   /// Assets for assetsImagesChat6431892
   /// assets/images/chat_6431892.png
@@ -66,6 +82,10 @@ class Assets {
   /// assets/images/job-board_18989826.png
   static const String assetsImagesJobBoard18989826 = "assets/images/job-board_18989826.png";
 
+  /// Assets for assetsImagesNoOrder
+  /// assets/images/no_order.jpg
+  static const String assetsImagesNoOrder = "assets/images/no_order.jpg";
+
   /// Assets for assetsImagesPortraitHappySmileyMan
   /// assets/images/portrait-happy-smiley-man.jpg
   static const String assetsImagesPortraitHappySmileyMan = "assets/images/portrait-happy-smiley-man.jpg";
@@ -77,6 +97,10 @@ class Assets {
   /// Assets for assetsImagesStar967444
   /// assets/images/star_967444.png
   static const String assetsImagesStar967444 = "assets/images/star_967444.png";
+
+  /// Assets for assetsImagesSwiftCode
+  /// assets/images/swift_code.png
+  static const String assetsImagesSwiftCode = "assets/images/swift_code.png";
 
   /// Assets for assetsImagesTaskly
   /// assets/images/taskly.png
@@ -101,11 +125,5 @@ class Assets {
   /// Assets for assetsImagesWork
   /// assets/images/work.png
   static const String assetsImagesWork = "assets/images/work.png";
-
-  static const String welcomeVideo = "assets/videos/muslim_business.mp4";
-
-  static const String noOrderImage = 'assets/images/no_order.jpg';
-  static const String accountName = 'assets/images/account_name.png';
-  static const String bankAccount = 'assets/images/bank_account.png';
 }
 

@@ -30,7 +30,7 @@ class FreelancerPublicOrdersList extends StatelessWidget {
               child: Center(
                 child: Column(
                   children: [
-                    Image.asset(Assets.noOrderImage,width: 240.w,height: 240.h,),
+                    Image.asset(Assets.assetsImagesNoOrder,width: 240.w,height: 240.h,),
 
                     SizedBox(height: 10.h),
                     Text(

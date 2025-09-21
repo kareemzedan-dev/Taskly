@@ -1,10 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:taskly/core/components/custom_button.dart';
+import 'package:taskly/core/components/dismissible_error_card.dart';
+import 'package:taskly/core/di/di.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
-import 'package:taskly/features/payments/presentation/widgets/secure_payment_bannar.dart';
-
-import '../../../../core/utils/assets_manager.dart';
+import 'package:taskly/features/attachments/presentation/manager/upload_attachments_view_model/upload_attachments_view_model.dart';
+import 'package:taskly/features/attachments/presentation/manager/upload_attachments_view_model/upload_attachments_view_model_states.dart';
+import 'package:taskly/features/payments/presentation/widgets/payments_content.dart';
+import 'package:taskly/features/payments/presentation/widgets/upload_payment_proof_button.dart';
 
 class ClientPaymentsViewBody extends StatelessWidget {
   const ClientPaymentsViewBody({super.key});
@@ -12,56 +17,50 @@ class ClientPaymentsViewBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(16.h),
-          child: Column(
-            children: [
-              SecurePaymentBanner(),
-              SizedBox(height: 16.h),
-
-              Card(elevation: 6,child: Container(
-                width: double.infinity,
-                padding: EdgeInsets.all(16.h),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.r),
-                  color: ColorsManager.primary.withOpacity(0.2),
-                ),
-                child: Column(children: [
-                  Row(children: [
-                    Image.asset(Assets.bankAccount,height: 24.h,width: 24.w,),
-                    SizedBox(width: 16.w),
-                   Column(
-                     mainAxisAlignment: MainAxisAlignment.start,
-                     crossAxisAlignment: CrossAxisAlignment.start,
-                     children: [
-                     Text('IBAN Number',style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                       fontWeight: FontWeight.w600,
-                       fontSize: 12.sp,
-                     ),),
-
-                       Text('SA56000000000000000000000000',style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                         fontWeight: FontWeight.w600,
-                         fontSize: 14.sp,
-                       ))
-                   ],),
-                    Spacer(),
-                    Container(
-                      padding: EdgeInsets.all(4.h),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.r),
-                        color: ColorsManager.primary,
-                      ),
-                      child: Center(child: Icon(Icons.copy,color: Colors.white,size: 20.sp,),),
-                    )
-                  ],)
-
-                ],),
-              ),)
-            ],
-          ),
+      child: Padding(
+        padding: EdgeInsets.all(16.h),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(child: PaymentsContent()),
+            SizedBox(height: 16.h),
+            BlocProvider(
+              create: (_) => getIt<UploadAttachmentsViewModel>(),
+              child: UploadAttachmentsSection(),
+            ),
+            SizedBox(height: 16.h),
+            CustomButton(title: "Make Payment", ontap: () {}),
+            SizedBox(height: 16.h),
+          ],
         ),
       ),
+    );
+  }
+}
+
+class UploadAttachmentsSection extends StatelessWidget {
+  const UploadAttachmentsSection({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<UploadAttachmentsViewModel, UploadAttachmentsViewModelStates>(
+      builder: (context, state) {
+        if (state is UploadAttachmentsViewModelStatesLoading) {
+          return const Center(child: CupertinoActivityIndicator());
+        }
+
+        if (state is UploadAttachmentsViewModelStatesError) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            showTemporaryMessage(context, state.message, MessageType.error);
+          });
+        }
+
+        return UploadPaymentProofButton(
+          onTap: () {
+            context.read<UploadAttachmentsViewModel>().pickFilesFromDevice();
+          },
+        );
+      },
     );
   }
 }

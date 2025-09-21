@@ -16,10 +16,12 @@ class Assets {
   static const String fontsDMSansSemiBold = 'assets/fonts/DMSans-SemiBold.ttf';
   static const String imagesAccount3166234 = 'assets/images/account_3166234.png';
   static const String imagesAccountName = 'assets/images/account_name.png';
+  static const String imagesAccountNumber = 'assets/images/account_number.png';
   static const String imagesArabicFlag = 'assets/images/arabic_flag.png';
   static const String imagesBankAccount = 'assets/images/bank_account.png';
   static const String imagesBrushes3450037 = 'assets/images/brushes_3450037.png';
   static const String imagesCahngePassword = 'assets/images/cahnge_password.png';
+  static const String imagesCallCenterService16343600 = 'assets/images/call-center-service_16343600.png';
   static const String imagesChat6431892 = 'assets/images/chat_6431892.png';
   static const String imagesClient = 'assets/images/client.png';
   static const String imagesCover = 'assets/images/cover.jpg';
@@ -36,6 +38,7 @@ class Assets {
   static const String imagesPortraitHappySmileyMan = 'assets/images/portrait-happy-smiley-man.jpg';
   static const String imagesSettings = 'assets/images/settings.png';
   static const String imagesStar967444 = 'assets/images/star_967444.png';
+  static const String imagesSwiftCode = 'assets/images/swift_code.png';
   static const String imagesTaskly = 'assets/images/taskly.png';
   static const String imagesTechSupport5109502 = 'assets/images/tech-support_5109502.png';
   static const String imagesUser12366536 = 'assets/images/user_12366536.png';

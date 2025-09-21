@@ -4,11 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/cache/shared_preferences.dart';
 import 'package:taskly/core/di/di.dart';
 import 'package:taskly/core/components/custom_tab_bar.dart';
-import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/user_info_home_header.dart';
-import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/cubit/get_order_view_model.dart/get_order_view_model.dart';
-import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/cubit/get_order_view_model.dart/get_order_view_model_states.dart';
-import 'package:taskly/features/freelancer/presentation/cubit/freelancer_info_view_model/freelancer_info_view_model.dart';
-import 'package:taskly/features/freelancer/presentation/cubit/freelancer_info_view_model/freelancer_info_view_model_states.dart';
+import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/user_info_header_shimmer.dart' as shimmer;
+import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/user_info_home_header.dart' as header;
+
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/cubit/freelancer_pending_order_view_model/freelancer_pending_order_view_model.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/cubit/freelancer_pending_order_view_model/freelancer_pending_order_view_model_states.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/freelancer_public_orders_list.dart';
@@ -69,15 +67,15 @@ class _FreelancerHomeTabViewBodyState extends State<FreelancerHomeTabViewBody> {
               >(
                 builder: (context, state) {
                   if (state is ProfileViewModelStatesLoading) {
-                    return   UserInfoHomeHeaderShimmer();
+                    return   shimmer.UserInfoHomeHeaderShimmer();
                   } else if (state is ProfileViewModelStatesSuccess) {
-                    return UserInfoHomeHeader(
+                    return header. UserInfoHomeHeader(
                       fullName: state.userInfoEntity.fullName,
                     );
                   } else if (state is ProfileViewModelStatesError) {
 
 
-                    return   UserInfoHomeHeaderShimmer();
+                    return   shimmer.UserInfoHomeHeaderShimmer();
                   }
                   return const SizedBox.shrink();
                 },
