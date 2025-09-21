@@ -14,9 +14,10 @@ class Assets {
   static const String fontsDMSansMedium = 'assets/fonts/DMSans-Medium.ttf';
   static const String fontsDMSansRegular = 'assets/fonts/DMSans-Regular.ttf';
   static const String fontsDMSansSemiBold = 'assets/fonts/DMSans-SemiBold.ttf';
-  static const String images9318688 = 'assets/images/no_order.jpg';
   static const String imagesAccount3166234 = 'assets/images/account_3166234.png';
+  static const String imagesAccountName = 'assets/images/account_name.png';
   static const String imagesArabicFlag = 'assets/images/arabic_flag.png';
+  static const String imagesBankAccount = 'assets/images/bank_account.png';
   static const String imagesBrushes3450037 = 'assets/images/brushes_3450037.png';
   static const String imagesCahngePassword = 'assets/images/cahnge_password.png';
   static const String imagesChat6431892 = 'assets/images/chat_6431892.png';
@@ -31,6 +32,7 @@ class Assets {
   static const String imagesInternet2889312 = 'assets/images/internet_2889312.png';
   static const String imagesIntialAvatar = 'assets/images/intial_avatar.jpg';
   static const String imagesJobBoard18989826 = 'assets/images/job-board_18989826.png';
+  static const String imagesNoOrder = 'assets/images/no_order.jpg';
   static const String imagesPortraitHappySmileyMan = 'assets/images/portrait-happy-smiley-man.jpg';
   static const String imagesSettings = 'assets/images/settings.png';
   static const String imagesStar967444 = 'assets/images/star_967444.png';

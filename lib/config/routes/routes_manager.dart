@@ -19,6 +19,7 @@ import 'package:taskly/features/splash/presentation/views/splash_view.dart';
 import 'package:taskly/features/welcome/presentation/views/welcome_view.dart';
 
 import '../../features/freelancer/presentation/views/tabs/my_jobs/presentation/views/offer_details_view.dart';
+import '../../features/payments/presentation/pages/client_payments_view.dart';
 
 class RoutesManager {
   static const String splash = "/";
@@ -39,6 +40,7 @@ class RoutesManager {
   static const String requestWithdrawalView = "requestWithdrawalView";
   static const String favouriteOrdersView = "favouriteOrdersView";
   static const String offerDetailsView = "offerDetailsView";
+  static const String clientPaymentsView = "clientPaymentsView";
   static Route onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case splash:
@@ -108,6 +110,8 @@ class RoutesManager {
           final args = settings.arguments as Map<String, dynamic>;
           final orderId = args['orderId'] as String;
            return MaterialPageRoute(builder: (_) =>   OfferDetailsView(orderId: orderId,));
+           case clientPaymentsView:
+             return MaterialPageRoute(builder: (_) => const ClientPaymentsView());
 
       default:
         return MaterialPageRoute(builder: (_) => const Placeholder());
