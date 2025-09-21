@@ -19,7 +19,8 @@ class CreatePaymentRemoteDataSourceImpl extends CreatePaymentRemoteDataSource {
         'id': paymentEntity.id,
         'client_id': paymentEntity.clientId,
         'freelancer_id': paymentEntity.freelancerId,
-        'order_id': paymentEntity.orderId,
+ 'order_id': paymentEntity.orderId,
+
         'amount': paymentEntity.amount,
         'status': paymentEntity.status,
         'attachments': jsonEncode(paymentEntity.attachments.map((e) => e.toJson()).toList()),
@@ -32,8 +33,21 @@ class CreatePaymentRemoteDataSourceImpl extends CreatePaymentRemoteDataSource {
       if (response == null) {
         return Left(ServerFailure("Failed to create payment"));
       }
+      final updateOrderResponse = await supabase
+          .from('orders')
+          .update({
+        "status": "AwaitingPaymentConfirmation",
+   
+      })
+         .eq('id', paymentEntity.orderId) 
 
-      // تحويل الـ response لـ PaymentEntity
+          .select()
+          .maybeSingle();
+
+      if (updateOrderResponse == null) {
+        return Left(ServerFailure("Failed to update order"));
+      }
+  
       final createdPayment = PaymentEntity(
         id: response['id'],
         clientId: response['client_id'],

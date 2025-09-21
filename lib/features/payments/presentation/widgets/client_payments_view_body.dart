@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/components/custom_button.dart';
 import 'package:taskly/core/components/dismissible_error_card.dart';
 import 'package:taskly/core/di/di.dart';
-import 'package:taskly/core/utils/colors_manger.dart';
 import 'package:taskly/features/attachments/presentation/manager/upload_attachments_view_model/upload_attachments_view_model.dart';
 import 'package:taskly/features/attachments/presentation/manager/upload_attachments_view_model/upload_attachments_view_model_states.dart';
 import 'package:taskly/features/client/presentation/views/client_home_view.dart';
@@ -76,6 +75,7 @@ class ClientPaymentsViewBody extends StatelessWidget {
                       MessageType.error,
                     );
                   }
+        
 
                   final paymentId = uuid.v4();
                   context.read<CreatePaymentViewModel>().createPayment(

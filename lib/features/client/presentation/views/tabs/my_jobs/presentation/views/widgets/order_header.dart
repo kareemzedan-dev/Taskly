@@ -22,23 +22,11 @@ class OrderHeader extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
- Row(
-  crossAxisAlignment: CrossAxisAlignment.start,
-  mainAxisAlignment: MainAxisAlignment.center ,
+Row(
+  mainAxisAlignment: MainAxisAlignment.end,
   children: [
-    Expanded(
-      child: Text(
-        orderName,
-        style: TextStyle(
-          fontSize: 16.sp,
-          fontWeight: FontWeight.w600,
-        ),
-        softWrap: true,  
-      ),
-    ),
-    SizedBox(width: 8.w),
     StatusBadge(
-      text:  orderStatus,
+      text: orderStatus,
       color: ColorsManager.primary,
       icon: Icons.pending_actions_outlined,
     ),
@@ -51,6 +39,15 @@ class OrderHeader extends StatelessWidget {
   ],
 )
 ,
+Text(
+  orderName,
+  style: TextStyle(
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w600,
+  ),
+  softWrap: true,
+),
+
         SizedBox(height: 3.h),
         Text(
           "#$orderId ",

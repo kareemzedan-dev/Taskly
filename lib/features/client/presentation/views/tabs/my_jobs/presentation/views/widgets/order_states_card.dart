@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:taskly/core/components/custom_button.dart';
 import 'package:taskly/core/di/di.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/cubit/get_offers_view_model/get_offers_view_model.dart';
@@ -19,6 +20,7 @@ int getStep(OrderStatus status) {
   switch (status) {
     case OrderStatus.Pending:
     case OrderStatus.Accepted:
+    case OrderStatus.AwaitingPaymentConfirmation:
       return 0;
     case OrderStatus.InProgress:
       return 1;
@@ -115,7 +117,7 @@ class OrderStatesCard extends StatelessWidget {
 
                       );
                     }
-                    else {
+                    else if(order.status == OrderStatus.Accepted){
                       return OrderActionButton(
                         text: "Paid Now ${order.budget} SAR",
                         icon: Icons.money,
@@ -128,6 +130,12 @@ class OrderStatesCard extends StatelessWidget {
                         },
                       );
                     }
+                else {
+return  CustomButton(title: " Payment under review ", ontap: ()
+{});
+
+}
+
                   },
                 ),
 
