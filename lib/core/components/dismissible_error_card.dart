@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-enum MessageType { success, error }
+enum MessageType { success, error, waiting }
 
 class DismissibleMessageCard extends StatelessWidget {
   final String message;
@@ -19,11 +19,24 @@ class DismissibleMessageCard extends StatelessWidget {
   Widget build(BuildContext context) {
     if (message.isEmpty) return const SizedBox.shrink();
 
-    final color = type == MessageType.error ? Colors.red : Colors.green;
-    final bgColor =
-        type == MessageType.error ? Colors.red.shade100 : Colors.green.shade100;
-    final icon =
-        type == MessageType.error ? Icons.error_outline : Icons.check_circle;
+    // تحديد اللون حسب النوع
+    final color = switch (type) {
+      MessageType.error => Colors.red,
+      MessageType.success => Colors.green,
+      MessageType.waiting => Colors.blue,
+    };
+
+    final bgColor = switch (type) {
+      MessageType.error => Colors.red.shade100,
+      MessageType.success => Colors.green.shade100,
+      MessageType.waiting => Colors.blue.shade100,
+    };
+
+    final icon = switch (type) {
+      MessageType.error => Icons.error_outline,
+      MessageType.success => Icons.check_circle,
+      MessageType.waiting => Icons.hourglass_top,
+    };
 
     return Card(
       color: bgColor,
@@ -62,22 +75,21 @@ void showTemporaryMessage(
   late OverlayEntry entry;
 
   entry = OverlayEntry(
-    builder:
-        (context) => Positioned(
-          bottom: 20,
-          left: 16,
-          right: 16,
-          child: Material(
-            color: Colors.transparent,
-            child: DismissibleMessageCard(
-              message: message,
-              type: type,
-              onDismiss: () {
-                entry.remove();
-              },
-            ),
-          ),
+    builder: (context) => Positioned(
+      bottom: 20,
+      left: 16,
+      right: 16,
+      child: Material(
+        color: Colors.transparent,
+        child: DismissibleMessageCard(
+          message: message,
+          type: type,
+          onDismiss: () {
+            entry.remove();
+          },
         ),
+      ),
+    ),
   );
 
   overlay.insert(entry);

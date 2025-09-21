@@ -121,7 +121,9 @@ class OrderStatesCard extends StatelessWidget {
                         icon: Icons.money,
                         color: ColorsManager.primary,
                         onTap: () {
-                          Navigator.pushNamed(context, RoutesManager.clientPaymentsView);
+                          Navigator.pushNamed(context, RoutesManager.clientPaymentsView, arguments: {
+                            'orderEntity': order,
+                          });
 
                         },
                       );

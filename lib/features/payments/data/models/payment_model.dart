@@ -11,6 +11,7 @@ class PaymentModel extends PaymentEntity {
     required double amount,
     required String status,
     required DateTime createdAt,
+    required DateTime updatedAt,
   }) : super(
     id: id,
     clientId: clientId,
@@ -20,6 +21,7 @@ class PaymentModel extends PaymentEntity {
     amount: amount,
     status: status,
     createdAt: createdAt,
+    updatedAt: updatedAt,
   );
 
   factory PaymentModel.fromJson(Map<String, dynamic> json) {
@@ -33,20 +35,23 @@ class PaymentModel extends PaymentEntity {
           .toList(),
       amount: (json['amount'] as num).toDouble(),
       status: json['status'],
-      createdAt: DateTime.parse(json['createdAt']),
+      createdAt: DateTime.parse(json['created_at']),
+      updatedAt: DateTime.parse(json['updated_at']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'clientId': clientId,
-      'freelancerId': freelancerId,
-      'orderId': orderId,
+      'client_id': clientId,
+      'freelancer_id': freelancerId,
+      'order_id': orderId,
       'attachments': attachments.map((e) => e.toJson()).toList(),
       'amount': amount,
       'status': status,
-      'createdAt': createdAt.toIso8601String(),
+      'created_at': createdAt.toIso8601String(),
+      'updated_at': updatedAt.toIso8601String(),
     };
   }
+
 }

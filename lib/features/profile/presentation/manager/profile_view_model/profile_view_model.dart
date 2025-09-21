@@ -9,16 +9,22 @@ class ProfileViewModel extends Cubit<ProfileViewModelStates>{
   ProfileViewModel(this.profileUseCase):super(ProfileViewModelStatesInitial());
   ProfileUseCase profileUseCase;
 
-  Future<void> getUserInfo(String userId,String role)async{
- try{
-      emit(ProfileViewModelStatesLoading());
-    final result=await profileUseCase.callUserInfo(userId, role);
-    result.fold((l) => emit(ProfileViewModelStatesError(  l.message)),
-     (r) => emit(ProfileViewModelStatesSuccess(r)));
-    
- }
- catch(e){
-  return   emit(ProfileViewModelStatesError(e.toString()));
- }
+Future<void> getUserInfo(String userId, String role) async {
+  try {
+    if (isClosed) return;
+    emit(ProfileViewModelStatesLoading());
+
+    final result = await profileUseCase.callUserInfo(userId, role);
+
+    if (isClosed) return;
+    result.fold(
+      (l) => emit(ProfileViewModelStatesError(l.message)),
+      (r) => emit(ProfileViewModelStatesSuccess(r)),
+    );
+  } catch (e) {
+    if (isClosed) return;
+    emit(ProfileViewModelStatesError(e.toString()));
   }
+}
+
 }

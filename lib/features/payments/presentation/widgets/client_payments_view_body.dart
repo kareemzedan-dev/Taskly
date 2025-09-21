@@ -8,35 +8,100 @@ import 'package:taskly/core/di/di.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
 import 'package:taskly/features/attachments/presentation/manager/upload_attachments_view_model/upload_attachments_view_model.dart';
 import 'package:taskly/features/attachments/presentation/manager/upload_attachments_view_model/upload_attachments_view_model_states.dart';
+import 'package:taskly/features/client/presentation/views/client_home_view.dart';
+import 'package:taskly/features/payments/domain/entities/payment_entity.dart';
+import 'package:taskly/features/payments/presentation/manager/create_payment_view_model/create_payment_view_model.dart';
+import 'package:taskly/features/payments/presentation/manager/create_payment_view_model/create_payment_view_model_states.dart';
 import 'package:taskly/features/payments/presentation/widgets/payments_content.dart';
 import 'package:taskly/features/payments/presentation/widgets/upload_payment_proof_button.dart';
+import 'package:uuid/uuid.dart';
+
+import '../../../shared/domain/entities/order_entity/order_entity.dart';
 
 class ClientPaymentsViewBody extends StatelessWidget {
-  const ClientPaymentsViewBody({super.key});
+  ClientPaymentsViewBody({super.key, required this.order});
+
+  final OrderEntity order;
+  final uuid = Uuid();
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => getIt<UploadAttachmentsViewModel>(),
-      child: SafeArea(
+ 
+    return MultiBlocProvider(
+  providers: [
+    BlocProvider(create: (_) => getIt<UploadAttachmentsViewModel>()),
+    BlocProvider(create: (_) => getIt<CreatePaymentViewModel>()),
+  ],
+  child: Builder(
+    builder: (context) {  
+      final uploadVM = context.read<UploadAttachmentsViewModel>();
+
+      return SafeArea(
         child: Padding(
           padding: EdgeInsets.all(16.h),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                child: PaymentsContent(),
+              Expanded(child: PaymentsContent()),
+
+              const UploadAttachmentsSection(),
+              SizedBox(height: 16.h),
+
+              BlocListener<CreatePaymentViewModel, CreatePaymentViewModelStates>(
+                listener: (context, state) {
+                  if (state is CreatePaymentViewModelStatesLoading) {
+                    showTemporaryMessage(context, "Creating payment...", MessageType.waiting);
+                  } else if (state is CreatePaymentViewModelStatesError) {
+                    showTemporaryMessage(context, state.message, MessageType.error);
+                  } else if (state is CreatePaymentViewModelStatesSuccess) {
+                    showTemporaryMessage(
+                      context,
+                      "Payment created successfully, please wait for admin approval",
+                      MessageType.success,
+                    );
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (_) => ClientHomeView(initialIndex: 1)),
+                      (route) => false,
+                    );
+                  }
+                },
+                child:CustomButton(
+                title: "Make Payment",
+                ontap: () {
+                  if (uploadVM.files.isNotEmpty &&
+                      uploadVM.files.length != uploadVM.uploadedFileHashes.length) {
+                    return showTemporaryMessage(
+                      context,
+                      "Please wait until all attachments are uploaded",
+                      MessageType.error,
+                    );
+                  }
+
+                  final paymentId = uuid.v4();
+                  context.read<CreatePaymentViewModel>().createPayment(
+                    PaymentEntity(
+                      id: paymentId,
+                      clientId: order.clientId,
+                      freelancerId: "f8d58897-cbda-4643-a4cb-d1bc53530cd2",
+                      orderId: order.id,
+                      attachments: uploadVM.uploadedAttachments,
+                      amount: order.budget!,
+                      status: "Pending",
+                      createdAt: DateTime.now(),
+                      updatedAt: DateTime.now(),
+                    ),
+                  );
+                },
               ),
-              SizedBox(height: 16.h),
-              UploadAttachmentsSection(),
-              SizedBox(height: 16.h),
-              CustomButton(title: "Make Payment", ontap: () {}),
-              SizedBox(height: 16.h),
+              )
             ],
           ),
         ),
-      ),
-    );
+      );
+    },
+    ),
+);
+  
   }
 }
 
@@ -46,7 +111,10 @@ class UploadAttachmentsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UploadAttachmentsViewModel, UploadAttachmentsViewModelStates>(
+    return BlocBuilder<
+      UploadAttachmentsViewModel,
+      UploadAttachmentsViewModelStates
+    >(
       builder: (context, state) {
         if (state is UploadAttachmentsViewModelStatesLoading) {
           return const Center(child: CupertinoActivityIndicator());
@@ -59,9 +127,12 @@ class UploadAttachmentsSection extends StatelessWidget {
         }
         if (state is UploadAttachmentsViewModelStatesSuccess) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            showTemporaryMessage(context, "Payment proof uploaded successfully", MessageType.success);
-          }
-          );
+            showTemporaryMessage(
+              context,
+              "Payment proof uploaded successfully",
+              MessageType.success,
+            );
+          });
         }
 
         return UploadPaymentProofButton(

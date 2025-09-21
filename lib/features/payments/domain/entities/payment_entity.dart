@@ -9,6 +9,7 @@ class PaymentEntity {
   final double amount;
   final String status;
   final DateTime createdAt;
+  final DateTime updatedAt;
 
   PaymentEntity({
     required this.id,
@@ -19,5 +20,6 @@ class PaymentEntity {
     required this.amount,
     required this.status,
     required this.createdAt,
+    required this.updatedAt,
   });
 }

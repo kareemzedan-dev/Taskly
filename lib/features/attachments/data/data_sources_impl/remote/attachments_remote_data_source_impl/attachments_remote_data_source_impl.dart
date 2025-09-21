@@ -61,24 +61,29 @@ class AttachmentsRemoteDataSourceImpl extends AttachmentsRemoteDataSource {
       List<AttachmentEntity> uploadedAttachments = [];
 
       for (var file in files) {
-        final fileName = file.path.split('/').last;
-        final uniqueName = "${uuid.v4()}_$fileName";
-        final fileBytes = await file.readAsBytes();
+    final fileName = file.path.split('/').last;
+final uniqueName = "${uuid.v4()}_$fileName";
+final fileBytes = await file.readAsBytes();
 
-        await supabase.storage.from(bucket).uploadBinary(uniqueName, fileBytes);
+// رفع الملف
+await supabase.storage.from(bucket).uploadBinary(uniqueName, fileBytes);
 
-        final url = supabase.storage.from(bucket).getPublicUrl(uniqueName);
+String safeUrl = supabase.storage.from(bucket).getPublicUrl(Uri.encodeComponent(uniqueName));
+safeUrl = safeUrl.endsWith('/') ? safeUrl.substring(0, safeUrl.length - 1) : safeUrl;
 
-        uploadedAttachments.add(
-          AttachmentEntity(
-            id: uuid.v4(),
-            name: fileName,
-            storagePath: uniqueName,
-            url: url,
-            size: file.lengthSync(),
-            type: _getMimeType(fileName),
-          ),
-        );
+
+ 
+uploadedAttachments.add(
+  AttachmentEntity(
+    id: uuid.v4(),
+    name: fileName,
+    storagePath: uniqueName,
+    url: safeUrl,
+    size: file.lengthSync(),
+    type: _getMimeType(fileName),
+  ),
+);
+
       }
 
       return Right(uploadedAttachments);

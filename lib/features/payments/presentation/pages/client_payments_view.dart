@@ -2,16 +2,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../shared/domain/entities/order_entity/order_entity.dart';
 import '../../../shared/presentation/views/widgets/custom_app_bar.dart';
 import '../widgets/client_payments_view_body.dart';
 
 class ClientPaymentsView extends StatelessWidget {
-  const ClientPaymentsView({super.key});
+  const ClientPaymentsView({super.key, required this.order});
+  final OrderEntity order;
 
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-    body: const ClientPaymentsViewBody(),
+    body:   ClientPaymentsViewBody(order:order),
     backgroundColor: Colors.white,
     appBar: AppBar(
       backgroundColor: Colors.white,

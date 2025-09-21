@@ -23,6 +23,7 @@ class UploadAttachmentsViewModel extends Cubit<UploadAttachmentsViewModelStates>
   Map<File, String> _fileKeys = {};
   int _fileCounter = 0;
   List<AttachmentModel> uploadedAttachments = [];
+  
   String _generateFileKey(File file) {
     if (!_fileKeys.containsKey(file)) {
       _fileKeys[file] = 'file_${_fileCounter++}_${DateTime.now().millisecondsSinceEpoch}';
@@ -97,6 +98,7 @@ class UploadAttachmentsViewModel extends Cubit<UploadAttachmentsViewModelStates>
 
 
   Future<Either<Failures, List<AttachmentEntity>>> uploadAttachments({String? bucketName}) async {
+    
     try {
       emit(UploadAttachmentsViewModelStatesLoading());
 

@@ -111,7 +111,11 @@ class RoutesManager {
           final orderId = args['orderId'] as String;
            return MaterialPageRoute(builder: (_) =>   OfferDetailsView(orderId: orderId,));
            case clientPaymentsView:
-             return MaterialPageRoute(builder: (_) => const ClientPaymentsView());
+             final args = settings.arguments as Map<String, dynamic>;
+             final orderEntity = args['orderEntity'] as OrderEntity;
+
+
+             return MaterialPageRoute(builder: (_) =>   ClientPaymentsView( order: orderEntity,));
 
       default:
         return MaterialPageRoute(builder: (_) => const Placeholder());

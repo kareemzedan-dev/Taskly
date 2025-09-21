@@ -34,25 +34,30 @@ class GetOffersViewModel extends Cubit<GetOffersViewModelStates> {
 
 
 
-  Future<void> getOffers(String orderId) async {
-    try {
-      emit(GetOffersViewModelLoading());
+Future<void> getOffers(String orderId) async {
+  try {
+    if (isClosed) return;
+    emit(GetOffersViewModelLoading());
 
-      final Either<Failures, List<OfferEntity>> result =
-      await myJobsUseCases.callGetOffers(orderId);
+    final Either<Failures, List<OfferEntity>> result =
+        await myJobsUseCases.callGetOffers(orderId);
 
-      result.fold(
-            (failure) => emit(GetOffersViewModelError(failure.message)),
-            (offers) {
-          _offers = offers;
-          _offersCount = offers.length;
-          emit(GetOffersViewModelSuccess(List.from(_offers), offersCount: _offersCount));
-        },
-      );
-    } catch (e) {
-      emit(GetOffersViewModelError(e.toString()));
-    }
+    if (isClosed) return;
+    result.fold(
+      (failure) => emit(GetOffersViewModelError(failure.message)),
+      (offers) {
+        _offers = offers;
+        _offersCount = offers.length;
+        emit(GetOffersViewModelSuccess(List.from(_offers),
+            offersCount: _offersCount));
+      },
+    );
+  } catch (e) {
+    if (isClosed) return;
+    emit(GetOffersViewModelError(e.toString()));
   }
+}
+
 
   RealtimeChannel subscribeToOffers({
     required String orderId,
