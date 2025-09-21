@@ -16,12 +16,21 @@ class AttachmentsRemoteDataSourceImpl extends AttachmentsRemoteDataSource {
   final Dio dio;
   final SupabaseClient supabase;
   SupabaseService supabaseService = SupabaseService();
-  AttachmentsRemoteDataSourceImpl(this.dio, this.supabase);
+  final String defaultBucket;
 
+  AttachmentsRemoteDataSourceImpl(
+      this.dio,
+      this.supabase, {
+        this.defaultBucket = 'order-attachments',
+      });
   @override
-  Future<Either<Failures, File>> downloadAttachments(String url, String fileName) async {
+  Future<Either<Failures, File>> downloadAttachments(
+      String url,
+      String fileName, {
+        String? saveDir,
+      }) async {
     try {
-      final dir = await getApplicationDocumentsDirectory();
+      final dir = saveDir != null ? Directory(saveDir) : await getApplicationDocumentsDirectory();
       final savePath = "${dir.path}/$fileName";
 
       await dio.download(url, savePath);
@@ -37,13 +46,18 @@ class AttachmentsRemoteDataSourceImpl extends AttachmentsRemoteDataSource {
       return Left(ServerFailure("Failed to download file: $e"));
     }
   }
-  
+
+
   @override
- 
-  Future<Either<Failures, List<AttachmentEntity>>> uploadAttachments(List<File> files) async {
+  Future<Either<Failures, List<AttachmentEntity>>> uploadAttachments(
+      List<File> files, {
+        String? bucketName,
+      }) async {
     try {
       final supabase = supabaseService.supabase;
       final uuid = const Uuid();
+      final bucket = bucketName ?? defaultBucket;
+
       List<AttachmentEntity> uploadedAttachments = [];
 
       for (var file in files) {
@@ -51,24 +65,20 @@ class AttachmentsRemoteDataSourceImpl extends AttachmentsRemoteDataSource {
         final uniqueName = "${uuid.v4()}_$fileName";
         final fileBytes = await file.readAsBytes();
 
-        await supabase.storage
-            .from('order-attachments')
-            .uploadBinary(uniqueName, fileBytes);
+        await supabase.storage.from(bucket).uploadBinary(uniqueName, fileBytes);
 
-        final url = supabase.storage
-            .from('order-attachments')
-            .getPublicUrl(uniqueName);
+        final url = supabase.storage.from(bucket).getPublicUrl(uniqueName);
+
         uploadedAttachments.add(
           AttachmentEntity(
-            id: uuid.v4(),           
+            id: uuid.v4(),
             name: fileName,
-            storagePath: uniqueName,  
+            storagePath: uniqueName,
             url: url,
             size: file.lengthSync(),
             type: _getMimeType(fileName),
           ),
         );
-
       }
 
       return Right(uploadedAttachments);
@@ -92,24 +102,21 @@ class AttachmentsRemoteDataSourceImpl extends AttachmentsRemoteDataSource {
         return 'application/octet-stream';
     }
   }
-  Future<Either<Failures, void>> deleteAttachment(String storagePath) async {
+  Future<Either<Failures, void>> deleteAttachment(
+      String storagePath, {
+        String? bucketName,
+      }) async {
     try {
-      final removedFiles = await supabase.storage
-          .from('order-attachments')
-          .remove([storagePath]);
+      final bucket = bucketName ?? defaultBucket;
 
-      print('Supabase remove response: $removedFiles');
+      final removedFiles = await supabase.storage.from(bucket).remove([storagePath]);
 
       if (removedFiles.isEmpty) {
-        print('Warning: file not found or already deleted');
         return Left(ServerFailure('File not found or already deleted'));
       }
 
-      print('File deleted successfully');
       return const Right(null);
     } catch (e, st) {
-      print('Error deleting file: $e');
-      print('Stack trace: $st');
       return Left(ServerFailure(e.toString()));
     }
   }

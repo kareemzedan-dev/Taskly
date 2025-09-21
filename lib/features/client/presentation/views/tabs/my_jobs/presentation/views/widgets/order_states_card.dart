@@ -12,6 +12,7 @@ import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentat
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/order_header.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/order_progress_time_line.dart';
  
+import '../../../../../../../../../config/routes/routes_manager.dart';
 import '../../cubit/update_offer_status_view_model/update_offer_status_view_model.dart';
 
 int getStep(OrderStatus status) {
@@ -120,6 +121,7 @@ class OrderStatesCard extends StatelessWidget {
                         icon: Icons.money,
                         color: ColorsManager.primary,
                         onTap: () {
+                          Navigator.pushNamed(context, RoutesManager.clientPaymentsView);
 
                         },
                       );

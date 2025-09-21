@@ -35,8 +35,7 @@ class UploadAttachmentsViewModel extends Cubit<UploadAttachmentsViewModelStates>
     final fileSize = await file.length();
     return '$fileName-$fileSize';
   }
-
-  Future<void> pickFilesFromDevice() async {
+  Future<void> pickFilesFromDevice({String? bucketName}) async {
     try {
       final result = await FilePicker.platform.pickFiles(
         allowMultiple: true,
@@ -53,9 +52,7 @@ class UploadAttachmentsViewModel extends Cubit<UploadAttachmentsViewModelStates>
           final file = File(platformFile.path!);
           final fileHash = await generateFileHash(file);
 
-          if (uploadedFileHashes.contains(fileHash)) {
-            continue;
-          }
+          if (uploadedFileHashes.contains(fileHash)) continue;
 
           bool alreadyInList = false;
           for (final existingFile in files) {
@@ -76,13 +73,15 @@ class UploadAttachmentsViewModel extends Cubit<UploadAttachmentsViewModelStates>
           files.addAll(validFiles);
           emit(UploadAttachmentsViewModelStatesInitial());
 
-          await uploadAttachments();
+          // رفع الملفات مع تحديد bucketName
+          await uploadAttachments(bucketName: bucketName);
         }
       }
     } catch (e) {
       emit(UploadAttachmentsViewModelStatesError(message: e.toString()));
     }
-  }  void removeFileFromQueue(File file) async {
+  }
+ void removeFileFromQueue(File file) async {
     final fileHash = await generateFileHash(file);
 
     files.remove(file);
@@ -97,7 +96,7 @@ class UploadAttachmentsViewModel extends Cubit<UploadAttachmentsViewModelStates>
   }
 
 
-  Future<Either<Failures, List<AttachmentEntity>>> uploadAttachments() async {
+  Future<Either<Failures, List<AttachmentEntity>>> uploadAttachments({String? bucketName}) async {
     try {
       emit(UploadAttachmentsViewModelStatesLoading());
 
@@ -121,7 +120,7 @@ class UploadAttachmentsViewModel extends Cubit<UploadAttachmentsViewModelStates>
         return const Right([]);
       }
 
-      final result = await uploadAttachmentsUseCase.callUploadAttachments(newFiles);
+      final result = await uploadAttachmentsUseCase.callUploadAttachments(newFiles, bucketName: bucketName);
 
       result.fold(
             (failure) => emit(UploadAttachmentsViewModelStatesError(message: failure.message)),

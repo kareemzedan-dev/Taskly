@@ -16,27 +16,30 @@ class ClientPaymentsViewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Padding(
-        padding: EdgeInsets.all(16.h),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(child: PaymentsContent()),
-            SizedBox(height: 16.h),
-            BlocProvider(
-              create: (_) => getIt<UploadAttachmentsViewModel>(),
-              child: UploadAttachmentsSection(),
-            ),
-            SizedBox(height: 16.h),
-            CustomButton(title: "Make Payment", ontap: () {}),
-            SizedBox(height: 16.h),
-          ],
+    return BlocProvider(
+      create: (_) => getIt<UploadAttachmentsViewModel>(),
+      child: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.all(16.h),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: PaymentsContent(),
+              ),
+              SizedBox(height: 16.h),
+              UploadAttachmentsSection(),
+              SizedBox(height: 16.h),
+              CustomButton(title: "Make Payment", ontap: () {}),
+              SizedBox(height: 16.h),
+            ],
+          ),
         ),
       ),
     );
   }
 }
+
 
 class UploadAttachmentsSection extends StatelessWidget {
   const UploadAttachmentsSection({super.key});
@@ -54,10 +57,18 @@ class UploadAttachmentsSection extends StatelessWidget {
             showTemporaryMessage(context, state.message, MessageType.error);
           });
         }
+        if (state is UploadAttachmentsViewModelStatesSuccess) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            showTemporaryMessage(context, "Payment proof uploaded successfully", MessageType.success);
+          }
+          );
+        }
 
         return UploadPaymentProofButton(
           onTap: () {
-            context.read<UploadAttachmentsViewModel>().pickFilesFromDevice();
+            context.read<UploadAttachmentsViewModel>().pickFilesFromDevice(
+              bucketName: "payment_attachments",
+            );
           },
         );
       },

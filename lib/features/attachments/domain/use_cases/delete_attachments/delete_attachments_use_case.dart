@@ -4,9 +4,13 @@ import 'package:taskly/core/errors/failures.dart';
 import 'package:taskly/features/attachments/domain/repositories/attachments_repository/attachments_repository.dart';
 @injectable
 class DeleteAttachmentsUseCase {
-    AttachmentsRepository attachmentsRepository;
- 
-  DeleteAttachmentsUseCase({required this.attachmentsRepository });
-Future<Either<Failures,void>> callDeleteAttachment(String attachmentId) => attachmentsRepository.deleteAttachment(attachmentId);
+  final AttachmentsRepository attachmentsRepository;
 
+  DeleteAttachmentsUseCase({required this.attachmentsRepository});
+
+  Future<Either<Failures, void>> callDeleteAttachment(
+      String attachmentId, {
+        String? bucketName,
+      }) =>
+      attachmentsRepository.deleteAttachment(attachmentId, bucketName: bucketName);
 }
