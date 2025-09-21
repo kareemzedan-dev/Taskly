@@ -2,14 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:taskly/core/errors/failures.dart';
 import 'package:taskly/core/utils/assets_manager.dart';
-import 'package:taskly/features/client/presentation/cubit/client_info_view_model/client_info_view_model_states.dart';
 import 'package:taskly/features/profile/domain/entities/user_info_entity/user_info_entity.dart';
 import 'package:taskly/features/profile/presentation/manager/profile_view_model/profile_view_model.dart';
 import 'package:taskly/features/profile/presentation/manager/profile_view_model/profile_view_model_states.dart';
 
 import '../../../../../../../../../core/di/di.dart';
-import '../../../../../../../../client/presentation/cubit/client_info_view_model/client_info_view_model.dart';
+import 'client_details_shimmer.dart';
 class ClientDetailsSection extends StatelessWidget {
   const ClientDetailsSection({super.key, required this.userId});
 final String userId;
@@ -23,9 +23,10 @@ final String userId;
       child: BlocBuilder<ProfileViewModel, ProfileViewModelStates>(
         builder: (context, state) {
           if (state is ProfileViewModelStatesLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return const ClientDetailsShimmer();
           } else if (state is ProfileViewModelStatesError) {
-            return Text(state.message, style: const TextStyle(color: Colors.red));
+
+            return const ClientDetailsShimmer();
           } else if (state is  ProfileViewModelStatesSuccess) {
             final UserInfoEntity client = state.userInfoEntity;
 
@@ -100,7 +101,6 @@ final String userId;
             );
           }
 
-          // Default حالة مبدئية
           return const SizedBox.shrink();
         },
       ),

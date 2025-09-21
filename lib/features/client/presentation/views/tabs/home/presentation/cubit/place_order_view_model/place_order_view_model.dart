@@ -17,7 +17,7 @@ import '../../../../../../../../attachments/data/models/attachments_dm/attachmen
 @injectable
 class PlaceOrderViewModel extends Cubit<PlaceOrderViewModelStates> {
   HomeUseCase homeUseCase;
-  PlaceOrderViewModel(this.homeUseCase) : super(PlaceOrderViewModelStatesInitial());
+  PlaceOrderViewModel(this.homeUseCase ) : super(PlaceOrderViewModelStatesInitial());
   final List<String> categories = [
     "Academic Sources",
     "Scientific Reports",
@@ -43,8 +43,13 @@ class PlaceOrderViewModel extends Cubit<PlaceOrderViewModelStates> {
   String? selectedCategory;
   TextEditingController descriptionController = TextEditingController();
   final clientId = SharedPrefHelper.getString("id");
+    String? freelancerId;
 
 
+  void setFreelancer(String id) {
+    freelancerId = id;
+    emit(PlaceOrderViewModelFreelancerSelected(id));
+  }
 
  
 

@@ -7,6 +7,9 @@ import 'package:taskly/features/freelancer/domain/entities/offer_entity/offer_en
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:taskly/features/shared/domain/entities/order_entity/order_entity.dart';
 
+import '../../../../../core/services/supabase_service.dart';
+import '../../../../shared/data/models/order_dm/order_dm.dart';
+
 @Injectable(as: MyJobsRepo)
 class MyJobsRepoImpl extends MyJobsRepo {
   final MyJobsRemoteDataSource myJobsRemoteDataSource;
@@ -37,5 +40,10 @@ class MyJobsRepoImpl extends MyJobsRepo {
   @override
   Future<Either<Failures, OrderEntity>> acceptOfferAndRejectOthers(String orderId, String offerId) {
   return myJobsRemoteDataSource.acceptOfferAndRejectOthers(orderId, offerId);
+  }
+
+  @override
+  RealtimeChannel subscribeToOrders(Map<String, String> filters, void Function(OrderEntity order, String action) onChange) {
+ return myJobsRemoteDataSource.subscribeToOrders(filters, onChange);
   }
 }

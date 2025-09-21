@@ -22,4 +22,8 @@ abstract class MyJobsRepo {
       String orderId,
       String offerId,
       );
+  RealtimeChannel subscribeToOrders(Map<String, String> filters,
+      void Function(OrderEntity order, String action) onChange);
+
+
 }

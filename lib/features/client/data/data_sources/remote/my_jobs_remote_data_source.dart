@@ -20,4 +20,9 @@ abstract class MyJobsRemoteDataSource {
       String orderId,
   String offerId,
       );
+
+  RealtimeChannel subscribeToOrders(
+      Map<String, dynamic>? filters,
+      void Function(OrderEntity order, String action) onChange,
+      );
 }

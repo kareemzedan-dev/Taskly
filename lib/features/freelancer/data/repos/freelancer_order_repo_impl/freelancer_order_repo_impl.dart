@@ -17,7 +17,19 @@ class FreelancerOrderRepoImpl extends FreelancerOrderRepo{
   }
 
   @override
-  RealtimeChannel  subscribeToPendingOrders(void Function(OrderEntity order, String action) onChange) {
-    return freelancerOrderRemoteDataSource.subscribeToPendingOrders(onChange);
+  RealtimeChannel  subscribeToPendingOrders(
+      void Function(OrderEntity order, String action) onChange,
+      ) {
+    return freelancerOrderRemoteDataSource.subscribeToPendingOrders( onChange);
+  }
+
+  @override
+  Future<Either<Failures, List<OrderEntity>>> fetchPrivateOrders(String freelancerId) {
+     return freelancerOrderRemoteDataSource.fetchPrivateOrders(freelancerId);
+  }
+  @override
+  RealtimeChannel subscribeToPrivateOrders(String freelancerId, void Function(OrderEntity order, String action) onChange) {
+    return freelancerOrderRemoteDataSource.subscribeToPrivateOrders(
+        freelancerId, onChange);
   }
 }

@@ -55,18 +55,22 @@ import '../../features/client/data/repos/my_jobs/my_jobs_repo_impl.dart'
     as _i1023;
 import '../../features/client/domain/repos/home/home_repos.dart' as _i660;
 import '../../features/client/domain/repos/my_jobs/my_jobs_repo.dart' as _i896;
+import '../../features/client/domain/use_cases/client_order_use_case/client_order_use_case.dart'
+    as _i886;
 import '../../features/client/domain/use_cases/home/home_use_case.dart'
     as _i213;
 import '../../features/client/domain/use_cases/my_jobs/my_jobs_use_cases.dart'
     as _i356;
-import '../../features/client/presentation/cubit/client_info_view_model/client_info_view_model.dart'
-    as _i449;
+import '../../features/client/presentation/views/tabs/home/presentation/cubit/fetch_all_freelancers_view_model/fetch_all_freelancers_view_model.dart'
+    as _i590;
 import '../../features/client/presentation/views/tabs/home/presentation/cubit/freelancers_view_model/freelancers_view_model.dart'
     as _i392;
 import '../../features/client/presentation/views/tabs/home/presentation/cubit/place_order_view_model/place_order_view_model.dart'
     as _i399;
 import '../../features/client/presentation/views/tabs/home/presentation/cubit/services_view_model/services_view_model.dart'
     as _i313;
+import '../../features/client/presentation/views/tabs/my_jobs/presentation/cubit/client_order_status_view_model/client_order_status_view_model.dart'
+    as _i94;
 import '../../features/client/presentation/views/tabs/my_jobs/presentation/cubit/get_offers_view_model/get_offers_view_model.dart'
     as _i946;
 import '../../features/client/presentation/views/tabs/my_jobs/presentation/cubit/get_order_view_model.dart/get_order_view_model.dart'
@@ -79,8 +83,8 @@ import '../../features/freelancer/data/data_sources/remote/offer_data_source.dar
     as _i358;
 import '../../features/freelancer/data/data_sources_impl/remote/freelancer_order_remote_data_source_impl.dart'
     as _i500;
-import '../../features/freelancer/data/data_sources_impl/remote/offer_data_source_imple.dart'
-    as _i33;
+import '../../features/freelancer/data/data_sources_impl/remote/offer_remote_data_source_impl.dart'
+    as _i35;
 import '../../features/freelancer/data/repos/freelancer_order_repo_impl/freelancer_order_repo_impl.dart'
     as _i535;
 import '../../features/freelancer/data/repos/offer_repository_impl/offer_repository_impl.dart'
@@ -91,6 +95,8 @@ import '../../features/freelancer/domain/repos/offer_repository/offer_repository
     as _i363;
 import '../../features/freelancer/domain/use_cases/fetch_order_details_use_case/fetch_order_details_use_case.dart'
     as _i988;
+import '../../features/freelancer/domain/use_cases/fetch_private_orders_use_case/fetch_private_orders_use_case.dart'
+    as _i2;
 import '../../features/freelancer/domain/use_cases/freelancer_order_use_case/freelancer_order_use_case.dart'
     as _i171;
 import '../../features/freelancer/domain/use_cases/get_freelancer_offers_use_case/get_freelancer_offers_use_case.dart'
@@ -105,6 +111,8 @@ import '../../features/freelancer/presentation/cubit/get_freelancer_offers_view_
     as _i552;
 import '../../features/freelancer/presentation/views/tabs/find_work/presentation/cubit/freelancer_pending_order_view_model/freelancer_pending_order_view_model.dart'
     as _i636;
+import '../../features/freelancer/presentation/views/tabs/find_work/presentation/cubit/freelancer_private_orders_view_model/freelancer_private_orders_view_model.dart'
+    as _i416;
 import '../../features/freelancer/presentation/views/tabs/find_work/presentation/cubit/send_offer_view_model/send_offer_view_model.dart'
     as _i1052;
 import '../../features/profile/data/data_sources/profile_remote_data_source.dart'
@@ -153,9 +161,6 @@ extension GetItInjectableX on _i174.GetIt {
         myJobsRemoteDataSource: gh<_i41.MyJobsRemoteDataSource>(),
       ),
     );
-    gh.factory<_i358.OfferRemoteDataSource>(
-      () => _i33.OfferRemoteDataSourceImpl(),
-    );
     gh.factory<_i1012.ProfileRemoteDataSource>(
       () => _i51.ProfileRemoteDataSourceImpl(gh<_i454.SupabaseClient>()),
     );
@@ -169,6 +174,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i821.ProfileRepo>(
       () => _i541.ProfileRepoImpl(gh<_i1012.ProfileRemoteDataSource>()),
+    );
+    gh.factory<_i358.OfferRemoteDataSource>(
+      () => _i35.OfferRemoteDataSourceImpl(),
     );
     gh.factory<_i307.HomeRemoteDataSource>(
       () =>
@@ -196,6 +204,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i356.MyJobsUseCases>(
       () => _i356.MyJobsUseCases(gh<_i896.MyJobsRepo>()),
+    );
+    gh.factory<_i886.ClientOrderUseCase>(
+      () => _i886.ClientOrderUseCase(gh<_i896.MyJobsRepo>()),
     );
     gh.factory<_i772.GetOrderViewModel>(
       () => _i772.GetOrderViewModel(gh<_i759.OrdersUseCase>()),
@@ -225,11 +236,11 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i1020.AttachmentsRemoteDataSource>(),
       ),
     );
+    gh.factory<_i94.ClientOrderStatusViewModel>(
+      () => _i94.ClientOrderStatusViewModel(gh<_i886.ClientOrderUseCase>()),
+    );
     gh.factory<_i213.HomeUseCase>(
       () => _i213.HomeUseCase(gh<_i660.HomeRepos>()),
-    );
-    gh.factory<_i449.ClientInfoViewModel>(
-      () => _i449.ClientInfoViewModel(gh<_i585.ProfileUseCase>()),
     );
     gh.factory<_i776.FreelancerInfoViewModel>(
       () => _i776.FreelancerInfoViewModel(gh<_i585.ProfileUseCase>()),
@@ -278,6 +289,9 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i197.DownloadAttachmentsUseCase>(),
       ),
     );
+    gh.factory<_i2.FetchPrivateOrdersUseCase>(
+      () => _i2.FetchPrivateOrdersUseCase(gh<_i75.FreelancerOrderRepo>()),
+    );
     gh.factory<_i399.PlaceOrderViewModel>(
       () => _i399.PlaceOrderViewModel(gh<_i213.HomeUseCase>()),
     );
@@ -292,12 +306,20 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i392.FreelancersViewModel>(
       () => _i392.FreelancersViewModel(gh<_i213.HomeUseCase>()),
     );
+    gh.factory<_i590.FetchAllFreelancersViewModel>(
+      () => _i590.FetchAllFreelancersViewModel(gh<_i213.HomeUseCase>()),
+    );
     gh.factory<_i11.UploadAttachmentsViewModel>(
       () =>
           _i11.UploadAttachmentsViewModel(gh<_i231.UploadAttachmentsUseCase>()),
     );
     gh.factory<_i1052.SendOfferViewModel>(
       () => _i1052.SendOfferViewModel(gh<_i626.SendOfferUseCase>()),
+    );
+    gh.factory<_i416.FreelancerPrivateOrdersViewModel>(
+      () => _i416.FreelancerPrivateOrdersViewModel(
+        gh<_i2.FetchPrivateOrdersUseCase>(),
+      ),
     );
     gh.factory<_i636.FreelancerPendingOrdersViewModel>(
       () => _i636.FreelancerPendingOrdersViewModel(

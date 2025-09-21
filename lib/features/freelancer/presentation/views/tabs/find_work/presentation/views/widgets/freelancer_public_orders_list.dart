@@ -6,6 +6,8 @@ import 'package:taskly/core/utils/colors_manger.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/cubit/freelancer_pending_order_view_model/freelancer_pending_order_view_model_states.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/freelancer_work_card.dart';
 
+import 'freelancer_work_card_shimmer.dart';
+
 class FreelancerPublicOrdersList extends StatelessWidget {
   final FreelancerPendingOrdersState state;
 
@@ -14,14 +16,7 @@ class FreelancerPublicOrdersList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (state is FreelancerPendingOrdersLoading) {
-      return Expanded(
-        child: Center(
-          child: LoadingAnimationWidget.inkDrop(
-            size: 50,
-            color: ColorsManager.primary,
-          ),
-        ),
-      );
+      return FreelancerWorkCardShimmer();
     } else if (state is FreelancerPendingOrdersSuccess) {
       final orders =
           (state as FreelancerPendingOrdersSuccess).pendingOrdersList;
@@ -64,9 +59,7 @@ class FreelancerPublicOrdersList extends StatelessWidget {
             ),
       );
     } else if (state is FreelancerPendingOrdersError) {
-      return Center(
-        child: Text((state as FreelancerPendingOrdersError).errorMessage),
-      );
+      return FreelancerWorkCardShimmer();
     }
     return Container();
   }

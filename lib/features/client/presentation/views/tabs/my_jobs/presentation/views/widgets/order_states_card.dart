@@ -5,26 +5,14 @@ import 'package:taskly/core/di/di.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/cubit/get_offers_view_model/get_offers_view_model.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/cubit/get_offers_view_model/get_offers_view_model_states.dart';
-import 'package:taskly/features/shared/domain/entities/order_entity/order_entity.dart';
+import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/cubit/client_order_status_view_model/client_order_status_view_model.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/offers_model_bottom_sheet_content.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/order_action_button.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/order_details_bottom_sheet_content.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/order_header.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/order_progress_time_line.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:taskly/core/di/di.dart';
-import 'package:taskly/core/utils/colors_manger.dart';
-import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/cubit/get_offers_view_model/get_offers_view_model.dart';
-import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/cubit/get_offers_view_model/get_offers_view_model_states.dart';
 import 'package:taskly/features/shared/domain/entities/order_entity/order_entity.dart';
-import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/offers_model_bottom_sheet_content.dart';
-import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/order_action_button.dart';
-import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/order_details_bottom_sheet_content.dart';
-import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/order_header.dart';
-import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/order_progress_time_line.dart';
-
+import '../../cubit/client_order_status_view_model/client_order_status_states.dart';
 import '../../cubit/update_offer_status_view_model/update_offer_status_view_model.dart';
 
 int getStep(OrderStatus status) {
@@ -42,16 +30,20 @@ int getStep(OrderStatus status) {
 }
 
 class OrderStatesCard extends StatelessWidget {
-  const OrderStatesCard({super.key, required this.order});
-
   final OrderEntity order;
+  const OrderStatesCard({super.key, required this.order});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<GetOffersViewModel>(
-      create: (_) =>
-      getIt<GetOffersViewModel>()
-        ..init(order.id),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<GetOffersViewModel>(
+          create: (_) => getIt<GetOffersViewModel>()..init(order.id),
+        ),
+        BlocProvider<ClientOrderStatusViewModel>(
+          create: (_) => getIt<ClientOrderStatusViewModel>()..subscribeToOrder(order.id),
+        ),
+      ],
       child: Card(
         elevation: 10,
         child: Container(
@@ -79,69 +71,79 @@ class OrderStatesCard extends StatelessWidget {
                   orderStatus: order.status.name,
                 ),
                 SizedBox(height: 20.h),
-
-
                 OrderProgressTimeline(
                   steps: ['Created', 'Paid', 'Executing', 'Completed'],
                   currentStep: getStep(order.status),
                 ),
-
                 SizedBox(height: 26.h),
+                BlocBuilder<ClientOrderStatusViewModel, OrderStatusState>(
+                  builder: (context, updatedState) {
+                    OrderEntity? updatedOrder;
 
-
-                BlocBuilder<GetOffersViewModel, GetOffersViewModelStates>(
-                  builder: (context, state) {
-                    int count = 0;
-                    if (state is GetOffersViewModelSuccess) {
-                      count = state.offersCount;
+                    if (updatedState is OrderStatusUpdated) {
+                      updatedOrder = updatedState.order;
+                    } else {
+                      updatedOrder = order; // fallback للاستخدام الأصلي
                     }
-                    if (order.status == OrderStatus.Pending) {
-                      return OrderActionButton(
-                        text: "Offers You’ve Received",
-                        icon: Icons.local_offer_outlined,
-                        color: ColorsManager.primary,
-                        count: count,
-                        onTap: () {
-                          final viewModel = context.read<GetOffersViewModel>();
 
-                          showModalBottomSheet(
-                            context: context,
-                            isScrollControlled: true,
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(20)),
-                            ),
-                            builder: (ctx) {
-                              return MultiBlocProvider(
-                                providers: [
-                                  BlocProvider.value(value: viewModel),
-                                  BlocProvider(create: (_) =>
-                                      getIt<UpdateOfferStatusViewModel>()),
-                                ],
-                                child: OffersBottomSheetContent(
-                                    orderId: order.id),
+                    return BlocBuilder<ClientOrderStatusViewModel, OrderStatusState>(
+                      builder: (context, state) {
+                        OrderEntity currentOrder;
+
+                        if (state is OrderStatusUpdated) {
+                          currentOrder = state.order;
+                        } else {
+                          currentOrder = order;
+                        }
+
+                        bool hasAcceptedOffer = false;
+                        int count = 0;
+
+                        final offersState = context.watch<GetOffersViewModel>().state;
+                        if (offersState is GetOffersViewModelSuccess) {
+                          count = offersState.offersCount;
+                          hasAcceptedOffer = offersState.offers.any((o) => o.offerStatus == "accepted");
+                        }
+
+                        if (currentOrder.status == OrderStatus.Pending && !hasAcceptedOffer) {
+                          return OrderActionButton(
+                            text: "Offers You’ve Received",
+                            icon: Icons.local_offer_outlined,
+                            color: ColorsManager.primary,
+                            count: count,
+                            onTap: () {
+                              final viewModel = context.read<GetOffersViewModel>();
+                              showModalBottomSheet(
+                                context: context,
+                                isScrollControlled: true,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                                ),
+                                builder: (ctx) => MultiBlocProvider(
+                                  providers: [
+                                    BlocProvider.value(value: viewModel),
+                                    BlocProvider(create: (_) => getIt<UpdateOfferStatusViewModel>()),
+                                  ],
+                                  child: OffersBottomSheetContent(orderId: currentOrder.id),
+                                ),
                               );
                             },
                           );
-                        },
+                        } else {
+                          return OrderActionButton(
+                            text: "Paid Now ${currentOrder.budget ?? 0} SAR",
+                            icon: Icons.money,
+                            color: ColorsManager.primary,
+                            onTap: () {},
+                          );
+                        }
+                      },
+                    );
 
-                      );
-                    }
-                    else {
-                      return OrderActionButton(
-                        text: "Paid Now ${order.budget} SAR",
-                        icon: Icons.money,
-                        color: ColorsManager.primary,
-                        onTap: () {
-
-                        },
-                      );
-                    }
                   },
                 ),
 
                 SizedBox(height: 10.h),
-
                 OrderActionButton(
                   text: "View details",
                   icon: Icons.remove_red_eye_outlined,
@@ -151,13 +153,9 @@ class OrderStatesCard extends StatelessWidget {
                       context: context,
                       isScrollControlled: true,
                       shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(20),
-                        ),
+                        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                       ),
-                      builder: (context) {
-                        return OrderDetailsBottomSheetContent(order: order);
-                      },
+                      builder: (context) => OrderDetailsBottomSheetContent(order: order),
                     );
                   },
                 ),

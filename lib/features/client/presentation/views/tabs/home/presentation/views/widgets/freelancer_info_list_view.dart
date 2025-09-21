@@ -5,15 +5,17 @@ import 'package:taskly/features/client/presentation/views/tabs/home/presentation
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/freelancer_info_card_for_hire.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/reviews_card.dart';
 
-class FreelancerInfoListView extends StatefulWidget {
-  const FreelancerInfoListView({super.key});
+import '../../cubit/place_order_view_model/place_order_view_model.dart';
 
+class FreelancerInfoListView extends StatefulWidget {
+    FreelancerInfoListView({super.key, required this.selectedId});
+  String? selectedId;
   @override
   State<FreelancerInfoListView> createState() => _FreelancerInfoListViewState();
 }
 
 class _FreelancerInfoListViewState extends State<FreelancerInfoListView> {
-  String? selectedId;
+
 
   @override
   Widget build(BuildContext context) {
@@ -37,10 +39,12 @@ class _FreelancerInfoListViewState extends State<FreelancerInfoListView> {
                     },);
                   },
                   freelancer: freelancer,
-                  isSelected: freelancer.id == selectedId,
+                  isSelected: freelancer.id == widget.selectedId,
                   onTap: () {
+
                     setState(() {
-                      selectedId = freelancer.id;
+                      widget.selectedId = freelancer.id;
+                      context.read<PlaceOrderViewModel>().setFreelancer(freelancer.id);
                     });
                     debugPrint("Selected Freelancer ID: ${freelancer.id}");
                   },

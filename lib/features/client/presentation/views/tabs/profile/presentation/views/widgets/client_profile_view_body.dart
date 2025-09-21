@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/config/routes/routes_manager.dart';
+import 'package:taskly/core/cache/shared_preferences.dart';
 import 'package:taskly/core/di/di.dart';
 import 'package:taskly/core/utils/assets_manager.dart';
-import 'package:taskly/features/client/presentation/cubit/client_info_view_model/client_info_view_model.dart';
-import 'package:taskly/features/client/presentation/cubit/client_info_view_model/client_info_view_model_states.dart';
+import 'package:taskly/core/utils/strings_manager.dart';
 import 'package:taskly/features/client/presentation/views/tabs/profile/presentation/views/widgets/account_item_row.dart';
 import 'package:taskly/features/client/presentation/views/tabs/profile/presentation/views/widgets/user_info_section.dart';
+import 'package:taskly/features/client/presentation/views/tabs/profile/presentation/views/widgets/user_info_section_shimmer.dart';
+import 'package:taskly/features/profile/presentation/manager/profile_view_model/profile_view_model.dart';
+import 'package:taskly/features/profile/presentation/manager/profile_view_model/profile_view_model_states.dart';
 import 'package:taskly/features/shared/presentation/views/widgets/language_bottom_sheet_content.dart';
 import 'package:taskly/features/shared/presentation/views/widgets/profile_section.dart';
 import 'package:taskly/features/shared/presentation/views/widgets/theme_bottom_sheet_content.dart';
@@ -20,15 +23,8 @@ class ClientProfileViewBody extends StatefulWidget {
 }
 
 class _ClientProfileViewBodyState extends State<ClientProfileViewBody> {
-  late final ClientInfoViewModel _userInfoViewModel;
   String _currentLanguage = "English";
   String _currentTheme = "Light";
-  @override
-  void initState() {
-    super.initState();
-    _userInfoViewModel = getIt<ClientInfoViewModel>();
-   // _userInfoViewModel.loadUserInfo();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,29 +36,34 @@ class _ClientProfileViewBodyState extends State<ClientProfileViewBody> {
           children: [
             const SizedBox(height: 20),
             BlocProvider(
-              create: (context) => _userInfoViewModel,
-              child:
-                  BlocBuilder<ClientInfoViewModel, ClientInfoViewModelStates>(
-                    builder: (context, state) {
-                      if (state is ClientInfoViewModelLoading) {
-                        return const CircularProgressIndicator();
-                      } else if (state is ClientInfoViewModelSuccess) {
-                        return UserInfoSection(
-                          onTap: () {
-                            Navigator.pushNamed(
-                              context,
-                              RoutesManager.userAccountView,
-                            );
-                          },
-                          email: state.userInfoEntity.email,
-                          name: state.userInfoEntity.fullName!,
+              create:
+                  (context) =>
+                      getIt<ProfileViewModel>()..getUserInfo(
+                        SharedPrefHelper.getString(StringsManager.idKey)!,
+                        "client",
+                      ),
+              child: BlocBuilder<ProfileViewModel, ProfileViewModelStates>(
+                builder: (context, state) {
+                  if (state is ProfileViewModelStatesLoading) {
+                    return const UserInfoSectionShimmer();
+                  } else if (state is ProfileViewModelStatesSuccess) {
+                    return UserInfoSection(
+                      userInfo: state.userInfoEntity,
+                      onTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          RoutesManager.userAccountView,
                         );
-                      } else if (state is ClientInfoViewModelError) {
-                        return Text(state.errorMessage);
-                      }
-                      return Container();
-                    },
-                  ),
+                      },
+                      email: state.userInfoEntity.email,
+                      name: state.userInfoEntity.fullName!,
+                    );
+                  } else if (state is ProfileViewModelStatesError) {
+                    return Text(state.message);
+                  }
+                  return Container();
+                },
+              ),
             ),
 
             SizedBox(height: 40.h),
@@ -139,7 +140,7 @@ class _ClientProfileViewBodyState extends State<ClientProfileViewBody> {
                 ),
                 SizedBox(height: 10.h),
 
-                       AccountItemRow(
+                AccountItemRow(
                   image: Assets.assetsImagesCahngePassword,
                   text: "Change Password",
                   onTap: () {
@@ -155,8 +156,6 @@ class _ClientProfileViewBodyState extends State<ClientProfileViewBody> {
             ProfileSection(
               title: "Settings",
               children: [
-              
-
                 AccountItemRow(
                   image: Assets.assetsImagesAccount3166234,
                   text: "Privacy Policy",

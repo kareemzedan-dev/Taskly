@@ -14,7 +14,8 @@ import '../../../../shared/data/models/order_dm/order_dm.dart';
 @Injectable(as:MyJobsRemoteDataSource )
 class MyJobsRemoteDataSourceImpl extends MyJobsRemoteDataSource {
   final SupabaseService supabaseService = SupabaseService();
-
+  RealtimeChannel? _ordersChannel;
+   final SupabaseClient _supabase = Supabase.instance.client;
   @override
   Future<Either<Failures, List<OfferEntity>>> getOffers(String orderId) async {
     try {
@@ -96,65 +97,83 @@ class MyJobsRemoteDataSourceImpl extends MyJobsRemoteDataSource {
         return Left(NetworkFailure(StringsManager.noInternetConnection));
       }
 
+      // 1) هات العرض المطلوب
       final offerResponse = await supabaseService.client
           .from('offers')
           .select()
           .eq('id', offerId)
-          .single();
+          .maybeSingle();
 
       if (offerResponse == null) {
-        return Left(ServerFailure("Failed to fetch the selected offer"));
+        return Left(ServerFailure("Offer not found"));
       }
 
-      final acceptedOffer = OfferModel.fromJson(offerResponse); // assuming OfferEntity فيه price
+      final acceptedOffer = OfferModel.fromJson(offerResponse);
 
-      final acceptResponse = await supabaseService.updateDataInSupabase(
-        tableName: 'offers',
-        data: {"status": "accepted"},
-        match: {"id": offerId},
-      );
+      // 2) حدّث العرض المختار لقبول
+      final acceptResponse = await supabaseService.client
+          .from('offers')
+          .update({"status": "accepted"})
+          .eq('id', offerId)
+          .select()
+          .maybeSingle();
 
       if (acceptResponse == null) {
         return Left(ServerFailure("Failed to accept the offer"));
       }
 
-      final updateBudget = await supabaseService.updateDataInSupabase(
-        tableName: 'orders',
-        data: {
-          "status": "Accepted",
-          "budget": acceptedOffer.offerAmount,
-        },
-        match: {"id": orderId},
-      );
+      // 3) حدّث الطلب بالـ status + budget
+      final updateOrderResponse = await supabaseService.client
+          .from('orders')
+          .update({
+        "status": "Accepted",
+        "budget": acceptedOffer.offerAmount,
+      })
+          .eq('id', orderId)
+          .select()
+          .maybeSingle();
 
-      final rejectResponse = await supabaseService.client
+      if (updateOrderResponse == null) {
+        return Left(ServerFailure("Failed to update order"));
+      }
+
+      // 4) ارفض باقي العروض
+      await supabaseService.client
           .from('offers')
           .update({'status': 'rejected'})
           .eq('order_id', orderId)
-          .neq('id', offerId)
-          .select();
+          .neq('id', offerId);
 
-      if (rejectResponse == null) {
-        return Left(ServerFailure("Failed to reject other offers"));
-      }
 
-      // 5️⃣ جلب الـ order بعد التحديث
-      final orderResponse = await supabaseService.client
-          .from('orders')
-          .select()
-          .eq('id', orderId)
-          .single();
-
-      if (orderResponse == null) {
-        return Left(ServerFailure("Failed to fetch updated order"));
-      }
-
-      final updatedOrder = OrderDm.fromJson(orderResponse);
-
+      final updatedOrder = OrderDm.fromJson(updateOrderResponse).toEntity();
       return Right(updatedOrder);
     } catch (e) {
       return Left(ServerFailure(e.toString()));
     }
+  }
+
+
+  @override
+  RealtimeChannel subscribeToOrders(
+      Map<String, dynamic>? filters,
+      void Function(OrderEntity order, String action) onChange,
+
+      ) {
+    _ordersChannel = supabaseService.subscribe(
+      table: 'orders',
+      filters: filters ?? {},
+      onChange: (record, action) {
+        final order = OrderDm.fromJson(record);
+        onChange(order, action);
+      },
+    );
+
+    return _ordersChannel!;
+  }
+
+  void unsubscribeFromOrders() {
+    supabaseService.unsubscribe(table: 'orders');
+    _ordersChannel = null;
   }
 
 }

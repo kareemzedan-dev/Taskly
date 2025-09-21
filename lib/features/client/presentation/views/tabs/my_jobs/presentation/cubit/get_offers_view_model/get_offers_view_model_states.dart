@@ -10,7 +10,12 @@ class GetOffersViewModelSuccess extends GetOffersViewModelStates {
   final List<OfferEntity> offers;
   final int offersCount;
 
-  GetOffersViewModelSuccess(this.offers, {this.offersCount = 0});
+
+  GetOffersViewModelSuccess(
+      this.offers, {
+        this.offersCount = 0,
+
+      });
 }
 
 class GetOffersViewModelError extends GetOffersViewModelStates {

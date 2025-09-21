@@ -51,40 +51,35 @@ class ProfileRemoteDataSourceImpl extends ProfileRemoteDataSource{
 
 
         final user = UserInfoDm(
-          id: userResponse!['id'],
-          fullName: userResponse['full_name'],
-          email: userResponse['email'],
-          phoneNumber: userResponse['phone_number'],
-          role: userResponse['role'],
-          profileImage: userResponse['profile_image'],
-          bio: userResponse['bio'],
-          createdAt: userResponse['created_at'] != null
-              ? DateTime.parse(userResponse['created_at'])
+          id: userResponse?['id'] ?? "",
+          fullName: userResponse?['full_name'] ?? "Unknown",
+          email: userResponse?['email'] ?? "Unknown",
+          phoneNumber: userResponse?['phone_number'] ?? "",
+          role: userResponse?['role'] ?? "",
+          profileImage: userResponse?['profile_image'],
+          bio: userResponse?['bio'],
+          createdAt: userResponse?['created_at'] != null
+              ? DateTime.tryParse(userResponse!['created_at'])
               : null,
-          rating: userResponse['rating'] != null
-              ? (userResponse['rating'] as num).toDouble()
+          rating: userResponse?['rating'] != null
+              ? (userResponse!['rating'] as num).toDouble()
+              : 1.0,
+          billingInfo: role == "client" &&
+              extraResponse?['billing_info'] != null &&
+              extraResponse!['billing_info'].toString().isNotEmpty
+              ? BillingInfo.fromJson(jsonDecode(extraResponse['billing_info']))
               : null,
-
-
-
-          billingInfo: role == "client" && extraResponse?['billing_info'] != null
-              ? BillingInfo.fromJson(jsonDecode(extraResponse!['billing_info']))
-              : null,
-
           balance: role == "client"
-              ? (extraResponse != null ? extraResponse['balance'] : null)
+              ? (extraResponse?['balance'] ?? 0)
               : null,
-
-
-
           skills: role == "freelancer" && extraResponse?['skills'] != null
               ? List<String>.from(extraResponse?['skills'])
               : null,
           hourlyRate: role == "freelancer" && extraResponse?['hourly_rate'] != null
               ? (extraResponse?['hourly_rate'] as num).toDouble()
               : null,
-
         );
+
 
         return Right(user);
       } catch (e) {

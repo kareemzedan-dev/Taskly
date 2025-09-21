@@ -17,6 +17,8 @@ import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/pre
 import 'package:taskly/features/profile/presentation/manager/profile_view_model/profile_view_model_states.dart';
 
 import '../../../../../../../../profile/presentation/manager/profile_view_model/profile_view_model.dart';
+import '../../cubit/freelancer_private_orders_view_model/freelancer_private_orders_view_model.dart';
+import '../../cubit/freelancer_private_orders_view_model/freelancer_private_orders_view_model_states.dart';
 
 class FreelancerHomeTabViewBody extends StatefulWidget {
   const FreelancerHomeTabViewBody({super.key});
@@ -29,7 +31,7 @@ class FreelancerHomeTabViewBody extends StatefulWidget {
 class _FreelancerHomeTabViewBodyState extends State<FreelancerHomeTabViewBody> {
   late final ProfileViewModel _freelancerInfoViewModel;
   late final FreelancerPendingOrdersViewModel _pendingOrdersViewModel;
-  late final GetOrderViewModel _privateOrderViewModel;
+  late final FreelancerPrivateOrdersViewModel _privateOrderViewModel;
 
   final List<String> searchHintTexts = ["Search for jobs..."];
   String userId = SharedPrefHelper.getString("id")!;
@@ -43,8 +45,8 @@ class _FreelancerHomeTabViewBodyState extends State<FreelancerHomeTabViewBody> {
     _pendingOrdersViewModel = getIt<FreelancerPendingOrdersViewModel>();
     _pendingOrdersViewModel.fetchPendingFreelancerOrders();
 
-    _privateOrderViewModel = getIt<GetOrderViewModel>();
-    _privateOrderViewModel.getUserOrdersByUserId(userId, "freelancer");
+    _privateOrderViewModel = getIt<FreelancerPrivateOrdersViewModel>();
+    _privateOrderViewModel.fetchPrivateOrders(userId );
   }
 
   @override
@@ -67,13 +69,15 @@ class _FreelancerHomeTabViewBodyState extends State<FreelancerHomeTabViewBody> {
               >(
                 builder: (context, state) {
                   if (state is ProfileViewModelStatesLoading) {
-                    return const CircularProgressIndicator();
+                    return   UserInfoHomeHeaderShimmer();
                   } else if (state is ProfileViewModelStatesSuccess) {
                     return UserInfoHomeHeader(
                       fullName: state.userInfoEntity.fullName,
                     );
                   } else if (state is ProfileViewModelStatesError) {
-                    return Text(state.message);
+
+
+                    return   UserInfoHomeHeaderShimmer();
                   }
                   return const SizedBox.shrink();
                 },
@@ -102,13 +106,13 @@ class _FreelancerHomeTabViewBodyState extends State<FreelancerHomeTabViewBody> {
                         );
                       },
                     ),
-                    BlocBuilder<GetOrderViewModel, GetOrderViewModelStates>(
+                    BlocBuilder<FreelancerPrivateOrdersViewModel, FreelancerPrivateOrdersViewModelStates>(
                       builder: (context, state) {
                         return RefreshIndicator(
                           onRefresh: () async {
                             await context
-                                .read<GetOrderViewModel>()
-                                .getUserOrdersByUserId(userId, "freelancer");
+                                .read<FreelancerPrivateOrdersViewModel>()
+                                .fetchPrivateOrders(userId);
                           },
                           child: FreelancerPrivateOrdersList(state: state),
                         );

@@ -18,3 +18,8 @@ class PlaceOrderViewModelStatesSuccess extends PlaceOrderViewModelStates {
 
   PlaceOrderViewModelStatesSuccess(this.orderEntity);
 }
+
+class PlaceOrderViewModelFreelancerSelected extends PlaceOrderViewModelStates {
+  final String id;
+  PlaceOrderViewModelFreelancerSelected(this.id);
+}

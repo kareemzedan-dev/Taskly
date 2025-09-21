@@ -7,9 +7,14 @@ import 'package:taskly/features/shared/domain/entities/order_entity/order_entity
 abstract class FreelancerOrderRemoteDataSource {
   Future<Either<Failures, List<OrderEntity>>> fetchPendingFreelancerOrders(String freelancerId);
 
- 
-  RealtimeChannel   subscribeToPendingOrders(
+  RealtimeChannel subscribeToPendingOrders(
+      void Function(OrderEntity order, String action) onChange,
+      );
+  Future<Either<Failures, List<OrderEntity>>> fetchPrivateOrders(String freelancerId);
+  RealtimeChannel subscribeToPrivateOrders(
+    String freelancerId,
     void Function(OrderEntity order, String action) onChange,
-  );
+
+      );
 
 }

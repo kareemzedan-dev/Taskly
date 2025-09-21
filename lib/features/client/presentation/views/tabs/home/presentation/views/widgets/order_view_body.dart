@@ -43,7 +43,7 @@ class _OrderViewBodyState extends State<OrderViewBody> {
     orderViewModel.selectedCategory = widget.selectedCategory;
   }
 
-  int selectedHireMethodIndex = -1;
+  int selectedHireMethodIndex = 0;
   List<AttachmentModel> uploadedAttachments = [];
 
   UploadAttachmentsViewModel uploadAttachmentsViewModel = getIt<UploadAttachmentsViewModel>();
@@ -172,7 +172,7 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                     ),
 
                     SizedBox(height: 16.h),
-                    if (selectedHireMethodIndex == 1) PrivateHireSection(),
+                    if (selectedHireMethodIndex == 1) PrivateHireSection(selectedId:orderViewModel.freelancerId ,),
                     SizedBox(height: 16.h),
                     CustomButton(
                       title: "Submit",
@@ -231,30 +231,69 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                         }
 
 
-                        await context.read<PlaceOrderViewModel>().placeOrder(
-                          OrderEntity(
-                            id: orderViewModel.orderId,
-                            clientId: orderViewModel.clientId!,
-                            freelancerId: null,
-                            title: orderViewModel.titleController.text,
-                            description:
-                            orderViewModel.descriptionController.text,
-                            category: orderViewModel.selectedCategory,
-                            attachments: uploadAttachmentsViewModel.uploadedAttachments,
-                            serviceType: ServiceType.public,
-                            status: OrderStatus.Pending,
-                            deadline: orderViewModel.calculateDeadline(
-                              orderViewModel.timeController.text,
-                              orderViewModel.selectedTimeUnit,
-                            ),
-                            createdAt: DateTime.now(),
-                            updatedAt: DateTime.now(),
-                            offersCount: 0,
+                         if(selectedHireMethodIndex == 0) {
+                           await context.read<PlaceOrderViewModel>().placeOrder(
+                               OrderEntity(
+                                 id: orderViewModel.orderId,
+                                 clientId: orderViewModel.clientId!,
+                                 freelancerId: null,
+                                 title: orderViewModel.titleController.text,
+                                 description:
+                                 orderViewModel.descriptionController.text,
+                                 category: orderViewModel.selectedCategory,
+                                 attachments: uploadAttachmentsViewModel.uploadedAttachments,
+                                 serviceType: ServiceType.public,
+                                 status: OrderStatus.Pending,
+                                 deadline: orderViewModel.calculateDeadline(
+                                   orderViewModel.timeController.text,
+                                   orderViewModel.selectedTimeUnit,
+                                 ),
+                                 createdAt: DateTime.now(),
+                                 updatedAt: DateTime.now(),
+                                 offersCount: 0,
 
 
-                          ),
+                               ),
+
 
                         );
+                         }
+                         else if(selectedHireMethodIndex == 1) {
+                           if (orderViewModel.freelancerId == null){
+                             return showTemporaryMessage(
+                               context,
+                                 "Please select freelancer",
+                                 MessageType.error,
+                             );
+                           }
+                          if(orderViewModel.freelancerId!.isNotEmpty){
+                            await context.read<PlaceOrderViewModel>().placeOrder(
+                              OrderEntity(
+                                id: orderViewModel.orderId,
+                                clientId: orderViewModel.clientId!,
+                                freelancerId: orderViewModel.freelancerId,
+                                title: orderViewModel.titleController.text,
+                                description:
+                                orderViewModel.descriptionController.text,
+                                category: orderViewModel.selectedCategory,
+                                attachments: uploadAttachmentsViewModel.uploadedAttachments,
+                                serviceType: ServiceType.public,
+                                status: OrderStatus.Pending,
+                                deadline: orderViewModel.calculateDeadline(
+                                  orderViewModel.timeController.text,
+                                  orderViewModel.selectedTimeUnit,
+                                ),
+                                createdAt: DateTime.now(),
+                                updatedAt: DateTime.now(),
+                                offersCount: 0,
+
+
+                              ),
+
+
+                            );
+                          }
+                         }
                       },
                     ),
                     SizedBox(height: 16.h),

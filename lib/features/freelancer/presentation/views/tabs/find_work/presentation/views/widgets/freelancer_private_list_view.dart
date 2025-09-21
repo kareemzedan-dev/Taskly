@@ -2,29 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
-import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/cubit/get_order_view_model.dart/get_order_view_model_states.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/freelancer_work_card.dart';
 
 import '../../../../../../../../../core/utils/assets_manager.dart';
+import '../../cubit/freelancer_private_orders_view_model/freelancer_private_orders_view_model_states.dart';
+import 'freelancer_work_card_shimmer.dart';
 
 class FreelancerPrivateOrdersList extends StatelessWidget {
-  final GetOrderViewModelStates state;
+  final FreelancerPrivateOrdersViewModelStates state;
 
   const FreelancerPrivateOrdersList({super.key, required this.state});
 
   @override
   Widget build(BuildContext context) {
-    if (state is GetOrderViewModelStatesLoading) {
-      return Expanded(
-        child: Center(
-          child: LoadingAnimationWidget.inkDrop(
-            size: 50,
-            color: ColorsManager.primary,
-          ),
-        ),
+    if (state is FreelancerPrivateOrdersViewModelStatesLoading) {
+      return FreelancerWorkCardShimmer(
       );
-    } else if (state is GetOrderViewModelStatesSuccess) {
-      final orders = (state as GetOrderViewModelStatesSuccess).orderEntity;
+    } else if (state is FreelancerPrivateOrdersViewModelStatesSuccess) {
+      final orders = (state as FreelancerPrivateOrdersViewModelStatesSuccess).orders;
 
       if (orders.isEmpty) {
         return ListView(
@@ -61,10 +56,8 @@ class FreelancerPrivateOrdersList extends StatelessWidget {
               child: FreelancerWorkCard(order: orders[index]),
             ),
       );
-    } else if (state is GetOrderViewModelStatesError) {
-      return Center(
-        child: Text((state as GetOrderViewModelStatesError).message),
-      );
+    } else if (state is FreelancerPrivateOrdersViewModelStatesError) {
+      return FreelancerWorkCardShimmer();
     }
     return Container();
   }

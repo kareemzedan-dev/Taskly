@@ -17,7 +17,7 @@ class FreelancerOrderRemoteDataSourceImpl
   final SupabaseService supabaseService = SupabaseService();
   final SupabaseClient _supabase = Supabase.instance.client;
   RealtimeChannel? _ordersChannel;
-
+  RealtimeChannel? _privateOrdersChannel;
   @override
   Future<Either<Failures, List<OrderEntity>>> fetchPendingFreelancerOrders(String freelancerId) async {
     try {
@@ -54,7 +54,6 @@ class FreelancerOrderRemoteDataSourceImpl
       return Left(ServerFailure(e.toString()));
     }
   }
-
   @override
   RealtimeChannel subscribeToPendingOrders(
       void Function(OrderEntity order, String action) onChange,
@@ -64,15 +63,66 @@ class FreelancerOrderRemoteDataSourceImpl
       filters: {'status': "Pending"},
       onChange: (record, action) {
         final order = OrderDm.fromJson(record);
-        onChange(order, action);
+        if(order.status == OrderStatus.Pending) {
+          onChange(order, action);
+        }
       },
     );
-
     return _ordersChannel!;
   }
 
   void unsubscribeFromPendingOrders() {
     supabaseService.unsubscribe(table: 'orders');
     _ordersChannel = null;
+  }
+
+
+
+  @override
+  Future<Either<Failures, List<OrderEntity>>> fetchPrivateOrders(
+      String freelancerId) async {
+    try {
+      var result = await Connectivity().checkConnectivity();
+      if (result == ConnectivityResult.none) {
+        return Left(NetworkFailure('No internet connection'));
+      }
+
+      final response = await _supabase
+          .from('orders')
+          .select('*')
+          .eq('freelancer_id', freelancerId);
+
+      if (response.isEmpty) {
+        return Right([]);
+      }
+
+      final orders =
+      (response as List).map((json) => OrderDm.fromJson(json)).toList();
+
+      return Right(orders);
+    } catch (e) {
+      return Left(ServerFailure("Failed to fetch private orders: $e"));
+    }
+  }
+@override
+  RealtimeChannel subscribeToPrivateOrders(
+      String freelancerId,
+      void Function(OrderEntity order, String action) onChange,
+      ) {
+    _privateOrdersChannel = supabaseService.subscribe(
+      table: 'orders',
+      filters: {'freelancer_id': freelancerId},
+      onChange: (record, action) {
+        final order = OrderDm.fromJson(record);
+        onChange(order, action);
+      },
+    );
+
+    return _privateOrdersChannel!;
+  }
+
+  void unsubscribeFromPrivateOrders() {
+    supabaseService.unsubscribe(table: 'orders');
+    _privateOrdersChannel = null;
   }
 }

@@ -7,7 +7,8 @@ import 'package:taskly/features/client/presentation/views/tabs/home/presentation
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/freelancer_info_list_view.dart';
 
 class PrivateHireSection extends StatelessWidget {
-  const PrivateHireSection({super.key});
+    PrivateHireSection({super.key, required this.selectedId});
+  String? selectedId;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +47,7 @@ class PrivateHireSection extends StatelessWidget {
               SizedBox(height: 16.h),
               BlocProvider(
                 create: (context) =>  getIt<FreelancersViewModel>()..getAllFreelancer(),
-                child: FreelancerInfoListView(),
+                child: FreelancerInfoListView(selectedId:selectedId ,),
               ),
             ],
           ),

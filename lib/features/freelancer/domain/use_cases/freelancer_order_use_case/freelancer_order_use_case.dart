@@ -17,8 +17,9 @@ class FreelancerOrderUseCase {
 
 
   RealtimeChannel  subscribeToPendingOrders(
-    void Function(OrderEntity order, String action) onChange,
-  ) {
-    return freelancerOrderRepo.subscribeToPendingOrders(onChange);
+      void Function(OrderEntity order, String action) onChange,
+
+      ) {
+    return freelancerOrderRepo.subscribeToPendingOrders( onChange);
   }
 }

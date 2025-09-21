@@ -14,7 +14,7 @@ import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/pre
 class FreelancerPendingOrdersViewModel
     extends Cubit<FreelancerPendingOrdersState> {
   FreelancerPendingOrdersViewModel(this.freelancerOrderUseCase)
-    : super(FreelancerPendingOrdersInitial());
+      : super(FreelancerPendingOrdersInitial());
 
   final FreelancerOrderUseCase freelancerOrderUseCase;
 
@@ -25,10 +25,10 @@ class FreelancerPendingOrdersViewModel
       emit(FreelancerPendingOrdersLoading());
 
       final result =
-          await freelancerOrderUseCase.fetchPendingFreelancerOrders( SharedPrefHelper.getString(StringsManager.idKey)!);
+      await freelancerOrderUseCase.fetchPendingFreelancerOrders( SharedPrefHelper.getString(StringsManager.idKey)!);
       result.fold(
-        (failure) => emit(FreelancerPendingOrdersError(failure.message)),
-        (orders) {
+            (failure) => emit(FreelancerPendingOrdersError(failure.message)),
+            (orders) {
           emit(FreelancerPendingOrdersSuccess(orders));
           _subscribeRealtime();
         },
@@ -41,9 +41,9 @@ class FreelancerPendingOrdersViewModel
 
   void _subscribeRealtime() {
     _ordersChannel = freelancerOrderUseCase.subscribeToPendingOrders((
-      order,
-      action,
-    ) {
+        order,
+        action,
+        ) {
       if (state is FreelancerPendingOrdersSuccess) {
         final currentOrders = List<OrderEntity>.from(
           (state as FreelancerPendingOrdersSuccess).pendingOrdersList,
