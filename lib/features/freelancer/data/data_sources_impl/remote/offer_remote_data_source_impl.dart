@@ -67,17 +67,20 @@ class OfferRemoteDataSourceImpl implements OfferRemoteDataSource {
   }
 
   @override
-  Future<Either<Failures, List<OfferEntity>>> getFreelancerOffers(String freelancerId) async {
+  Future<Either<Failures, List<OfferEntity>>> getFreelancerOffers(String freelancerId, String status) async {
     try {
       final connectivity = await Connectivity().checkConnectivity();
       if (connectivity.contains(ConnectivityResult.wifi) ||
           connectivity.contains(ConnectivityResult.mobile)) {
 
-        final response = await supabaseService.client
-            .from('offers')
-            .select()
-            .eq('freelancer_id', freelancerId)
-            .eq('status', 'pending');
+        final query = supabaseService.client.from('offers').select().eq('freelancer_id', freelancerId);
+
+        if (status != 'all') {
+          query.eq('status', status);
+        }
+
+        final response = await query;
+
 
         if (response == null || (response is List && response.isEmpty)) {
           return Right([]);

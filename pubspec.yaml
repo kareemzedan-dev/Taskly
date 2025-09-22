@@ -65,6 +65,7 @@ dependencies:
   timeago: ^3.7.1
   path_provider: ^2.1.5
   shimmer: ^3.0.0
+  marquee: ^2.3.0
 
 dev_dependencies:
   flutter_test:
@@ -120,6 +121,9 @@ flutter:
           weight: 400
         - asset: assets/fonts/Cairo-Light.ttf
           weight: 300
+
+    - family: DMSans
+      fonts:
         - asset: assets/fonts/DMSans-ExtraBold.ttf
           weight: 800
         - asset: assets/fonts/DMSans-Bold.ttf
@@ -130,7 +134,8 @@ flutter:
           weight: 400
         - asset: assets/fonts/DMSans-Light.ttf
           weight: 300
-        
+
+
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package

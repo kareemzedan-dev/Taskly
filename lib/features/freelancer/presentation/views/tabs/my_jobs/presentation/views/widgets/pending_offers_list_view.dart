@@ -10,8 +10,9 @@ import '../../../../../../../../profile/domain/entities/user_info_entity/user_in
 import '../../../../../../../../profile/presentation/manager/profile_view_model/profile_view_model.dart';
 
 class PendingOffersListView extends StatelessWidget {
-    PendingOffersListView({super.key,required this.offer });
+    PendingOffersListView({super.key,required this.offer,  this.isPending= false });
 List<OfferEntity> offer;
+bool isPending  ;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,7 @@ List<OfferEntity> offer;
 
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical:  8.0),
-                child:   PendingOfferCard(offerEntity: offer[index] ),
+                child:   PendingOfferCard(offerEntity: offer[index] ,isPending: isPending),
               );
 
 

@@ -25,18 +25,18 @@ class MyJobsTabViewBody extends StatefulWidget {
 class _MyJobsTabViewBodyState extends State<MyJobsTabViewBody> {
   late final GetFreelancerOffersViewModel viewModel;
   RealtimeChannel? _subscriptionChannel;
+  final freelancerId = SharedPrefHelper.getString(StringsManager.idKey)!;
+  @override
 
   @override
   void initState() {
     super.initState();
-    final freelancerId = SharedPrefHelper.getString(StringsManager.idKey)!;
     viewModel = getIt<GetFreelancerOffersViewModel>();
 
-    viewModel.getFreelancerOffers(freelancerId);
+    viewModel.getFreelancerOffers(freelancerId, null);
 
     _subscriptionChannel = viewModel.subscribeToOffers(freelancerId, (offer, action) {
-      viewModel.getFreelancerOffers(freelancerId);
-
+      viewModel.getFreelancerOffers(freelancerId, null);
 
       if (offer.offerStatus == 'accepted') {
         NotificationHelper.showNotification(context, "Your offer got accepted!");
@@ -47,6 +47,8 @@ class _MyJobsTabViewBodyState extends State<MyJobsTabViewBody> {
       }
     });
   }
+
+
 
 
   @override
@@ -76,13 +78,18 @@ class _MyJobsTabViewBodyState extends State<MyJobsTabViewBody> {
                 return Center(child: Text(state.message));
               }
               if (state is GetFreelancerOffersSuccessState) {
-                if (state.offers.isEmpty) {
+
+                final pendingOffers = state.offers
+                    .where((o) => o.offerStatus == "pending")
+                    .toList();
+
+                if (pendingOffers.isEmpty) {
                   return const EmptyStateAnimation(
                     animationPath: 'assets/lotties/Loading.json',
                     message: 'No pending offers',
                   );
                 }
-                return PendingOffersListView(offer: state.offers);
+                return PendingOffersListView(offer: pendingOffers,isPending: true,);
               }
               return const Center(child: Text("No offers"));
             },
@@ -90,11 +97,39 @@ class _MyJobsTabViewBodyState extends State<MyJobsTabViewBody> {
         ),
 
 
-        // Accepted tab
-        const Center(
-          child: EmptyStateAnimation(
-            animationPath: 'assets/lotties/Progress.json',
-            message: 'No accepted Offers',
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: BlocBuilder<
+              GetFreelancerOffersViewModel,
+              GetFreelancerOffersStates
+          >(
+            bloc: viewModel ,
+            builder: (context, state) {
+              if (state is GetFreelancerOffersLoadingState) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              if (state is GetFreelancerOffersErrorState) {
+                return Center(child: Text(state.message));
+              }
+              if (state is GetFreelancerOffersSuccessState) {
+
+                final acceptedOffers = state.offers
+                    .where((o) => o.offerStatus == "accepted")
+                    .toList();
+
+                if (acceptedOffers.isEmpty) {
+                  return const EmptyStateAnimation(
+                    animationPath: 'assets/lotties/Progress.json',
+                    message: 'No accepted Offers',
+                  );
+                }
+                return PendingOffersListView(offer: acceptedOffers );
+              }
+
+              return const Center(child: Text("No offers"));
+            },
           ),
         ),
 

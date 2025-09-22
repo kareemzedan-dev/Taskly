@@ -1,14 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:taskly/core/di/di.dart';
 import 'package:taskly/core/helper/date_time_formatter.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
-import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/cubit/get_order_view_model.dart/get_order_view_model.dart';
 import 'package:taskly/features/freelancer/presentation/cubit/fetch_order_details_view_model/fetch_order_details_view_model.dart';
 import 'package:taskly/features/freelancer/presentation/cubit/fetch_order_details_view_model/fetch_order_details_view_model_states.dart';
-
-import '../../../../../../../../client/presentation/views/tabs/my_jobs/presentation/cubit/get_order_view_model.dart/get_order_view_model_states.dart';
 import '../../../../../../../../shared/presentation/views/widgets/attachments_section.dart';
 import '../../../../../../../../shared/presentation/views/widgets/description_section.dart';
 import '../../../../../../../../shared/presentation/views/widgets/job_header_section.dart';

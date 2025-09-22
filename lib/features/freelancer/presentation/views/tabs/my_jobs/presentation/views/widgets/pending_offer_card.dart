@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:marquee/marquee.dart';
 import 'package:taskly/config/routes/routes_manager.dart';
 import 'package:taskly/features/client/presentation/views/tabs/profile/presentation/views/widgets/user_info_section.dart';
+import 'package:taskly/features/client/presentation/views/tabs/profile/presentation/views/widgets/user_info_section_shimmer.dart';
 import 'package:taskly/features/freelancer/domain/entities/offer_entity/offer_entity.dart';
 import 'package:taskly/features/profile/domain/entities/user_info_entity/user_info_entity.dart';
 
@@ -16,9 +18,10 @@ import '../../../../find_work/presentation/views/widgets/delivery_info.dart';
 import '../../../../find_work/presentation/views/widgets/freelancer_work_card.dart';
 
 class PendingOfferCard extends StatelessWidget {
-  PendingOfferCard({super.key, required this.offerEntity});
+  PendingOfferCard({super.key, required this.offerEntity,   this.isPending=false});
 
   OfferEntity offerEntity;
+  bool isPending;
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +39,33 @@ class PendingOfferCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Container(
+
+                height: 20,
+                decoration: BoxDecoration(
+                  color: ColorsManager.primary.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(10.r),
+                  border: Border.all(color: ColorsManager.primary.withOpacity(0.1), width: 1.w),
+                ),
+                child: Marquee(
+                  text: "Please wait until the payment is confirmed. Once confirmed, you can contact the client and start the work.",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                  scrollAxis: Axis.horizontal,
+                  blankSpace: 50.0,
+                  velocity: 50.0,
+                  pauseAfterRound: Duration(seconds: 2),
+                  startPadding: 10.0,
+                  accelerationDuration: Duration(seconds: 2),
+                  accelerationCurve: Curves.linear,
+                  decelerationDuration: Duration(seconds: 2),
+                  decelerationCurve: Curves.easeOut,
+                ),
+              ),
+
+              SizedBox(height: 5.h),
               BlocBuilder<ProfileViewModel, ProfileViewModelStates>(
                 bloc:
                     getIt<ProfileViewModel>()
@@ -43,14 +73,10 @@ class PendingOfferCard extends StatelessWidget {
 
                 builder: (context, state) {
                   if (state is ProfileViewModelStatesLoading) {
-                    return Center(
-                      child: CircularProgressIndicator(
-                        color: ColorsManager.primary,
-                      ),
-                    );
+                    return UserInfoSectionShimmer();
                   }
                   if (state is ProfileViewModelStatesError) {
-                    return Center(child: Text(state.message));
+                    return UserInfoSectionShimmer();
                   }
                   if (state is ProfileViewModelStatesSuccess) {
                     return UserInfoSection(
@@ -64,15 +90,34 @@ class PendingOfferCard extends StatelessWidget {
                 },
               ),
               SizedBox(height: 16.h),
-              Text(
-                "Mind Map",
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
-                softWrap: true,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Text(
+                      "Mind Map",
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
+                      softWrap: true,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.all(4.h),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.r),
+                      color: ColorsManager.primary.withOpacity(0.1),
+                      border: Border.all(color: ColorsManager.primary.withOpacity(0.1), width: 1.w),
+                    ),
+                    child: Text(
+                      offerEntity.offerStatus,
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: ColorsManager.primary),
+                    ),
+                  ),
+                ],
               ),
+
               SizedBox(height: 8.h),
               Text(
                 "Proposal description:${offerEntity.offerDescription} ",
@@ -115,7 +160,8 @@ class PendingOfferCard extends StatelessWidget {
                       );
                     },
                   ),
-                  ActionItem(
+                     if(isPending)
+                     ActionItem(
                     title: "Withdraw offer",
 
                     icon: Icons.remove_circle_outline,

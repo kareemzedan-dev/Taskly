@@ -17,8 +17,8 @@ class OfferRepositoryImpl extends OfferRepository {
   }
 
   @override
-  Future<Either<Failures, List<OfferEntity>>> getFreelancerOffers(String freelancerId) {
- return offerRemoteDataSource.getFreelancerOffers(freelancerId);
+  Future<Either<Failures, List<OfferEntity>>> getFreelancerOffers(String freelancerId, String status) {
+ return offerRemoteDataSource.getFreelancerOffers(freelancerId, status);
   }
 
   @override

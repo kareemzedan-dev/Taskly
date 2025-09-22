@@ -12,14 +12,16 @@ class GetFreelancerOffersViewModel extends Cubit<GetFreelancerOffersStates> {
   final GetFreelancerOffersUseCase getFreelancerOffersUseCase;
   RealtimeChannel? _offersChannel;
 
+
   GetFreelancerOffersViewModel(this.getFreelancerOffersUseCase)
       : super(GetFreelancerOffersLoadingState());
 
   Future<Either<Failures, List<OfferEntity>>> getFreelancerOffers(
-      String freelancerId) async {
+      String freelancerId,[String? status]) async {
     try {
       emit(GetFreelancerOffersLoadingState());
-      final result = await getFreelancerOffersUseCase.call(freelancerId);
+      final result = await getFreelancerOffersUseCase.call(freelancerId, status ?? "all");
+
       result.fold(
             (failure) => emit(GetFreelancerOffersErrorState(failure.message)),
             (offers) => emit(GetFreelancerOffersSuccessState(offers)),
@@ -33,6 +35,7 @@ class GetFreelancerOffersViewModel extends Cubit<GetFreelancerOffersStates> {
   RealtimeChannel subscribeToOffers(
       String freelancerId,
       void Function(OfferEntity offer, String action) onChange,
+
       ) {
 
     _offersChannel = getFreelancerOffersUseCase.subscribeToOffers(freelancerId, onChange);

@@ -7,7 +7,6 @@ import 'package:taskly/core/di/di.dart';
 import 'package:taskly/core/helper/my_bloc_observer.dart';
 import 'package:taskly/core/cache/shared_preferences.dart';
 import 'package:taskly/config/theme/app_theme.dart';
-
 import 'package:taskly/config/routes/routes_manager.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/cubit/services_view_model/services_view_model.dart';
 import 'package:taskly/config/l10n/app_localizations.dart';
@@ -66,7 +65,7 @@ class Taskly extends StatelessWidget {
 
           onGenerateRoute:
               (settings) => RoutesManager.onGenerateRoute(settings),
-          initialRoute: RoutesManager.splash,
+          initialRoute: RoutesManager.freelancerHome,
         );
       },
     );
