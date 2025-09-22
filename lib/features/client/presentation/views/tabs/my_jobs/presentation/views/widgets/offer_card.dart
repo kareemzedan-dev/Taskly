@@ -40,37 +40,39 @@ class OfferCard extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      BlocProvider(
-                        create: (context) => getIt<ProfileViewModel>()..getUserInfo(offer.freelancerId, "freelancer"),
-                        child:BlocBuilder<ProfileViewModel,ProfileViewModelStates>(
-                          
-                            
-                            builder: (context, state) {
-                              if(state is ProfileViewModelStatesLoading){
-                                return const Center(child: CircularProgressIndicator());
-                              }else if(state is ProfileViewModelStatesError){
-                                return Center(child: Text(state.message));
-                              }else if(state is ProfileViewModelStatesSuccess){
-                                 return
-                               UserInfoSection(
-                                 photoSizeSelected: true,
-                           userInfo: state.userInfoEntity,
-                            );
-                              }
-                              return const Center(child: CircularProgressIndicator());
-                             
-                            }
-                             
-                          )
-                      ),
-                      PriceDurationSection(
-                        price: "\$${offer.offerAmount} SAR",
-                        duration:  offer.offerDeliveryTime.formatMinutes(),
-                      ),
-                    ],
-                  ),
+  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  crossAxisAlignment: CrossAxisAlignment.start, // ✅ يخليهم من فوق مش يوسّط
+  children: [
+    Expanded( // ✅ هيخلي الـ UserInfoSection ما ياخدش أكتر من مساحته
+      child: BlocProvider(
+        create: (context) => getIt<ProfileViewModel>()..getUserInfo(offer.freelancerId, "freelancer"),
+        child: BlocBuilder<ProfileViewModel, ProfileViewModelStates>(
+          builder: (context, state) {
+            if (state is ProfileViewModelStatesLoading) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is ProfileViewModelStatesError) {
+              return Center(child: Text(state.message));
+            } else if (state is ProfileViewModelStatesSuccess) {
+              return UserInfoSection(
+                photoSizeSelected: true,
+                userInfo: state.userInfoEntity,
+              );
+            }
+            return const Center(child: CircularProgressIndicator());
+          },
+        ),
+      ),
+    ),
+
+    SizedBox(width: 8.w), // ✅ مسافة صغيرة بينهم
+
+    PriceDurationSection(
+      price: "\$${offer.offerAmount} SAR",
+      duration: offer.offerDeliveryTime.formatMinutes(),
+    ),
+  ],
+),
+
                 ),
                 SizedBox(height: 20.h),
 
@@ -99,14 +101,7 @@ class OfferCard extends StatelessWidget {
 
             
                   OfferActions(offerId: offer.id,onAcceptOffer:onAcceptOffer! ,),
-                SizedBox(height: 10.h),
-                OrderActionButton(
-                  text: "View Reviews ",
-                  icon: Icons.reviews,
-                  color: ColorsManager.primary,
-                  onTap: (){},
-
-                ),
+              
                 SizedBox(height: 10.h),
                 OrderActionButton(
                   text: "Decline Offer",

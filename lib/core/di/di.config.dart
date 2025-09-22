@@ -117,16 +117,24 @@ import '../../features/freelancer/presentation/views/tabs/find_work/presentation
     as _i1052;
 import '../../features/payments/data/data_sources/remote/create_payment_remote_data_source.dart'
     as _i968;
+import '../../features/payments/data/data_sources/remote/get_payment_remote_data_source.dart'
+    as _i315;
 import '../../features/payments/data/data_sources_impl/remote/create_payment_remote_data_source_impl.dart'
     as _i795;
-import '../../features/payments/data/repositories/create_payment_repo_impl/create_payment_repo_impl.dart'
-    as _i891;
-import '../../features/payments/domain/repositories/create_payment_repo/create_payment_repo.dart'
-    as _i1032;
+import '../../features/payments/data/data_sources_impl/remote/get_payment_remote_data_source_impl.dart'
+    as _i696;
+import '../../features/payments/data/repositories/payment_repo_impl/payment_repo_impl.dart'
+    as _i488;
+import '../../features/payments/domain/repositories/payment_repos/payment_repo.dart'
+    as _i815;
 import '../../features/payments/domain/use_cases/create_payment_use_case/create_payment_use_case.dart'
     as _i618;
+import '../../features/payments/domain/use_cases/get_payment/get_payment.dart'
+    as _i848;
 import '../../features/payments/presentation/manager/create_payment_view_model/create_payment_view_model.dart'
     as _i517;
+import '../../features/payments/presentation/manager/get_payment_view_model/get_payment_view_model.dart'
+    as _i483;
 import '../../features/profile/data/data_sources/profile_remote_data_source.dart'
     as _i1012;
 import '../../features/profile/data/data_sources_implem/profile_remote_data_source_impl.dart'
@@ -179,6 +187,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i432.AuthRemoteDataSource>(
       () => _i420.AuthRemoteDataSourceImpl(),
     );
+    gh.factory<_i315.GetPaymentRemoteDataSource>(
+      () => _i696.GetPaymentRemoteDataSourceImpl(gh<_i454.SupabaseClient>()),
+    );
     gh.factory<_i46.OrdersRepo>(
       () => _i553.OrdersRepoImpl(
         ordersRemoteDataSource: gh<_i159.OrdersRemoteDataSource>(),
@@ -196,6 +207,12 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i307.HomeRemoteDataSource>(
       () =>
           _i426.HomeRemoteDataSourceImpl(supabase: gh<_i454.SupabaseClient>()),
+    );
+    gh.factory<_i815.PaymentRepos>(
+      () => _i488.CreatePaymentRepoImpl(
+        gh<_i968.CreatePaymentRemoteDataSource>(),
+        gh<_i315.GetPaymentRemoteDataSource>(),
+      ),
     );
     gh.factory<_i759.OrdersUseCase>(
       () => _i759.OrdersUseCase(gh<_i46.OrdersRepo>()),
@@ -220,14 +237,12 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i772.GetOrderViewModel>(
       () => _i772.GetOrderViewModel(gh<_i759.OrdersUseCase>()),
     );
- gh.factory<_i1020.AttachmentsRemoteDataSource>(
-  () => _i568.AttachmentsRemoteDataSourceImpl(
-    gh<_i361.Dio>(),
-    gh<_i454.SupabaseClient>(),
- 
-  ),
-);
-
+    gh.factory<_i1020.AttachmentsRemoteDataSource>(
+      () => _i568.AttachmentsRemoteDataSourceImpl(
+        gh<_i361.Dio>(),
+        gh<_i454.SupabaseClient>(),
+      ),
+    );
     gh.factory<_i988.FetchOrderDetailsUseCase>(
       () => _i988.FetchOrderDetailsUseCase(gh<_i363.OfferRepository>()),
     );
@@ -248,10 +263,8 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i630.AuthUseCase>(
       () => _i630.AuthUseCase(gh<_i746.AuthRepo>()),
     );
-    gh.factory<_i1032.CreatePaymentRepo>(
-      () => _i891.CreatePaymentRepoImpl(
-        gh<_i968.CreatePaymentRemoteDataSource>(),
-      ),
+    gh.factory<_i618.CreatePaymentUseCase>(
+      () => _i618.CreatePaymentUseCase(gh<_i815.PaymentRepos>()),
     );
     gh.factory<_i345.AttachmentsRepository>(
       () => _i727.AttachmentsRepositoryImpl(
@@ -261,9 +274,6 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i94.ClientOrderStatusViewModel>(
       () => _i94.ClientOrderStatusViewModel(gh<_i886.ClientOrderUseCase>()),
     );
-    gh.factory<_i618.CreatePaymentUseCase>(
-      () => _i618.CreatePaymentUseCase(gh<_i1032.CreatePaymentRepo>()),
-    );
     gh.factory<_i213.HomeUseCase>(
       () => _i213.HomeUseCase(gh<_i660.HomeRepos>()),
     );
@@ -272,6 +282,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i1003.ProfileViewModel>(
       () => _i1003.ProfileViewModel(gh<_i585.ProfileUseCase>()),
+    );
+    gh.factory<_i848.GetPaymentUseCase>(
+      () => _i848.GetPaymentUseCase(gh<_i815.PaymentRepos>()),
     );
     gh.factory<_i946.GetOffersViewModel>(
       () => _i946.GetOffersViewModel(gh<_i356.MyJobsUseCases>()),
@@ -290,6 +303,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i626.SendOfferUseCase>(
       () =>
           _i626.SendOfferUseCase(offerRepository: gh<_i363.OfferRepository>()),
+    );
+    gh.factory<_i483.GetPaymentViewModel>(
+      () => _i483.GetPaymentViewModel(gh<_i848.GetPaymentUseCase>()),
     );
     gh.factory<_i416.DeleteAttachmentsUseCase>(
       () => _i416.DeleteAttachmentsUseCase(

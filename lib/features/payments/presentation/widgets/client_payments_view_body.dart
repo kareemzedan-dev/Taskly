@@ -75,6 +75,13 @@ class ClientPaymentsViewBody extends StatelessWidget {
                       MessageType.error,
                     );
                   }
+                if (uploadVM.uploadedAttachments.isEmpty) {
+                    return showTemporaryMessage(
+                      context,
+                      "Please upload payment proof",
+                      MessageType.error,
+                    );
+                  }
         
 
                   final paymentId = uuid.v4();

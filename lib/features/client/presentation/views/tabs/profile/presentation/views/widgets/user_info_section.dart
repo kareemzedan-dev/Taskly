@@ -43,30 +43,31 @@ class UserInfoSection extends StatelessWidget {
             ),
           ),
           SizedBox(width: 20.w),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                displayName,
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black,
-                ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+          Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            displayName,
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w600,
+              color: Colors.black,
+            ),
+            maxLines:2,  
+            overflow: TextOverflow.visible,
+          ),
+          if (emailShow)
+            Text(
+              displayEmail,
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w500,
+                color: Colors.grey,
               ),
-              if (emailShow)
-                Text(
-                  displayEmail,
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.grey,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
+              maxLines: 1, // ✅ برضه قص لو طويل
+              overflow: TextOverflow.ellipsis,
+            ),
               Row(
                 children: [
                   ...List.generate(5, (index) {
@@ -100,9 +101,9 @@ class UserInfoSection extends StatelessWidget {
                       style: AppTextStyles.bold14.copyWith(color: Colors.grey),
                     ),
                   ],
-                ),
+      ),
             ],
-          ),
+             )   ),
         ],
       ),
     );
