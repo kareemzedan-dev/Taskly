@@ -3,7 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
 
 class CustomStatesContainer extends StatelessWidget {
-  const CustomStatesContainer({super.key});
+  const CustomStatesContainer({super.key, required this.state});
+  final String state;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,7 @@ class CustomStatesContainer extends StatelessWidget {
                           ),
                           child: Center(
                             child: Text(
-                              "In Progress",
+                            state,
                               style: Theme.of(
                                 context,
                               ).textTheme.bodyLarge?.copyWith(

@@ -55,41 +55,42 @@ class AttachmentItemViewer extends StatelessWidget {
               width: 1.w,
             ),
           ),
-          child: Row(
+          child:Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                attachmentName,
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black,
-
+              Expanded( // ⬅️ هنا
+                child: Text(
+                  attachmentName,
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1, // ⬅️ عشان يقص لو طويل
                 ),
-                overflow: TextOverflow.ellipsis,
               ),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   IconButton(
-                    icon: Icon(Icons.remove_red_eye, color: ColorsManager.primary,size: 18.sp,),
+                    icon: Icon(Icons.remove_red_eye,
+                        color: ColorsManager.primary, size: 18.sp),
                     onPressed: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                      
-                          builder: (_) => FileViewerView (
+                          builder: (_) => FileViewerView(
                             filePath: File(attachmentPath).path,
                             isNetwork: true,
                           ),
-
                         ),
                       );
                     },
                   ),
                   if (isFreelancer)
                     IconButton(
-                      icon:   Icon(Icons.download, color: Colors.green,size: 18.sp,),
+                      icon: Icon(Icons.download, color: Colors.green, size: 18.sp),
                       onPressed: () {
                         context.read<DownloadAttachmentsViewModel>().downloadAttachments(
                           attachmentPath,
@@ -99,7 +100,10 @@ class AttachmentItemViewer extends StatelessWidget {
                     ),
                 ],
               ),
-            ],
+
+
+
+          ],
           ),
         ),
       ),

@@ -8,16 +8,20 @@ import 'package:taskly/features/shared/presentation/views/widgets/chat_input_fie
 import 'package:taskly/features/shared/presentation/views/widgets/message_bubble.dart';
 import 'package:taskly/features/shared/presentation/views/widgets/order_status_card.dart';
 
+import '../../../domain/entities/order_entity/order_entity.dart';
+
 class ChatViewBody extends StatelessWidget {
-  const ChatViewBody({super.key});
+    ChatViewBody({super.key,   required this.order});
+
+  OrderEntity order;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         OrderStatusCard(
-          price: 4000,
-          status: "In Progress",
+          price: order.budget ??0,
+          status:  order.status.name,
           onButtonPressed: () {},
         ),
         Expanded(

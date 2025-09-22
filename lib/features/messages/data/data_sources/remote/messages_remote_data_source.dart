@@ -1,11 +1,12 @@
 import 'package:either_dart/either.dart';
 import '../../../../../core/errors/failures.dart';
 import '../../../../../features/shared/domain/entities/order_entity/order_entity.dart';
+import '../../../../welcome/presentation/cubit/welcome_states.dart';
 import '../../../domain/entities/message_entity.dart';
 
 abstract class MessagesRemoteDataSource {
   /// Get accepted orders for a specific user
-  Future<Either<Failures, List<OrderEntity>>> getAcceptedOrderMessages(String userId);
+  Future<Either<Failures, List<OrderEntity>>> getAcceptedOrderMessages(String userId, UserRole role);
 
   /// Get all messages for a specific order
   Future<Either<Failures, List<MessageEntity>>> getOrderMessages(String orderId);

@@ -115,6 +115,26 @@ import '../../features/freelancer/presentation/views/tabs/find_work/presentation
     as _i416;
 import '../../features/freelancer/presentation/views/tabs/find_work/presentation/cubit/send_offer_view_model/send_offer_view_model.dart'
     as _i1052;
+import '../../features/messages/data/data_sources/remote/messages_remote_data_source.dart'
+    as _i1016;
+import '../../features/messages/data/data_sources_impl/remote/messages_remote_data_source_impl.dart'
+    as _i545;
+import '../../features/messages/data/repositories/messages_repos_impl/messages_repos_impl.dart'
+    as _i16;
+import '../../features/messages/domain/repositories/messages_repos/messages_repos.dart'
+    as _i790;
+import '../../features/messages/domain/use_cases/delete_message_use_case/delete_message_use_case.dart'
+    as _i988;
+import '../../features/messages/domain/use_cases/get_accepted_order_message_use_case/get_accepted_order_message_use_case.dart'
+    as _i997;
+import '../../features/messages/domain/use_cases/get_order_messages_use_case/get_order_messages_use_case.dart'
+    as _i416;
+import '../../features/messages/domain/use_cases/mark_message_read_use_case/mark_message_read_use_case.dart'
+    as _i367;
+import '../../features/messages/domain/use_cases/send_message_use_case/send_message_use_case.dart'
+    as _i366;
+import '../../features/messages/presentation/manager/get_accepted_order_message_view_model/get_accepted_order_message_view_model.dart'
+    as _i12;
 import '../../features/payments/data/data_sources/remote/create_payment_remote_data_source.dart'
     as _i968;
 import '../../features/payments/data/data_sources/remote/get_payment_remote_data_source.dart'
@@ -200,6 +220,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i821.ProfileRepo>(
       () => _i541.ProfileRepoImpl(gh<_i1012.ProfileRemoteDataSource>()),
     );
+    gh.factory<_i1016.MessagesRemoteDataSource>(
+      () => _i545.MessagesRemoteDataSourceImpl(gh<_i454.SupabaseClient>()),
+    );
     gh.factory<_i358.OfferRemoteDataSource>(
       () => _i35.OfferRemoteDataSourceImpl(),
     );
@@ -244,6 +267,9 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i361.Dio>(),
         gh<_i454.SupabaseClient>(),
       ),
+    );
+    gh.factory<_i790.MessagesRepos>(
+      () => _i16.MessagesReposImpl(gh<_i1016.MessagesRemoteDataSource>()),
     );
     gh.factory<_i988.FetchOrderDetailsUseCase>(
       () => _i988.FetchOrderDetailsUseCase(gh<_i363.OfferRepository>()),
@@ -322,6 +348,21 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i197.DownloadAttachmentsUseCase>(
       () => _i197.DownloadAttachmentsUseCase(gh<_i345.AttachmentsRepository>()),
     );
+    gh.lazySingleton<_i988.DeleteMessageUseCase>(
+      () => _i988.DeleteMessageUseCase(gh<_i790.MessagesRepos>()),
+    );
+    gh.lazySingleton<_i416.GetOrderMessagesUseCase>(
+      () => _i416.GetOrderMessagesUseCase(gh<_i790.MessagesRepos>()),
+    );
+    gh.lazySingleton<_i367.MarkMessagesAsReadUseCase>(
+      () => _i367.MarkMessagesAsReadUseCase(gh<_i790.MessagesRepos>()),
+    );
+    gh.lazySingleton<_i366.SendMessageUseCase>(
+      () => _i366.SendMessageUseCase(gh<_i790.MessagesRepos>()),
+    );
+    gh.factory<_i997.GetAcceptedOrderMessagesUseCase>(
+      () => _i997.GetAcceptedOrderMessagesUseCase(gh<_i790.MessagesRepos>()),
+    );
     gh.factory<_i171.FreelancerOrderUseCase>(
       () => _i171.FreelancerOrderUseCase(
         freelancerOrderRepo: gh<_i75.FreelancerOrderRepo>(),
@@ -348,6 +389,11 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i517.CreatePaymentViewModel>(
       () => _i517.CreatePaymentViewModel(gh<_i618.CreatePaymentUseCase>()),
+    );
+    gh.factory<_i12.GetAcceptedOrderMessageViewModel>(
+      () => _i12.GetAcceptedOrderMessageViewModel(
+        gh<_i997.GetAcceptedOrderMessagesUseCase>(),
+      ),
     );
     gh.factory<_i590.FetchAllFreelancersViewModel>(
       () => _i590.FetchAllFreelancersViewModel(gh<_i213.HomeUseCase>()),

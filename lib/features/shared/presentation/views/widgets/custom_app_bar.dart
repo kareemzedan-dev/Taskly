@@ -4,7 +4,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/utils/assets_manager.dart';
 import 'package:taskly/features/shared/presentation/views/widgets/custom_states_container.dart';
 
-AppBar customAppBar(BuildContext context) {
+import '../../../domain/entities/order_entity/order_entity.dart';
+
+AppBar customAppBar(BuildContext context, {required String userName, required String userImage, required OrderEntity order}) {
+
     return AppBar(
       backgroundColor: Colors.white,
       toolbarHeight: 70.h,
@@ -49,7 +52,7 @@ AppBar customAppBar(BuildContext context) {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Kareem Zedan",
+                   userName,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       fontWeight: FontWeight.w700,
                       fontSize: 16.sp,
@@ -58,7 +61,7 @@ AppBar customAppBar(BuildContext context) {
                   Row(
                     children: [
                       Text(
-                        "Mind Map",
+                         order.title,
                         style: Theme.of(
                           context,
                         ).textTheme.bodyLarge?.copyWith(
@@ -67,7 +70,7 @@ AppBar customAppBar(BuildContext context) {
                         ),
                       ),
                       SizedBox(width: 8.w),
-                      CustomStatesContainer()
+                      CustomStatesContainer(state: order.status.name,)
                     ],
                   ),
                 ],

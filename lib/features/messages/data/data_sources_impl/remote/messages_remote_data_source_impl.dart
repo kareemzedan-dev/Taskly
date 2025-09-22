@@ -6,6 +6,7 @@ import 'package:taskly/features/messages/data/models/message_model.dart';
 import 'package:taskly/features/shared/data/models/order_dm/order_dm.dart';
 import '../../../../../core/errors/failures.dart';
 import '../../../../../features/shared/domain/entities/order_entity/order_entity.dart';
+import '../../../../welcome/presentation/cubit/welcome_states.dart';
 import '../../../domain/entities/message_entity.dart';
 import '../../data_sources/remote/messages_remote_data_source.dart';
 
@@ -16,15 +17,25 @@ class MessagesRemoteDataSourceImpl implements MessagesRemoteDataSource {
   MessagesRemoteDataSourceImpl(this.supabase);
 
   @override
-  Future<Either<Failures, List<OrderEntity>>> getAcceptedOrderMessages(String userId) async {
+  Future<Either<Failures, List<OrderEntity>>> getAcceptedOrderMessages(
+      String userId, UserRole role) async {
     try {
+      final column = role == UserRole.freelancer ? 'freelancer_id' : 'client_id';
+
       final response = await supabase
           .from('orders')
           .select()
-          .eq('client_id', userId)
-          .inFilter('status', ['pending', 'accepted', 'rejected', 'Awaiting Approval']);
+          .eq(column, userId)
+          .inFilter('status', [
+        'Accepted',
+        'Rejected',
+        'Paid',
+        'AwaitingPaymentConfirmation',
+        'In Progress',
+        'Completed'
+      ]);
 
-      final data = response
+      final data = (response as List)
           .map((e) => OrderDm.fromJson(e))
           .toList();
 

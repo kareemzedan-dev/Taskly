@@ -41,6 +41,7 @@ class RoutesManager {
   static const String favouriteOrdersView = "favouriteOrdersView";
   static const String offerDetailsView = "offerDetailsView";
   static const String clientPaymentsView = "clientPaymentsView";
+
   static Route onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case splash:
@@ -69,7 +70,11 @@ class RoutesManager {
         );
 
       case chatView:
-        return MaterialPageRoute(builder: (_) => ChatView());
+        final args = settings.arguments as Map<String, dynamic>;
+        final userName = args['userName'] as String;
+        final userImage = args['userImage'] as String;
+        final order = args['order'] as OrderEntity;
+        return MaterialPageRoute(builder: (_) => ChatView(userName: userName, userImage: userImage, order: order));
       case jobDetailsView:
         final args = settings.arguments;
         final user = settings.arguments;

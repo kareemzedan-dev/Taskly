@@ -41,7 +41,7 @@ class OrderStatusCard extends StatelessWidget {
                 ),
                 SizedBox(width: 8.w),
 
-                CustomStatesContainer(),
+                CustomStatesContainer(state:  status,),
               ],
             ),
             ElevatedButton(
