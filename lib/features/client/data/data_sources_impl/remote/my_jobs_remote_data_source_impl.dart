@@ -114,6 +114,7 @@ class MyJobsRemoteDataSourceImpl extends MyJobsRemoteDataSource {
       final acceptResponse = await supabaseService.client
           .from('offers')
           .update({"status": "accepted"})
+
           .eq('id', offerId)
           .select()
           .maybeSingle();
@@ -128,6 +129,8 @@ class MyJobsRemoteDataSourceImpl extends MyJobsRemoteDataSource {
           .update({
         "status": "Accepted",
         "budget": acceptedOffer.offerAmount,
+        "freelancer_id": acceptedOffer.freelancerId,
+
       })
           .eq('id', orderId)
           .select()

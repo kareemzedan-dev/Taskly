@@ -61,7 +61,7 @@ class _ThemeBottomSheetContentState extends State<ThemeBottomSheetContent> {
                   theme["title"] as String,
                   style: Theme.of(
                     context,
-                  ).textTheme.bodyLarge?.copyWith(color: ColorsManager.black),
+                  ).textTheme.bodyLarge?.copyWith(color: ColorsManager.black,fontSize: 16.sp,),
                 ),
                 trailing: Container(
                   width: 20.w,

@@ -30,17 +30,27 @@ class _SplashViewBodyState extends State<SplashViewBody>
       duration: const Duration(seconds: 2),
     );
 
-    _fadeAnimation = Tween<double>(
-      begin: 0,
-      end: 1,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
-
-    _scaleAnimation = Tween<double>(
-      begin: 0.8,
-      end: 1,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutBack));
+    _fadeAnimation = Tween<double>(begin: 0, end: 1).animate(
+        CurvedAnimation(parent: _controller, curve: Curves.easeIn));
+    _scaleAnimation = Tween<double>(begin: 0.8, end: 1).animate(
+        CurvedAnimation(parent: _controller, curve: Curves.easeOutBack));
 
     _controller.forward();
+
+    // Move Future.delayed here
+    Future.delayed(
+        const Duration(seconds: ConstantsManager.splashDelay), () {
+      if (!mounted) return;
+      if (token != null) {
+        if (role == StringsManager.freelancerRole) {
+          Navigator.pushReplacementNamed(context, RoutesManager.freelancerHome);
+        } else {
+          Navigator.pushReplacementNamed(context, RoutesManager.clientHome);
+        }
+      } else {
+        Navigator.pushReplacementNamed(context, RoutesManager.welcome);
+      }
+    });
   }
 
   @override

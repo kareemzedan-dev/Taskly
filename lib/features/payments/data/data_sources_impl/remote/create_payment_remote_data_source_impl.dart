@@ -19,7 +19,7 @@ class CreatePaymentRemoteDataSourceImpl extends CreatePaymentRemoteDataSource {
         'id': paymentEntity.id,
         'client_id': paymentEntity.clientId,
         'freelancer_id': paymentEntity.freelancerId,
- 'order_id': paymentEntity.orderId,
+    'order_id': paymentEntity.orderId,
 
         'amount': paymentEntity.amount,
         'status': paymentEntity.status,
@@ -43,6 +43,18 @@ class CreatePaymentRemoteDataSourceImpl extends CreatePaymentRemoteDataSource {
 
           .select()
           .maybeSingle();
+      //
+      // final acceptResponse = await supabase
+      //     .from('offers')
+      //     .update({"status": "Awaiting Approval"})
+      //     .eq('order_id', paymentEntity.orderId)
+      //     .select();
+      //
+      //
+      // if (acceptResponse == null) {
+      //   return Left(ServerFailure("Failed to accept the offer"));
+      // }
+
 
       if (updateOrderResponse == null) {
         return Left(ServerFailure("Failed to update order"));

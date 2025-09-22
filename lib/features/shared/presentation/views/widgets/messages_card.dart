@@ -3,9 +3,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/utils/assets_manager.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
 
+import '../../../domain/entities/order_entity/order_entity.dart';
+
 class MessagesCard extends StatelessWidget {
-    MessagesCard({super.key,required this.onTap});
+    MessagesCard({super.key,required this.onTap,required this.order});
   VoidCallback onTap;
+  OrderEntity order;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +49,7 @@ class MessagesCard extends StatelessWidget {
                     SizedBox(width: 4.w),
         
                     Text(
-                      "No messages yet",
+                      "No messages_repos yet",
                       style: Theme.of(
                         context,
                       ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w400),
@@ -66,7 +69,7 @@ class MessagesCard extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),
                   child: Text(
-                    "Mind",
+                    order.title,
                     style: Theme.of(
                       context,
                     ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),

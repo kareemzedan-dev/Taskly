@@ -9,7 +9,7 @@ import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentat
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/empty_state_animation.dart';
 import 'package:taskly/features/freelancer/presentation/cubit/get_freelancer_offers_view_model/get_freelancer_offers_states.dart';
 import 'package:taskly/features/freelancer/presentation/cubit/get_freelancer_offers_view_model/get_freelancer_offers_view_model.dart';
-import 'package:taskly/features/freelancer/presentation/views/tabs/my_jobs/presentation/views/widgets/pending_offers_list_view.dart';
+import 'package:taskly/features/freelancer/presentation/views/tabs/my_jobs/presentation/views/widgets/tracking_offers_list_view.dart';
 import '../../../../../../../../../core/components/custom_tab_bar.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -89,7 +89,7 @@ class _MyJobsTabViewBodyState extends State<MyJobsTabViewBody> {
                     message: 'No pending offers',
                   );
                 }
-                return PendingOffersListView(offer: pendingOffers,isPending: true,);
+                return TrackingOffersListView(offer: pendingOffers,isPending: true,);
               }
               return const Center(child: Text("No offers"));
             },
@@ -125,7 +125,7 @@ class _MyJobsTabViewBodyState extends State<MyJobsTabViewBody> {
                     message: 'No accepted Offers',
                   );
                 }
-                return PendingOffersListView(offer: acceptedOffers );
+                return TrackingOffersListView(offer: acceptedOffers );
               }
 
               return const Center(child: Text("No offers"));
@@ -134,20 +134,80 @@ class _MyJobsTabViewBodyState extends State<MyJobsTabViewBody> {
         ),
 
         // Completed tab
-        const Center(
-          child: EmptyStateAnimation(
-            animationPath: 'assets/lotties/Success.json',
-            message: 'No completed projects yet',
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: BlocBuilder<
+              GetFreelancerOffersViewModel,
+              GetFreelancerOffersStates
+          >(
+            bloc: viewModel ,
+            builder: (context, state) {
+              if (state is GetFreelancerOffersLoadingState) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              if (state is GetFreelancerOffersErrorState) {
+                return Center(child: Text(state.message));
+              }
+              if (state is GetFreelancerOffersSuccessState) {
+
+                final acceptedOffers = state.offers
+                    .where((o) => o.offerStatus == "completed")
+                    .toList();
+
+                if (acceptedOffers.isEmpty) {
+                  return const EmptyStateAnimation(
+                    animationPath: 'assets/lotties/Success.json',
+                    message: 'No completed projects yet',
+                  );
+                }
+                return TrackingOffersListView(offer: acceptedOffers );
+              }
+
+              return const Center(child: Text("No offers"));
+            },
           ),
         ),
 
+
         // Rejected tab
-        const Center(
-          child: EmptyStateAnimation(
-            animationPath: 'assets/lotties/cancelled.json',
-            message: 'No rejected offers',
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: BlocBuilder<
+              GetFreelancerOffersViewModel,
+              GetFreelancerOffersStates
+          >(
+            bloc: viewModel ,
+            builder: (context, state) {
+              if (state is GetFreelancerOffersLoadingState) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              if (state is GetFreelancerOffersErrorState) {
+                return Center(child: Text(state.message));
+              }
+              if (state is GetFreelancerOffersSuccessState) {
+
+                final acceptedOffers = state.offers
+                    .where((o) => o.offerStatus == "rejected")
+                    .toList();
+
+                if (acceptedOffers.isEmpty) {
+                  return const EmptyStateAnimation(
+                    animationPath: 'assets/lotties/cancelled.json',
+                    message: 'No rejected offers',
+                  );
+                }
+                return TrackingOffersListView(offer: acceptedOffers );
+              }
+
+              return const Center(child: Text("No offers"));
+            },
           ),
         ),
+
       ],
     );
   }

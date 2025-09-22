@@ -45,6 +45,7 @@ class AttachmentItemViewer extends StatelessWidget {
       child: IntrinsicHeight(
         child: Container(
           padding: EdgeInsets.all(8.w),
+          margin: EdgeInsets.symmetric(vertical: 8.h),
           width: double.infinity,
           decoration: BoxDecoration(
             color: Colors.white,
@@ -57,18 +58,21 @@ class AttachmentItemViewer extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Flexible(
-                child: Text(
-                  attachmentName,
-                  style: Theme.of(context).textTheme.bodyLarge,
-                  overflow: TextOverflow.ellipsis,
+              Text(
+                attachmentName,
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black,
+
                 ),
+                overflow: TextOverflow.ellipsis,
               ),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   IconButton(
-                    icon: Icon(Icons.remove_red_eye, color: ColorsManager.primary),
+                    icon: Icon(Icons.remove_red_eye, color: ColorsManager.primary,size: 18.sp,),
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -85,7 +89,7 @@ class AttachmentItemViewer extends StatelessWidget {
                   ),
                   if (isFreelancer)
                     IconButton(
-                      icon: const Icon(Icons.download, color: Colors.green),
+                      icon:   Icon(Icons.download, color: Colors.green,size: 18.sp,),
                       onPressed: () {
                         context.read<DownloadAttachmentsViewModel>().downloadAttachments(
                           attachmentPath,

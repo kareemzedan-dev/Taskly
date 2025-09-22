@@ -9,12 +9,12 @@ class PrivacyPolicyViewBody extends StatelessWidget {
     final TextStyle titleStyle = Theme.of(context)
         .textTheme
         .titleLarge!
-        .copyWith(fontWeight: FontWeight.bold, color: Colors.black);
+        .copyWith(fontWeight: FontWeight.bold, color: Colors.black,fontSize: 16.sp,);
 
     final TextStyle bodyStyle = Theme.of(context)
         .textTheme
         .bodyMedium!
-        .copyWith(color: Colors.black87, height: 1.5);
+        .copyWith(color: Colors.black87, height: 1.5,fontSize: 14.sp,);
 
     return Card(
       elevation: 6,

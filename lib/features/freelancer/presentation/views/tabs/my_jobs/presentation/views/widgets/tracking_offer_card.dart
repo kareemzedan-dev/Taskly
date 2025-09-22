@@ -17,8 +17,8 @@ import '../../../../find_work/presentation/views/widgets/action_row.dart';
 import '../../../../find_work/presentation/views/widgets/delivery_info.dart';
 import '../../../../find_work/presentation/views/widgets/freelancer_work_card.dart';
 
-class PendingOfferCard extends StatelessWidget {
-  PendingOfferCard({super.key, required this.offerEntity,   this.isPending=false});
+class TrackingOfferCard extends StatelessWidget {
+  TrackingOfferCard({super.key, required this.offerEntity,   this.isPending=false});
 
   OfferEntity offerEntity;
   bool isPending;
@@ -39,6 +39,7 @@ class PendingOfferCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              if(!isPending)
               Container(
 
                 height: 20,

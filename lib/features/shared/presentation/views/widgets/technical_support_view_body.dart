@@ -25,7 +25,7 @@ class TechnicalSupportViewBody extends StatelessWidget {
     {
       "question": "How to chat directly with the admin?",
       "answer":
-          "To chat directly with the admin, go to the 'Messages' tab. You will find a pinned chat where you can send your messages and get a response from the admin."
+          "To chat directly with the admin, go to the 'Messages' tab. You will find a pinned chat where you can send your messages_repos and get a response from the admin."
     },
     {
       "question": "How to update my profile?",

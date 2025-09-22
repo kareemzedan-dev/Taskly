@@ -37,7 +37,11 @@ class SocialLoginButton extends StatelessWidget {
             SizedBox(width: 30.w),
             Text(
               label,
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(),
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w600,
+                color: Colors.black,
+              ),
             ),
           ],
         ),

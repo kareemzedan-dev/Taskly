@@ -172,7 +172,7 @@ Future<String> _uploadFileInternal(
     return channel;
   }
 
-  /// Unsubscribe from a table
+
   void unsubscribe({required String table}) {
     final channelName = 'public:$table';
     if (_channels.containsKey(channelName)) {
@@ -181,7 +181,6 @@ Future<String> _uploadFileInternal(
     }
   }
 
-  /// Unsubscribe from all channels
   void unsubscribeAll() {
     for (var channel in _channels.values) {
       supabase.removeChannel(channel);

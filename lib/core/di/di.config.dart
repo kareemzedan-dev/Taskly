@@ -168,7 +168,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.singleton<_i383.FilePickerService>(() => _i383.FilePickerService());
     gh.singleton<_i374.SupabaseService>(() => _i374.SupabaseService());
     gh.factory<_i297.FreelancerOrderRemoteDataSource>(
-      () => _i500.FreelancerOrderRemoteDataSourceImpl(),
+      () => _i500.FreelancerOrderRemoteDataSourceImpl(
+        supabaseService: gh<_i374.SupabaseService>(),
+      ),
     );
     gh.factory<_i41.MyJobsRemoteDataSource>(
       () => _i95.MyJobsRemoteDataSourceImpl(),

@@ -1,7 +1,6 @@
 import 'dart:async';
-
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:either_dart/src/either.dart';
+import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:taskly/core/errors/failures.dart';
@@ -14,15 +13,22 @@ import 'package:taskly/features/freelancer/data/data_sources/remote/freelancer_o
 class FreelancerOrderRemoteDataSourceImpl
     extends FreelancerOrderRemoteDataSource {
 
-  final SupabaseService supabaseService = SupabaseService();
-  final SupabaseClient _supabase = Supabase.instance.client;
+  final SupabaseService _supabaseService;
+  final SupabaseClient _supabase;
+
   RealtimeChannel? _ordersChannel;
   RealtimeChannel? _privateOrdersChannel;
+
+  FreelancerOrderRemoteDataSourceImpl({
+    required SupabaseService supabaseService,
+  })  : _supabaseService = supabaseService,
+        _supabase = Supabase.instance.client;
+
   @override
   Future<Either<Failures, List<OrderEntity>>> fetchPendingFreelancerOrders(String freelancerId) async {
     try {
-      var result = await Connectivity().checkConnectivity();
-      if (result == ConnectivityResult.none) {
+      final connectivity = await Connectivity().checkConnectivity();
+      if (connectivity == ConnectivityResult.none) {
         return Left(NetworkFailure('No internet connection'));
       }
 
@@ -41,29 +47,23 @@ class FreelancerOrderRemoteDataSourceImpl
           .eq('status', 'Pending')
           .not('id', 'in', offeredOrderIds.isEmpty ? [''] : offeredOrderIds);
 
-      if (response.isEmpty) {
-        return Right([]);
-      }
+      if ((response as List).isEmpty) return Right([]);
 
-      final orders = (response as List)
-          .map((json) => OrderDm.fromJson(json))
-          .toList();
-
+      final orders = response.map((json) => OrderDm.fromJson(json)).toList();
       return Right(orders);
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      return Left(ServerFailure('Failed to fetch pending orders: $e'));
     }
   }
+
   @override
-  RealtimeChannel subscribeToPendingOrders(
-      void Function(OrderEntity order, String action) onChange,
-      ) {
-    _ordersChannel = supabaseService.subscribe(
+  RealtimeChannel subscribeToPendingOrders(void Function(OrderEntity order, String action) onChange) {
+    _ordersChannel = _supabaseService.subscribe(
       table: 'orders',
-      filters: {'status': "Pending"},
+      filters: {'status': 'Pending'},
       onChange: (record, action) {
         final order = OrderDm.fromJson(record);
-        if(order.status == OrderStatus.Pending) {
+        if (order.status == OrderStatus.Pending) {
           onChange(order, action);
         }
       },
@@ -72,18 +72,18 @@ class FreelancerOrderRemoteDataSourceImpl
   }
 
   void unsubscribeFromPendingOrders() {
-    supabaseService.unsubscribe(table: 'orders');
-    _ordersChannel = null;
+    if (_ordersChannel != null) {
+      _supabaseService.unsubscribe(table: 'orders');
+      _ordersChannel = null;
+    }
   }
 
 
-
   @override
-  Future<Either<Failures, List<OrderEntity>>> fetchPrivateOrders(
-      String freelancerId) async {
+  Future<Either<Failures, List<OrderEntity>>> fetchPrivateOrders(String freelancerId) async {
     try {
-      var result = await Connectivity().checkConnectivity();
-      if (result == ConnectivityResult.none) {
+      final connectivity = await Connectivity().checkConnectivity();
+      if (connectivity == ConnectivityResult.none) {
         return Left(NetworkFailure('No internet connection'));
       }
 
@@ -92,24 +92,18 @@ class FreelancerOrderRemoteDataSourceImpl
           .select('*')
           .eq('freelancer_id', freelancerId);
 
-      if (response.isEmpty) {
-        return Right([]);
-      }
+      if ((response as List).isEmpty) return Right([]);
 
-      final orders =
-      (response as List).map((json) => OrderDm.fromJson(json)).toList();
-
+      final orders = response.map((json) => OrderDm.fromJson(json)).toList();
       return Right(orders);
     } catch (e) {
-      return Left(ServerFailure("Failed to fetch private orders: $e"));
+      return Left(ServerFailure('Failed to fetch private orders: $e'));
     }
   }
-@override
-  RealtimeChannel subscribeToPrivateOrders(
-      String freelancerId,
-      void Function(OrderEntity order, String action) onChange,
-      ) {
-    _privateOrdersChannel = supabaseService.subscribe(
+
+  @override
+  RealtimeChannel subscribeToPrivateOrders(String freelancerId, void Function(OrderEntity order, String action) onChange) {
+    _privateOrdersChannel = _supabaseService.subscribe(
       table: 'orders',
       filters: {'freelancer_id': freelancerId},
       onChange: (record, action) {
@@ -117,12 +111,19 @@ class FreelancerOrderRemoteDataSourceImpl
         onChange(order, action);
       },
     );
-
     return _privateOrdersChannel!;
   }
 
   void unsubscribeFromPrivateOrders() {
-    supabaseService.unsubscribe(table: 'orders');
+    if (_privateOrdersChannel != null) {
+      _supabaseService.unsubscribe(table: 'orders');
+      _privateOrdersChannel = null;
+    }
+  }
+
+  void unsubscribeAll() {
+    _supabaseService.unsubscribeAll();
+    _ordersChannel = null;
     _privateOrdersChannel = null;
   }
 }

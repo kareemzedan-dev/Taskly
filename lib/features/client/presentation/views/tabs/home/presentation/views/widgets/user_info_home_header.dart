@@ -17,7 +17,7 @@ class UserInfoHomeHeader extends StatelessWidget {
               "Hi ${fullName ?? ""},",
               style: Theme.of(
                 context,
-              ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
+              ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600,       fontSize: 16.sp,),
             ),
             Text(
               "Welcome back",

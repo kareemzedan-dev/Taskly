@@ -18,7 +18,8 @@ class AttachmentCardViewerListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    return SizedBox(
+      height: 200,
       child: ListView.builder(
         itemCount: attachmentEntity.length,
         scrollDirection: Axis.vertical,
