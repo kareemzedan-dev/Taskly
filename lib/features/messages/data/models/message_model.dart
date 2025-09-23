@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:taskly/features/messages/domain/entities/message_entity.dart';
 import 'package:taskly/features/attachments/data/models/attachments_dm/attachments_dm.dart';
 
@@ -28,10 +30,26 @@ class MessageModel extends MessageEntity {
       messageType: json['message_type'] as String,
       content: json['content'] as String?,
       attachment: json['attachment'] != null
-          ? (json['attachment'] as List)
-          .map((a) => AttachmentModel.fromJson(a))
-          .toList()
+          ? (() {
+        final raw = json['attachment'];
+        if (raw is String) {
+          // decode string → list
+          final decoded = jsonDecode(raw);
+          if (decoded is List) {
+            return decoded
+                .map((a) => AttachmentModel.fromJson(a as Map<String, dynamic>))
+                .toList();
+          }
+        } else if (raw is List) {
+          // already list
+          return raw
+              .map((a) => AttachmentModel.fromJson(a as Map<String, dynamic>))
+              .toList();
+        }
+        return null;
+      })()
           : null,
+
       status: json['status'] as String,
       deliveredAt: json['delivered_at'] != null
           ? DateTime.parse(json['delivered_at'] as String)

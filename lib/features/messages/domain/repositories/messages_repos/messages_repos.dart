@@ -1,4 +1,5 @@
 import 'package:either_dart/either.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:taskly/features/shared/domain/entities/order_entity/order_entity.dart';
 import 'package:taskly/features/messages/domain/entities/message_entity.dart';
 import '../../../../../core/errors/failures.dart';
@@ -20,4 +21,7 @@ abstract class MessagesRepos {
 
   /// Delete a message
   Future<Either<Failures, void>> deleteMessage(String messageId);
+
+  /// Subscribe to messages for a specific order
+  Future<RealtimeChannel> subscribeToMessages(String orderId, void Function(MessageEntity message, String action) onChange);
 }

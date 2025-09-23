@@ -9,6 +9,7 @@ import '../../../domain/entities/order_entity/order_entity.dart';
 AppBar customAppBar(BuildContext context, {required String userName, required String userImage, required OrderEntity order}) {
 
     return AppBar(
+      surfaceTintColor: Colors.transparent,
       backgroundColor: Colors.white,
       toolbarHeight: 70.h,
       elevation: 0,

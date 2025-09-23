@@ -13,4 +13,5 @@ class SendMessageUseCase {
   Future<Either<Failures, MessageEntity>> call(String orderId, MessageEntity message) {
     return repository.sendMessage(orderId, message);
   }
+
 }

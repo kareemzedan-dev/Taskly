@@ -1,4 +1,3 @@
-
 import 'package:taskly/features/attachments/domain/entities/attachment_entity/attaachments_entity.dart';
 
 class AttachmentModel extends AttachmentEntity {
@@ -9,7 +8,6 @@ class AttachmentModel extends AttachmentEntity {
     required super.size,
     required super.type,
     required super.storagePath,
-    
   });
 
   factory AttachmentModel.fromJson(Map<String, dynamic> json) {
@@ -32,5 +30,27 @@ class AttachmentModel extends AttachmentEntity {
       'type': type,
       'storagePath': storagePath,
     };
+  }
+
+  factory AttachmentModel.fromEntity(AttachmentEntity entity) {
+    return AttachmentModel(
+      id: entity.id,
+      name: entity.name,
+      url: entity.url,
+      size: entity.size,
+      type: entity.type,
+      storagePath: entity.storagePath,
+    );
+  }
+
+  AttachmentEntity toEntity() {
+    return AttachmentEntity(
+      id: id,
+      name: name,
+      url: url,
+      size: size,
+      type: type,
+      storagePath: storagePath,
+    );
   }
 }

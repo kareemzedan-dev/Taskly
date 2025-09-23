@@ -135,6 +135,8 @@ import '../../features/messages/domain/use_cases/send_message_use_case/send_mess
     as _i366;
 import '../../features/messages/presentation/manager/get_accepted_order_message_view_model/get_accepted_order_message_view_model.dart'
     as _i12;
+import '../../features/messages/presentation/manager/send_message_view_model/send_message_view_model.dart'
+    as _i602;
 import '../../features/payments/data/data_sources/remote/create_payment_remote_data_source.dart'
     as _i968;
 import '../../features/payments/data/data_sources/remote/get_payment_remote_data_source.dart'
@@ -220,9 +222,6 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i821.ProfileRepo>(
       () => _i541.ProfileRepoImpl(gh<_i1012.ProfileRemoteDataSource>()),
     );
-    gh.factory<_i1016.MessagesRemoteDataSource>(
-      () => _i545.MessagesRemoteDataSourceImpl(gh<_i454.SupabaseClient>()),
-    );
     gh.factory<_i358.OfferRemoteDataSource>(
       () => _i35.OfferRemoteDataSourceImpl(),
     );
@@ -258,6 +257,12 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i356.MyJobsUseCases>(
       () => _i356.MyJobsUseCases(gh<_i896.MyJobsRepo>()),
+    );
+    gh.factory<_i1016.MessagesRemoteDataSource>(
+      () => _i545.MessagesRemoteDataSourceImpl(
+        gh<_i454.SupabaseClient>(),
+        gh<_i374.SupabaseService>(),
+      ),
     );
     gh.factory<_i772.GetOrderViewModel>(
       () => _i772.GetOrderViewModel(gh<_i759.OrdersUseCase>()),
@@ -367,6 +372,9 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i171.FreelancerOrderUseCase(
         freelancerOrderRepo: gh<_i75.FreelancerOrderRepo>(),
       ),
+    );
+    gh.factory<_i602.SendMessageViewModel>(
+      () => _i602.SendMessageViewModel(gh<_i366.SendMessageUseCase>()),
     );
     gh.factory<_i338.DownloadAttachmentsViewModel>(
       () => _i338.DownloadAttachmentsViewModel(

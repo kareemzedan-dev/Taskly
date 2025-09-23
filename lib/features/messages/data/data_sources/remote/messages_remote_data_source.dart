@@ -1,4 +1,5 @@
 import 'package:either_dart/either.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../../core/errors/failures.dart';
 import '../../../../../features/shared/domain/entities/order_entity/order_entity.dart';
 import '../../../../welcome/presentation/cubit/welcome_states.dart';
@@ -19,4 +20,6 @@ abstract class MessagesRemoteDataSource {
 
   /// Delete a specific message
   Future<Either<Failures, void>> deleteMessage(String messageId);
+  /// Subscribe to messages for a specific order
+ Future<RealtimeChannel> subscribeToMessages(String orderId, void Function(MessageEntity message, String action) onChange);
 }

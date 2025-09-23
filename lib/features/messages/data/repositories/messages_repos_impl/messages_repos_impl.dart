@@ -1,4 +1,5 @@
 import 'package:injectable/injectable.dart';
+import 'package:realtime_client/src/realtime_channel.dart';
 
 import '../../../../welcome/presentation/cubit/welcome_states.dart';
 import '../../../domain/repositories/messages_repos/messages_repos.dart';
@@ -16,20 +17,27 @@ class MessagesReposImpl implements MessagesRepos {
   Future<Either<Failures, List<OrderEntity>>> getAcceptedOrderMessages(String userId, UserRole role) {
     return remoteDataSource.getAcceptedOrderMessages(userId, role );
   }
-
+  @override
   Future<Either<Failures, List<MessageEntity>>> getOrderMessages(String orderId) {
     return remoteDataSource.getOrderMessages(orderId);
   }
-
+  @override
   Future<Either<Failures, MessageEntity>> sendMessage(String orderId, MessageEntity message) {
     return remoteDataSource.sendMessage(orderId, message);
   }
-
+  @override
   Future<Either<Failures, void>> markMessagesAsRead(String orderId) {
     return remoteDataSource.markMessagesAsRead(orderId);
   }
-
+  @override
   Future<Either<Failures, void>> deleteMessage(String messageId) {
     return remoteDataSource.deleteMessage(messageId);
   }
+
+  @override
+  Future<RealtimeChannel> subscribeToMessages(String orderId, void Function(MessageEntity message, String action) onChange) {
+     return remoteDataSource.subscribeToMessages(orderId, onChange);
+  }
+
+
 }

@@ -3,7 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
 class AdminMessageCard extends StatelessWidget {
-  const AdminMessageCard({super.key});
+  const AdminMessageCard({super.key, required this.message});
+  final String message;
 
   @override
   Widget build(BuildContext context) {
@@ -28,25 +29,14 @@ class AdminMessageCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Order created successfully, payment is pending admin approval.',
+                  message,
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         color: ColorsManager.primary,
                         fontSize: 12.sp,
                         fontWeight: FontWeight.w600,
                       ),
                 ),
-                SizedBox(height: 8.h),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: Text(
-                    '9.00 AM',
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: ColorsManager.primary,
-                          fontSize: 10.sp,
-                          fontWeight: FontWeight.w600,
-                        ),
-                  ),
-                ),
+
               ],
             ),
           ),

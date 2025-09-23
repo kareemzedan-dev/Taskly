@@ -74,7 +74,9 @@ class RoutesManager {
         final userName = args['userName'] as String;
         final userImage = args['userImage'] as String;
         final order = args['order'] as OrderEntity;
-        return MaterialPageRoute(builder: (_) => ChatView(userName: userName, userImage: userImage, order: order));
+        final currentUserId = args['currentUserId'] as String;
+        final receiverId = args['receiverId'] as String;
+        return MaterialPageRoute(builder: (_) => ChatView(userName: userName, userImage: userImage, order: order,currentUserId: currentUserId,receiverId: receiverId));
       case jobDetailsView:
         final args = settings.arguments;
         final user = settings.arguments;

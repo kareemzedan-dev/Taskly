@@ -48,4 +48,22 @@ class MessageEntity   {
     createdAt,
     updatedAt,
   ];
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'orderId': orderId,
+      'paymentId': paymentId,
+      'senderId': senderId,
+      'receiverId': receiverId,
+      'messageType': messageType,
+      'content': content,
+      'attachment': attachment?.map((a) => a.toJson()).toList(),
+      'status': status,
+      'deliveredAt': deliveredAt?.toIso8601String(),
+      'seenAt': seenAt?.toIso8601String(),
+      'createdAt': createdAt.toIso8601String(),
+      'updatedAt': updatedAt.toIso8601String(),
+    };
+  }
+
 }

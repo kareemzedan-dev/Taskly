@@ -96,6 +96,8 @@ class UserMessagesTabViewBody extends StatelessWidget {
                               "userName": fullName,
                               "userImage": avatarUrl,
                               "order": order,
+                              "currentUserId": SharedPrefHelper.getString(StringsManager.idKey)!,
+                              "receiverId": chatUserId!,
                             });
                           },
                         )
