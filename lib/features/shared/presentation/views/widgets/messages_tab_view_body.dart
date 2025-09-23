@@ -74,33 +74,40 @@ class UserMessagesTabViewBody extends StatelessWidget {
 
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: MessagesCard(
-                          chatUserId: chatUserId!,
-                          chatUserRole: chatUserRole,
-                          order: order,
-                          onTap: () {
-                            if (order.status != OrderStatus.Accepted &&
-                                order.status != OrderStatus.AwaitingPaymentConfirmation) {
+                          child: MessagesCard(
+                            chatUserId: chatUserId!,
+                            chatUserRole: chatUserRole,
+                            order: order,
+                              onTap: () {
+                                if (order.status == OrderStatus.AwaitingPaymentConfirmation ||
+                                    order.status == OrderStatus.Pending ||
+                                    order.status == OrderStatus.Accepted) {
+                                  showTemporaryMessage(
+                                    context,
+                                    "Please wait for the order payment to be confirmed",
+                                    MessageType.waiting,
+                                  );
+                                }
+                              },
+                              onUserInfoLoaded: (fullName, avatarUrl) {
+                                if (order.status != OrderStatus.AwaitingPaymentConfirmation &&
+                                    order.status != OrderStatus.Pending &&
+                                    order.status != OrderStatus.Accepted) {
+                                  Navigator.pushNamed(
+                                    context,
+                                    RoutesManager.chatView,
+                                    arguments: {
+                                      "userName": fullName,
+                                      "userImage": avatarUrl,
+                                      "order": order,
+                                      "currentUserId": SharedPrefHelper.getString(StringsManager.idKey)!,
+                                      "receiverId": chatUserId!,
+                                    },
+                                  );
+                                }
+                              }
 
-                            } else {
-                              showTemporaryMessage(
-                                context,
-                                "Please wait for the order payment to be confirmed",
-                                MessageType.waiting,
-                              );
-                            }
-                          },
-                          onUserInfoLoaded: (fullName, avatarUrl) {
-
-                            Navigator.pushNamed(context, RoutesManager.chatView, arguments: {
-                              "userName": fullName,
-                              "userImage": avatarUrl,
-                              "order": order,
-                              "currentUserId": SharedPrefHelper.getString(StringsManager.idKey)!,
-                              "receiverId": chatUserId!,
-                            });
-                          },
-                        )
+                          )
 
 
                       );

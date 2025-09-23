@@ -59,6 +59,11 @@ class _ChatViewBodyState extends State<ChatViewBody> {
             price: widget.order.budget ?? 0,
             status: widget.order.status.name,
             onButtonPressed: () {},
+            message: widget.currentUserId == widget.order.clientId ? "Work received." : "Submit delivery.",
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: AdminMessageCard(message: "System: Order payment has been confirmed, you can start working on it.",),
           ),
 
           Expanded(

@@ -36,53 +36,53 @@ class UploadAttachmentsViewModel extends Cubit<UploadAttachmentsViewModelStates>
     final fileSize = await file.length();
     return '$fileName-$fileSize';
   }
-  Future<void> pickFilesFromDevice({String? bucketName}) async {
+  Future<void> pickFilesFromDevice({
+    String? bucketName,
+    bool singleFileMode = false,
+  }) async {
     try {
       final result = await FilePicker.platform.pickFiles(
-        allowMultiple: true,
+        allowMultiple: false, // ⛔ ملف واحد في كل اختيار
         type: FileType.custom,
         allowedExtensions: ['jpg', 'png', 'pdf', 'doc', 'docx'],
       );
 
       if (result != null && result.files.isNotEmpty) {
-        final List<File> validFiles = [];
+        final platformFile = result.files.first;
 
-        for (final platformFile in result.files) {
-          if (platformFile.path == null) continue;
-
+        if (platformFile.path != null) {
           final file = File(platformFile.path!);
           final fileHash = await generateFileHash(file);
 
-          if (uploadedFileHashes.contains(fileHash)) continue;
-
-          bool alreadyInList = false;
-          for (final existingFile in files) {
-            final existingHash = await generateFileHash(existingFile);
-            if (existingHash == fileHash) {
-              alreadyInList = true;
-              break;
+          if (!uploadedFileHashes.contains(fileHash)) {
+            if (singleFileMode) {
+              // ✅ يستبدل القديم بالجديد
+              files.clear();
+            } else {
+              // ✅ يحتفظ بالقديم
+              for (final existingFile in files) {
+                final existingHash = await generateFileHash(existingFile);
+                if (existingHash == fileHash) {
+                  return; // الملف مكرر
+                }
+              }
             }
-          }
 
-          if (!alreadyInList) {
-            validFiles.add(file);
+            files.add(file);
             _generateFileKey(file);
+
+            emit(UploadAttachmentsViewModelStatesInitial());
+
+            await uploadAttachments(bucketName: bucketName);
           }
-        }
-
-        if (validFiles.isNotEmpty) {
-          files.addAll(validFiles);
-          emit(UploadAttachmentsViewModelStatesInitial());
-
-          // رفع الملفات مع تحديد bucketName
-          await uploadAttachments(bucketName: bucketName);
         }
       }
     } catch (e) {
       emit(UploadAttachmentsViewModelStatesError(message: e.toString()));
     }
   }
- void removeFileFromQueue(File file) async {
+
+  void removeFileFromQueue(File file) async {
     final fileHash = await generateFileHash(file);
 
     files.remove(file);

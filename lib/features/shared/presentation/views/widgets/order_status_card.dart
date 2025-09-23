@@ -7,12 +7,14 @@ class OrderStatusCard extends StatelessWidget {
   final double price;
   final String status;
   final VoidCallback onButtonPressed;
+  final String message;
 
   const OrderStatusCard({
     super.key,
     required this.price,
     required this.status,
     required this.onButtonPressed,
+    required this.message,
   });
 
   @override
@@ -52,7 +54,7 @@ class OrderStatusCard extends StatelessWidget {
                 ),
               ),
               child: Text(
-                "Submit Delivery",
+                message,
                 style: Theme.of(
                   context,
                 ).textTheme.bodyLarge?.copyWith(color: Colors.white),

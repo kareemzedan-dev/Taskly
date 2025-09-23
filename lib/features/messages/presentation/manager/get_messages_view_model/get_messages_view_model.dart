@@ -31,7 +31,6 @@ class GetMessagesViewModel extends Cubit<GetMessagesViewModelStates> {
         final currentMessages = state is GetMessagesViewModelStatesSuccess
             ? List<MessageEntity>.from((state as GetMessagesViewModelStatesSuccess).messages)
             : <MessageEntity>[];
-
         if (action == 'INSERT') {
           currentMessages.add(message);
         } else if (action == 'UPDATE') {
@@ -40,6 +39,12 @@ class GetMessagesViewModel extends Cubit<GetMessagesViewModelStates> {
         } else if (action == 'DELETE') {
           currentMessages.removeWhere((m) => m.id == message.id);
         }
+
+// رتب حسب createdAt
+        currentMessages.sort((a, b) => a.createdAt.compareTo(b.createdAt));
+
+        emit(GetMessagesViewModelStatesSuccess(messages: List.from(currentMessages)));
+
 
         emit(GetMessagesViewModelStatesSuccess(messages: currentMessages));
 

@@ -60,7 +60,7 @@ class ChatInputField extends StatelessWidget {
                             senderId: currentUserId,
                             receiverId: receiverId,
                             paymentId: null,
-                            messageType: messageType, // ✅ متوافق مع الـ DB
+                            messageType: messageType,
                             content: null,
                             attachment: attachments,
                             status: "sent",
@@ -91,6 +91,7 @@ class ChatInputField extends StatelessWidget {
                           onPressed: () {
                             context.read<UploadAttachmentsViewModel>().pickFilesFromDevice(
                               bucketName: "attachments",
+                              singleFileMode: true,
                             );
                           },
                         );

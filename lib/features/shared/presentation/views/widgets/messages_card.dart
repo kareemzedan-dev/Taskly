@@ -129,7 +129,7 @@ class MessagesCard extends StatelessWidget {
                               borderRadius: BorderRadius.circular(12.r),
                             ),
                             child: Text(
-                              order.status!.name,
+                              order.status.name,
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyLarge
