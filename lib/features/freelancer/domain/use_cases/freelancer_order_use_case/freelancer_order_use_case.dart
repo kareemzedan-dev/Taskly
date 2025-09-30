@@ -16,10 +16,10 @@ class FreelancerOrderUseCase {
       freelancerOrderRepo.fetchPendingFreelancerOrders(freelancerId);
 
 
-  RealtimeChannel  subscribeToPendingOrders(
-      void Function(OrderEntity order, String action) onChange,
+  Stream<List<OrderEntity>>  subscribeToPendingOrders(
+ 
 
       ) {
-    return freelancerOrderRepo.subscribeToPendingOrders( onChange);
+    return freelancerOrderRepo.subscribeToPendingOrders();
   }
 }

@@ -10,9 +10,9 @@ abstract class MyJobsRepo {
   Future<Either<Failures, List<OfferEntity>>> getOffers(String orderId);
 
 
-  RealtimeChannel subscribeToOffers({
+  Stream<int> subscribeToOffers({
     required String orderId,
-    required void Function(int offersCount) onChange,
+  
   });
 
   Future< Either<Failures,OfferEntity >> updateOfferStatus(
@@ -22,8 +22,8 @@ abstract class MyJobsRepo {
       String orderId,
       String offerId,
       );
-  RealtimeChannel subscribeToOrders(Map<String, String> filters,
-      void Function(OrderEntity order, String action) onChange);
+   Stream<(OrderEntity, String)> subscribeToOrders(Map<String, String> filters,
+     
 
-
+   );
 }

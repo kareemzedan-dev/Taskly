@@ -22,13 +22,13 @@ class MyJobsRepoImpl extends MyJobsRepo {
   }
 
   @override
-  RealtimeChannel subscribeToOffers({
+  Stream<int> subscribeToOffers({
     required String orderId,
-    required void Function(int offersCount) onChange,
+ 
   }) {
     return myJobsRemoteDataSource.subscribeToOrderOffersCount(
       orderId: orderId,
-      onChange: onChange,
+ 
     );
   }
 
@@ -43,7 +43,7 @@ class MyJobsRepoImpl extends MyJobsRepo {
   }
 
   @override
-  RealtimeChannel subscribeToOrders(Map<String, String> filters, void Function(OrderEntity order, String action) onChange) {
- return myJobsRemoteDataSource.subscribeToOrders(filters, onChange);
+  Stream<(OrderEntity, String)>  subscribeToOrders(Map<String, String> filters ) {
+ return myJobsRemoteDataSource.subscribeToOrders(filters );
   }
 }

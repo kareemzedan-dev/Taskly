@@ -9,9 +9,9 @@ class SubscribetToOrdersUseCase {
   final MyJobsRepo myJobsRepo;
   SubscribetToOrdersUseCase(this.myJobsRepo);
 
-  RealtimeChannel subscribeToOrders(Map<String, String> filters,
-      void Function(OrderEntity order, String action) onChange){
-  return    myJobsRepo.subscribeToOrders(filters, onChange);
+   Stream<(OrderEntity, String)> subscribeToOrders(Map<String, String> filters,
+    ){
+  return    myJobsRepo.subscribeToOrders(filters);
   }
 
 }

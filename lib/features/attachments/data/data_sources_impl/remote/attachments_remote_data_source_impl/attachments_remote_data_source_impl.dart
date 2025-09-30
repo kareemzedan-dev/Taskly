@@ -15,13 +15,15 @@ import '../../../data_sources/remote/attachments_remote_data_source/attachments_
 class AttachmentsRemoteDataSourceImpl extends AttachmentsRemoteDataSource {
   final Dio dio;
   final SupabaseClient supabase;
-  SupabaseService supabaseService = SupabaseService();
+  SupabaseService supabaseService  ;
   final String defaultBucket;
 
   AttachmentsRemoteDataSourceImpl(
       this.dio,
+         this.supabaseService,
       this.supabase, {
         this.defaultBucket = 'order-attachments',
+        
       });
   @override
   Future<Either<Failures, File>> downloadAttachments(
@@ -54,7 +56,7 @@ class AttachmentsRemoteDataSourceImpl extends AttachmentsRemoteDataSource {
         String? bucketName,
       }) async {
     try {
-      final supabase = supabaseService.supabase;
+      final supabase = supabaseService.supabaseClient;
       final uuid = const Uuid();
       final bucket = bucketName ?? defaultBucket;
 

@@ -21,13 +21,13 @@ import '../../models/register_response_dm/register_response_dm.dart';
 
 @Injectable(as: AuthRemoteDataSource)
 class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
-  final SupabaseClient supabase = Supabase.instance.client;
-  final SupabaseService supabaseService = SupabaseService();
+ 
+  final SupabaseService supabaseService  ;
   final GoogleSignIn _googleSignIn = GoogleSignIn(
     serverClientId: ConstantsManager.supabaseServerClientId,
     scopes: ['email', 'profile'],
   );
-
+AuthRemoteDataSourceImpl(this.supabaseService);
   Future<void> _saveUserLocally({
     required String token,
     required String id,

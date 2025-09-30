@@ -27,13 +27,9 @@ class OfferRepositoryImpl extends OfferRepository {
   }
 
   @override
-  RealtimeChannel subscribeToOffers(String freelancerId, void Function(OfferEntity offer, String action) onChange) {
-  return offerRemoteDataSource.subscribeToOffers(freelancerId, onChange);
+  Stream<(OfferEntity, String)> subscribeToOffers(String freelancerId, ) {
+  return offerRemoteDataSource.subscribeToOffers(freelancerId, );
   }
-
-  @override
-  void unsubscribeFromOffers(RealtimeChannel channel) {
- return offerRemoteDataSource.unsubscribeFromOffers(channel);
-  }
+ 
 
 }

@@ -9,17 +9,17 @@ import 'package:taskly/features/shared/domain/entities/order_entity/order_entity
 abstract class FreelancerOrderRepo {
   Future<Either<Failures, List<OrderEntity>>> fetchPendingFreelancerOrders(String freelancerId);
 
-  RealtimeChannel  subscribeToPendingOrders(
-      void Function(OrderEntity order, String action) onChange,
+    Stream<List<OrderEntity>> subscribeToPendingOrders(
+      
 
       );
   Future<Either<Failures,List<OrderEntity>>> fetchPrivateOrders(String freelancerId);
   Future<Either<Failures, void >> updateOrderStatus(String orderId, String status);
   Future<Either <Failures,void>>  withdrawOffer(String offerId, String orderId); 
 
-  RealtimeChannel subscribeToPrivateOrders(
+  Stream<(OrderEntity, String)> subscribeToPrivateOrders(
     String freelancerId,
-    void Function(OrderEntity order, String action) onChange,
+   
       );
       
 }

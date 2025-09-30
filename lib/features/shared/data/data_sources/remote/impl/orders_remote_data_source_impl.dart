@@ -1,4 +1,3 @@
-
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:either_dart/src/either.dart';
 import 'package:injectable/injectable.dart';
@@ -11,14 +10,16 @@ import 'package:taskly/features/shared/domain/entities/order_entity/order_entity
 
 @Injectable(as: OrdersRemoteDataSource)
 class OrdersRemoteDataSourceImpl extends OrdersRemoteDataSource {
-  final SupabaseService supabaseService = SupabaseService();
+  final SupabaseService supabaseService  ;
   RealtimeChannel? _ordersChannel;
+
+  OrdersRemoteDataSourceImpl(this.supabaseService);
 
   @override
   Future<Either<Failures, List<OrderEntity>>> getUserOrdersByUserId(
-      String userId,
-      String role,
-      ) async {
+    String userId,
+    String role,
+  ) async {
     try {
       final connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult == ConnectivityResult.none) {
@@ -34,16 +35,14 @@ class OrdersRemoteDataSourceImpl extends OrdersRemoteDataSource {
         return Left(Failures("Invalid role provided"));
       }
 
-      _ordersChannel ??= supabaseService.subscribe(
+      _ordersChannel ??= supabaseService.subscribeWithCallbacks(
         table: 'orders',
-        filters: { fieldName: userId },
-        onChange: (record, action) {
+        onData: (record, action) {
           final order = OrderDm.fromJson(record);
-          print('Order ${order.id} updated. Status: ${order.status}');
-
+          print(
+              'Realtime Change [$action]: Order ${order.id} - ${order.status}');
         },
       );
-
 
       final response = await supabaseService.getDataFromSupabase(
         tableName: "orders",
@@ -54,7 +53,8 @@ class OrdersRemoteDataSourceImpl extends OrdersRemoteDataSource {
         return Right([]);
       }
 
-      final orders = response.map((e) => OrderDm.fromJson(e).toEntity()).toList();
+      final orders =
+          response.map((e) => OrderDm.fromJson(e).toEntity()).toList();
       return Right(orders);
     } catch (e) {
       return Left(Failures(e.toString()));
@@ -63,7 +63,7 @@ class OrdersRemoteDataSourceImpl extends OrdersRemoteDataSource {
 
   void unsubscribe() {
     if (_ordersChannel != null) {
-      supabaseService.unsubscribe(table: 'orders');
+      _ordersChannel?.unsubscribe();
       _ordersChannel = null;
     }
   }

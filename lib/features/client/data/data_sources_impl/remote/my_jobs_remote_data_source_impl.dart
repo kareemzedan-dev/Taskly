@@ -11,26 +11,25 @@ import 'package:taskly/features/freelancer/domain/entities/offer_entity/offer_en
 import 'package:taskly/features/shared/domain/entities/order_entity/order_entity.dart';
 
 import '../../../../shared/data/models/order_dm/order_dm.dart';
-@Injectable(as:MyJobsRemoteDataSource )
+
+@Injectable(as: MyJobsRemoteDataSource)
 class MyJobsRemoteDataSourceImpl extends MyJobsRemoteDataSource {
-  final SupabaseService supabaseService = SupabaseService();
-  RealtimeChannel? _ordersChannel;
-   final SupabaseClient _supabase = Supabase.instance.client;
+  final SupabaseService supabaseService ;
+   MyJobsRemoteDataSourceImpl(this.supabaseService);
+ 
+
   @override
   Future<Either<Failures, List<OfferEntity>>> getOffers(String orderId) async {
     try {
-    
       if (!await NetworkUtils.hasInternet()) {
         return Left(NetworkFailure(StringsManager.noInternetConnection));
       }
 
-      // Fetch offers
-      final response = await supabaseService.client
+      final response = await supabaseService.supabaseClient
           .from('offers')
           .select()
           .eq('order_id', orderId)
           .eq('status', 'pending');
-
 
       if (response == null || response.isEmpty) {
         return Right([]);
@@ -46,31 +45,29 @@ class MyJobsRemoteDataSourceImpl extends MyJobsRemoteDataSource {
     }
   }
 
-
-  RealtimeChannel subscribeToOrderOffersCount({
-    required String orderId,
-    required void Function(int offersCount) onChange,
-  }) {
-    return supabaseService.subscribe(
-      table: 'orders',
-      filters: {"id": orderId},
-      onChange: (record, action) {
-        final count = record['offers_count'] as int? ?? 0;
-        onChange(count);
-      },
-    );
+ @override
+  Stream<int> subscribeToOrderOffersCount({String orderId= ''}) {
+    return supabaseService
+        .subscribeToTable(
+          table: 'orders',
+          filter: "id=eq.$orderId",
+        )
+        .map((records) {
+      if (records.isEmpty) return 0;
+      final record = records.first;
+      return record['offers_count'] as int? ?? 0;
+    });
   }
+
   @override
   Future<Either<Failures, OfferEntity>> updateOfferStatus(
-      String offerId,
-      String newStatus,
-      ) async {
+    String offerId,
+    String newStatus,
+  ) async {
     try {
-      // check internet
       if (!await NetworkUtils.hasInternet()) {
         return Left(NetworkFailure(StringsManager.noInternetConnection));
       }
-
 
       final response = await supabaseService.updateDataInSupabase(
         tableName: 'offers',
@@ -79,7 +76,6 @@ class MyJobsRemoteDataSourceImpl extends MyJobsRemoteDataSource {
       );
 
       if (response != null) {
-
         final updatedOffer = OfferModel.fromJson(response).toEntity();
         return Right(updatedOffer);
       } else {
@@ -89,6 +85,7 @@ class MyJobsRemoteDataSourceImpl extends MyJobsRemoteDataSource {
       return Left(ServerFailure(e.toString()));
     }
   }
+
   @override
   Future<Either<Failures, OrderEntity>> acceptOfferAndRejectOthers(
       String orderId, String offerId) async {
@@ -97,8 +94,7 @@ class MyJobsRemoteDataSourceImpl extends MyJobsRemoteDataSource {
         return Left(NetworkFailure(StringsManager.noInternetConnection));
       }
 
-      // 1) هات العرض المطلوب
-      final offerResponse = await supabaseService.client
+      final offerResponse = await supabaseService.supabaseClient
           .from('offers')
           .select()
           .eq('id', offerId)
@@ -110,11 +106,9 @@ class MyJobsRemoteDataSourceImpl extends MyJobsRemoteDataSource {
 
       final acceptedOffer = OfferModel.fromJson(offerResponse);
 
-      // 2) حدّث العرض المختار لقبول
-      final acceptResponse = await supabaseService.client
+      final acceptResponse = await supabaseService.supabaseClient
           .from('offers')
           .update({"status": "accepted"})
-
           .eq('id', offerId)
           .select()
           .maybeSingle();
@@ -123,15 +117,13 @@ class MyJobsRemoteDataSourceImpl extends MyJobsRemoteDataSource {
         return Left(ServerFailure("Failed to accept the offer"));
       }
 
-      // 3) حدّث الطلب بالـ status + budget
-      final updateOrderResponse = await supabaseService.client
+      final updateOrderResponse = await supabaseService.supabaseClient
           .from('orders')
           .update({
-        "status": "Accepted",
-        "budget": acceptedOffer.offerAmount,
-        "freelancer_id": acceptedOffer.freelancerId,
-
-      })
+            "status": "Accepted",
+            "budget": acceptedOffer.offerAmount,
+            "freelancer_id": acceptedOffer.freelancerId,
+          })
           .eq('id', orderId)
           .select()
           .maybeSingle();
@@ -140,13 +132,11 @@ class MyJobsRemoteDataSourceImpl extends MyJobsRemoteDataSource {
         return Left(ServerFailure("Failed to update order"));
       }
 
-      // 4) ارفض باقي العروض
-      await supabaseService.client
+      await supabaseService.supabaseClient
           .from('offers')
           .update({'status': 'rejected'})
           .eq('order_id', orderId)
           .neq('id', offerId);
-
 
       final updatedOrder = OrderDm.fromJson(updateOrderResponse).toEntity();
       return Right(updatedOrder);
@@ -155,28 +145,23 @@ class MyJobsRemoteDataSourceImpl extends MyJobsRemoteDataSource {
     }
   }
 
+ 
+  Stream<(OrderEntity, String)> subscribeToOrders(
+      Map<String, dynamic>? filters) {
+    final filterString = filters?.entries
+            .map((e) => "${e.key}=eq.${e.value}")
+            .join(",") ??
+        "";
 
-  @override
-  RealtimeChannel subscribeToOrders(
-      Map<String, dynamic>? filters,
-      void Function(OrderEntity order, String action) onChange,
-
-      ) {
-    _ordersChannel = supabaseService.subscribe(
-      table: 'orders',
-      filters: filters ?? {},
-      onChange: (record, action) {
-        final order = OrderDm.fromJson(record);
-        onChange(order, action);
-      },
-    );
-
-    return _ordersChannel!;
+    return supabaseService
+        .subscribeToTable(
+          table: 'orders',
+          filter: filterString,
+        )
+        .asyncExpand((records) => Stream.fromIterable(records.map((record) {
+              final order = OrderDm.fromJson(record).toEntity();
+              final action = record['action'] as String? ?? "UNKNOWN";
+              return (order, action);
+            })));
   }
-
-  void unsubscribeFromOrders() {
-    supabaseService.unsubscribe(table: 'orders');
-    _ordersChannel = null;
-  }
-
 }

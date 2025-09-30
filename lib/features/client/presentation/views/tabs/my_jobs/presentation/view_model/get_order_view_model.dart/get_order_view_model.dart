@@ -1,7 +1,7 @@
+import 'dart:async';
 import 'package:either_dart/either.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:taskly/core/errors/failures.dart';
 import 'package:taskly/features/client/domain/use_cases/my_jobs/subscribe_to_order_status_use_case/subscribe_to_order_status_use_case.dart';
 import 'package:taskly/features/shared/domain/entities/order_entity/order_entity.dart';
@@ -16,21 +16,16 @@ class GetOrderViewModel extends Cubit<GetOrderViewModelStates> {
   final OrdersUseCase ordersUseCase;
   final SubscribeToOrderStatusUseCase myJobsUseCases;
 
-  RealtimeChannel? _ordersChannel;
-
+  StreamSubscription<(OrderEntity, String)>? _ordersSubscription;
 
   Future<Either<Failures, List<OrderEntity>>> getUserOrdersByUserId(
-      String userId,
-      String role,) async {
+      String userId, String role) async {
     try {
       emit(GetOrderViewModelStatesLoading());
-      var response = await ordersUseCase.callGetUserOrdersByUserId(
-        userId,
-        role,
-      );
+      var response = await ordersUseCase.callGetUserOrdersByUserId(userId, role);
       response.fold(
-            (fnL) => emit(GetOrderViewModelStatesError(fnL.message)),
-            (fnR) => emit(GetOrderViewModelStatesSuccess(fnR)),
+        (fnL) => emit(GetOrderViewModelStatesError(fnL.message)),
+        (fnR) => emit(GetOrderViewModelStatesSuccess(fnR)),
       );
       return response;
     } catch (e) {
@@ -38,13 +33,13 @@ class GetOrderViewModel extends Cubit<GetOrderViewModelStates> {
     }
   }
 
-  RealtimeChannel subscribeToOrderStatus({
+  void subscribeToOrderStatus({
     required Map<String, String> filters,
-    required void Function(OrderEntity order, String action) onChange,
   }) {
-    _ordersChannel = myJobsUseCases.subscribeToOrderStatus(
-     filters:  filters,
-       onChange:    (order, action) {
+    _ordersSubscription =
+        myJobsUseCases.subscribeToOrderStatus(filters: filters).listen(
+      (event) {
+        final (order, action) = event;
         if (action == 'UPDATE') {
           emit(GetOrderViewModelStatesOrderUpdated(order));
         } else if (action == 'DELETE') {
@@ -54,22 +49,21 @@ class GetOrderViewModel extends Cubit<GetOrderViewModelStates> {
         }
       },
     );
-    return _ordersChannel!;
   }
 
   Future<void> loadAndSubscribeOrders(String userId, String role) async {
     final response = await getUserOrdersByUserId(userId, role);
     response.fold(
-          (l) {},
-          (orders) {
-        subscribeToOrderStatus(
-          filters: {'client_id': userId},
-          onChange: (order, action) {
-          },
-        );
+      (l) {},
+      (orders) {
+        subscribeToOrderStatus(filters: {'client_id': userId});
       },
     );
   }
 
-
+  @override
+  Future<void> close() {
+    _ordersSubscription?.cancel();
+    return super.close();
+  }
 }

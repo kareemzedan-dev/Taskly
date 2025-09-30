@@ -12,13 +12,11 @@ class GetFreelancerOffersUseCase {
 
   const GetFreelancerOffersUseCase({required this.offerRepository});
   Future<Either<Failures, List<OfferEntity>>> call(String freelancerId, String status) => offerRepository.getFreelancerOffers(freelancerId,status);
-  RealtimeChannel subscribeToOffers(
+    Stream<(OfferEntity, String)> subscribeToOffers(
       String freelancerId,
-  void Function(OfferEntity offer, String action) onChange,
-  ) => offerRepository.subscribeToOffers(freelancerId, onChange);
-  void unsubscribeFromOffers(RealtimeChannel channel) => offerRepository.unsubscribeFromOffers(channel);
-
-
+ 
+  ) => offerRepository.subscribeToOffers(freelancerId);
+  
 
 
 }

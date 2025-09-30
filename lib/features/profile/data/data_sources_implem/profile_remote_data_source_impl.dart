@@ -1,33 +1,31 @@
 import 'dart:convert';
-
-import 'package:either_dart/src/either.dart';
+import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:taskly/core/errors/failures.dart';
 import 'package:taskly/core/services/supabase_service.dart';
 import 'package:taskly/features/profile/data/data_sources/profile_remote_data_source.dart';
-
 import '../../domain/entities/user_info_entity/user_info_entity.dart';
 import '../models/user_info_dm/user_info_response_dm.dart';
 
 @Injectable(as: ProfileRemoteDataSource)
 class ProfileRemoteDataSourceImpl extends ProfileRemoteDataSource {
-  final SupabaseClient supabase;
-  SupabaseService supabaseService = SupabaseService();
+  final SupabaseService supabaseService;
+  final SupabaseClient _client = Supabase.instance.client;
 
-  ProfileRemoteDataSourceImpl(this.supabase);
+  ProfileRemoteDataSourceImpl(this.supabaseService);
 
   @override
   Future<Either<Failures, UserInfoDm>> getUserInfo(
-      String userId,
-      String role,
-      ) async {
+    String userId,
+    String role,
+  ) async {
     try {
       if (userId.isEmpty) {
         return Left(ServerFailure("User not logged in"));
       }
 
-      final userResponse = await supabase
+      final userResponse = await _client
           .from('users')
           .select()
           .eq('id', userId)
@@ -36,13 +34,13 @@ class ProfileRemoteDataSourceImpl extends ProfileRemoteDataSource {
       Map<String, dynamic>? extraResponse;
 
       if (role == "client") {
-        extraResponse = await supabase
+        extraResponse = await _client
             .from('clients')
             .select()
             .eq('id', userId)
             .maybeSingle();
       } else if (role == "freelancer") {
-        extraResponse = await supabase
+        extraResponse = await _client
             .from('freelancers')
             .select()
             .eq('id', userId)
@@ -58,36 +56,36 @@ class ProfileRemoteDataSourceImpl extends ProfileRemoteDataSource {
         profileImage: userResponse?['profile_image'],
         bio: userResponse?['bio'],
         createdAt: userResponse?['created_at'] != null
-            ? DateTime.tryParse(userResponse!['created_at'])
+            ? DateTime.tryParse(userResponse?['created_at'])
             : null,
         rating: userResponse?['rating'] != null
-            ? (userResponse!['rating'] as num).toDouble()
+            ? (userResponse?['rating'] as num).toDouble()
             : 1.0,
         billingInfo: role == "client" &&
-            extraResponse?['billing_info'] != null &&
-            extraResponse!['billing_info'].toString().isNotEmpty
+                extraResponse?['billing_info'] != null &&
+                extraResponse!['billing_info'].toString().isNotEmpty
             ? BillingInfo.fromJson(jsonDecode(extraResponse['billing_info']))
             : null,
         balance: role == "client" ? (extraResponse?['balance'] ?? 0) : null,
         skills: role == "freelancer" && extraResponse?['skills'] != null
-            ? List<String>.from(extraResponse?['skills'])
+            ? List<String>.from(extraResponse?['skills'] as List)
             : null,
-        hourlyRate:
-        role == "freelancer" && extraResponse?['hourly_rate'] != null
+        hourlyRate: role == "freelancer" && extraResponse?['hourly_rate'] != null
             ? (extraResponse?['hourly_rate'] as num).toDouble()
             : null,
         freelancerBalance: role == "freelancer"
             ? _parseDouble(extraResponse?['freelancer_balance']) ?? 0.0
             : 0.0,
         freelancerStatus:
-        role == "freelancer" ? (extraResponse?['freelancer_status'] ?? '') : '',
-        clientStatus: role == "client" ? (extraResponse?['client_status'] ?? '') : '',
+            role == "freelancer" ? (extraResponse?['freelancer_status'] ?? '') : '',
+        clientStatus:
+            role == "client" ? (extraResponse?['client_status'] ?? '') : '',
         isVerified:
-        role == "freelancer" ? (extraResponse?['is_verified'] ?? false) : false,
+            role == "freelancer" ? (extraResponse?['is_verified'] ?? false) : false,
         isOnline: userResponse?['is_online'] ?? false,
         jobsCount: userResponse?['jobs_count']?.toInt() ?? 0,
         lastSeen: userResponse?['last_seen'] != null
-            ? DateTime.tryParse(userResponse?['last_seen'].toString() ?? "")
+            ? DateTime.tryParse(userResponse!['last_seen'].toString())
             : null,
         reviewsCount: userResponse?['reviews_count']?.toInt() ?? 0,
       );

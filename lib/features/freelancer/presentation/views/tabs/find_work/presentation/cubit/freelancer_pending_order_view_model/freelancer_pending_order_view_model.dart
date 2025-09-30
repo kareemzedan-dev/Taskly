@@ -9,7 +9,6 @@ import 'package:taskly/core/utils/strings_manager.dart';
 import 'package:taskly/features/shared/domain/entities/order_entity/order_entity.dart';
 import 'package:taskly/features/freelancer/domain/use_cases/freelancer_order_use_case/freelancer_order_use_case.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/cubit/freelancer_pending_order_view_model/freelancer_pending_order_view_model_states.dart';
-
 @injectable
 class FreelancerPendingOrdersViewModel
     extends Cubit<FreelancerPendingOrdersState> {
@@ -17,22 +16,25 @@ class FreelancerPendingOrdersViewModel
       : super(FreelancerPendingOrdersInitial());
 
   final FreelancerOrderUseCase freelancerOrderUseCase;
+  StreamSubscription<List<OrderEntity>>? _ordersSubscription;
 
-  RealtimeChannel? _ordersChannel;
   Future<Either<Failures, List<OrderEntity>>>
-  fetchPendingFreelancerOrders() async {
+      fetchPendingFreelancerOrders() async {
     try {
       emit(FreelancerPendingOrdersLoading());
 
-      final result =
-      await freelancerOrderUseCase.fetchPendingFreelancerOrders( SharedPrefHelper.getString(StringsManager.idKey)!);
+      final result = await freelancerOrderUseCase.fetchPendingFreelancerOrders(
+        SharedPrefHelper.getString(StringsManager.idKey)!,
+      );
+
       result.fold(
-            (failure) => emit(FreelancerPendingOrdersError(failure.message)),
-            (orders) {
+        (failure) => emit(FreelancerPendingOrdersError(failure.message)),
+        (orders) {
           emit(FreelancerPendingOrdersSuccess(orders));
-          _subscribeRealtime();
+          _subscribeRealtime(); // هنا تناديه
         },
       );
+
       return result;
     } catch (e) {
       return Left(ServerFailure(e.toString()));
@@ -40,36 +42,16 @@ class FreelancerPendingOrdersViewModel
   }
 
   void _subscribeRealtime() {
-    _ordersChannel = freelancerOrderUseCase.subscribeToPendingOrders((
-        order,
-        action,
-        ) {
-      if (state is FreelancerPendingOrdersSuccess) {
-        final currentOrders = List<OrderEntity>.from(
-          (state as FreelancerPendingOrdersSuccess).pendingOrdersList,
-        );
-if (action.toUpperCase() == 'INSERT') {
-  currentOrders.add(order);
-} else if (action.toUpperCase() == 'UPDATE') {
-  final index = currentOrders.indexWhere((o) => o.id == order.id);
-  if (index != -1) {
-    currentOrders[index] = order;
-  }
-} else if (action.toUpperCase() == 'DELETE') {
-  currentOrders.removeWhere((o) => o.id == order.id);
-}
-
-
-        emit(FreelancerPendingOrdersSuccess(currentOrders));
-      }
+    _ordersSubscription =
+        freelancerOrderUseCase.subscribeToPendingOrders().listen((orders) {
+      emit(FreelancerPendingOrdersSuccess(orders));
     });
   }
 
   @override
   Future<void> close() {
-    if (_ordersChannel != null) {
-      _ordersChannel!.unsubscribe();
-    }
+    _ordersSubscription?.cancel();
     return super.close();
   }
 }
+

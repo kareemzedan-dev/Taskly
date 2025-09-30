@@ -9,12 +9,10 @@ abstract class OfferRepository {
   Future<Either<Failures, OfferEntity>> placeOffer(OfferEntity offer);
   Future<Either<Failures, List<OfferEntity>>> getFreelancerOffers(String freelancerId, String status );
   Future<Either<Failures,OrderEntity>> fetchOrderDetails(String orderId );
-  RealtimeChannel subscribeToOffers(
+    Stream<(OfferEntity, String)> subscribeToOffers(
       String freelancerId,
-      void Function(OfferEntity offer, String action) onChange,
+ 
       );
-
-  void unsubscribeFromOffers(RealtimeChannel channel);
-
+ 
 
 }

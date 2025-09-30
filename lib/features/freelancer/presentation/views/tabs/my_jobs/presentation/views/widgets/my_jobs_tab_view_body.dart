@@ -1,18 +1,15 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/cache/shared_preferences.dart';
 import 'package:taskly/core/di/di.dart';
 import 'package:taskly/core/utils/strings_manager.dart';
-import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/view_model/get_offers_view_model/get_offers_view_model.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/view_model/get_offers_view_model/get_offers_view_model_states.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/empty_state_animation.dart';
+import 'package:taskly/features/freelancer/domain/entities/offer_entity/offer_entity.dart';
 import 'package:taskly/features/freelancer/presentation/cubit/get_freelancer_offers_view_model/get_freelancer_offers_states.dart';
 import 'package:taskly/features/freelancer/presentation/cubit/get_freelancer_offers_view_model/get_freelancer_offers_view_model.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/my_jobs/presentation/views/widgets/tracking_offers_list_view.dart';
-import '../../../../../../../../../core/components/custom_tab_bar.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-
 import '../../../../../../../../../core/helper/notifications_helper.dart';
 
 class MyJobsTabViewBody extends StatefulWidget {
@@ -24,20 +21,26 @@ class MyJobsTabViewBody extends StatefulWidget {
 
 class _MyJobsTabViewBodyState extends State<MyJobsTabViewBody> {
   late final GetFreelancerOffersViewModel viewModel;
-  RealtimeChannel? _subscriptionChannel;
+  StreamSubscription<(OfferEntity, String)>? _subscription;
+
   final freelancerId = SharedPrefHelper.getString(StringsManager.idKey)!;
-  @override
 
   @override
   void initState() {
     super.initState();
     viewModel = getIt<GetFreelancerOffersViewModel>();
 
+    // أول تحميل للـ offers
     viewModel.getFreelancerOffers(freelancerId, null);
 
-    _subscriptionChannel = viewModel.subscribeToOffers(freelancerId, (offer, action) {
+    // الاشتراك في الـ stream
+    _subscription = viewModel.subscribeToOffers(freelancerId).listen((event) {
+      final (offer, action) = event;
+
+      // نعمل refresh للـ offers
       viewModel.getFreelancerOffers(freelancerId, null);
 
+      // Notifications
       if (offer.offerStatus == 'accepted') {
         NotificationHelper.showNotification(context, "Your offer got accepted!");
       } else if (offer.offerStatus == 'rejected') {
@@ -48,12 +51,9 @@ class _MyJobsTabViewBodyState extends State<MyJobsTabViewBody> {
     });
   }
 
-
-
-
   @override
   void dispose() {
-    viewModel.unsubscribeFromOffers();
+    _subscription?.cancel();
     super.dispose();
   }
 
@@ -61,24 +61,20 @@ class _MyJobsTabViewBodyState extends State<MyJobsTabViewBody> {
   Widget build(BuildContext context) {
     return TabBarView(
       children: [
+        // Pending tab
         Padding(
           padding: const EdgeInsets.all(16.0),
-          child: BlocBuilder<
-              GetFreelancerOffersViewModel,
-              GetFreelancerOffersStates
-          >(
+          child: BlocBuilder<GetFreelancerOffersViewModel,
+              GetFreelancerOffersStates>(
             bloc: viewModel,
             builder: (context, state) {
               if (state is GetFreelancerOffersLoadingState) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
+                return const Center(child: CircularProgressIndicator());
               }
               if (state is GetFreelancerOffersErrorState) {
                 return Center(child: Text(state.message));
               }
               if (state is GetFreelancerOffersSuccessState) {
-
                 final pendingOffers = state.offers
                     .where((o) => o.offerStatus == "pending")
                     .toList();
@@ -89,32 +85,30 @@ class _MyJobsTabViewBodyState extends State<MyJobsTabViewBody> {
                     message: 'No pending offers',
                   );
                 }
-                return TrackingOffersListView(offer: pendingOffers,isPending: true,);
+                return TrackingOffersListView(
+                  offer: pendingOffers,
+                  isPending: true,
+                );
               }
               return const Center(child: Text("No offers"));
             },
           ),
         ),
 
-
+        // Accepted tab
         Padding(
           padding: const EdgeInsets.all(16.0),
-          child: BlocBuilder<
-              GetFreelancerOffersViewModel,
-              GetFreelancerOffersStates
-          >(
-            bloc: viewModel ,
+          child: BlocBuilder<GetFreelancerOffersViewModel,
+              GetFreelancerOffersStates>(
+            bloc: viewModel,
             builder: (context, state) {
               if (state is GetFreelancerOffersLoadingState) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
+                return const Center(child: CircularProgressIndicator());
               }
               if (state is GetFreelancerOffersErrorState) {
                 return Center(child: Text(state.message));
               }
               if (state is GetFreelancerOffersSuccessState) {
-
                 final acceptedOffers = state.offers
                     .where((o) => o.offerStatus == "accepted")
                     .toList();
@@ -122,12 +116,11 @@ class _MyJobsTabViewBodyState extends State<MyJobsTabViewBody> {
                 if (acceptedOffers.isEmpty) {
                   return const EmptyStateAnimation(
                     animationPath: 'assets/lotties/Progress.json',
-                    message: 'No accepted Offers',
+                    message: 'No accepted offers',
                   );
                 }
-                return TrackingOffersListView(offer: acceptedOffers );
+                return TrackingOffersListView(offer: acceptedOffers);
               }
-
               return const Center(child: Text("No offers"));
             },
           ),
@@ -136,78 +129,64 @@ class _MyJobsTabViewBodyState extends State<MyJobsTabViewBody> {
         // Completed tab
         Padding(
           padding: const EdgeInsets.all(16.0),
-          child: BlocBuilder<
-              GetFreelancerOffersViewModel,
-              GetFreelancerOffersStates
-          >(
-            bloc: viewModel ,
+          child: BlocBuilder<GetFreelancerOffersViewModel,
+              GetFreelancerOffersStates>(
+            bloc: viewModel,
             builder: (context, state) {
               if (state is GetFreelancerOffersLoadingState) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
+                return const Center(child: CircularProgressIndicator());
               }
               if (state is GetFreelancerOffersErrorState) {
                 return Center(child: Text(state.message));
               }
               if (state is GetFreelancerOffersSuccessState) {
-
-                final acceptedOffers = state.offers
+                final completedOffers = state.offers
                     .where((o) => o.offerStatus == "completed")
                     .toList();
 
-                if (acceptedOffers.isEmpty) {
+                if (completedOffers.isEmpty) {
                   return const EmptyStateAnimation(
                     animationPath: 'assets/lotties/Success.json',
                     message: 'No completed projects yet',
                   );
                 }
-                return TrackingOffersListView(offer: acceptedOffers );
+                return TrackingOffersListView(offer: completedOffers);
               }
-
               return const Center(child: Text("No offers"));
             },
           ),
         ),
 
-
         // Rejected tab
         Padding(
           padding: const EdgeInsets.all(16.0),
-          child: BlocBuilder<
-              GetFreelancerOffersViewModel,
-              GetFreelancerOffersStates
-          >(
-            bloc: viewModel ,
+          child: BlocBuilder<GetFreelancerOffersViewModel,
+              GetFreelancerOffersStates>(
+            bloc: viewModel,
             builder: (context, state) {
               if (state is GetFreelancerOffersLoadingState) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
+                return const Center(child: CircularProgressIndicator());
               }
               if (state is GetFreelancerOffersErrorState) {
                 return Center(child: Text(state.message));
               }
               if (state is GetFreelancerOffersSuccessState) {
-
-                final acceptedOffers = state.offers
+                final rejectedOffers = state.offers
                     .where((o) => o.offerStatus == "rejected")
                     .toList();
 
-                if (acceptedOffers.isEmpty) {
+                if (rejectedOffers.isEmpty) {
                   return const EmptyStateAnimation(
                     animationPath: 'assets/lotties/cancelled.json',
                     message: 'No rejected offers',
                   );
                 }
-                return TrackingOffersListView(offer: acceptedOffers );
+                return TrackingOffersListView(offer: rejectedOffers);
               }
-
               return const Center(child: Text("No offers"));
             },
           ),
         ),
-
       ],
     );
   }

@@ -224,122 +224,84 @@ extension GetItInjectableX on _i174.GetIt {
       environmentFilter,
     );
     gh.singleton<_i383.FilePickerService>(() => _i383.FilePickerService());
-    gh.singleton<_i374.SupabaseService>(() => _i374.SupabaseService());
     gh.factory<_i114.ReviewsRemoteDataSource>(
         () => _i716.ReviewsRemoteDataSourceImpl(gh<_i454.SupabaseClient>()));
-    gh.factory<_i297.FreelancerOrderRemoteDataSource>(() =>
-        _i500.FreelancerOrderRemoteDataSourceImpl(
-            supabaseService: gh<_i374.SupabaseService>()));
-    gh.factory<_i41.MyJobsRemoteDataSource>(
-        () => _i95.MyJobsRemoteDataSourceImpl());
-    gh.factory<_i159.OrdersRemoteDataSource>(
-        () => _i237.OrdersRemoteDataSourceImpl());
-    gh.factory<_i896.MyJobsRepo>(() => _i1023.MyJobsRepoImpl(
-        myJobsRemoteDataSource: gh<_i41.MyJobsRemoteDataSource>()));
-    gh.factory<_i1012.ProfileRemoteDataSource>(
-        () => _i51.ProfileRemoteDataSourceImpl(gh<_i454.SupabaseClient>()));
-    gh.factory<_i432.AuthRemoteDataSource>(
-        () => _i420.AuthRemoteDataSourceImpl());
+    gh.singleton<_i374.SupabaseService>(
+      () => _i374.SupabaseService(gh<_i454.SupabaseClient>()),
+      dispose: (i) => i.dispose(),
+    );
     gh.factory<_i315.GetPaymentRemoteDataSource>(
         () => _i696.GetPaymentRemoteDataSourceImpl(gh<_i454.SupabaseClient>()));
-    gh.factory<_i46.OrdersRepo>(() => _i553.OrdersRepoImpl(
-        ordersRemoteDataSource: gh<_i159.OrdersRemoteDataSource>()));
-    gh.factory<_i821.ProfileRepo>(
-        () => _i541.ProfileRepoImpl(gh<_i1012.ProfileRemoteDataSource>()));
-    gh.factory<_i358.OfferRemoteDataSource>(
-        () => _i35.OfferRemoteDataSourceImpl());
     gh.factory<_i968.CreatePaymentRemoteDataSource>(() =>
         _i795.CreatePaymentRemoteDataSourceImpl(gh<_i454.SupabaseClient>()));
-    gh.factory<_i307.HomeRemoteDataSource>(() =>
-        _i426.HomeRemoteDataSourceImpl(supabase: gh<_i454.SupabaseClient>()));
+    gh.factory<_i1012.ProfileRemoteDataSource>(
+        () => _i51.ProfileRemoteDataSourceImpl(gh<_i374.SupabaseService>()));
     gh.factory<_i815.PaymentRepos>(() => _i488.CreatePaymentRepoImpl(
           gh<_i968.CreatePaymentRemoteDataSource>(),
           gh<_i315.GetPaymentRemoteDataSource>(),
         ));
-    gh.factory<_i759.OrdersUseCase>(
-        () => _i759.OrdersUseCase(gh<_i46.OrdersRepo>()));
-    gh.factory<_i660.HomeRepos>(() => _i86.HomeRepoImpl(
-        homeremoteDataSource: gh<_i307.HomeRemoteDataSource>()));
+    gh.factory<_i358.OfferRemoteDataSource>(
+        () => _i35.OfferRemoteDataSourceImpl(gh<_i374.SupabaseService>()));
     gh.factory<_i420.ReviewsRepo>(() => _i81.ReviewsRepoImpl(
         remoteDataSource: gh<_i114.ReviewsRemoteDataSource>()));
+    gh.factory<_i432.AuthRemoteDataSource>(
+        () => _i420.AuthRemoteDataSourceImpl(gh<_i374.SupabaseService>()));
     gh.factory<_i363.OfferRepository>(
         () => _i792.OfferRepositoryImpl(gh<_i358.OfferRemoteDataSource>()));
     gh.factory<_i746.AuthRepo>(
         () => _i529.AuthRepoImpl(gh<_i432.AuthRemoteDataSource>()));
-    gh.factory<_i576.SubscribeToOrderStatusUseCase>(
-        () => _i576.SubscribeToOrderStatusUseCase(gh<_i896.MyJobsRepo>()));
-    gh.factory<_i213.AcceptOfferUseCase>(
-        () => _i213.AcceptOfferUseCase(gh<_i896.MyJobsRepo>()));
-    gh.factory<_i863.GetOffersForOrderUseCase>(
-        () => _i863.GetOffersForOrderUseCase(gh<_i896.MyJobsRepo>()));
-    gh.factory<_i86.SubscribeToOfferStatusUseCase>(
-        () => _i86.SubscribeToOfferStatusUseCase(gh<_i896.MyJobsRepo>()));
-    gh.factory<_i530.UpdateOfferStatusUseCase>(
-        () => _i530.UpdateOfferStatusUseCase(gh<_i896.MyJobsRepo>()));
-    gh.factory<_i454.SubscribetToOrdersUseCase>(
-        () => _i454.SubscribetToOrdersUseCase(gh<_i896.MyJobsRepo>()));
+    gh.factory<_i159.OrdersRemoteDataSource>(
+        () => _i237.OrdersRemoteDataSourceImpl(gh<_i374.SupabaseService>()));
+    gh.factory<_i41.MyJobsRemoteDataSource>(
+        () => _i95.MyJobsRemoteDataSourceImpl(gh<_i374.SupabaseService>()));
     gh.factory<_i1016.MessagesRemoteDataSource>(
         () => _i545.MessagesRemoteDataSourceImpl(
               gh<_i454.SupabaseClient>(),
               gh<_i374.SupabaseService>(),
             ));
-    gh.factory<_i1020.AttachmentsRemoteDataSource>(
-        () => _i568.AttachmentsRemoteDataSourceImpl(
-              gh<_i361.Dio>(),
-              gh<_i454.SupabaseClient>(),
-            ));
     gh.factory<_i790.MessagesRepos>(
         () => _i16.MessagesReposImpl(gh<_i1016.MessagesRemoteDataSource>()));
-    gh.factory<_i855.GetOrderViewModel>(() => _i855.GetOrderViewModel(
-          gh<_i759.OrdersUseCase>(),
-          gh<_i576.SubscribeToOrderStatusUseCase>(),
-        ));
     gh.factory<_i988.FetchOrderDetailsUseCase>(
         () => _i988.FetchOrderDetailsUseCase(gh<_i363.OfferRepository>()));
     gh.factory<_i644.FetchOrderDetailsViewModel>(() =>
         _i644.FetchOrderDetailsViewModel(gh<_i988.FetchOrderDetailsUseCase>()));
     gh.factory<_i701.GetUserReviewsUseCase>(
         () => _i701.GetUserReviewsUseCase(gh<_i420.ReviewsRepo>()));
-    gh.factory<_i988.GetAllFreelancersUseCase>(
-        () => _i988.GetAllFreelancersUseCase(gh<_i660.HomeRepos>()));
-    gh.factory<_i585.ProfileUseCase>(
-        () => _i585.ProfileUseCase(gh<_i821.ProfileRepo>()));
-    gh.factory<_i75.FreelancerOrderRepo>(() => _i535.FreelancerOrderRepoImpl(
-        freelancerOrderRemoteDataSource:
-            gh<_i297.FreelancerOrderRemoteDataSource>()));
+    gh.factory<_i307.HomeRemoteDataSource>(() => _i426.HomeRemoteDataSourceImpl(
+        supabaseService: gh<_i374.SupabaseService>()));
+    gh.factory<_i1020.AttachmentsRemoteDataSource>(
+        () => _i568.AttachmentsRemoteDataSourceImpl(
+              gh<_i361.Dio>(),
+              gh<_i374.SupabaseService>(),
+              gh<_i454.SupabaseClient>(),
+            
+            ));
+    gh.factory<_i297.FreelancerOrderRemoteDataSource>(() =>
+        _i500.FreelancerOrderRemoteDataSourceImpl(
+            supabaseService: gh<_i374.SupabaseService>()));
     gh.factory<_i630.AuthUseCase>(
         () => _i630.AuthUseCase(gh<_i746.AuthRepo>()));
+    gh.factory<_i896.MyJobsRepo>(() => _i1023.MyJobsRepoImpl(
+        myJobsRemoteDataSource: gh<_i41.MyJobsRemoteDataSource>()));
     gh.factory<_i618.CreatePaymentUseCase>(
         () => _i618.CreatePaymentUseCase(gh<_i815.PaymentRepos>()));
+    gh.factory<_i46.OrdersRepo>(() => _i553.OrdersRepoImpl(
+        ordersRemoteDataSource: gh<_i159.OrdersRemoteDataSource>()));
+    gh.factory<_i821.ProfileRepo>(
+        () => _i541.ProfileRepoImpl(gh<_i1012.ProfileRemoteDataSource>()));
     gh.factory<_i345.AttachmentsRepository>(() =>
         _i727.AttachmentsRepositoryImpl(
             gh<_i1020.AttachmentsRemoteDataSource>()));
-    gh.factory<_i920.GetOffersViewModel>(
-        () => _i920.GetOffersViewModel(gh<_i863.GetOffersForOrderUseCase>()));
     gh.factory<_i163.GetUserReviewsViewModel>(
         () => _i163.GetUserReviewsViewModel(gh<_i701.GetUserReviewsUseCase>()));
-    gh.factory<_i376.UpdateOfferStatusViewModel>(
-        () => _i376.UpdateOfferStatusViewModel(
-              gh<_i530.UpdateOfferStatusUseCase>(),
-              gh<_i213.AcceptOfferUseCase>(),
-            ));
-    gh.factory<_i628.GetAllServicesUseCase>(
-        () => _i628.GetAllServicesUseCase(gh<_i660.HomeRepos>()));
-    gh.factory<_i904.PlaceOrderUseCase>(
-        () => _i904.PlaceOrderUseCase(gh<_i660.HomeRepos>()));
-    gh.factory<_i776.FreelancerInfoViewModel>(
-        () => _i776.FreelancerInfoViewModel(gh<_i585.ProfileUseCase>()));
-    gh.factory<_i1003.ProfileViewModel>(
-        () => _i1003.ProfileViewModel(gh<_i585.ProfileUseCase>()));
-    gh.factory<_i670.FetchAllFreelancersViewModel>(() =>
-        _i670.FetchAllFreelancersViewModel(
-            gh<_i988.GetAllFreelancersUseCase>()));
-    gh.factory<_i938.FreelancersViewModel>(
-        () => _i938.FreelancersViewModel(gh<_i988.GetAllFreelancersUseCase>()));
     gh.factory<_i848.GetPaymentUseCase>(
         () => _i848.GetPaymentUseCase(gh<_i815.PaymentRepos>()));
     gh.factory<_i745.AuthViewModel>(
         () => _i745.AuthViewModel(authUseCase: gh<_i630.AuthUseCase>()));
+    gh.factory<_i759.OrdersUseCase>(
+        () => _i759.OrdersUseCase(gh<_i46.OrdersRepo>()));
+    gh.factory<_i660.HomeRepos>(() => _i86.HomeRepoImpl(
+        homeremoteDataSource: gh<_i307.HomeRemoteDataSource>()));
     gh.factory<_i90.GetFreelancerOffersUseCase>(() =>
         _i90.GetFreelancerOffersUseCase(
             offerRepository: gh<_i363.OfferRepository>()));
@@ -353,13 +315,20 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i231.UploadAttachmentsUseCase>(() =>
         _i231.UploadAttachmentsUseCase(
             attachmentsRepository: gh<_i345.AttachmentsRepository>()));
-    gh.factory<_i779.PlaceOrderViewModel>(
-        () => _i779.PlaceOrderViewModel(gh<_i904.PlaceOrderUseCase>()));
-    gh.factory<_i765.ClientOrderStatusViewModel>(() =>
-        _i765.ClientOrderStatusViewModel(
-            gh<_i454.SubscribetToOrdersUseCase>()));
     gh.factory<_i197.DownloadAttachmentsUseCase>(() =>
         _i197.DownloadAttachmentsUseCase(gh<_i345.AttachmentsRepository>()));
+    gh.factory<_i576.SubscribeToOrderStatusUseCase>(
+        () => _i576.SubscribeToOrderStatusUseCase(gh<_i896.MyJobsRepo>()));
+    gh.factory<_i213.AcceptOfferUseCase>(
+        () => _i213.AcceptOfferUseCase(gh<_i896.MyJobsRepo>()));
+    gh.factory<_i863.GetOffersForOrderUseCase>(
+        () => _i863.GetOffersForOrderUseCase(gh<_i896.MyJobsRepo>()));
+    gh.factory<_i86.SubscribeToOfferStatusUseCase>(
+        () => _i86.SubscribeToOfferStatusUseCase(gh<_i896.MyJobsRepo>()));
+    gh.factory<_i530.UpdateOfferStatusUseCase>(
+        () => _i530.UpdateOfferStatusUseCase(gh<_i896.MyJobsRepo>()));
+    gh.factory<_i454.SubscribetToOrdersUseCase>(
+        () => _i454.SubscribetToOrdersUseCase(gh<_i896.MyJobsRepo>()));
     gh.lazySingleton<_i988.DeleteMessageUseCase>(
         () => _i988.DeleteMessageUseCase(gh<_i790.MessagesRepos>()));
     gh.lazySingleton<_i416.GetOrderMessagesUseCase>(
@@ -370,45 +339,81 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i366.SendMessageUseCase(gh<_i790.MessagesRepos>()));
     gh.factory<_i997.GetAcceptedOrderMessagesUseCase>(
         () => _i997.GetAcceptedOrderMessagesUseCase(gh<_i790.MessagesRepos>()));
-    gh.factory<_i171.FreelancerOrderUseCase>(() => _i171.FreelancerOrderUseCase(
-        freelancerOrderRepo: gh<_i75.FreelancerOrderRepo>()));
     gh.factory<_i602.SendMessageViewModel>(
         () => _i602.SendMessageViewModel(gh<_i366.SendMessageUseCase>()));
     gh.factory<_i338.DownloadAttachmentsViewModel>(() =>
         _i338.DownloadAttachmentsViewModel(
             gh<_i197.DownloadAttachmentsUseCase>()));
+    gh.factory<_i855.GetOrderViewModel>(() => _i855.GetOrderViewModel(
+          gh<_i759.OrdersUseCase>(),
+          gh<_i576.SubscribeToOrderStatusUseCase>(),
+        ));
+    gh.factory<_i988.GetAllFreelancersUseCase>(
+        () => _i988.GetAllFreelancersUseCase(gh<_i660.HomeRepos>()));
+    gh.factory<_i585.ProfileUseCase>(
+        () => _i585.ProfileUseCase(gh<_i821.ProfileRepo>()));
+    gh.factory<_i552.GetFreelancerOffersViewModel>(() =>
+        _i552.GetFreelancerOffersViewModel(
+            gh<_i90.GetFreelancerOffersUseCase>()));
+    gh.factory<_i75.FreelancerOrderRepo>(() => _i535.FreelancerOrderRepoImpl(
+        freelancerOrderRemoteDataSource:
+            gh<_i297.FreelancerOrderRemoteDataSource>()));
+    gh.factory<_i517.CreatePaymentViewModel>(
+        () => _i517.CreatePaymentViewModel(gh<_i618.CreatePaymentUseCase>()));
+    gh.factory<_i12.GetAcceptedOrderMessageViewModel>(() =>
+        _i12.GetAcceptedOrderMessageViewModel(
+            gh<_i997.GetAcceptedOrderMessagesUseCase>()));
+    gh.factory<_i920.GetOffersViewModel>(
+        () => _i920.GetOffersViewModel(gh<_i863.GetOffersForOrderUseCase>()));
+    gh.factory<_i11.UploadAttachmentsViewModel>(() =>
+        _i11.UploadAttachmentsViewModel(gh<_i231.UploadAttachmentsUseCase>()));
+    gh.factory<_i376.UpdateOfferStatusViewModel>(
+        () => _i376.UpdateOfferStatusViewModel(
+              gh<_i530.UpdateOfferStatusUseCase>(),
+              gh<_i213.AcceptOfferUseCase>(),
+            ));
+    gh.factory<_i628.GetAllServicesUseCase>(
+        () => _i628.GetAllServicesUseCase(gh<_i660.HomeRepos>()));
+    gh.factory<_i904.PlaceOrderUseCase>(
+        () => _i904.PlaceOrderUseCase(gh<_i660.HomeRepos>()));
+    gh.factory<_i776.FreelancerInfoViewModel>(
+        () => _i776.FreelancerInfoViewModel(gh<_i585.ProfileUseCase>()));
+    gh.factory<_i1003.ProfileViewModel>(
+        () => _i1003.ProfileViewModel(gh<_i585.ProfileUseCase>()));
+    gh.factory<_i1052.SendOfferViewModel>(
+        () => _i1052.SendOfferViewModel(gh<_i626.SendOfferUseCase>()));
+    gh.factory<_i670.FetchAllFreelancersViewModel>(() =>
+        _i670.FetchAllFreelancersViewModel(
+            gh<_i988.GetAllFreelancersUseCase>()));
+    gh.factory<_i938.FreelancersViewModel>(
+        () => _i938.FreelancersViewModel(gh<_i988.GetAllFreelancersUseCase>()));
+    gh.factory<_i195.DeleteAttachmentsViewModel>(() =>
+        _i195.DeleteAttachmentsViewModel(gh<_i416.DeleteAttachmentsUseCase>()));
+    gh.factory<_i779.PlaceOrderViewModel>(
+        () => _i779.PlaceOrderViewModel(gh<_i904.PlaceOrderUseCase>()));
+    gh.factory<_i765.ClientOrderStatusViewModel>(() =>
+        _i765.ClientOrderStatusViewModel(
+            gh<_i454.SubscribetToOrdersUseCase>()));
+    gh.factory<_i171.FreelancerOrderUseCase>(() => _i171.FreelancerOrderUseCase(
+        freelancerOrderRepo: gh<_i75.FreelancerOrderRepo>()));
     gh.factory<_i2.FetchPrivateOrdersUseCase>(
         () => _i2.FetchPrivateOrdersUseCase(gh<_i75.FreelancerOrderRepo>()));
     gh.factory<_i785.UpdateOrderStatusUseCase>(
         () => _i785.UpdateOrderStatusUseCase(gh<_i75.FreelancerOrderRepo>()));
     gh.factory<_i380.WithdrawOfferUseCase>(
         () => _i380.WithdrawOfferUseCase(gh<_i75.FreelancerOrderRepo>()));
-    gh.factory<_i552.GetFreelancerOffersViewModel>(() =>
-        _i552.GetFreelancerOffersViewModel(
-            gh<_i90.GetFreelancerOffersUseCase>()));
     gh.factory<_i869.ServicesViewModel>(
         () => _i869.ServicesViewModel(gh<_i628.GetAllServicesUseCase>()));
-    gh.factory<_i517.CreatePaymentViewModel>(
-        () => _i517.CreatePaymentViewModel(gh<_i618.CreatePaymentUseCase>()));
-    gh.factory<_i12.GetAcceptedOrderMessageViewModel>(() =>
-        _i12.GetAcceptedOrderMessageViewModel(
-            gh<_i997.GetAcceptedOrderMessagesUseCase>()));
     gh.factory<_i278.WithdrawOfferViewModel>(
         () => _i278.WithdrawOfferViewModel(gh<_i380.WithdrawOfferUseCase>()));
     gh.factory<_i975.UpdateOrderStatusViewModel>(() =>
         _i975.UpdateOrderStatusViewModel(gh<_i785.UpdateOrderStatusUseCase>()));
-    gh.factory<_i11.UploadAttachmentsViewModel>(() =>
-        _i11.UploadAttachmentsViewModel(gh<_i231.UploadAttachmentsUseCase>()));
-    gh.factory<_i1052.SendOfferViewModel>(
-        () => _i1052.SendOfferViewModel(gh<_i626.SendOfferUseCase>()));
     gh.factory<_i416.FreelancerPrivateOrdersViewModel>(() =>
         _i416.FreelancerPrivateOrdersViewModel(
             gh<_i2.FetchPrivateOrdersUseCase>()));
     gh.factory<_i636.FreelancerPendingOrdersViewModel>(() =>
         _i636.FreelancerPendingOrdersViewModel(
             gh<_i171.FreelancerOrderUseCase>()));
-    gh.factory<_i195.DeleteAttachmentsViewModel>(() =>
-        _i195.DeleteAttachmentsViewModel(gh<_i416.DeleteAttachmentsUseCase>()));
     return this;
   }
 }

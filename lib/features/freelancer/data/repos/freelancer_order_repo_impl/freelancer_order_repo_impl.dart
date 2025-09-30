@@ -17,10 +17,10 @@ class FreelancerOrderRepoImpl extends FreelancerOrderRepo{
   }
 
   @override
-  RealtimeChannel  subscribeToPendingOrders(
-      void Function(OrderEntity order, String action) onChange,
+  Stream<List<OrderEntity>>  subscribeToPendingOrders(
+     
       ) {
-    return freelancerOrderRemoteDataSource.subscribeToPendingOrders( onChange);
+    return freelancerOrderRemoteDataSource.subscribeToPendingOrders();
   }
 
   @override
@@ -28,9 +28,9 @@ class FreelancerOrderRepoImpl extends FreelancerOrderRepo{
      return freelancerOrderRemoteDataSource.fetchPrivateOrders(freelancerId);
   }
   @override
-  RealtimeChannel subscribeToPrivateOrders(String freelancerId, void Function(OrderEntity order, String action) onChange) {
+  Stream<(OrderEntity, String)> subscribeToPrivateOrders(String freelancerId,  ) {
     return freelancerOrderRemoteDataSource.subscribeToPrivateOrders(
-        freelancerId, onChange);
+        freelancerId,);
   }
   
   @override

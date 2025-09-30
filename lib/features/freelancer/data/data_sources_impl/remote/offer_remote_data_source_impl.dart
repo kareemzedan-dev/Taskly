@@ -11,11 +11,26 @@ import 'package:taskly/features/freelancer/domain/entities/offer_entity/offer_en
 import 'package:taskly/features/shared/domain/entities/order_entity/order_entity.dart';
 
 import '../../../../shared/data/models/order_dm/order_dm.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:either_dart/either.dart';
+import 'package:injectable/injectable.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:taskly/core/errors/failures.dart';
+import 'package:taskly/core/services/supabase_service.dart';
+import 'package:taskly/core/utils/network_utils.dart';
+import 'package:taskly/features/freelancer/data/data_sources/remote/offer_data_source.dart';
+import 'package:taskly/features/freelancer/data/models/offer_dm/offer_dm.dart';
+import 'package:taskly/features/freelancer/domain/entities/offer_entity/offer_entity.dart';
+import 'package:taskly/features/shared/domain/entities/order_entity/order_entity.dart';
+
+import '../../../../shared/data/models/order_dm/order_dm.dart';
 
 @Injectable(as: OfferRemoteDataSource)
 class OfferRemoteDataSourceImpl implements OfferRemoteDataSource {
-  final SupabaseService supabaseService = SupabaseService();
-  RealtimeChannel? _offersChannel;
+  final SupabaseService supabaseService  ;
+
+  OfferRemoteDataSourceImpl(this.supabaseService);
+
   @override
   Future<Either<Failures, OfferEntity>> placeOffer(
       OfferEntity offerEntity) async {
@@ -42,8 +57,9 @@ class OfferRemoteDataSourceImpl implements OfferRemoteDataSource {
         data: offerModel.toJson(),
       );
 
+      // زيادة offers_count للـ order
       final orderId = offerEntity.orderId;
-      final order = await supabaseService.client
+      final order = await supabaseService.supabaseClient
           .from('orders')
           .select('offers_count')
           .eq('id', orderId)
@@ -51,7 +67,7 @@ class OfferRemoteDataSourceImpl implements OfferRemoteDataSource {
 
       final currentCount = order?['offers_count'] ?? 0;
 
-      await supabaseService.client
+      await supabaseService.supabaseClient
           .from('orders')
           .update({'offers_count': currentCount + 1}).eq('id', orderId);
 
@@ -70,7 +86,7 @@ class OfferRemoteDataSourceImpl implements OfferRemoteDataSource {
         return Left(NetworkFailure('No internet connection'));
       }
 
-      final query = supabaseService.client
+      final query = supabaseService.supabaseClient
           .from('offers')
           .select()
           .eq('freelancer_id', freelancerId)
@@ -104,7 +120,7 @@ class OfferRemoteDataSourceImpl implements OfferRemoteDataSource {
         return Left(NetworkFailure('No internet connection'));
       }
 
-      final orderResponse = await supabaseService.client
+      final orderResponse = await supabaseService.supabaseClient
           .from('orders')
           .select()
           .eq('id', orderId)
@@ -121,65 +137,23 @@ class OfferRemoteDataSourceImpl implements OfferRemoteDataSource {
     }
   }
 
+  /// ✅ بدل RealtimeChannel و unsubscribe
+  /// هنخليها Stream بيرجع (OfferEntity, action)
   @override
-  RealtimeChannel subscribeToOffers(
-    String freelancerId,
-    void Function(OfferEntity offer, String action) onChange,
-  ) {
-    _offersChannel = supabaseService.client
-        .channel('offers:freelancer_id=eq.$freelancerId')
-        .onPostgresChanges(
-          event: PostgresChangeEvent.insert,
-          schema: 'public',
+  Stream<(OfferEntity, String)> subscribeToOffers(String freelancerId) {
+    return supabaseService
+        .subscribeToTable(
           table: 'offers',
-          filter: PostgresChangeFilter(
-            type: PostgresChangeFilterType.eq,
-            column: 'freelancer_id',
-            value: freelancerId,
-          ),
-          callback: (payload) {
-            final offer = OfferModel.fromJson(payload.newRecord).toEntity();
-            onChange(offer, 'INSERT');
-          },
+          filter: "freelancer_id=eq.$freelancerId",
         )
-        .onPostgresChanges(
-          event: PostgresChangeEvent.update,
-          schema: 'public',
-          table: 'offers',
-          filter: PostgresChangeFilter(
-            type: PostgresChangeFilterType.eq,
-            column: 'freelancer_id',
-            value: freelancerId,
-          ),
-          callback: (payload) {
-            final offer = OfferModel.fromJson(payload.newRecord).toEntity();
-            onChange(offer, 'UPDATE');
-          },
-        )
-        .onPostgresChanges(
-          event: PostgresChangeEvent.delete,
-          schema: 'public',
-          table: 'offers',
-          filter: PostgresChangeFilter(
-            type: PostgresChangeFilterType.eq,
-            column: 'freelancer_id',
-            value: freelancerId,
-          ),
-          callback: (payload) {
-            final offer = OfferModel.fromJson(payload.oldRecord).toEntity();
-            onChange(offer, 'DELETE');
-          },
-        )
-        .subscribe();
-
-    return _offersChannel!;
-  }
-
-  @override
-  void unsubscribeFromOffers(RealtimeChannel channel) {
-    if (_offersChannel != null) {
-      supabaseService.client.removeChannel(_offersChannel!);
-      _offersChannel = null;
-    }
+        .map((records) {
+          return records.map((record) {
+            final offer = OfferModel.fromJson(record).toEntity();
+            final action = record['action'] as String? ?? 'unknown';
+            return (offer, action);
+          });
+        })
+        // flatMap عشان كل event يبقى فردي مش list
+        .asyncExpand((events) => Stream.fromIterable(events));
   }
 }

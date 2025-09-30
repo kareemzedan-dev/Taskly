@@ -9,9 +9,9 @@ abstract class MyJobsRemoteDataSource {
   Future<Either<Failures, List<OfferEntity>>> getOffers(String orderId);
 
   // إضافة subscribe method للـ realtime
-  RealtimeChannel subscribeToOrderOffersCount({
-    required String orderId,
-    required void Function(int offersCount) onChange,
+  Stream<int> subscribeToOrderOffersCount({
+      String orderId,
+ 
   });
   Future< Either<Failures, OfferEntity >> updateOfferStatus(
       String offerId, String newStatus);
@@ -21,8 +21,8 @@ abstract class MyJobsRemoteDataSource {
   String offerId,
       );
 
-  RealtimeChannel subscribeToOrders(
+   Stream<(OrderEntity, String)> subscribeToOrders(
       Map<String, dynamic>? filters,
-      void Function(OrderEntity order, String action) onChange,
+ 
       );
 }

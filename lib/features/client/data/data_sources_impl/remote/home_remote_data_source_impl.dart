@@ -18,10 +18,10 @@ import 'package:taskly/features/client/data/models/home/service_response_dm.dart
 
 @Injectable(as: HomeRemoteDataSource)
 class HomeRemoteDataSourceImpl extends HomeRemoteDataSource {
-  final SupabaseClient supabase;
-  SupabaseService supabaseService = SupabaseService();
+ 
+  SupabaseService supabaseService  ;
 
-  HomeRemoteDataSourceImpl({required this.supabase});
+  HomeRemoteDataSourceImpl({required this.supabaseService});
  
 
   @override

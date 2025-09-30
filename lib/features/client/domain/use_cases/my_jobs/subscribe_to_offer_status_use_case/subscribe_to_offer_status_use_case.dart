@@ -5,10 +5,9 @@ import 'package:injectable/injectable.dart';
 class SubscribeToOfferStatusUseCase {
   final MyJobsRepo myJobsRepo;
   SubscribeToOfferStatusUseCase(this.myJobsRepo);
-  RealtimeChannel subscribeToOffers({
+  Stream<int> subscribeToOffers({
     required String orderId,
-    required void Function(int offersCount) onChange,
   }) {
-    return myJobsRepo.subscribeToOffers(orderId: orderId, onChange: onChange);
+    return myJobsRepo.subscribeToOffers(orderId: orderId, );
   }
 }

@@ -8,20 +8,15 @@ import 'package:taskly/core/services/supabase_service.dart';
 import 'package:taskly/features/shared/data/models/order_dm/order_dm.dart';
 import 'package:taskly/features/shared/domain/entities/order_entity/order_entity.dart';
 import 'package:taskly/features/freelancer/data/data_sources/remote/freelancer_order_remote_data_source.dart';
-
 @Injectable(as: FreelancerOrderRemoteDataSource)
 class FreelancerOrderRemoteDataSourceImpl
     extends FreelancerOrderRemoteDataSource {
   final SupabaseService _supabaseService;
-  final SupabaseClient _supabase;
-
-  RealtimeChannel? _ordersChannel;
-  RealtimeChannel? _privateOrdersChannel;
+ 
 
   FreelancerOrderRemoteDataSourceImpl({
     required SupabaseService supabaseService,
-  })  : _supabaseService = supabaseService,
-        _supabase = Supabase.instance.client;
+  }) : _supabaseService = supabaseService;
 
   @override
   Future<Either<Failures, List<OrderEntity>>> fetchPendingFreelancerOrders(
@@ -32,7 +27,7 @@ class FreelancerOrderRemoteDataSourceImpl
         return Left(NetworkFailure('No internet connection'));
       }
 
-      final offersResponse = await _supabase
+      final offersResponse = await _supabaseService.supabaseClient
           .from('offers')
           .select('order_id')
           .eq('freelancer_id', freelancerId);
@@ -40,7 +35,7 @@ class FreelancerOrderRemoteDataSourceImpl
       final offeredOrderIds =
           (offersResponse as List).map((e) => e['order_id'] as String).toList();
 
-      final response = await _supabase
+      final response = await _supabaseService.supabaseClient
           .from('orders')
           .select('*')
           .eq('status', 'Pending')
@@ -56,43 +51,19 @@ class FreelancerOrderRemoteDataSourceImpl
     }
   }
 
-  @override
-  RealtimeChannel subscribeToPendingOrders(
-      void Function(OrderEntity order, String action) onChange) {
-_ordersChannel = _supabase
-    .channel('public_orders_channel')
-    .onPostgresChanges(
-      event: PostgresChangeEvent.all, // insert, update, delete
-      schema: 'public',
-      table: 'orders',
-      filter: PostgresChangeFilter(
-        type: PostgresChangeFilterType.eq,
-        column: 'status',
-        value: 'Pending',
-      ),
-      callback: (payload) {
-        final record = payload.newRecord ?? payload.oldRecord;
-        if (record != null) {
-          final order = OrderDm.fromJson(record);
-          if (order.status == OrderStatus.Pending &&
-              order.serviceType == 'public') {
-            onChange(order, payload.eventType.name); // insert/update/delete
-          }
-        }
-      },
-    )
-    .subscribe();
+@override
+Stream<List<OrderEntity>> subscribeToPendingOrders() {
+  return _supabaseService
+      .subscribeToTable(
+        table: 'orders',
+        filter: "status=eq.Pending,service_type=eq.public",
+      )
+      .map((records) =>
+          records.map((record) => OrderDm.fromJson(record).toEntity()).toList());
+}
 
 
-    return _ordersChannel!;
-  }
-
-  void unsubscribeFromPendingOrders() {
-    if (_ordersChannel != null) {
-      _supabaseService.unsubscribe(table: 'orders');
-      _ordersChannel = null;
-    }
-  }
+ 
 
   @override
   Future<Either<Failures, List<OrderEntity>>> fetchPrivateOrders(
@@ -103,7 +74,7 @@ _ordersChannel = _supabase
         return Left(NetworkFailure('No internet connection'));
       }
 
-      final response = await _supabase
+      final response = await _supabaseService.supabaseClient
           .from('orders')
           .select('*')
           .eq('freelancer_id', freelancerId)
@@ -118,45 +89,36 @@ _ordersChannel = _supabase
     }
   }
 
-  @override
-  RealtimeChannel subscribeToPrivateOrders(String freelancerId,
-      void Function(OrderEntity order, String action) onChange) {
-    _privateOrdersChannel = _supabaseService.subscribe(
-      table: 'orders',
-      filters: {
-        'freelancer_id': freelancerId,
-        'service_type': 'private',
-      },
-      onChange: (record, action) {
-        final order = OrderDm.fromJson(record);
-        if (order.serviceType == 'private') {
-          onChange(order, action);
-        }
-      },
-    );
+@override
+Stream<(OrderEntity, String)> subscribeToPrivateOrders(String freelancerId) {
+  return _supabaseService
+      .subscribeToTable(
+        table: 'orders',
+        filter: "freelancer_id=eq.$freelancerId,service_type=eq.private",
+      )
+      .map((records) {
+        return records.map((record) {
+          final order = OrderDm.fromJson(record).toEntity();
+          // هنا هرجع الـ order ومعاه الـ action (insert/update/delete)
+          return (order, record['action'] as String);
+        });
+      })
+      // flatMap عشان اخلي stream يرجع event واحد مش list
+      .asyncExpand((events) => Stream.fromIterable(events));
+}
 
-    return _privateOrdersChannel!;
-  }
+ 
 
-  void unsubscribeFromPrivateOrders() {
-    if (_privateOrdersChannel != null) {
-      _supabaseService.unsubscribe(table: 'orders');
-      _privateOrdersChannel = null;
-    }
-  }
-
-  void unsubscribeAll() {
-    _supabaseService.unsubscribeAll();
-    _ordersChannel = null;
-    _privateOrdersChannel = null;
-  }
+ 
 
   @override
   Future<Either<Failures, void>> updateOrderStatus(
       String orderId, String status) async {
     try {
-      _supabase.from('orders').update({'status': status}).eq('id', orderId);
-      return Right(null);
+      await _supabaseService.supabaseClient
+          .from('orders')
+          .update({'status': status}).eq('id', orderId);
+      return const Right(null);
     } catch (e) {
       return Left(ServerFailure('Failed to update order status: $e'));
     }
@@ -166,11 +128,11 @@ _ordersChannel = _supabase
   Future<Either<Failures, void>> withdrawOffer(
       String offerId, String orderId) async {
     try {
-      await _supabase
+      await _supabaseService.supabaseClient
           .from('offers')
           .update({'status': 'withdrawn'}).eq('id', offerId);
 
-      await _supabase.rpc(
+      await _supabaseService.supabaseClient.rpc(
         'decrement_offers_count',
         params: {'order_id': orderId},
       );
