@@ -4,15 +4,15 @@ import 'package:taskly/config/routes/routes_manager.dart';
 import 'package:taskly/core/di/di.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/offer_card.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/offer_header.dart';
-import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/cubit/get_offers_view_model/get_offers_view_model.dart';
-import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/cubit/get_offers_view_model/get_offers_view_model_states.dart';
+import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/view_model/get_offers_view_model/get_offers_view_model.dart';
+import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/view_model/get_offers_view_model/get_offers_view_model_states.dart';
 import 'package:taskly/features/freelancer/domain/entities/offer_entity/offer_entity.dart';
 import 'package:taskly/features/freelancer/presentation/cubit/fetch_order_details_view_model/fetch_order_details_view_model.dart';
 
 import '../../../../../../../../../core/components/dismissible_error_card.dart';
 import '../../../../../client_home_view.dart';
-import '../../cubit/update_offer_status_view_model/update_offer_status_states.dart';
-import '../../cubit/update_offer_status_view_model/update_offer_status_view_model.dart';
+import '../../view_model/update_offer_status_view_model/update_offer_status_states.dart';
+import '../../view_model/update_offer_status_view_model/update_offer_status_view_model.dart';
 class OffersBottomSheetContent extends StatelessWidget {
   final String orderId;
 

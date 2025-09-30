@@ -4,8 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 import 'package:taskly/core/di/di.dart';
 import 'package:taskly/config/routes/routes_manager.dart';
-import 'package:taskly/features/client/presentation/views/tabs/home/presentation/cubit/services_view_model/services_view_model.dart';
-import 'package:taskly/features/client/presentation/views/tabs/home/presentation/cubit/services_view_model/services_view_model_states.dart';
+import 'package:taskly/features/client/presentation/views/tabs/home/presentation/view_model/services_view_model/services_view_model.dart';
+import 'package:taskly/features/client/presentation/views/tabs/home/presentation/view_model/services_view_model/services_view_model_states.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/service_category.dart';
 import 'package:shimmer/shimmer.dart';
 

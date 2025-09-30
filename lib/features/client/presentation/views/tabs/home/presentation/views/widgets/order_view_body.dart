@@ -8,8 +8,8 @@ import 'package:taskly/core/components/dismissible_error_card.dart';
 import 'package:taskly/features/attachments/presentation/manager/upload_attachments_view_model/upload_attachments_view_model.dart';
 import 'package:taskly/features/shared/domain/entities/order_entity/order_entity.dart';
 import 'package:taskly/features/client/presentation/views/client_home_view.dart';
-import 'package:taskly/features/client/presentation/views/tabs/home/presentation/cubit/place_order_view_model/place_order_view_model.dart';
-import 'package:taskly/features/client/presentation/views/tabs/home/presentation/cubit/place_order_view_model/place_order_view_model_states.dart';
+import 'package:taskly/features/client/presentation/views/tabs/home/presentation/view_model/place_order_view_model/place_order_view_model.dart';
+import 'package:taskly/features/client/presentation/views/tabs/home/presentation/view_model/place_order_view_model/place_order_view_model_states.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/attachments_files_section.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/build_text_field_widget.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/category_drop_down.dart';
@@ -277,7 +277,7 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                                 orderViewModel.descriptionController.text,
                                 category: orderViewModel.selectedCategory,
                                 attachments: uploadAttachmentsViewModel.uploadedAttachments,
-                                serviceType: ServiceType.public,
+                                serviceType: ServiceType.private,
                                 status: OrderStatus.Pending,
                                 deadline: orderViewModel.calculateDeadline(
                                   orderViewModel.timeController.text,

@@ -8,8 +8,8 @@ import 'package:taskly/core/di/di.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/action_button.dart';
 
 import '../../../../../../../../../config/routes/routes_manager.dart';
-import '../../cubit/update_offer_status_view_model/update_offer_status_states.dart';
-import '../../cubit/update_offer_status_view_model/update_offer_status_view_model.dart';
+import '../../view_model/update_offer_status_view_model/update_offer_status_states.dart';
+import '../../view_model/update_offer_status_view_model/update_offer_status_view_model.dart';
 
 class OfferActions extends StatelessWidget {
   const OfferActions({super.key, required this.offerId, required this.onAcceptOffer});

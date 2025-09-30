@@ -14,9 +14,12 @@ abstract class FreelancerOrderRepo {
 
       );
   Future<Either<Failures,List<OrderEntity>>> fetchPrivateOrders(String freelancerId);
+  Future<Either<Failures, void >> updateOrderStatus(String orderId, String status);
+  Future<Either <Failures,void>>  withdrawOffer(String offerId, String orderId); 
 
   RealtimeChannel subscribeToPrivateOrders(
     String freelancerId,
     void Function(OrderEntity order, String action) onChange,
       );
+      
 }

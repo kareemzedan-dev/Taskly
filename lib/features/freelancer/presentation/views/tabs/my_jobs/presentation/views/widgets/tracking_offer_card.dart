@@ -3,9 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:marquee/marquee.dart';
 import 'package:taskly/config/routes/routes_manager.dart';
+import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/view_model/update_offer_status_view_model/update_offer_status_states.dart';
+import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/view_model/update_offer_status_view_model/update_offer_status_view_model.dart';
 import 'package:taskly/features/client/presentation/views/tabs/profile/presentation/views/widgets/user_info_section.dart';
 import 'package:taskly/features/client/presentation/views/tabs/profile/presentation/views/widgets/user_info_section_shimmer.dart';
 import 'package:taskly/features/freelancer/domain/entities/offer_entity/offer_entity.dart';
+import 'package:taskly/features/freelancer/presentation/cubit/withdraw_offer_view_model/withdraw_offer_states.dart';
+import 'package:taskly/features/freelancer/presentation/cubit/withdraw_offer_view_model/withdraw_offer_view_model.dart';
 import 'package:taskly/features/profile/domain/entities/user_info_entity/user_info_entity.dart';
 
 import '../../../../../../../../../core/di/di.dart';
@@ -85,6 +89,7 @@ class TrackingOfferCard extends StatelessWidget {
                       name: state.userInfoEntity.fullName,
                       email: state.userInfoEntity.email,
                       rating: state.userInfoEntity.rating!,
+
                     );
                   }
                   return const Center(child: Text("Loading"));
@@ -146,31 +151,42 @@ class TrackingOfferCard extends StatelessWidget {
               ),
 
               SizedBox(height: 8.h),
-              ActionsRow(
-                actions: [
-                  ActionItem(
-                    title: "View details",
-                    icon: Icons.remove_red_eye_outlined,
-                    onTap: () {
-                      Navigator.pushNamed(
-                        context,
-                        RoutesManager.offerDetailsView,
-                        arguments: {
-                          'orderId': offerEntity.orderId,
-                        }
-                      );
-                    },
-                  ),
-                     if(isPending)
-                     ActionItem(
-                    title: "Withdraw offer",
+BlocBuilder<WithdrawOfferViewModel, WithdrawOfferStates>(
+  builder: (context, state) {
+    return ActionsRow(
+      actions: [
+        ActionItem(
+          title: "View details",
+          icon: Icons.remove_red_eye_outlined,
+          onTap: () {
+            Navigator.pushNamed(
+              context,
+              RoutesManager.offerDetailsView,
+              arguments: {
+                'orderId': offerEntity.orderId,
+              },
+            );
+          },
+        ),
+        if (isPending)
+          ActionItem(
+            title: state is WithdrawOfferStatesLoading
+                ? "Withdrawing..."
+                : "Withdraw offer",
+            icon: Icons.remove_circle_outline,
+            isOffer: true,
+            onTap: state is WithdrawOfferStatesLoading
+                ? null
+                : () {
+                    context.read<WithdrawOfferViewModel>()
+                      .withdrawOffer(offerEntity.id,  offerEntity.orderId);
+                  },
+          ),
+      ],
+    );
+  },
+),
 
-                    icon: Icons.remove_circle_outline,
-                    isOffer: true,
-                    onTap: () {},
-                  ),
-                ],
-              ),
 
               //ActionsRow(order:),
             ],

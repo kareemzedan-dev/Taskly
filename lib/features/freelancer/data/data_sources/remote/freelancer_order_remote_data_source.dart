@@ -16,5 +16,7 @@ abstract class FreelancerOrderRemoteDataSource {
     void Function(OrderEntity order, String action) onChange,
 
       );
+  Future<Either<Failures, void>> updateOrderStatus(String orderId, String status);
+  Future<Either<Failures, void>> withdrawOffer(String offerId, String orderId);
 
 }

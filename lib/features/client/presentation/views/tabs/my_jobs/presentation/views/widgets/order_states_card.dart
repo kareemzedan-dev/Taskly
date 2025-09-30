@@ -4,8 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/components/custom_button.dart';
 import 'package:taskly/core/di/di.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
-import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/cubit/get_offers_view_model/get_offers_view_model.dart';
-import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/cubit/get_offers_view_model/get_offers_view_model_states.dart';
+import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/view_model/get_offers_view_model/get_offers_view_model.dart';
+import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/view_model/get_offers_view_model/get_offers_view_model_states.dart';
 import 'package:taskly/features/payments/presentation/manager/get_payment_view_model/get_payment_view_model.dart';
 import 'package:taskly/features/payments/presentation/manager/get_payment_view_model/get_payment_view_model_states.dart';
 import 'package:taskly/features/payments/presentation/widgets/payment_status_bottom_sheet.dart';
@@ -17,7 +17,7 @@ import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentat
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/order_progress_time_line.dart';
 
 import '../../../../../../../../../config/routes/routes_manager.dart';
-import '../../cubit/update_offer_status_view_model/update_offer_status_view_model.dart';
+import '../../view_model/update_offer_status_view_model/update_offer_status_view_model.dart';
 
 int getStep(OrderStatus status) {
   switch (status) {

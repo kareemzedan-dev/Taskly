@@ -48,17 +48,17 @@ class FreelancerPendingOrdersViewModel
         final currentOrders = List<OrderEntity>.from(
           (state as FreelancerPendingOrdersSuccess).pendingOrdersList,
         );
+if (action.toUpperCase() == 'INSERT') {
+  currentOrders.add(order);
+} else if (action.toUpperCase() == 'UPDATE') {
+  final index = currentOrders.indexWhere((o) => o.id == order.id);
+  if (index != -1) {
+    currentOrders[index] = order;
+  }
+} else if (action.toUpperCase() == 'DELETE') {
+  currentOrders.removeWhere((o) => o.id == order.id);
+}
 
-        if (action == 'insert') {
-          currentOrders.add(order);
-        } else if (action == 'update') {
-          final index = currentOrders.indexWhere((o) => o.id == order.id);
-          if (index != -1) {
-            currentOrders[index] = order;
-          }
-        } else if (action == 'delete') {
-          currentOrders.removeWhere((o) => o.id == order.id);
-        }
 
         emit(FreelancerPendingOrdersSuccess(currentOrders));
       }

@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/utils/app_text_styles.dart';
 import 'package:taskly/core/utils/assets_manager.dart';
 import 'package:taskly/features/profile/domain/entities/user_info_entity/user_info_entity.dart';
+import 'package:taskly/features/reviews/presentation/widgets/user_avatar.dart';
 
 class UserInfoSection extends StatelessWidget {
   final String? name, email;
@@ -36,11 +37,9 @@ class UserInfoSection extends StatelessWidget {
       onTap: onTap,
       child: Row(
         children: [
-          CircleAvatar(
-            radius: photoSizeSelected ? 26.r : 40.r,
-            backgroundImage: AssetImage(
-              Assets.assetsImagesPortraitHappySmileyMan,
-            ),
+         UserAvatar(
+            imagePath: userInfo?.profileImage,
+            radius: photoSizeSelected ? 30.r : 20.r,
           ),
           SizedBox(width: 20.w),
           Expanded(
@@ -65,7 +64,7 @@ class UserInfoSection extends StatelessWidget {
                 fontWeight: FontWeight.w500,
                 color: Colors.grey,
               ),
-              maxLines: 1, // ✅ برضه قص لو طويل
+              maxLines: 1,  
               overflow: TextOverflow.ellipsis,
             ),
               Row(

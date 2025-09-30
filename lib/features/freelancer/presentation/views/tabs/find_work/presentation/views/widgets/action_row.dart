@@ -32,7 +32,7 @@ class ActionItem {
   final String title;
   final IconData icon;
   final bool isOffer;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   ActionItem({
     required this.title,

@@ -32,4 +32,14 @@ class FreelancerOrderRepoImpl extends FreelancerOrderRepo{
     return freelancerOrderRemoteDataSource.subscribeToPrivateOrders(
         freelancerId, onChange);
   }
+  
+  @override
+  Future<Either<Failures, void>> updateOrderStatus(String orderId, String status) {
+ return freelancerOrderRemoteDataSource.updateOrderStatus(orderId, status);
+  }
+  
+  @override
+  Future<Either<Failures, void>> withdrawOffer(String offerId, String orderId) {
+     return freelancerOrderRemoteDataSource.withdrawOffer(offerId, orderId);
+  }
 }

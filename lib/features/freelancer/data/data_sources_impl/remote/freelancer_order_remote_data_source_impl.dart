@@ -12,7 +12,6 @@ import 'package:taskly/features/freelancer/data/data_sources/remote/freelancer_o
 @Injectable(as: FreelancerOrderRemoteDataSource)
 class FreelancerOrderRemoteDataSourceImpl
     extends FreelancerOrderRemoteDataSource {
-
   final SupabaseService _supabaseService;
   final SupabaseClient _supabase;
 
@@ -25,7 +24,8 @@ class FreelancerOrderRemoteDataSourceImpl
         _supabase = Supabase.instance.client;
 
   @override
-  Future<Either<Failures, List<OrderEntity>>> fetchPendingFreelancerOrders(String freelancerId) async {
+  Future<Either<Failures, List<OrderEntity>>> fetchPendingFreelancerOrders(
+      String freelancerId) async {
     try {
       final connectivity = await Connectivity().checkConnectivity();
       if (connectivity == ConnectivityResult.none) {
@@ -37,14 +37,14 @@ class FreelancerOrderRemoteDataSourceImpl
           .select('order_id')
           .eq('freelancer_id', freelancerId);
 
-      final offeredOrderIds = (offersResponse as List)
-          .map((e) => e['order_id'] as String)
-          .toList();
+      final offeredOrderIds =
+          (offersResponse as List).map((e) => e['order_id'] as String).toList();
 
       final response = await _supabase
           .from('orders')
           .select('*')
           .eq('status', 'Pending')
+          .eq('service_type', 'public')
           .not('id', 'in', offeredOrderIds.isEmpty ? [''] : offeredOrderIds);
 
       if ((response as List).isEmpty) return Right([]);
@@ -57,17 +57,33 @@ class FreelancerOrderRemoteDataSourceImpl
   }
 
   @override
-  RealtimeChannel subscribeToPendingOrders(void Function(OrderEntity order, String action) onChange) {
-    _ordersChannel = _supabaseService.subscribe(
+  RealtimeChannel subscribeToPendingOrders(
+      void Function(OrderEntity order, String action) onChange) {
+_ordersChannel = _supabase
+    .channel('public_orders_channel')
+    .onPostgresChanges(
+      event: PostgresChangeEvent.all, // insert, update, delete
+      schema: 'public',
       table: 'orders',
-      filters: {'status': 'Pending'},
-      onChange: (record, action) {
-        final order = OrderDm.fromJson(record);
-        if (order.status == OrderStatus.Pending) {
-          onChange(order, action);
+      filter: PostgresChangeFilter(
+        type: PostgresChangeFilterType.eq,
+        column: 'status',
+        value: 'Pending',
+      ),
+      callback: (payload) {
+        final record = payload.newRecord ?? payload.oldRecord;
+        if (record != null) {
+          final order = OrderDm.fromJson(record);
+          if (order.status == OrderStatus.Pending &&
+              order.serviceType == 'public') {
+            onChange(order, payload.eventType.name); // insert/update/delete
+          }
         }
       },
-    );
+    )
+    .subscribe();
+
+
     return _ordersChannel!;
   }
 
@@ -78,9 +94,9 @@ class FreelancerOrderRemoteDataSourceImpl
     }
   }
 
-
   @override
-  Future<Either<Failures, List<OrderEntity>>> fetchPrivateOrders(String freelancerId) async {
+  Future<Either<Failures, List<OrderEntity>>> fetchPrivateOrders(
+      String freelancerId) async {
     try {
       final connectivity = await Connectivity().checkConnectivity();
       if (connectivity == ConnectivityResult.none) {
@@ -90,7 +106,8 @@ class FreelancerOrderRemoteDataSourceImpl
       final response = await _supabase
           .from('orders')
           .select('*')
-          .eq('freelancer_id', freelancerId);
+          .eq('freelancer_id', freelancerId)
+          .eq('service_type', 'private');
 
       if ((response as List).isEmpty) return Right([]);
 
@@ -102,15 +119,22 @@ class FreelancerOrderRemoteDataSourceImpl
   }
 
   @override
-  RealtimeChannel subscribeToPrivateOrders(String freelancerId, void Function(OrderEntity order, String action) onChange) {
+  RealtimeChannel subscribeToPrivateOrders(String freelancerId,
+      void Function(OrderEntity order, String action) onChange) {
     _privateOrdersChannel = _supabaseService.subscribe(
       table: 'orders',
-      filters: {'freelancer_id': freelancerId},
+      filters: {
+        'freelancer_id': freelancerId,
+        'service_type': 'private',
+      },
       onChange: (record, action) {
         final order = OrderDm.fromJson(record);
-        onChange(order, action);
+        if (order.serviceType == 'private') {
+          onChange(order, action);
+        }
       },
     );
+
     return _privateOrdersChannel!;
   }
 
@@ -125,5 +149,35 @@ class FreelancerOrderRemoteDataSourceImpl
     _supabaseService.unsubscribeAll();
     _ordersChannel = null;
     _privateOrdersChannel = null;
+  }
+
+  @override
+  Future<Either<Failures, void>> updateOrderStatus(
+      String orderId, String status) async {
+    try {
+      _supabase.from('orders').update({'status': status}).eq('id', orderId);
+      return Right(null);
+    } catch (e) {
+      return Left(ServerFailure('Failed to update order status: $e'));
+    }
+  }
+
+  @override
+  Future<Either<Failures, void>> withdrawOffer(
+      String offerId, String orderId) async {
+    try {
+      await _supabase
+          .from('offers')
+          .update({'status': 'withdrawn'}).eq('id', offerId);
+
+      await _supabase.rpc(
+        'decrement_offers_count',
+        params: {'order_id': orderId},
+      );
+
+      return const Right(null);
+    } catch (e) {
+      return Left(ServerFailure('Failed to withdraw offer: $e'));
+    }
   }
 }
