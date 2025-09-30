@@ -14,6 +14,7 @@ class Assets {
   static const String fontsDMSansMedium = 'assets/fonts/DMSans-Medium.ttf';
   static const String fontsDMSansRegular = 'assets/fonts/DMSans-Regular.ttf';
   static const String fontsDMSansSemiBold = 'assets/fonts/DMSans-SemiBold.ttf';
+  static const String images9440461 = 'assets/images/9440461.jpg';
   static const String imagesAccount3166234 = 'assets/images/account_3166234.png';
   static const String imagesAccountName = 'assets/images/account_name.png';
   static const String imagesAccountNumber = 'assets/images/account_number.png';
@@ -52,6 +53,7 @@ class Assets {
   static const String lottiesOrderLoading = 'assets/lotties/order_Loading.json';
   static const String lottiesProgress = 'assets/lotties/Progress.json';
   static const String lottiesSuccess = 'assets/lotties/Success.json';
+  static const String lottiesWaiting = 'assets/lotties/waiting.json';
   static const String videosMuslimBusiness = 'assets/videos/muslim_business.mp4';
 
 }

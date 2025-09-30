@@ -23,19 +23,20 @@ int getStep(OrderStatus status) {
   switch (status) {
     case OrderStatus.Pending:
     case OrderStatus.Accepted:
-    case OrderStatus.AwaitingPaymentConfirmation:
       return 0;
-    case OrderStatus.InProgress:
+    case OrderStatus.AwaitingPaymentConfirmation:
       return 1;
-    case OrderStatus.Completed:
+    case OrderStatus.InProgress:
       return 2;
+    case OrderStatus.Completed:
+      return 3;
     default:
       return 0;
   }
 }
 
 class OrderStatesCard extends StatelessWidget {
-  const OrderStatesCard({super.key, required this.order});
+  const  OrderStatesCard({super.key, required this.order});
 
   final OrderEntity order;
 
@@ -132,7 +133,7 @@ class OrderStatesCard extends StatelessWidget {
                           );
                         },
                       );
-                    } else {
+                    }  else if (order.status == OrderStatus.AwaitingPaymentConfirmation)  {
                       return CustomButton(
                         title: " Payment under review ",
                         ontap: () {
@@ -157,6 +158,9 @@ class OrderStatesCard extends StatelessWidget {
                           },);
                         },
                       );
+                    }
+                    else {
+                      return Container();
                     }
                   },
                 ),

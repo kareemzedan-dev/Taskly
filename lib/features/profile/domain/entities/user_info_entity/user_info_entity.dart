@@ -20,9 +20,20 @@ class UserInfoEntity {
   final List<String>? skills;
   final double? hourlyRate;
   final double ? rating;
+  final String?   clientStatus;
+  final String?   freelancerStatus;
+  final DateTime? lastSeen;
+  final bool? isOnline;
+  final int ? jobsCount;
+  final int ? reviewsCount;
+  final double ? freelancerBalance;
+
+
   final DateTime? createdAt;
   final BillingInfo? billingInfo;
   final double? balance;
+  final DateTime? updatedAt;
+  final bool? isVerified;
 
   UserInfoEntity({
     required this.id,
@@ -38,6 +49,16 @@ class UserInfoEntity {
     this.balance,
     this.hourlyRate,
     this.createdAt,
+    this.updatedAt,
+    this.clientStatus,
+    this.freelancerStatus,
+
+    this.lastSeen,
+    this.isOnline,
+    this.jobsCount,
+    this.reviewsCount,
+    this.freelancerBalance,
+    this.isVerified,
   });
 }
 class BillingInfo {

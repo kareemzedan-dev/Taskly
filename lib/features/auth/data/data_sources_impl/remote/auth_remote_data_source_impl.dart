@@ -28,8 +28,6 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
     scopes: ['email', 'profile'],
   );
 
-
-
   Future<void> _saveUserLocally({
     required String token,
     required String id,
@@ -39,11 +37,10 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   }) async {
     await SharedPrefHelper.setString(StringsManager.tokenKey, token);
     await SharedPrefHelper.setString(StringsManager.idKey, id);
-    await SharedPrefHelper.setString( StringsManager.fullNameKey, fullName);
-    await SharedPrefHelper.setString( StringsManager.emailKey, email);
-    await SharedPrefHelper.setString( StringsManager.roleKey, role);
+    await SharedPrefHelper.setString(StringsManager.fullNameKey, fullName);
+    await SharedPrefHelper.setString(StringsManager.emailKey, email);
+    await SharedPrefHelper.setString(StringsManager.roleKey, role);
   }
-
 
   Future<void> _saveUserToSupabase({
     required String id,
@@ -61,6 +58,8 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
         'role': role,
         'profile_image': avatarUrl,
         'rating': 0.0,
+        'jobs_count': 0,
+        'reviews_count': 0,
       },
       conflictColumn: 'email',
     );
@@ -72,19 +71,26 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
     if (role == StringsManager.clientRole) {
       await supabaseService.sendDataToSupabase(
         tableName: 'clients',
-        data: {'id': id, 'billing_info': '', 'balance': 0, 'created_at': now},
+        data: {
+          'id': id,
+          'billing_info': '',
+          'balance': 0,
+          'created_at': now,
+
+        },
         conflictColumn: 'id',
       );
     } else if (role == StringsManager.freelancerRole) {
       await supabaseService.sendDataToSupabase(
         tableName: 'freelancers',
-        data: {'id': id, 'created_at': now},
+        data: {'id': id, 'created_at': now,
+          'is_verified': false,
+          'freelancer_status': 'Active',
+          'freelancer_balance': 0.0,},
         conflictColumn: 'id',
       );
     }
   }
-
-
 
   Future<void> _handleUserAfterAuth({
     required String id,
@@ -94,20 +100,34 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
     required String role,
     String? avatarUrl,
   }) async {
-    await _saveUserLocally(id: id, fullName: fullName, email: email, token: token, role: role);
-    await _saveUserToSupabase(id: id, fullName: fullName, email: email, role: role, avatarUrl: avatarUrl);
+    await _saveUserLocally(
+      id: id,
+      fullName: fullName,
+      email: email,
+      token: token,
+      role: role,
+    );
+    await _saveUserToSupabase(
+      id: id,
+      fullName: fullName,
+      email: email,
+      role: role,
+      avatarUrl: avatarUrl,
+    );
     await _insertRoleData(id, role);
   }
 
   @override
   Future<Either<Failures, RegisterResponseDm>> register(
-      String firstName,
-      String lastName,
-      String email,
-      String password,
-      String role) async {
+    String firstName,
+    String lastName,
+    String email,
+    String password,
+    String role,
+  ) async {
     try {
-      if (!await NetworkUtils.hasInternet()) return Left(NetworkFailure(StringsManager.noInternetConnection));
+      if (!await NetworkUtils.hasInternet())
+        return Left(NetworkFailure(StringsManager.noInternetConnection));
 
       final response = await supabase.auth.signUp(
         email: email,
@@ -116,7 +136,7 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
       );
 
       if (response.user != null && response.session == null) {
-        return Left(ServerFailure( StringsManager.emailAlreadyExists));
+        return Left(ServerFailure(StringsManager.emailAlreadyExists));
       }
 
       final user = response.user!;
@@ -140,7 +160,7 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
 
       final registerResponse = RegisterResponseDm(
         user: userDm,
-        message:  StringsManager.userRegisteredSuccessfully,
+        message: StringsManager.userRegisteredSuccessfully,
         token: token,
       );
 
@@ -149,34 +169,45 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
       return Left(ServerFailure(e.message));
     } catch (e, stackTrace) {
       debugPrint("Error: $e\n$stackTrace");
-      return Left(ServerFailure( StringsManager.somethingWentWrong));
+      return Left(ServerFailure(StringsManager.somethingWentWrong));
     }
   }
 
   @override
-  Future<Either<Failures, LoginResponseDm>> login(String email, String password, String role) async {
+  Future<Either<Failures, LoginResponseDm>> login(
+    String email,
+    String password,
+    String role,
+  ) async {
     try {
-      if (!await NetworkUtils.hasInternet()) return Left(NetworkFailure( StringsManager.noInternetConnection));
+      if (!await NetworkUtils.hasInternet())
+        return Left(NetworkFailure(StringsManager.noInternetConnection));
 
-      final response = await supabase.auth.signInWithPassword(email: email, password: password);
+      final response = await supabase.auth.signInWithPassword(
+        email: email,
+        password: password,
+      );
 
       final user = response.user;
       final session = response.session;
       final token = session?.accessToken;
 
       if (user == null || session == null) {
-        return Left(ServerFailure( StringsManager.loginFailed));
+        return Left(ServerFailure(StringsManager.loginFailed));
       }
 
       final userRole = user.userMetadata?['role'] ?? '';
       if (userRole != role) {
-        return Left(ServerFailure(
-          StringsManager.notRegisteredAsRole,
-          params: {"role": role},
-        ));
+        return Left(
+          ServerFailure(
+            StringsManager.notRegisteredAsRole,
+            params: {"role": role},
+          ),
+        );
       }
 
-      final userData = await supabase.from('users').select().eq('id', user.id).maybeSingle();
+      final userData =
+          await supabase.from('users').select().eq('id', user.id).maybeSingle();
       final fullName = userData?['full_name'] ?? '';
 
       await _handleUserAfterAuth(
@@ -188,18 +219,25 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
       );
 
       final userDm = LoginUserDm(email: user.email, password: password);
-      final loginResponse = LoginResponseDm(user: userDm, message:  StringsManager.userLoginSuccessfully, token: token);
+      final loginResponse = LoginResponseDm(
+        user: userDm,
+        message: StringsManager.userLoginSuccessfully,
+        token: token,
+      );
 
       return Right(loginResponse);
     } on AuthException catch (e) {
       return Left(ServerFailure(e.message));
     } catch (e, stackTrace) {
       debugPrint("Error: $e\n$stackTrace");
-      return Left(ServerFailure( StringsManager.somethingWentWrong));
+      return Left(ServerFailure(StringsManager.somethingWentWrong));
     }
   }
+
   @override
-  Future<Either<Failures, GoogleAuthResponseEntity>> googleLogin(String role) async {
+  Future<Either<Failures, GoogleAuthResponseEntity>> googleLogin(
+    String role,
+  ) async {
     try {
       if (!await NetworkUtils.hasInternet()) {
         return Left(NetworkFailure(StringsManager.noInternetConnection));
@@ -210,8 +248,8 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
         return Left(ServerFailure(StringsManager.googleLoginCancelled));
       }
 
-      final GoogleSignInAuthentication googleAuth = await account.authentication;
-
+      final GoogleSignInAuthentication googleAuth =
+          await account.authentication;
 
       final res = await Supabase.instance.client.auth.signInWithIdToken(
         provider: OAuthProvider.google,
@@ -230,19 +268,23 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
       final fullName = account.displayName ?? '';
       final avatarUrl = account.photoUrl;
 
-
-      final existingUser = await supabase.from('users').select().eq('email', email).maybeSingle();
+      final existingUser =
+          await supabase
+              .from('users')
+              .select()
+              .eq('email', email)
+              .maybeSingle();
       if (existingUser != null && existingUser['role'] != role) {
-        return Left(ServerFailure(
-          StringsManager.accountAlreadyRegistered,
-          params: {
-            "existingRole": existingUser['role'],
-            "role": role,
-          },
-        ));
+        return Left(
+          ServerFailure(
+            StringsManager.accountAlreadyRegistered,
+            params: {"existingRole": existingUser['role'], "role": role},
+          ),
+        );
       }
 
-      final userId = existingUser != null ? existingUser['id'] : supabaseUser.id;
+      final userId =
+          existingUser != null ? existingUser['id'] : supabaseUser.id;
 
       await _handleUserAfterAuth(
         id: userId,
@@ -273,5 +315,4 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
       return Left(ServerFailure(StringsManager.somethingWentWrong));
     }
   }
-
 }

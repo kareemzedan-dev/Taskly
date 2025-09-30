@@ -264,9 +264,6 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i374.SupabaseService>(),
       ),
     );
-    gh.factory<_i772.GetOrderViewModel>(
-      () => _i772.GetOrderViewModel(gh<_i759.OrdersUseCase>()),
-    );
     gh.factory<_i1020.AttachmentsRemoteDataSource>(
       () => _i568.AttachmentsRemoteDataSourceImpl(
         gh<_i361.Dio>(),
@@ -327,6 +324,12 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i745.AuthViewModel>(
       () => _i745.AuthViewModel(authUseCase: gh<_i630.AuthUseCase>()),
+    );
+    gh.factory<_i772.GetOrderViewModel>(
+      () => _i772.GetOrderViewModel(
+        gh<_i759.OrdersUseCase>(),
+        gh<_i356.MyJobsUseCases>(),
+      ),
     );
     gh.factory<_i90.GetFreelancerOffersUseCase>(
       () => _i90.GetFreelancerOffersUseCase(

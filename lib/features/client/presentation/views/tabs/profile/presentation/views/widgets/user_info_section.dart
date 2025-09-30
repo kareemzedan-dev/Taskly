@@ -54,8 +54,8 @@ class UserInfoSection extends StatelessWidget {
               fontWeight: FontWeight.w600,
               color: Colors.black,
             ),
-            maxLines:2,  
-            overflow: TextOverflow.visible,
+            maxLines: 1,  
+            overflow: TextOverflow.ellipsis,
           ),
           if (emailShow)
             Text(

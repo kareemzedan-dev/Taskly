@@ -50,7 +50,7 @@ class OfferDetailsViewBody extends StatelessWidget {
                           AttachmentsSection(attachmentEntity:  state.orderEntity.attachments,isFreelancer: true,),
                           Divider(thickness: 1, color: Colors.grey),
 
-                          AboutJobSection(),
+                          AboutJobSection( order: state.orderEntity),
                         ],
                       ),
                     ),

@@ -38,7 +38,7 @@ class JobDetailsViewBody extends StatelessWidget {
                     Divider(thickness: 1, color: Colors.grey),
                     AttachmentsSection(attachmentEntity: orderEntity.attachments,isFreelancer: true,),
                     Divider(thickness: 1, color: Colors.grey),
-                    AboutJobSection(),
+                    AboutJobSection( order: orderEntity),
                   ],
                 ),
               ),

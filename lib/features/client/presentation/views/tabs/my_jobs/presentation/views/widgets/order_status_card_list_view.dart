@@ -7,9 +7,19 @@ import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentat
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/cubit/get_order_view_model.dart/get_order_view_model_states.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/order_states_card.dart';
 
+import '../../../../../../../../shared/domain/entities/order_entity/order_entity.dart';
 import 'empty_state_animation.dart';
 class OrderStatusCardListView extends StatelessWidget {
-  const OrderStatusCardListView({super.key});
+  OrderStatusCardListView({
+    super.key,
+    required this.animationPath,
+    required this.message,
+    required this.filter,
+  });
+
+  final String animationPath;
+  final String message;
+  final OrderStatusFilter filter; // enum عشان نعرف التاب
 
   @override
   Widget build(BuildContext context) {
@@ -17,35 +27,43 @@ class OrderStatusCardListView extends StatelessWidget {
       child: BlocBuilder<GetOrderViewModel, GetOrderViewModelStates>(
         builder: (context, state) {
           if (state is GetOrderViewModelStatesLoading) {
-            return Center(
-              child: LoadingAnimationWidget.inkDrop(
-                size: 30.sp,
-                color: ColorsManager.primary,
-              ),
-            );
+            return Center(child: CircularProgressIndicator());
           } else if (state is GetOrderViewModelStatesSuccess) {
-            if (state.orderEntity.isEmpty) {
+            // هنا الفلترة
+            final filteredOrders = state.orderEntity.where((order) {
+              switch (filter) {
+                case OrderStatusFilter.pending:
+                  return order.status == OrderStatus.Pending ||
+                      order.status == OrderStatus.Accepted ||
+                      order.status == OrderStatus.AwaitingPaymentConfirmation;
+                case OrderStatusFilter.inProgress:
+                  return order.status == OrderStatus.InProgress;
+                case OrderStatusFilter.completed:
+                  return order.status == OrderStatus.Completed;
+                case OrderStatusFilter.cancelled:
+                  return order.status == OrderStatus.Cancelled;
+              }
+            }).toList();
 
+            if (filteredOrders.isEmpty) {
               return Center(
                 child: EmptyStateAnimation(
-                  animationPath: "assets/lotties/Loading.json",
-                  message: "No pending orders yet",
+                  animationPath: animationPath,
+                  message: message,
                 ),
               );
             }
+
             return ListView.separated(
-              separatorBuilder: (context, index) => Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: const Divider(color: Colors.grey, thickness: 1),
-              ),
-              itemCount: state.orderEntity.length,
-              itemBuilder: (context, index) => Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: OrderStatesCard(order: state.orderEntity[index]),
-              ),
+              itemCount: filteredOrders.length,
+              separatorBuilder: (_, __) => Divider(),
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: OrderStatesCard(order: filteredOrders[index]),
+                );
+              },
             );
-          } else if (state is GetOrderViewModelStatesError) {
-            return Center(child: Text(state.message));
           }
           return Container();
         },
@@ -53,3 +71,5 @@ class OrderStatusCardListView extends StatelessWidget {
     );
   }
 }
+
+enum OrderStatusFilter { pending, inProgress, completed, cancelled }

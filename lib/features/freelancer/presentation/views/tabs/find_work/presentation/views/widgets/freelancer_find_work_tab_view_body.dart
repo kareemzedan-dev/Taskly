@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
 import 'package:taskly/core/cache/shared_preferences.dart';
 import 'package:taskly/core/di/di.dart';
 import 'package:taskly/core/components/custom_tab_bar.dart';
-import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/user_info_header_shimmer.dart' as shimmer;
-import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/user_info_home_header.dart' as header;
+import 'package:taskly/core/utils/colors_manger.dart';
+import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/user_info_header_shimmer.dart'
+    as shimmer;
+import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/user_info_home_header.dart'
+    as header;
 
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/cubit/freelancer_pending_order_view_model/freelancer_pending_order_view_model.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/cubit/freelancer_pending_order_view_model/freelancer_pending_order_view_model_states.dart';
@@ -37,14 +41,14 @@ class _FreelancerHomeTabViewBodyState extends State<FreelancerHomeTabViewBody> {
   @override
   void initState() {
     super.initState();
-    _freelancerInfoViewModel = getIt<ProfileViewModel>()..getUserInfo(userId, "freelancer");
-
+    _freelancerInfoViewModel =
+        getIt<ProfileViewModel>()..getUserInfo(userId, "freelancer");
 
     _pendingOrdersViewModel = getIt<FreelancerPendingOrdersViewModel>();
     _pendingOrdersViewModel.fetchPendingFreelancerOrders();
 
     _privateOrderViewModel = getIt<FreelancerPrivateOrdersViewModel>();
-    _privateOrderViewModel.fetchPrivateOrders(userId );
+    _privateOrderViewModel.fetchPrivateOrders(userId);
   }
 
   @override
@@ -61,63 +65,102 @@ class _FreelancerHomeTabViewBodyState extends State<FreelancerHomeTabViewBody> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              BlocBuilder<
-                ProfileViewModel,
-                  ProfileViewModelStates
-              >(
+
+              BlocBuilder<ProfileViewModel, ProfileViewModelStates>(
                 builder: (context, state) {
                   if (state is ProfileViewModelStatesLoading) {
-                    return   shimmer.UserInfoHomeHeaderShimmer();
+                    return shimmer.UserInfoHomeHeaderShimmer();
                   } else if (state is ProfileViewModelStatesSuccess) {
-                    return header. UserInfoHomeHeader(
+                    return header.UserInfoHomeHeader(
                       fullName: state.userInfoEntity.fullName,
                     );
-                  } else if (state is ProfileViewModelStatesError) {
-
-
-                    return   shimmer.UserInfoHomeHeaderShimmer();
+                  } else {
+                    return shimmer.UserInfoHomeHeaderShimmer();
                   }
-                  return const SizedBox.shrink();
                 },
               ),
+
               SizedBox(height: 20.h),
               SearchBarWithFavorite(hintTexts: searchHintTexts),
               SizedBox(height: 30.h),
               CustomTabBar(tabs: ["Public Requests", "Private Requests"]),
               SizedBox(height: 6.h),
               Divider(color: Colors.grey.shade300, thickness: 1.w),
-              Expanded(
-                child: TabBarView(
-                  children: [
-                    BlocBuilder<
-                      FreelancerPendingOrdersViewModel,
-                      FreelancerPendingOrdersState
-                    >(
-                      builder: (context, state) {
-                        return RefreshIndicator(
-                          onRefresh: () async {
-                            await context
-                                .read<FreelancerPendingOrdersViewModel>()
-                                .fetchPendingFreelancerOrders();
-                          },
-                          child: FreelancerPublicOrdersList(state: state),
-                        );
-                      },
-                    ),
-                    BlocBuilder<FreelancerPrivateOrdersViewModel, FreelancerPrivateOrdersViewModelStates>(
-                      builder: (context, state) {
-                        return RefreshIndicator(
-                          onRefresh: () async {
-                            await context
-                                .read<FreelancerPrivateOrdersViewModel>()
-                                .fetchPrivateOrders(userId);
-                          },
-                          child: FreelancerPrivateOrdersList(state: state),
-                        );
-                      },
-                    ),
-                  ],
-                ),
+
+              BlocBuilder<ProfileViewModel, ProfileViewModelStates>(
+                builder: (context, state) {
+                  if (state is ProfileViewModelStatesSuccess &&
+                      state.userInfoEntity.isVerified!) {
+                    return Expanded(
+                      child: TabBarView(
+                        children: [
+                          BlocBuilder<
+                            FreelancerPendingOrdersViewModel,
+                            FreelancerPendingOrdersState
+                          >(
+                            builder: (context, pendingState) {
+                              return RefreshIndicator(
+                                onRefresh: () async {
+                                  await context
+                                      .read<FreelancerPendingOrdersViewModel>()
+                                      .fetchPendingFreelancerOrders();
+                                },
+                                child: FreelancerPublicOrdersList(
+                                  state: pendingState,
+                                ),
+                              );
+                            },
+                          ),
+                          BlocBuilder<
+                            FreelancerPrivateOrdersViewModel,
+                            FreelancerPrivateOrdersViewModelStates
+                          >(
+                            builder: (context, privateState) {
+                              return RefreshIndicator(
+                                onRefresh: () async {
+                                  await context
+                                      .read<FreelancerPrivateOrdersViewModel>()
+                                      .fetchPrivateOrders(userId);
+                                },
+                                child: FreelancerPrivateOrdersList(
+                                  state: privateState,
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.r),
+                          color: ColorsManager.primary.withOpacity(0.1),
+                          border: Border.all(
+                            color: ColorsManager.primary.withOpacity(0.3),
+                            width: 1.w,
+                          ),
+                        ),
+
+                        child: Lottie.asset("assets/lotties/waiting.json"),
+                      ),
+                      SizedBox(height: 20.h),
+                      Text(
+                        "Your account is under verification.\nPlease wait until your request is approved.",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          color: Colors.grey.shade600,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  );
+                },
               ),
             ],
           ),

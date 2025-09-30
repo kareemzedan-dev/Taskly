@@ -179,19 +179,42 @@ class _ChatViewBodyState extends State<ChatViewBody> {
                                   ),
 
 
-                                  IconButton(
-                                    icon: Icon(
-                                      Icons.download,
-                                      color: Colors.green,
-                                      size: 20.sp,
-                                    ),
-                                    onPressed: () {
-                                      context.read<DownloadAttachmentsViewModel>().downloadAttachments(
-                                        msg.attachment!.first.url,
-                                        msg.attachment!.first.name ?? "attachment",
+                                  BlocConsumer<DownloadAttachmentsViewModel, DownloadAttachmentsStates>(
+                                    listener: (context, state) {
+                                      if (state is DownloadAttachmentsStatesSuccess) {
+                                        // افتح الملف مباشرة بعد التحميل
+                                        OpenFile.open(state.file.path);
+                                      } else if (state is DownloadAttachmentsStatesError) {
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                          SnackBar(content: Text("Failed to download ${msg.attachment!.first.name}")),
+                                        );
+                                      }
+                                    },
+                                    builder: (context, state) {
+                                      final isLoading = state is DownloadAttachmentsStatesLoading;
+
+                                      return isLoading
+                                          ? SizedBox(
+                                        width: 20.sp,
+                                        height: 20.sp,
+                                        child: CircularProgressIndicator(strokeWidth: 2),
+                                      )
+                                          : IconButton(
+                                        icon: Icon(
+                                          Icons.download,
+                                          color: Colors.green,
+                                          size: 20.sp,
+                                        ),
+                                        onPressed: () {
+                                          context.read<DownloadAttachmentsViewModel>().downloadAttachments(
+                                            msg.attachment!.first.url,
+                                            msg.attachment!.first.name ?? "attachment",
+                                          );
+                                        },
                                       );
                                     },
                                   ),
+
                                 ],
                               ),
                             )

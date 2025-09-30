@@ -23,35 +23,41 @@ extension RelativeTime on DateTime {
 
     bool isPast = difference.isNegative;
 
-    final seconds = difference.inSeconds.abs();
-    final minutes = difference.inMinutes.abs();
-    final hours = difference.inHours.abs();
-    final days = difference.inDays.abs();
+    int totalSeconds = difference.inSeconds.abs();
+
+    final days = totalSeconds ~/ (24 * 3600);
+    totalSeconds -= days * 24 * 3600;
+
+    final hours = totalSeconds ~/ 3600;
+    totalSeconds -= hours * 3600;
+
+    final minutes = totalSeconds ~/ 60;
+    totalSeconds -= minutes * 60;
+
+    final seconds = totalSeconds;
 
     String suffix = isPast ? " ago" : " left";
 
-    if (seconds < 60) {
-      return "just now";
-    } else if (minutes < 60) {
+    if (days > 0) {
+      String result = "$days day${days > 1 ? 's' : ''}";
+      if (hours > 0) {
+        result += " $hours hour${hours > 1 ? 's' : ''}";
+      }
+      return result + suffix;
+    } else if (hours > 0) {
+      String result = "$hours hour${hours > 1 ? 's' : ''}";
+      if (minutes > 0) {
+        result += " $minutes minute${minutes > 1 ? 's' : ''}";
+      }
+      return result + suffix;
+    } else if (minutes > 0) {
       return "$minutes minute${minutes > 1 ? 's' : ''}$suffix";
-    } else if (hours < 24) {
-      return "$hours hour${hours > 1 ? 's' : ''}$suffix";
-    } else if (days < 7) {
-      return "$days day${days > 1 ? 's' : ''}$suffix";
-    } else if (days < 14) {
-      return "$days day${days > 1 ? 's' : ''}$suffix";
-    } else if (days < 30) {
-      final weeks = (days / 7).floor();
-      return "$weeks week${weeks > 1 ? 's' : ''}$suffix";
-    } else if (days < 365) {
-      final months = (days / 30).floor();
-      return "$months month${months > 1 ? 's' : ''}$suffix";
     } else {
-      final years = (days / 365).floor();
-      return "$years year${years > 1 ? 's' : ''}$suffix";
+      return "just now";
     }
   }
 }
+
 
 class _FreelancerWorkCardState extends State<FreelancerWorkCard> {
   bool isFavorite = false;

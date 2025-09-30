@@ -1,9 +1,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/freelancer_work_card.dart';
+import 'package:taskly/features/shared/domain/entities/order_entity/order_entity.dart';
 
 class AboutJobSection extends StatelessWidget {
-  const AboutJobSection({super.key});
+  const AboutJobSection({super.key , required this.order});
+  final OrderEntity order;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +34,7 @@ class AboutJobSection extends StatelessWidget {
             ),
             const Spacer(),
             Text(
-              "2 weeks",
+              order.deadline?.toRelative() ?? "",
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     fontWeight: FontWeight.w500,
                     fontSize: 14.sp,
@@ -40,28 +43,7 @@ class AboutJobSection extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(height: 8.h),
-        Row(
-          children: [
-            Text(
-              "Proposals:",
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 14.sp,
-                    color: Colors.grey.shade800,
-                  ),
-            ),
-            const Spacer(),
-            Text(
-              "+5",
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 14.sp,
-                    color: Colors.grey.shade800,
-                  ),
-            ),
-          ],
-        ),
+
         SizedBox(height: 16.h),
       ],
     );

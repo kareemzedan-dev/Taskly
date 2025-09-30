@@ -22,19 +22,27 @@ class MyJobsUseCases {
     required String orderId,
     required void Function(int offersCount) onChange,
   }) {
-    return myJobsRepo.subscribeToOffers(
-      orderId: orderId,
-      onChange: onChange,
-    );
+    return myJobsRepo.subscribeToOffers(orderId: orderId, onChange: onChange);
   }
-  Future<Either<Failures, OfferEntity >> updateOfferStatus(
-    String offerId, String newStatus) {
+
+  Future<Either<Failures, OfferEntity>> updateOfferStatus(
+    String offerId,
+    String newStatus,
+  ) {
     return myJobsRepo.updateOfferStatus(offerId, newStatus);
   }
 
   Future<Either<Failures, OrderEntity>> acceptOfferAndRejectOthers(
     String orderId,
-  String offerId) {
+    String offerId,
+  ) {
     return myJobsRepo.acceptOfferAndRejectOthers(orderId, offerId);
+  }
+
+  RealtimeChannel subscribeToOrderStatus({
+    required Map<String, String> filters,
+    required void Function(OrderEntity order, String action) onChange,
+  }) {
+    return myJobsRepo.subscribeToOrders(filters, onChange);
   }
 }

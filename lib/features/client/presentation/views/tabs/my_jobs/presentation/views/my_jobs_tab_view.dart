@@ -51,32 +51,41 @@ class MyJobsTabView extends StatelessWidget {
         backgroundColor: Colors.white,
         body: TabBarView(
           children: [
-
-            Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  BlocProvider(
-                    create: (context) => getIt<GetOrderViewModel>()..getUserOrdersByUserId(userId, "client"),
-                    child: OrderStatusCardListView(),
-                  ),
-                ],
+            BlocProvider(
+              create: (_) => getIt<GetOrderViewModel>()..loadAndSubscribeOrders(userId, "client"),
+              child: OrderStatusCardListView(
+                animationPath: "assets/lotties/Loading.json",
+                message: "No pending orders yet",
+                filter: OrderStatusFilter.pending,
               ),
             ),
-            EmptyStateAnimation(
-              animationPath: "assets/lotties/Progress.json",
-              message: "No orders in progress",
+            BlocProvider(
+              create: (_) => getIt<GetOrderViewModel>()..loadAndSubscribeOrders(userId, "client"),
+              child: OrderStatusCardListView(
+                animationPath: "assets/lotties/Progress.json",
+                message: "No orders in progress",
+                filter: OrderStatusFilter.inProgress,
+              ),
             ),
-            EmptyStateAnimation(
-              animationPath: "assets/lotties/Success.json",
-              message: "No completed orders",
+            BlocProvider(
+              create: (_) => getIt<GetOrderViewModel>()..loadAndSubscribeOrders(userId, "client"),
+              child: OrderStatusCardListView(
+                animationPath: "assets/lotties/Success.json",
+                message: "No completed orders",
+                filter: OrderStatusFilter.completed,
+              ),
             ),
-            EmptyStateAnimation(
-              animationPath: "assets/lotties/cancelled.json",
-              message: "No cancelled orders",
+            BlocProvider(
+              create: (_) => getIt<GetOrderViewModel>()..loadAndSubscribeOrders(userId, "client"),
+              child: OrderStatusCardListView(
+                animationPath: "assets/lotties/cancelled.json",
+                message: "No cancelled orders",
+                filter: OrderStatusFilter.cancelled,
+              ),
             ),
           ],
-        ),
+        )
+
       ),
     );
   }

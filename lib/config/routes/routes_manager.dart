@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:taskly/features/reviews/presentation/pages/reviews_page.dart';
 import 'package:taskly/features/shared/domain/entities/order_entity/order_entity.dart';
 import 'package:taskly/features/auth/presentation/views/login_view.dart';
 import 'package:taskly/features/auth/presentation/views/register_view.dart';
@@ -41,6 +42,7 @@ class RoutesManager {
   static const String favouriteOrdersView = "favouriteOrdersView";
   static const String offerDetailsView = "offerDetailsView";
   static const String clientPaymentsView = "clientPaymentsView";
+  static const String reviewsView = "reviewsView";
 
   static Route onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -77,6 +79,8 @@ class RoutesManager {
         final currentUserId = args['currentUserId'] as String;
         final receiverId = args['receiverId'] as String;
         return MaterialPageRoute(builder: (_) => ChatView(userName: userName, userImage: userImage, order: order,currentUserId: currentUserId,receiverId: receiverId));
+
+
       case jobDetailsView:
         final args = settings.arguments;
         final user = settings.arguments;
@@ -123,6 +127,14 @@ class RoutesManager {
 
 
              return MaterialPageRoute(builder: (_) =>   ClientPaymentsView( order: orderEntity,));
+             case reviewsView:
+               final args = settings.arguments as Map<String, dynamic>;
+               final userId = args['userId'] as String;
+               final role = args['role'] as String;
+               final userImage = args['userImage'] as String;
+               final userName = args['userName'] as String;
+               final userRating = args['userRating'] as double;
+               return MaterialPageRoute(builder: (_) =>   ReviewsPage(userId: userId, userRole: role, userImage: userImage , userName: userName , userRating:  userRating,));
 
       default:
         return MaterialPageRoute(builder: (_) => const Placeholder());
