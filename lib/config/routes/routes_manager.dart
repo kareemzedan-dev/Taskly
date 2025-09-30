@@ -78,8 +78,13 @@ class RoutesManager {
         final order = args['order'] as OrderEntity;
         final currentUserId = args['currentUserId'] as String;
         final receiverId = args['receiverId'] as String;
-        return MaterialPageRoute(builder: (_) => ChatView(userName: userName, userImage: userImage, order: order,currentUserId: currentUserId,receiverId: receiverId));
-
+        return MaterialPageRoute(
+            builder: (_) => ChatView(
+                userName: userName,
+                userImage: userImage,
+                order: order,
+                currentUserId: currentUserId,
+                receiverId: receiverId));
 
       case jobDetailsView:
         final args = settings.arguments;
@@ -90,16 +95,18 @@ class RoutesManager {
           );
         } else {
           return MaterialPageRoute(
-            builder:
-                (_) => Scaffold(
-                  body: Center(child: Text('No order data provided')),
-                ),
+            builder: (_) => Scaffold(
+              body: Center(child: Text('No order data provided')),
+            ),
           );
         }
 
       case sendOfferView:
-      final OrderEntity args = settings.arguments as OrderEntity;
-        return MaterialPageRoute(builder: (_) => SendOfferView(orderEntity: args,));
+        final OrderEntity args = settings.arguments as OrderEntity;
+        return MaterialPageRoute(
+            builder: (_) => SendOfferView(
+                  orderEntity: args,
+                ));
       case technicalSupportView:
         return MaterialPageRoute(builder: (_) => const TechnicalSupportView());
       case privacyPolicyView:
@@ -117,24 +124,55 @@ class RoutesManager {
 
       case favouriteOrdersView:
         return MaterialPageRoute(builder: (_) => const FavouriteOrdersView());
-        case offerDetailsView:
-          final args = settings.arguments as Map<String, dynamic>;
-          final orderId = args['orderId'] as String;
-           return MaterialPageRoute(builder: (_) =>   OfferDetailsView(orderId: orderId,));
-           case clientPaymentsView:
-             final args = settings.arguments as Map<String, dynamic>;
-             final orderEntity = args['orderEntity'] as OrderEntity;
+      case offerDetailsView:
+        final args = settings.arguments as Map<String, dynamic>;
+        final orderId = args['orderId'] as String;
+        return MaterialPageRoute(
+            builder: (_) => OfferDetailsView(
+                  orderId: orderId,
+                ));
+      case clientPaymentsView:
+        final args = settings.arguments as Map<String, dynamic>;
+        final orderEntity = args['orderEntity'] as OrderEntity;
 
+        return MaterialPageRoute(
+            builder: (_) => ClientPaymentsView(
+                  order: orderEntity,
+                ));
+      case reviewsView:
+        final args = settings.arguments as Map<String, dynamic>?;
 
-             return MaterialPageRoute(builder: (_) =>   ClientPaymentsView( order: orderEntity,));
-             case reviewsView:
-               final args = settings.arguments as Map<String, dynamic>;
-               final userId = args['userId'] as String;
-               final role = args['role'] as String;
-               final userImage = args['userImage'] as String;
-               final userName = args['userName'] as String;
-               final userRating = args['userRating'] as double;
-               return MaterialPageRoute(builder: (_) =>   ReviewsPage(userId: userId, userRole: role, userImage: userImage , userName: userName , userRating:  userRating,));
+        if (args == null) {
+          return MaterialPageRoute(
+            builder: (_) => Scaffold(
+              body: Center(child: Text('No arguments provided')),
+            ),
+          );
+        }
+
+        final userId = args['userId'] as String?;
+        final role = args['role'] as String?;
+        final userName = args['userName'] as String?;
+        final userRating = args['userRating'] as double?;
+        final userImage = args['userImage'] as String? ?? '';
+
+        if ([userId, role, userName, userRating].contains(null)) {
+          return MaterialPageRoute(
+            builder: (_) => Scaffold(
+              body: Center(child: Text('Incomplete arguments provided')),
+            ),
+          );
+        }
+
+        return MaterialPageRoute(
+          builder: (_) => ReviewsPage(
+            userId: userId!,
+            userRole: role!,
+            userName: userName!,
+            userImage: userImage,
+            userRating: userRating!,
+          ),
+        );
 
       default:
         return MaterialPageRoute(builder: (_) => const Placeholder());

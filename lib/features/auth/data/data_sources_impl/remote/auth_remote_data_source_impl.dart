@@ -41,14 +41,20 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
     await SharedPrefHelper.setString(StringsManager.emailKey, email);
     await SharedPrefHelper.setString(StringsManager.roleKey, role);
   }
+Future<void> _saveUserToSupabase({
+  required String id,
+  required String fullName,
+  required String email,
+  required String role,
+  String? avatarUrl,
+}) async {
+  final existingUser = await supabase
+      .from('users')
+      .select()
+      .eq('id', id)
+      .maybeSingle();
 
-  Future<void> _saveUserToSupabase({
-    required String id,
-    required String fullName,
-    required String email,
-    required String role,
-    String? avatarUrl,
-  }) async {
+  if (existingUser == null) {
     await supabaseService.sendDataToSupabase(
       tableName: 'users',
       data: {
@@ -64,11 +70,21 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
       conflictColumn: 'email',
     );
   }
+}
 
-  Future<void> _insertRoleData(String id, String role) async {
-    final now = DateTime.now().toIso8601String();
 
-    if (role == StringsManager.clientRole) {
+Future<void> _insertRoleData(String id, String role) async {
+  final now = DateTime.now().toIso8601String();
+
+  if (role == StringsManager.clientRole) {
+ 
+    final existingClient = await supabase
+        .from('clients')
+        .select()
+        .eq('id', id)
+        .maybeSingle();
+
+    if (existingClient == null) {
       await supabaseService.sendDataToSupabase(
         tableName: 'clients',
         data: {
@@ -76,21 +92,34 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
           'billing_info': '',
           'balance': 0,
           'created_at': now,
-
         },
         conflictColumn: 'id',
       );
-    } else if (role == StringsManager.freelancerRole) {
+    }
+  } else if (role == StringsManager.freelancerRole) {
+ 
+    final existingFreelancer = await supabase
+        .from('freelancers')
+        .select()
+        .eq('id', id)
+        .maybeSingle();
+
+    if (existingFreelancer == null) {
       await supabaseService.sendDataToSupabase(
         tableName: 'freelancers',
-        data: {'id': id, 'created_at': now,
+        data: {
+          'id': id,
           'is_verified': false,
           'freelancer_status': 'Active',
-          'freelancer_balance': 0.0,},
+          'freelancer_balance': 0.0,
+          'created_at': now,
+        },
         conflictColumn: 'id',
       );
     }
   }
+}
+
 
   Future<void> _handleUserAfterAuth({
     required String id,

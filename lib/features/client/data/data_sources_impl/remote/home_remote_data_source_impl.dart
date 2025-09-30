@@ -6,6 +6,7 @@ import 'package:injectable/injectable.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:taskly/core/errors/failures.dart';
 import 'package:taskly/core/services/supabase_service.dart';
+import 'package:taskly/core/utils/network_utils.dart';
 import 'package:taskly/features/client/domain/entities/home/service_response_entity.dart';
 import 'package:taskly/features/profile/data/models/user_info_dm/user_info_response_dm.dart';
 import 'package:taskly/features/profile/domain/entities/user_info_entity/user_info_entity.dart';
@@ -27,9 +28,9 @@ class HomeRemoteDataSourceImpl extends HomeRemoteDataSource {
   Future<Either<Failures, List<ServiceEntity>>> getServices() async {
     try {
       var result = await Connectivity().checkConnectivity();
-
-      if (result.contains(ConnectivityResult.wifi) ||
-          result.contains(ConnectivityResult.mobile)) {
+  if(NetworkUtils.hasInternet() == false) {
+    return Left(NetworkFailure('No internet connection'));
+  }
         final response = await supabaseService.getDataFromSupabase(
           tableName: "services",
         );
@@ -41,9 +42,7 @@ class HomeRemoteDataSourceImpl extends HomeRemoteDataSource {
         final services = response.map((e) => ServiceDm.fromJson(e)).toList();
 
         return Right(services);
-      } else {
-        return Left(NetworkFailure('No internet connection'));
-      }
+     
     } catch (e) {
       return Left(ServerFailure("Failed to fetch services: $e"));
     }
@@ -53,8 +52,9 @@ class HomeRemoteDataSourceImpl extends HomeRemoteDataSource {
   Future<Either<Failures, OrderDm>> placeOrder(OrderEntity orderEntity) async {
     try {
       var result = await Connectivity().checkConnectivity();
-      if (result.contains(ConnectivityResult.wifi) ||
-          result.contains(ConnectivityResult.mobile)) {
+  if(NetworkUtils.hasInternet() == false) {
+    return Left(NetworkFailure('No internet connection'));
+  }
         final orderDm = OrderDm.fromEntity(orderEntity);
 
         final response = await supabaseService.sendDataToSupabase(
@@ -63,9 +63,7 @@ class HomeRemoteDataSourceImpl extends HomeRemoteDataSource {
         );
         var order = OrderDm.fromJson(response!);
         return Right(order);
-      } else {
-        return Left(NetworkFailure('No internet connection'));
-      }
+    
     } catch (e) {
       return Left(ServerFailure("Failed to place order: $e"));
     }
@@ -76,8 +74,9 @@ class HomeRemoteDataSourceImpl extends HomeRemoteDataSource {
   getAllFreelancerInfo() async {
     try {
       var result = await Connectivity().checkConnectivity();
-      if (result.contains(ConnectivityResult.wifi) ||
-          result.contains(ConnectivityResult.mobile)) {
+  if(NetworkUtils.hasInternet() == false) {
+    return Left(NetworkFailure('No internet connection'));
+  }
 
         final userResponse = await supabaseService.getDataFromSupabase(
           tableName: "users",
@@ -116,9 +115,7 @@ class HomeRemoteDataSourceImpl extends HomeRemoteDataSource {
         }
 
         return Right(freelancers);
-      } else {
-        return Left(NetworkFailure('No internet connection'));
-      }
+  
     } catch (e) {
       return Left(ServerFailure(e.toString()));
     }

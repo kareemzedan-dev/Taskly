@@ -62,7 +62,10 @@ class ClientDetailsSection extends StatelessWidget {
                         "role": "client",
                         "userRating": client.rating,
                         "userName": client.fullName,
-                        "userImage": client.profileImage,
+                         "userImage": client.profileImage,
+                         
+
+                   
                       },
                     );
                     },

@@ -169,6 +169,18 @@ import '../../features/profile/domain/use_cases/profile/profile_use_case.dart'
     as _i585;
 import '../../features/profile/presentation/manager/profile_view_model/profile_view_model.dart'
     as _i1003;
+import '../../features/reviews/data/data_sources/remote/reviews_remote_data_source/reviews_remote_data_source.dart'
+    as _i114;
+import '../../features/reviews/data/data_sources_impl/remote/reviews_remote_data_source_impl/reviews_remote_data_source_impl.dart'
+    as _i716;
+import '../../features/reviews/data/repositories/reviews_repo_impl/reviews_repo_impl.dart'
+    as _i81;
+import '../../features/reviews/domain/repositories/reviews_repo/reviews_repo.dart'
+    as _i420;
+import '../../features/reviews/domain/use_cases/get_user_reviews_use_case/get_user_reviews_use_case.dart'
+    as _i701;
+import '../../features/reviews/presentation/manager/get_user_reviews_view_model/get_user_reviews_view_model.dart'
+    as _i163;
 import '../../features/shared/data/data_sources/remote/impl/orders_remote_data_source_impl.dart'
     as _i237;
 import '../../features/shared/data/data_sources/remote/orders_remote_data_source.dart'
@@ -181,259 +193,178 @@ import '../services/file_uploaded_services.dart' as _i383;
 import '../services/supabase_service.dart' as _i374;
 
 extension GetItInjectableX on _i174.GetIt {
-  // initializes the registration of main-scope dependencies inside of GetIt
+// initializes the registration of main-scope dependencies inside of GetIt
   _i174.GetIt init({
     String? environment,
     _i526.EnvironmentFilter? environmentFilter,
   }) {
-    final gh = _i526.GetItHelper(this, environment, environmentFilter);
+    final gh = _i526.GetItHelper(
+      this,
+      environment,
+      environmentFilter,
+    );
     gh.singleton<_i383.FilePickerService>(() => _i383.FilePickerService());
     gh.singleton<_i374.SupabaseService>(() => _i374.SupabaseService());
-    gh.factory<_i297.FreelancerOrderRemoteDataSource>(
-      () => _i500.FreelancerOrderRemoteDataSourceImpl(
-        supabaseService: gh<_i374.SupabaseService>(),
-      ),
-    );
+    gh.factory<_i114.ReviewsRemoteDataSource>(
+        () => _i716.ReviewsRemoteDataSourceImpl(gh<_i454.SupabaseClient>()));
+    gh.factory<_i297.FreelancerOrderRemoteDataSource>(() =>
+        _i500.FreelancerOrderRemoteDataSourceImpl(
+            supabaseService: gh<_i374.SupabaseService>()));
     gh.factory<_i41.MyJobsRemoteDataSource>(
-      () => _i95.MyJobsRemoteDataSourceImpl(),
-    );
+        () => _i95.MyJobsRemoteDataSourceImpl());
     gh.factory<_i159.OrdersRemoteDataSource>(
-      () => _i237.OrdersRemoteDataSourceImpl(),
-    );
-    gh.factory<_i896.MyJobsRepo>(
-      () => _i1023.MyJobsRepoImpl(
-        myJobsRemoteDataSource: gh<_i41.MyJobsRemoteDataSource>(),
-      ),
-    );
+        () => _i237.OrdersRemoteDataSourceImpl());
+    gh.factory<_i896.MyJobsRepo>(() => _i1023.MyJobsRepoImpl(
+        myJobsRemoteDataSource: gh<_i41.MyJobsRemoteDataSource>()));
     gh.factory<_i1012.ProfileRemoteDataSource>(
-      () => _i51.ProfileRemoteDataSourceImpl(gh<_i454.SupabaseClient>()),
-    );
+        () => _i51.ProfileRemoteDataSourceImpl(gh<_i454.SupabaseClient>()));
     gh.factory<_i432.AuthRemoteDataSource>(
-      () => _i420.AuthRemoteDataSourceImpl(),
-    );
+        () => _i420.AuthRemoteDataSourceImpl());
     gh.factory<_i315.GetPaymentRemoteDataSource>(
-      () => _i696.GetPaymentRemoteDataSourceImpl(gh<_i454.SupabaseClient>()),
-    );
-    gh.factory<_i46.OrdersRepo>(
-      () => _i553.OrdersRepoImpl(
-        ordersRemoteDataSource: gh<_i159.OrdersRemoteDataSource>(),
-      ),
-    );
+        () => _i696.GetPaymentRemoteDataSourceImpl(gh<_i454.SupabaseClient>()));
+    gh.factory<_i46.OrdersRepo>(() => _i553.OrdersRepoImpl(
+        ordersRemoteDataSource: gh<_i159.OrdersRemoteDataSource>()));
     gh.factory<_i821.ProfileRepo>(
-      () => _i541.ProfileRepoImpl(gh<_i1012.ProfileRemoteDataSource>()),
-    );
+        () => _i541.ProfileRepoImpl(gh<_i1012.ProfileRemoteDataSource>()));
     gh.factory<_i358.OfferRemoteDataSource>(
-      () => _i35.OfferRemoteDataSourceImpl(),
-    );
-    gh.factory<_i968.CreatePaymentRemoteDataSource>(
-      () => _i795.CreatePaymentRemoteDataSourceImpl(gh<_i454.SupabaseClient>()),
-    );
-    gh.factory<_i307.HomeRemoteDataSource>(
-      () =>
-          _i426.HomeRemoteDataSourceImpl(supabase: gh<_i454.SupabaseClient>()),
-    );
-    gh.factory<_i815.PaymentRepos>(
-      () => _i488.CreatePaymentRepoImpl(
-        gh<_i968.CreatePaymentRemoteDataSource>(),
-        gh<_i315.GetPaymentRemoteDataSource>(),
-      ),
-    );
+        () => _i35.OfferRemoteDataSourceImpl());
+    gh.factory<_i968.CreatePaymentRemoteDataSource>(() =>
+        _i795.CreatePaymentRemoteDataSourceImpl(gh<_i454.SupabaseClient>()));
+    gh.factory<_i307.HomeRemoteDataSource>(() =>
+        _i426.HomeRemoteDataSourceImpl(supabase: gh<_i454.SupabaseClient>()));
+    gh.factory<_i815.PaymentRepos>(() => _i488.CreatePaymentRepoImpl(
+          gh<_i968.CreatePaymentRemoteDataSource>(),
+          gh<_i315.GetPaymentRemoteDataSource>(),
+        ));
     gh.factory<_i759.OrdersUseCase>(
-      () => _i759.OrdersUseCase(gh<_i46.OrdersRepo>()),
-    );
-    gh.factory<_i660.HomeRepos>(
-      () => _i86.HomeRepoImpl(
-        homeremoteDataSource: gh<_i307.HomeRemoteDataSource>(),
-      ),
-    );
+        () => _i759.OrdersUseCase(gh<_i46.OrdersRepo>()));
+    gh.factory<_i660.HomeRepos>(() => _i86.HomeRepoImpl(
+        homeremoteDataSource: gh<_i307.HomeRemoteDataSource>()));
+    gh.factory<_i420.ReviewsRepo>(() => _i81.ReviewsRepoImpl(
+        remoteDataSource: gh<_i114.ReviewsRemoteDataSource>()));
     gh.factory<_i363.OfferRepository>(
-      () => _i792.OfferRepositoryImpl(gh<_i358.OfferRemoteDataSource>()),
-    );
+        () => _i792.OfferRepositoryImpl(gh<_i358.OfferRemoteDataSource>()));
     gh.factory<_i746.AuthRepo>(
-      () => _i529.AuthRepoImpl(gh<_i432.AuthRemoteDataSource>()),
-    );
+        () => _i529.AuthRepoImpl(gh<_i432.AuthRemoteDataSource>()));
     gh.factory<_i886.ClientOrderUseCase>(
-      () => _i886.ClientOrderUseCase(gh<_i896.MyJobsRepo>()),
-    );
+        () => _i886.ClientOrderUseCase(gh<_i896.MyJobsRepo>()));
     gh.factory<_i356.MyJobsUseCases>(
-      () => _i356.MyJobsUseCases(gh<_i896.MyJobsRepo>()),
-    );
+        () => _i356.MyJobsUseCases(gh<_i896.MyJobsRepo>()));
     gh.factory<_i1016.MessagesRemoteDataSource>(
-      () => _i545.MessagesRemoteDataSourceImpl(
-        gh<_i454.SupabaseClient>(),
-        gh<_i374.SupabaseService>(),
-      ),
-    );
+        () => _i545.MessagesRemoteDataSourceImpl(
+              gh<_i454.SupabaseClient>(),
+              gh<_i374.SupabaseService>(),
+            ));
     gh.factory<_i1020.AttachmentsRemoteDataSource>(
-      () => _i568.AttachmentsRemoteDataSourceImpl(
-        gh<_i361.Dio>(),
-        gh<_i454.SupabaseClient>(),
-      ),
-    );
+        () => _i568.AttachmentsRemoteDataSourceImpl(
+              gh<_i361.Dio>(),
+              gh<_i454.SupabaseClient>(),
+              
+            ));
     gh.factory<_i790.MessagesRepos>(
-      () => _i16.MessagesReposImpl(gh<_i1016.MessagesRemoteDataSource>()),
-    );
+        () => _i16.MessagesReposImpl(gh<_i1016.MessagesRemoteDataSource>()));
     gh.factory<_i988.FetchOrderDetailsUseCase>(
-      () => _i988.FetchOrderDetailsUseCase(gh<_i363.OfferRepository>()),
-    );
-    gh.factory<_i644.FetchOrderDetailsViewModel>(
-      () => _i644.FetchOrderDetailsViewModel(
-        gh<_i988.FetchOrderDetailsUseCase>(),
-      ),
-    );
+        () => _i988.FetchOrderDetailsUseCase(gh<_i363.OfferRepository>()));
+    gh.factory<_i644.FetchOrderDetailsViewModel>(() =>
+        _i644.FetchOrderDetailsViewModel(gh<_i988.FetchOrderDetailsUseCase>()));
+    gh.factory<_i701.GetUserReviewsUseCase>(
+        () => _i701.GetUserReviewsUseCase(gh<_i420.ReviewsRepo>()));
     gh.factory<_i585.ProfileUseCase>(
-      () => _i585.ProfileUseCase(gh<_i821.ProfileRepo>()),
-    );
-    gh.factory<_i75.FreelancerOrderRepo>(
-      () => _i535.FreelancerOrderRepoImpl(
+        () => _i585.ProfileUseCase(gh<_i821.ProfileRepo>()));
+    gh.factory<_i75.FreelancerOrderRepo>(() => _i535.FreelancerOrderRepoImpl(
         freelancerOrderRemoteDataSource:
-            gh<_i297.FreelancerOrderRemoteDataSource>(),
-      ),
-    );
+            gh<_i297.FreelancerOrderRemoteDataSource>()));
     gh.factory<_i630.AuthUseCase>(
-      () => _i630.AuthUseCase(gh<_i746.AuthRepo>()),
-    );
+        () => _i630.AuthUseCase(gh<_i746.AuthRepo>()));
     gh.factory<_i618.CreatePaymentUseCase>(
-      () => _i618.CreatePaymentUseCase(gh<_i815.PaymentRepos>()),
-    );
-    gh.factory<_i345.AttachmentsRepository>(
-      () => _i727.AttachmentsRepositoryImpl(
-        gh<_i1020.AttachmentsRemoteDataSource>(),
-      ),
-    );
+        () => _i618.CreatePaymentUseCase(gh<_i815.PaymentRepos>()));
+    gh.factory<_i345.AttachmentsRepository>(() =>
+        _i727.AttachmentsRepositoryImpl(
+            gh<_i1020.AttachmentsRemoteDataSource>()));
     gh.factory<_i94.ClientOrderStatusViewModel>(
-      () => _i94.ClientOrderStatusViewModel(gh<_i886.ClientOrderUseCase>()),
-    );
+        () => _i94.ClientOrderStatusViewModel(gh<_i886.ClientOrderUseCase>()));
+    gh.factory<_i163.GetUserReviewsViewModel>(
+        () => _i163.GetUserReviewsViewModel(gh<_i701.GetUserReviewsUseCase>()));
     gh.factory<_i213.HomeUseCase>(
-      () => _i213.HomeUseCase(gh<_i660.HomeRepos>()),
-    );
+        () => _i213.HomeUseCase(gh<_i660.HomeRepos>()));
     gh.factory<_i776.FreelancerInfoViewModel>(
-      () => _i776.FreelancerInfoViewModel(gh<_i585.ProfileUseCase>()),
-    );
+        () => _i776.FreelancerInfoViewModel(gh<_i585.ProfileUseCase>()));
     gh.factory<_i1003.ProfileViewModel>(
-      () => _i1003.ProfileViewModel(gh<_i585.ProfileUseCase>()),
-    );
+        () => _i1003.ProfileViewModel(gh<_i585.ProfileUseCase>()));
     gh.factory<_i848.GetPaymentUseCase>(
-      () => _i848.GetPaymentUseCase(gh<_i815.PaymentRepos>()),
-    );
+        () => _i848.GetPaymentUseCase(gh<_i815.PaymentRepos>()));
     gh.factory<_i946.GetOffersViewModel>(
-      () => _i946.GetOffersViewModel(gh<_i356.MyJobsUseCases>()),
-    );
+        () => _i946.GetOffersViewModel(gh<_i356.MyJobsUseCases>()));
     gh.factory<_i73.UpdateOfferStatusViewModel>(
-      () => _i73.UpdateOfferStatusViewModel(gh<_i356.MyJobsUseCases>()),
-    );
+        () => _i73.UpdateOfferStatusViewModel(gh<_i356.MyJobsUseCases>()));
     gh.factory<_i745.AuthViewModel>(
-      () => _i745.AuthViewModel(authUseCase: gh<_i630.AuthUseCase>()),
-    );
-    gh.factory<_i772.GetOrderViewModel>(
-      () => _i772.GetOrderViewModel(
-        gh<_i759.OrdersUseCase>(),
-        gh<_i356.MyJobsUseCases>(),
-      ),
-    );
-    gh.factory<_i90.GetFreelancerOffersUseCase>(
-      () => _i90.GetFreelancerOffersUseCase(
-        offerRepository: gh<_i363.OfferRepository>(),
-      ),
-    );
-    gh.factory<_i626.SendOfferUseCase>(
-      () =>
-          _i626.SendOfferUseCase(offerRepository: gh<_i363.OfferRepository>()),
-    );
+        () => _i745.AuthViewModel(authUseCase: gh<_i630.AuthUseCase>()));
+    gh.factory<_i772.GetOrderViewModel>(() => _i772.GetOrderViewModel(
+          gh<_i759.OrdersUseCase>(),
+          gh<_i356.MyJobsUseCases>(),
+        ));
+    gh.factory<_i90.GetFreelancerOffersUseCase>(() =>
+        _i90.GetFreelancerOffersUseCase(
+            offerRepository: gh<_i363.OfferRepository>()));
+    gh.factory<_i626.SendOfferUseCase>(() =>
+        _i626.SendOfferUseCase(offerRepository: gh<_i363.OfferRepository>()));
     gh.factory<_i483.GetPaymentViewModel>(
-      () => _i483.GetPaymentViewModel(gh<_i848.GetPaymentUseCase>()),
-    );
-    gh.factory<_i416.DeleteAttachmentsUseCase>(
-      () => _i416.DeleteAttachmentsUseCase(
-        attachmentsRepository: gh<_i345.AttachmentsRepository>(),
-      ),
-    );
-    gh.factory<_i231.UploadAttachmentsUseCase>(
-      () => _i231.UploadAttachmentsUseCase(
-        attachmentsRepository: gh<_i345.AttachmentsRepository>(),
-      ),
-    );
-    gh.factory<_i197.DownloadAttachmentsUseCase>(
-      () => _i197.DownloadAttachmentsUseCase(gh<_i345.AttachmentsRepository>()),
-    );
+        () => _i483.GetPaymentViewModel(gh<_i848.GetPaymentUseCase>()));
+    gh.factory<_i416.DeleteAttachmentsUseCase>(() =>
+        _i416.DeleteAttachmentsUseCase(
+            attachmentsRepository: gh<_i345.AttachmentsRepository>()));
+    gh.factory<_i231.UploadAttachmentsUseCase>(() =>
+        _i231.UploadAttachmentsUseCase(
+            attachmentsRepository: gh<_i345.AttachmentsRepository>()));
+    gh.factory<_i197.DownloadAttachmentsUseCase>(() =>
+        _i197.DownloadAttachmentsUseCase(gh<_i345.AttachmentsRepository>()));
     gh.lazySingleton<_i988.DeleteMessageUseCase>(
-      () => _i988.DeleteMessageUseCase(gh<_i790.MessagesRepos>()),
-    );
+        () => _i988.DeleteMessageUseCase(gh<_i790.MessagesRepos>()));
     gh.lazySingleton<_i416.GetOrderMessagesUseCase>(
-      () => _i416.GetOrderMessagesUseCase(gh<_i790.MessagesRepos>()),
-    );
+        () => _i416.GetOrderMessagesUseCase(gh<_i790.MessagesRepos>()));
     gh.lazySingleton<_i367.MarkMessagesAsReadUseCase>(
-      () => _i367.MarkMessagesAsReadUseCase(gh<_i790.MessagesRepos>()),
-    );
+        () => _i367.MarkMessagesAsReadUseCase(gh<_i790.MessagesRepos>()));
     gh.lazySingleton<_i366.SendMessageUseCase>(
-      () => _i366.SendMessageUseCase(gh<_i790.MessagesRepos>()),
-    );
+        () => _i366.SendMessageUseCase(gh<_i790.MessagesRepos>()));
     gh.factory<_i997.GetAcceptedOrderMessagesUseCase>(
-      () => _i997.GetAcceptedOrderMessagesUseCase(gh<_i790.MessagesRepos>()),
-    );
-    gh.factory<_i171.FreelancerOrderUseCase>(
-      () => _i171.FreelancerOrderUseCase(
-        freelancerOrderRepo: gh<_i75.FreelancerOrderRepo>(),
-      ),
-    );
+        () => _i997.GetAcceptedOrderMessagesUseCase(gh<_i790.MessagesRepos>()));
+    gh.factory<_i171.FreelancerOrderUseCase>(() => _i171.FreelancerOrderUseCase(
+        freelancerOrderRepo: gh<_i75.FreelancerOrderRepo>()));
     gh.factory<_i602.SendMessageViewModel>(
-      () => _i602.SendMessageViewModel(gh<_i366.SendMessageUseCase>()),
-    );
-    gh.factory<_i338.DownloadAttachmentsViewModel>(
-      () => _i338.DownloadAttachmentsViewModel(
-        gh<_i197.DownloadAttachmentsUseCase>(),
-      ),
-    );
+        () => _i602.SendMessageViewModel(gh<_i366.SendMessageUseCase>()));
+    gh.factory<_i338.DownloadAttachmentsViewModel>(() =>
+        _i338.DownloadAttachmentsViewModel(
+            gh<_i197.DownloadAttachmentsUseCase>()));
     gh.factory<_i2.FetchPrivateOrdersUseCase>(
-      () => _i2.FetchPrivateOrdersUseCase(gh<_i75.FreelancerOrderRepo>()),
-    );
+        () => _i2.FetchPrivateOrdersUseCase(gh<_i75.FreelancerOrderRepo>()));
     gh.factory<_i399.PlaceOrderViewModel>(
-      () => _i399.PlaceOrderViewModel(gh<_i213.HomeUseCase>()),
-    );
+        () => _i399.PlaceOrderViewModel(gh<_i213.HomeUseCase>()));
     gh.factory<_i313.ServicesViewModel>(
-      () => _i313.ServicesViewModel(gh<_i213.HomeUseCase>()),
-    );
-    gh.factory<_i552.GetFreelancerOffersViewModel>(
-      () => _i552.GetFreelancerOffersViewModel(
-        gh<_i90.GetFreelancerOffersUseCase>(),
-      ),
-    );
+        () => _i313.ServicesViewModel(gh<_i213.HomeUseCase>()));
+    gh.factory<_i552.GetFreelancerOffersViewModel>(() =>
+        _i552.GetFreelancerOffersViewModel(
+            gh<_i90.GetFreelancerOffersUseCase>()));
     gh.factory<_i517.CreatePaymentViewModel>(
-      () => _i517.CreatePaymentViewModel(gh<_i618.CreatePaymentUseCase>()),
-    );
-    gh.factory<_i12.GetAcceptedOrderMessageViewModel>(
-      () => _i12.GetAcceptedOrderMessageViewModel(
-        gh<_i997.GetAcceptedOrderMessagesUseCase>(),
-      ),
-    );
+        () => _i517.CreatePaymentViewModel(gh<_i618.CreatePaymentUseCase>()));
+    gh.factory<_i12.GetAcceptedOrderMessageViewModel>(() =>
+        _i12.GetAcceptedOrderMessageViewModel(
+            gh<_i997.GetAcceptedOrderMessagesUseCase>()));
     gh.factory<_i590.FetchAllFreelancersViewModel>(
-      () => _i590.FetchAllFreelancersViewModel(gh<_i213.HomeUseCase>()),
-    );
+        () => _i590.FetchAllFreelancersViewModel(gh<_i213.HomeUseCase>()));
     gh.factory<_i392.FreelancersViewModel>(
-      () => _i392.FreelancersViewModel(gh<_i213.HomeUseCase>()),
-    );
-    gh.factory<_i11.UploadAttachmentsViewModel>(
-      () =>
-          _i11.UploadAttachmentsViewModel(gh<_i231.UploadAttachmentsUseCase>()),
-    );
+        () => _i392.FreelancersViewModel(gh<_i213.HomeUseCase>()));
+    gh.factory<_i11.UploadAttachmentsViewModel>(() =>
+        _i11.UploadAttachmentsViewModel(gh<_i231.UploadAttachmentsUseCase>()));
     gh.factory<_i1052.SendOfferViewModel>(
-      () => _i1052.SendOfferViewModel(gh<_i626.SendOfferUseCase>()),
-    );
-    gh.factory<_i416.FreelancerPrivateOrdersViewModel>(
-      () => _i416.FreelancerPrivateOrdersViewModel(
-        gh<_i2.FetchPrivateOrdersUseCase>(),
-      ),
-    );
-    gh.factory<_i636.FreelancerPendingOrdersViewModel>(
-      () => _i636.FreelancerPendingOrdersViewModel(
-        gh<_i171.FreelancerOrderUseCase>(),
-      ),
-    );
-    gh.factory<_i195.DeleteAttachmentsViewModel>(
-      () => _i195.DeleteAttachmentsViewModel(
-        gh<_i416.DeleteAttachmentsUseCase>(),
-      ),
-    );
+        () => _i1052.SendOfferViewModel(gh<_i626.SendOfferUseCase>()));
+    gh.factory<_i416.FreelancerPrivateOrdersViewModel>(() =>
+        _i416.FreelancerPrivateOrdersViewModel(
+            gh<_i2.FetchPrivateOrdersUseCase>()));
+    gh.factory<_i636.FreelancerPendingOrdersViewModel>(() =>
+        _i636.FreelancerPendingOrdersViewModel(
+            gh<_i171.FreelancerOrderUseCase>()));
+    gh.factory<_i195.DeleteAttachmentsViewModel>(() =>
+        _i195.DeleteAttachmentsViewModel(gh<_i416.DeleteAttachmentsUseCase>()));
     return this;
   }
 }

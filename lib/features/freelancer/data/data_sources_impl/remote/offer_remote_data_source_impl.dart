@@ -4,6 +4,7 @@ import 'package:injectable/injectable.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:taskly/core/errors/failures.dart';
 import 'package:taskly/core/services/supabase_service.dart';
+import 'package:taskly/core/utils/network_utils.dart';
 import 'package:taskly/features/freelancer/data/data_sources/remote/offer_data_source.dart';
 import 'package:taskly/features/freelancer/data/models/offer_dm/offer_dm.dart';
 import 'package:taskly/features/freelancer/domain/entities/offer_entity/offer_entity.dart';
@@ -17,9 +18,9 @@ class OfferRemoteDataSourceImpl implements OfferRemoteDataSource {
   @override
   Future<Either<Failures, OfferEntity>> placeOffer(OfferEntity offerEntity) async {
     try {
-      final connectivity = await Connectivity().checkConnectivity();
-      if (connectivity.contains(ConnectivityResult.wifi) ||
-          connectivity.contains(ConnectivityResult.mobile)) {
+  if(NetworkUtils.hasInternet() == false) {
+    return Left(NetworkFailure('No internet connection'));
+  }
 
 
         final offerModel = OfferModel(
@@ -58,9 +59,8 @@ class OfferRemoteDataSourceImpl implements OfferRemoteDataSource {
         var offer = OfferModel.fromJson(response!);
         return Right(offer);
 
-      } else {
-        return Left(NetworkFailure('No internet connection'));
-      }
+     
+    
     } catch (e) {
       return Left(ServerFailure('Error while placing offer: $e'));
     }
@@ -69,9 +69,9 @@ class OfferRemoteDataSourceImpl implements OfferRemoteDataSource {
   @override
   Future<Either<Failures, List<OfferEntity>>> getFreelancerOffers(String freelancerId, String status) async {
     try {
-      final connectivity = await Connectivity().checkConnectivity();
-      if (connectivity.contains(ConnectivityResult.wifi) ||
-          connectivity.contains(ConnectivityResult.mobile)) {
+  if(NetworkUtils.hasInternet() == false) {
+    return Left(NetworkFailure('No internet connection'));
+  }
 
         final query = supabaseService.client.from('offers').select().eq('freelancer_id', freelancerId);
 
@@ -91,8 +91,7 @@ class OfferRemoteDataSourceImpl implements OfferRemoteDataSource {
             .toList();
 
         return Right(offers);
-      }
-      return Left(NetworkFailure('No internet connection'));
+ 
     }
     catch (e) {
       return Left(ServerFailure('Error while fetching freelancer offers: $e'));
@@ -103,11 +102,9 @@ class OfferRemoteDataSourceImpl implements OfferRemoteDataSource {
   @override
   Future<Either<Failures, OrderEntity>> fetchOrderDetails(String orderId) async {
     try {
-      final connectivity = await Connectivity().checkConnectivity();
-      if (!(connectivity.contains(ConnectivityResult.wifi) ||
-          connectivity.contains(ConnectivityResult.mobile))) {
-        return Left(NetworkFailure('No internet connection'));
-      }
+   if(NetworkUtils.hasInternet() == false) {
+    return Left(NetworkFailure('No internet connection'));
+  }
 
       final orderResponse = await supabaseService.client
           .from('orders')

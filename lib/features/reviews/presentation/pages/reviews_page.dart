@@ -11,7 +11,7 @@ class ReviewsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-      appBar:  CustomAppBar(title: "Review", backgroundColor: Colors.white,   ),
+      appBar:const  CustomAppBar(title: "Review", backgroundColor: Colors.white,   ),
       body: ReviewsPageBody( userId: userId, userRole: userRole, userName: userName, userImage: userImage, userRating: userRating,),
     );
   }

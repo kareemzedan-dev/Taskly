@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 import 'package:taskly/features/profile/presentation/manager/profile_view_model/profile_view_model.dart';
 import 'package:taskly/features/profile/presentation/manager/profile_view_model/profile_view_model_states.dart';
 import 'package:taskly/features/reviews/presentation/widgets/user_avatar.dart';
-
 
 import '../../../../config/l10n/app_localizations.dart';
 import '../../../../core/di/di.dart';
@@ -43,26 +43,26 @@ class ReviewItem extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            /// Header Section - User Info and Actions
             BlocProvider(
               create: (_) => getIt<ProfileViewModel>()
                 ..getUserInfo(
-                    userId
-                       ,  role == 'freelancer' ? 'client' : 'freelancer'
+                  role == 'client' ? review.freelancerId : review.clientId,
+                  role == 'client' ? 'freelancer' : 'client',
                 ),
               child: BlocBuilder<ProfileViewModel, ProfileViewModelStates>(
                 builder: (context, state) {
-                  if (state is ProfileViewModelStatesSuccess) {
+                  if (state is ProfileViewModelStatesLoading) {
                     return _buildLoadingState();
                   }
                   if (state is ProfileViewModelStatesError) {
                     return _buildErrorState(state.message);
                   }
                   if (state is ProfileViewModelStatesSuccess) {
+                    final user = state.userInfoEntity;
                     return _buildUserInfoSection(
                       context,
-                      state.userInfoEntity.fullName!,
-                      state.userInfoEntity.profileImage,
+                      user.fullName ?? '',
+                      user.profileImage,
                       roleLabel,
                       roleColor,
                     );
@@ -71,15 +71,9 @@ class ReviewItem extends StatelessWidget {
                 },
               ),
             ),
-
             SizedBox(height: 12.h),
-
-            /// Rating Section
             _buildRatingSection(rating),
-
             SizedBox(height: 10.h),
-
-            /// Comment Section
             _buildCommentSection(context),
           ],
         ),
@@ -147,14 +141,11 @@ class ReviewItem extends StatelessWidget {
   ) {
     return Row(
       children: [
-        /// User Avatar
         UserAvatar(
           imagePath: profileImage,
           radius: 22.r,
         ),
         SizedBox(width: 12.w),
-
-        /// User Name and Role
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -188,40 +179,14 @@ class ReviewItem extends StatelessWidget {
             ],
           ),
         ),
-
         Spacer(),
-
-        /// Date and Delete Button
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Text(
-              review.createdAt,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    fontSize: 11.sp,
-                    color: Colors.grey.shade600,
-                    fontWeight: FontWeight.w500,
-                  ),
-            ),
-            SizedBox(height: 6.h),
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.red.shade50,
-                borderRadius: BorderRadius.circular(8.r),
-                border: Border.all(color: Colors.red.shade100, width: 1),
+        Text(
+          DateFormat('yyyy-MM-dd ').format(DateTime.parse(review.createdAt)),
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                fontSize: 11.sp,
+                color: Colors.grey.shade600,
+                fontWeight: FontWeight.w500,
               ),
-              child: IconButton(
-                iconSize: 18.sp,
-                padding: EdgeInsets.all(6.w),
-                constraints: BoxConstraints(
-                  minWidth: 32.w,
-                  minHeight: 32.h,
-                ),
-                icon: Icon(Icons.delete_rounded, color: Colors.redAccent),
-                onPressed: onDelete,
-              ),
-            ),
-          ],
         ),
       ],
     );
@@ -230,7 +195,6 @@ class ReviewItem extends StatelessWidget {
   Widget _buildRatingSection(double rating) {
     return Row(
       children: [
-        /// Rating Label
         Container(
           padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
           decoration: BoxDecoration(
@@ -259,16 +223,14 @@ class ReviewItem extends StatelessWidget {
           ),
         ),
         SizedBox(width: 8.w),
-
-        /// Stars
         Row(
           children: List.generate(
             5,
             (index) => Padding(
               padding: EdgeInsets.symmetric(horizontal: 2.w),
               child: Icon(
-                index < rating.round() 
-                    ? Icons.star_rounded 
+                index < rating.round()
+                    ? Icons.star_rounded
                     : Icons.star_border_rounded,
                 size: 18.sp,
                 color: Colors.amber.shade600,

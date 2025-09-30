@@ -37,9 +37,7 @@ class ReviewsPageBody extends StatelessWidget {
           final viewModel = context.read<GetUserReviewsViewModel>();
           final allReviews = state is GetUserReviewsSuccess ? state.reviewsList : <ReviewsEntity>[];
 
-        
           final receivedReviews = allReviews.where((r) => r.role != userRole).toList();
-
           final total = viewModel.getTotal(receivedReviews);
           final avg = viewModel.calculateAverage(receivedReviews);
           final ratings = viewModel.calculateRatings(receivedReviews);
@@ -48,7 +46,7 @@ class ReviewsPageBody extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
-
+                // User info
                 Padding(
                   padding: EdgeInsets.all(16.w),
                   child: Column(
@@ -66,6 +64,7 @@ class ReviewsPageBody extends StatelessWidget {
                   ),
                 ),
 
+                // Rating card
                 Card(
                   elevation: 10,
                   child: Container(
@@ -111,27 +110,39 @@ class ReviewsPageBody extends StatelessWidget {
 
                 SizedBox(height: 16.h),
 
-                /// Tabs
+                // Reviews list
                 Expanded(
-                  child: DefaultTabController(
-                    length: 2,
-                    child: Column(
-                      children: [
-                        CustomTabBar(tabs: [
-
-                        ]),
-                        SizedBox(height: 16.h),
-                        Expanded(
-                          child: TabBarView(
-                            children: [
-                              _ReviewsTab(userId: userId, userRole: userRole, tabType: ReviewsTabType.given),
-                              _ReviewsTab(userId: userId, userRole: userRole, tabType: ReviewsTabType.received),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  child: state is GetUserReviewsLoading
+                      ? const Center(child: CircularProgressIndicator())
+                      : state is GetUserReviewsError
+                          ? Center(
+                              child: Text(
+                                state.error,
+                                style: const TextStyle(color: Colors.red),
+                              ),
+                            )
+                          : receivedReviews.isEmpty
+                              ? Center(
+                                  child: Text(
+                                    local.noReviewsReceived,
+                                    style: TextStyle(fontSize: 14.sp, color: Colors.grey),
+                                  ),
+                                )
+                              : ListView.separated(
+                                  shrinkWrap: true,
+                                  physics: const BouncingScrollPhysics(),
+                                  itemCount: receivedReviews.length,
+                                  separatorBuilder: (_, __) => SizedBox(height: 8.h),
+                                  itemBuilder: (context, index) {
+                                    final review = receivedReviews[index];
+                                    return ReviewItem(
+                                      role: userRole,
+                                      review: review,
+                                      onDelete: () {},
+                                      userId: userRole == "client" ? review.freelancerId : review.clientId,
+                                    );
+                                  },
+                                ),
                 ),
               ],
             ),
