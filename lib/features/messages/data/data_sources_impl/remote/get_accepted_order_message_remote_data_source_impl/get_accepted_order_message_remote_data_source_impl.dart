@@ -6,9 +6,12 @@ import 'package:taskly/features/messages/data/data_sources/remote/get_accepted_o
 import 'package:taskly/features/shared/data/models/order_dm/order_dm.dart';
 import 'package:taskly/features/shared/domain/entities/order_entity/order_entity.dart';
 import 'package:taskly/features/welcome/presentation/cubit/welcome_states.dart';
+
 @Injectable(as: GetAcceptedOrderMessageRemoteDataSource)
-class GetAcceptedOrderMessageRemoteDataSourceImpl extends  GetAcceptedOrderMessageRemoteDataSource{
+class GetAcceptedOrderMessageRemoteDataSourceImpl
+    extends GetAcceptedOrderMessageRemoteDataSource {
   final SupabaseService supabaseService;
+
   GetAcceptedOrderMessageRemoteDataSourceImpl({required this.supabaseService});
 
   @override
@@ -16,32 +19,33 @@ class GetAcceptedOrderMessageRemoteDataSourceImpl extends  GetAcceptedOrderMessa
       String userId, {UserRole? role}) async {
     try {
       Map<String, dynamic> filters = {};
+      String? or;
 
       if (role != null) {
-        final column = role == UserRole.freelancer ? 'freelancer_id' : 'client_id';
+        final column =
+        role == UserRole.freelancer ? 'freelancer_id' : 'client_id';
         filters[column] = userId;
-        filters['or'] = 'status.eq.In Progress,status.eq.Completed';
+        or = 'status.eq.In Progress,status.eq.Completed,status.eq.Waiting,status.eq.Rejected';
       } else {
-        filters['or'] =
+        or =
         'client_id.eq.$userId,freelancer_id.eq.$userId,status.eq.In Progress,status.eq.Completed';
       }
 
       final response = await supabaseService.getDataFromSupabase(
         tableName: 'orders',
         filters: filters,
+        or: or,
       );
 
-      final responseList = response as List<dynamic>? ?? [];
-      final data = responseList.map((e) => OrderDm.fromJson(e).toEntity()).toList();
+      final responseList = response ?? [];
+      final data =
+      responseList.map((e) => OrderDm.fromJson(e).toEntity()).toList();
 
       return Right(data);
-
     } catch (e, st) {
       print("Error fetching accepted messages: $e");
       print(st);
       return Left(ServerFailure(e.toString()));
     }
   }
-
-
 }

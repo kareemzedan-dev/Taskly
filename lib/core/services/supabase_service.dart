@@ -524,6 +524,7 @@ class SupabaseService {
   Future<List<Map<String, dynamic>>?> getDataFromSupabase({
     required String tableName,
     Map<String, dynamic>? filters,
+    String? or, // 👈 عشان تدعم or
   }) async {
     try {
       var query = supabase.from(tableName).select();
@@ -532,6 +533,10 @@ class SupabaseService {
         filters.forEach((key, value) {
           query = query.eq(key, value);
         });
+      }
+
+      if (or != null) {
+        query = query.or(or);
       }
 
       final response = await query;
@@ -543,5 +548,6 @@ class SupabaseService {
       return null;
     }
   }
+
 
 }

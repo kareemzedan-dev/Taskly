@@ -75,6 +75,8 @@ class OrderDm extends OrderEntity {
           return OrderStatus.Paid;
       case 'In Progress':
         return OrderStatus.InProgress;
+        case 'Waiting':
+          return OrderStatus.Waiting;
 
       case 'Completed':
         return OrderStatus.Completed;
@@ -94,6 +96,8 @@ class OrderDm extends OrderEntity {
           return 'Paid';
       case OrderStatus.InProgress:
         return 'In Progress';
+        case OrderStatus.Waiting:
+          return 'Waiting';
       case OrderStatus.Completed:
         return 'Completed';
       case OrderStatus.Cancelled:

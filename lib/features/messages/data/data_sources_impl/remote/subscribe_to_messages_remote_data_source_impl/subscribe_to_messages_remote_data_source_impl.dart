@@ -7,22 +7,30 @@ import 'package:taskly/features/messages/data/data_sources/remote/subscribe_to_m
 import 'package:taskly/features/messages/data/models/message_model.dart';
 import 'package:taskly/features/messages/domain/entities/message_entity.dart';
 @Injectable(as:  SubscribeToMessagesRemoteDataSource)
-class SubscribeToMessagesRemoteDataSourceImpl implements SubscribeToMessagesRemoteDataSource{
-    final SupabaseService supabaseService;
+class SubscribeToMessagesRemoteDataSourceImpl implements SubscribeToMessagesRemoteDataSource {
+  final SupabaseService supabaseService;
 
-    SubscribeToMessagesRemoteDataSourceImpl({required this.supabaseService});
-    
+  SubscribeToMessagesRemoteDataSourceImpl({required this.supabaseService});
+
   @override
   Future<RealtimeChannel> subscribeToMessages(
       String orderId,
       void Function(MessageEntity message, String action) onChange,
       ) async {
-    final channel = supabase.channel('messages:$orderId');
+    final channel = supabase.channel(
+      'messages:order_$orderId',
+      opts: const RealtimeChannelConfig(),
+    );
 
     channel.onPostgresChanges(
       event: PostgresChangeEvent.insert,
       schema: 'public',
       table: 'messages',
+      filter: PostgresChangeFilter(
+        type: PostgresChangeFilterType.eq,
+        column: 'order_id',
+        value: orderId,
+      ),
       callback: (payload) {
         final record = payload.newRecord;
         if (record == null) return;
@@ -37,6 +45,11 @@ class SubscribeToMessagesRemoteDataSourceImpl implements SubscribeToMessagesRemo
       event: PostgresChangeEvent.update,
       schema: 'public',
       table: 'messages',
+      filter: PostgresChangeFilter(
+        type: PostgresChangeFilterType.eq,
+        column: 'order_id',
+        value: orderId,
+      ),
       callback: (payload) {
         final record = payload.newRecord;
         if (record == null) return;
@@ -51,8 +64,13 @@ class SubscribeToMessagesRemoteDataSourceImpl implements SubscribeToMessagesRemo
       event: PostgresChangeEvent.delete,
       schema: 'public',
       table: 'messages',
+      filter: PostgresChangeFilter(
+        type: PostgresChangeFilterType.eq,
+        column: 'order_id',
+        value: orderId,
+      ),
       callback: (payload) {
-        final record = payload.oldRecord;  
+        final record = payload.oldRecord;
         if (record == null) return;
         final message = MessageModel.fromJson(
           Map<String, dynamic>.from(record),
@@ -61,11 +79,7 @@ class SubscribeToMessagesRemoteDataSourceImpl implements SubscribeToMessagesRemo
       },
     );
 
- 
     await channel.subscribe();
-
     return channel;
   }
-
-
 }

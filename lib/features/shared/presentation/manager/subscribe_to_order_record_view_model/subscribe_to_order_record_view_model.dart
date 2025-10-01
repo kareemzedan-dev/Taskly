@@ -40,7 +40,9 @@ class SubscribeOrdersRecordViewModel extends Cubit<OrderViewModelState> {
         return "System:Payment has been submitted and is under review. Work will begin as soon as possible.";
       case OrderStatus.InProgress:
         return "System:Order payment has been confirmed, you can start working on it now.";
-      case OrderStatus.Completed:
+      case OrderStatus.Waiting:
+        return "System:Work has been submitted to the client for review.";
+        case OrderStatus.Completed:
         return "System: The order has been completed successfully.";
       case OrderStatus.Cancelled:
         return "System: This order has been cancelled.";
@@ -57,7 +59,10 @@ class SubscribeOrdersRecordViewModel extends Cubit<OrderViewModelState> {
         if (currentUserId == order.clientId) return "Pay Now ${order.budget}SAR";
         return null;
       case OrderStatus.InProgress:
-        if (currentUserId == order.freelancerId) return "Submit Work";
+        if (currentUserId == order.freelancerId) return "submit delivery";
+
+      case OrderStatus.Waiting:
+        if(currentUserId== order.clientId) return "work received";
         return null;
       default:
         return null;

@@ -4,6 +4,7 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/utils/assets_manager.dart';
 import 'package:taskly/features/messages/presentation/widgets/custom_states_container.dart';
+import 'package:taskly/features/reviews/presentation/widgets/user_avatar.dart';
 
 import '../../../shared/domain/entities/order_entity/order_entity.dart';
   AppBar customAppBar(
@@ -43,11 +44,7 @@ import '../../../shared/domain/entities/order_entity/order_entity.dart';
                 ),
               ),
               SizedBox(width: 8.w),
-              CircleAvatar(
-                backgroundColor: Colors.grey.shade300,
-                radius: 20.r,
-                backgroundImage: AssetImage(userImage),
-              ),
+              UserAvatar(imagePath:userImage, radius: 20.r,),
               SizedBox(width: 8.w),
               // Flexible for text responsiveness
               Flexible(

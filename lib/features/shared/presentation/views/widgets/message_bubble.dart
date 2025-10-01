@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
+import 'package:taskly/features/reviews/presentation/widgets/user_avatar.dart';
 
 enum SenderType { client, freelancer }
 
@@ -8,7 +9,7 @@ class MessageBubble extends StatelessWidget {
   final String message;
   final String time;
   final SenderType sender;
-  final String avatarUrl; // رابط الصورة أو asset
+  final String avatarUrl;
 
   const MessageBubble({
     super.key,
@@ -30,10 +31,7 @@ class MessageBubble extends StatelessWidget {
             isClient ? MainAxisAlignment.start : MainAxisAlignment.end,
         children: [
           if (isClient ) ...[
-            CircleAvatar(
-              radius: 16.r,
-              backgroundImage: AssetImage(avatarUrl),
-            ),
+             UserAvatar( imagePath: avatarUrl, radius: 16.r,),
             SizedBox(width: 8.w),
           ],
           Flexible(
@@ -79,10 +77,7 @@ class MessageBubble extends StatelessWidget {
           ),
           if (!isClient) ...[
             SizedBox(width: 8.w),
-            CircleAvatar(
-              radius: 16.r,
-              backgroundImage: AssetImage(avatarUrl),
-            ),
+           UserAvatar( imagePath: avatarUrl, radius: 16.r,)
           ],
         ],
       ),

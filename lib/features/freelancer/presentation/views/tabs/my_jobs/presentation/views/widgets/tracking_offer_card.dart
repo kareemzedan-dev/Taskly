@@ -22,7 +22,8 @@ import '../../../../find_work/presentation/views/widgets/delivery_info.dart';
 import '../../../../find_work/presentation/views/widgets/freelancer_work_card.dart';
 
 class TrackingOfferCard extends StatelessWidget {
-  TrackingOfferCard({super.key, required this.offerEntity,   this.isPending=false});
+  TrackingOfferCard(
+      {super.key, required this.offerEntity, this.isPending = false});
 
   OfferEntity offerEntity;
   bool isPending;
@@ -43,39 +44,39 @@ class TrackingOfferCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if(!isPending)
-              Container(
-
-                height: 20,
-                decoration: BoxDecoration(
-                  color: ColorsManager.primary.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(10.r),
-                  border: Border.all(color: ColorsManager.primary.withOpacity(0.1), width: 1.w),
-                ),
-                child: Marquee(
-                  text: "Please wait until the payment is confirmed. Once confirmed, you can contact the client and start the work.",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
+              if (!isPending)
+                Container(
+                  height: 20,
+                  decoration: BoxDecoration(
+                    color: ColorsManager.primary.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(10.r),
+                    border: Border.all(
+                        color: ColorsManager.primary.withOpacity(0.1),
+                        width: 1.w),
                   ),
-                  scrollAxis: Axis.horizontal,
-                  blankSpace: 50.0,
-                  velocity: 50.0,
-                  pauseAfterRound: Duration(seconds: 2),
-                  startPadding: 10.0,
-                  accelerationDuration: Duration(seconds: 2),
-                  accelerationCurve: Curves.linear,
-                  decelerationDuration: Duration(seconds: 2),
-                  decelerationCurve: Curves.easeOut,
+                  child: Marquee(
+                    text:
+                        "Please wait until the payment is confirmed. Once confirmed, you can contact the client and start the work.",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                    scrollAxis: Axis.horizontal,
+                    blankSpace: 50.0,
+                    velocity: 50.0,
+                    pauseAfterRound: Duration(seconds: 2),
+                    startPadding: 10.0,
+                    accelerationDuration: Duration(seconds: 2),
+                    accelerationCurve: Curves.linear,
+                    decelerationDuration: Duration(seconds: 2),
+                    decelerationCurve: Curves.easeOut,
+                  ),
                 ),
-              ),
 
               SizedBox(height: 5.h),
               BlocBuilder<ProfileViewModel, ProfileViewModelStates>(
-                bloc:
-                    getIt<ProfileViewModel>()
-                      ..getUserInfo(offerEntity.clientId, "client"),
-
+                bloc: getIt<ProfileViewModel>()
+                  ..getUserInfo(offerEntity.clientId, "client"),
                 builder: (context, state) {
                   if (state is ProfileViewModelStatesLoading) {
                     return UserInfoSectionShimmer();
@@ -89,7 +90,7 @@ class TrackingOfferCard extends StatelessWidget {
                       name: state.userInfoEntity.fullName,
                       email: state.userInfoEntity.email,
                       rating: state.userInfoEntity.rating!,
-
+                      userInfo: state.userInfoEntity,
                     );
                   }
                   return const Center(child: Text("Loading"));
@@ -103,7 +104,10 @@ class TrackingOfferCard extends StatelessWidget {
                   Expanded(
                     child: Text(
                       "Mind Map",
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyLarge
+                          ?.copyWith(fontWeight: FontWeight.bold),
                       softWrap: true,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
@@ -114,11 +118,16 @@ class TrackingOfferCard extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10.r),
                       color: ColorsManager.primary.withOpacity(0.1),
-                      border: Border.all(color: ColorsManager.primary.withOpacity(0.1), width: 1.w),
+                      border: Border.all(
+                          color: ColorsManager.primary.withOpacity(0.1),
+                          width: 1.w),
                     ),
                     child: Text(
                       offerEntity.offerStatus,
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: ColorsManager.primary),
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyLarge
+                          ?.copyWith(color: ColorsManager.primary),
                     ),
                   ),
                 ],
@@ -142,7 +151,6 @@ class TrackingOfferCard extends StatelessWidget {
               Row(
                 children: [
                   Icon(Icons.attach_money_outlined, size: 15.sp),
-
                   Text(
                     "${offerEntity.offerAmount} SAR",
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(),
@@ -151,42 +159,43 @@ class TrackingOfferCard extends StatelessWidget {
               ),
 
               SizedBox(height: 8.h),
-BlocBuilder<WithdrawOfferViewModel, WithdrawOfferStates>(
-  builder: (context, state) {
-    return ActionsRow(
-      actions: [
-        ActionItem(
-          title: "View details",
-          icon: Icons.remove_red_eye_outlined,
-          onTap: () {
-            Navigator.pushNamed(
-              context,
-              RoutesManager.offerDetailsView,
-              arguments: {
-                'orderId': offerEntity.orderId,
-              },
-            );
-          },
-        ),
-        if (isPending)
-          ActionItem(
-            title: state is WithdrawOfferStatesLoading
-                ? "Withdrawing..."
-                : "Withdraw offer",
-            icon: Icons.remove_circle_outline,
-            isOffer: true,
-            onTap: state is WithdrawOfferStatesLoading
-                ? null
-                : () {
-                    context.read<WithdrawOfferViewModel>()
-                      .withdrawOffer(offerEntity.id,  offerEntity.orderId);
-                  },
-          ),
-      ],
-    );
-  },
-),
-
+              BlocBuilder<WithdrawOfferViewModel, WithdrawOfferStates>(
+                builder: (context, state) {
+                  return ActionsRow(
+                    actions: [
+                      ActionItem(
+                        title: "View details",
+                        icon: Icons.remove_red_eye_outlined,
+                        onTap: () {
+                          Navigator.pushNamed(
+                            context,
+                            RoutesManager.offerDetailsView,
+                            arguments: {
+                              'orderId': offerEntity.orderId,
+                            },
+                          );
+                        },
+                      ),
+                      if (isPending)
+                        ActionItem(
+                          title: state is WithdrawOfferStatesLoading
+                              ? "Withdrawing..."
+                              : "Withdraw offer",
+                          icon: Icons.remove_circle_outline,
+                          isOffer: true,
+                          onTap: state is WithdrawOfferStatesLoading
+                              ? null
+                              : () {
+                                  context
+                                      .read<WithdrawOfferViewModel>()
+                                      .withdrawOffer(
+                                          offerEntity.id, offerEntity.orderId);
+                                },
+                        ),
+                    ],
+                  );
+                },
+              ),
 
               //ActionsRow(order:),
             ],

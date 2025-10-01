@@ -29,9 +29,6 @@ class SubscribeToMessagesViewModel extends Cubit<SubscribeToMessagesStates>{
 
         currentMessages.sort((a, b) => a.createdAt.compareTo(b.createdAt));
 
-        emit(SubscribeToMessagesStatesSuccess(
-            messages: List.from(currentMessages)));
-
         emit(SubscribeToMessagesStatesSuccess(messages: currentMessages));
       });
     } catch (e) {
