@@ -37,5 +37,5 @@ class OrderEntity {
 
 enum ServiceType { public, private }
 
-enum OrderStatus { Pending, AwaitingPaymentConfirmation , Paid ,Accepted, InProgress, Completed, Cancelled }
+enum OrderStatus { Pending, Paid ,Accepted, InProgress,Waiting,Completed,  Cancelled }
 

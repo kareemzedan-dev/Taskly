@@ -24,7 +24,7 @@ int getStep(OrderStatus status) {
     case OrderStatus.Pending:
     case OrderStatus.Accepted:
       return 0;
-    case OrderStatus.AwaitingPaymentConfirmation:
+    case OrderStatus.Paid:
       return 1;
     case OrderStatus.InProgress:
       return 2;
@@ -134,7 +134,7 @@ class OrderStatesCard extends StatelessWidget {
                           );
                         },
                       );
-                    }  else if (order.status == OrderStatus.AwaitingPaymentConfirmation)  {
+                    }  else if (order.status == OrderStatus.Paid)  {
                       return CustomButton(
                         title: " Payment under review ",
                         ontap: () {

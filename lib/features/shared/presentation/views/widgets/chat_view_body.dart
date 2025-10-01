@@ -82,7 +82,12 @@ class _ChatViewBodyState extends State<ChatViewBody> {
                     buttonText: buttonText,
                     onButtonPressed: buttonText != null
                         ? () {
-                      if (buttonText == "Pay Now") {
+                      if (buttonText == "Pay Now ${widget.order.budget}SAR") {
+                        Navigator.pushNamed(
+                          context,
+                          RoutesManager.clientPaymentsView,
+                          arguments: {'orderEntity': widget.order  },
+                        );
 
                       } else if (buttonText == "Submit Work") {
 
@@ -141,7 +146,7 @@ class _ChatViewBodyState extends State<ChatViewBody> {
                               message: msg.content ?? "",
                               avatarUrl: Assets.assetsImagesPortraitHappySmileyMan,
                               time:
-                              "${msg.createdAt.hour}:${msg.createdAt.minute.toString().padLeft(2, '0')}",
+                              "${msg.createdAt.hour}:${msg.createdAt.minute.toString().padLeft(2, '0')} ${msg.createdAt.hour < 12 ? "AM" : "PM"}",
                             ),
                           ] else if (msg.messageType == "image" && msg.attachment != null && msg.attachment!.isNotEmpty) ...[
                             GestureDetector(

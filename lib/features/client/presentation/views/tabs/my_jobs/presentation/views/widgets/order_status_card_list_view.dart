@@ -35,7 +35,7 @@ class OrderStatusCardListView extends StatelessWidget {
                 case OrderStatusFilter.pending:
                   return order.status == OrderStatus.Pending ||
                       order.status == OrderStatus.Accepted ||
-                      order.status == OrderStatus.AwaitingPaymentConfirmation;
+                      order.status == OrderStatus.Paid;
                 case OrderStatusFilter.inProgress:
                   return order.status == OrderStatus.InProgress;
                 case OrderStatusFilter.completed:

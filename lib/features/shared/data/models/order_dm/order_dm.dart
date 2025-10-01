@@ -70,8 +70,7 @@ class OrderDm extends OrderEntity {
     switch (status) {
       case 'Accepted':
         return OrderStatus.Accepted;
-        case 'AwaitingPaymentConfirmation':
-        return OrderStatus.AwaitingPaymentConfirmation;
+
         case 'Paid':
           return OrderStatus.Paid;
       case 'In Progress':
@@ -90,8 +89,7 @@ class OrderDm extends OrderEntity {
     switch (status) {
       case OrderStatus.Accepted:
         return 'Accepted';
-        case OrderStatus.AwaitingPaymentConfirmation:
-        return 'AwaitingPaymentConfirmation';
+
         case OrderStatus.Paid:
           return 'Paid';
       case OrderStatus.InProgress:

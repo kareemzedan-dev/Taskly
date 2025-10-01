@@ -36,7 +36,7 @@ class SubscribeOrdersRecordViewModel extends Cubit<OrderViewModelState> {
       case OrderStatus.Accepted:
         return "System:The offer has been accepted. Waiting for payment before work can start.";
       case OrderStatus.Paid:
-      case OrderStatus.AwaitingPaymentConfirmation:
+
         return "System:Payment has been submitted and is under review. Work will begin as soon as possible.";
       case OrderStatus.InProgress:
         return "System:Order payment has been confirmed, you can start working on it now.";
@@ -52,7 +52,7 @@ class SubscribeOrdersRecordViewModel extends Cubit<OrderViewModelState> {
   String? getActionButtonText(OrderEntity order, String currentUserId) {
     switch (order.status) {
       case OrderStatus.Pending:
-        return null; // لا يظهر أي زرار
+        return null;
       case OrderStatus.Accepted:
         if (currentUserId == order.clientId) return "Pay Now ${order.budget}SAR";
         return null;

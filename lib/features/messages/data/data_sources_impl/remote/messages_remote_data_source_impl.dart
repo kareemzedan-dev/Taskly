@@ -18,36 +18,34 @@ class MessagesRemoteDataSourceImpl implements MessagesRemoteDataSource {
   final SupabaseService supabaseService;
 
   MessagesRemoteDataSourceImpl(this.supabase,this.supabaseService);
-
   @override
   Future<Either<Failures, List<OrderEntity>>> getAcceptedOrderMessages(
       String userId, {UserRole? role}) async {
     try {
-      final query = supabase.from('orders').select();
+      Map<String, dynamic> filters = {};
 
-      // لو role موجود نفلتر على حسبه، لو مش موجود نجيب كل الأوردرات اللي ليك فيها
       if (role != null) {
         final column = role == UserRole.freelancer ? 'freelancer_id' : 'client_id';
-        query.eq(column, userId);
+        filters[column] = userId;
+        filters['or'] = 'status.eq.In Progress,status.eq.Completed';
       } else {
-        query.or('client_id.eq.$userId,freelancer_id.eq.$userId');
+        filters['or'] =
+        'client_id.eq.$userId,freelancer_id.eq.$userId,status.eq.In Progress,status.eq.Completed';
       }
 
-      query.inFilter('status', [
-        'In Progress',
-        'Completed'
-      ]);
+      final response = await supabaseService.getDataFromSupabase(
+        tableName: 'orders',
+        filters: filters,
+      );
 
-      final response = await query;
-
-      final data = (response as List)
-          .map((e) => OrderDm.fromJson(e).toEntity())
-          .toList();
+      final responseList = response as List<dynamic>? ?? [];
+      final data = responseList.map((e) => OrderDm.fromJson(e).toEntity()).toList();
 
       return Right(data);
-    } on PostgrestException catch (e) {
-      return Left(ServerFailure(e.message));
-    } catch (e) {
+
+    } catch (e, st) {
+      print("Error fetching accepted messages: $e");
+      print(st);
       return Left(ServerFailure(e.toString()));
     }
   }
@@ -178,7 +176,7 @@ class MessagesRemoteDataSourceImpl implements MessagesRemoteDataSource {
       schema: 'public',
       table: 'messages',
       callback: (payload) {
-        final record = payload.newRecord; // بعد التعديل
+        final record = payload.newRecord;
         if (record == null) return;
         final message = MessageModel.fromJson(
           Map<String, dynamic>.from(record),

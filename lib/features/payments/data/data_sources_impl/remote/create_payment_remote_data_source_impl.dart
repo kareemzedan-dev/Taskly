@@ -42,7 +42,7 @@ class CreatePaymentRemoteDataSourceImpl extends CreatePaymentRemoteDataSource {
       final updateOrderResponse = await supabase
           .from('orders')
           .update({
-            "status": "AwaitingPaymentConfirmation",
+            "status": "Paid",
           })
           .eq('id', paymentEntity.orderId!)
           .select()
