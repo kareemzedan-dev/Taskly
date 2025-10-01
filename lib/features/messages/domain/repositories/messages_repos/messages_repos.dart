@@ -8,7 +8,7 @@ import '../../../../welcome/presentation/cubit/welcome_states.dart';
 /// Repository interface for messages feature
 abstract class MessagesRepos {
   /// Get messages of accepted orders (for client or freelancer)
-  Future<Either<Failures, List<OrderEntity>>> getAcceptedOrderMessages(String userId,UserRole role);
+  Future<Either<Failures, List<OrderEntity>>> getAcceptedOrderMessages(String userId,{UserRole? role});
 
   /// Get messages for a specific order
   Future<Either<Failures, List<MessageEntity>>> getOrderMessages(String orderId);

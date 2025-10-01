@@ -18,9 +18,9 @@ class FreelancerOrderRepoImpl extends FreelancerOrderRepo{
 
   @override
   Stream<List<OrderEntity>>  subscribeToPendingOrders(
-     
+      String freelancerId
       ) {
-    return freelancerOrderRemoteDataSource.subscribeToPendingOrders();
+    return freelancerOrderRemoteDataSource.subscribeToPendingOrders( freelancerId);
   }
 
   @override

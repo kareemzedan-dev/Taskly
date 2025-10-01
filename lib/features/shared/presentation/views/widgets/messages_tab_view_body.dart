@@ -45,7 +45,7 @@ class UserMessagesTabViewBody extends StatelessWidget {
               bloc: getIt<GetAcceptedOrderMessageViewModel>()
                 ..getAcceptedOrderMessages(
                   SharedPrefHelper.getString(StringsManager.idKey)!,
-                  userRole,
+                 role:  userRole,
                 ),
               builder: (context, state) {
                 if (state is GetAcceptedOrderMessageStatesLoading) {
@@ -60,7 +60,7 @@ class UserMessagesTabViewBody extends StatelessWidget {
                   }
 
                   return ListView.builder(
-                    itemCount: state.orders!.length,
+                    itemCount: state.orders.length,
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) {
@@ -79,20 +79,10 @@ class UserMessagesTabViewBody extends StatelessWidget {
                             chatUserRole: chatUserRole,
                             order: order,
                               onTap: () {
-                                if (order.status == OrderStatus.AwaitingPaymentConfirmation ||
-                                    order.status == OrderStatus.Pending ||
-                                    order.status == OrderStatus.Accepted) {
-                                  showTemporaryMessage(
-                                    context,
-                                    "Please wait for the order payment to be confirmed",
-                                    MessageType.waiting,
-                                  );
-                                }
+
                               },
                               onUserInfoLoaded: (fullName, avatarUrl) {
-                                if (order.status != OrderStatus.AwaitingPaymentConfirmation &&
-                                    order.status != OrderStatus.Pending &&
-                                    order.status != OrderStatus.Accepted) {
+
                                   Navigator.pushNamed(
                                     context,
                                     RoutesManager.chatView,
@@ -104,7 +94,7 @@ class UserMessagesTabViewBody extends StatelessWidget {
                                       "receiverId": chatUserId!,
                                     },
                                   );
-                                }
+
                               }
 
                           )

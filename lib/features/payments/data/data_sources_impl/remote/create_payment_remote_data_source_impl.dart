@@ -6,6 +6,7 @@ import 'package:taskly/core/errors/failures.dart';
 import 'package:taskly/features/payments/domain/entities/payment_entity.dart';
 import '../../../../attachments/data/models/attachments_dm/attachments_dm.dart';
 import '../../data_sources/remote/create_payment_remote_data_source.dart';
+
 @Injectable(as: CreatePaymentRemoteDataSource)
 class CreatePaymentRemoteDataSourceImpl extends CreatePaymentRemoteDataSource {
   final SupabaseClient supabase;
@@ -13,22 +14,27 @@ class CreatePaymentRemoteDataSourceImpl extends CreatePaymentRemoteDataSource {
   CreatePaymentRemoteDataSourceImpl(this.supabase);
 
   @override
-  Future<Either<Failures, PaymentEntity>> createPayment(PaymentEntity paymentEntity) async {
+  Future<Either<Failures, PaymentEntity>> createPayment(
+      PaymentEntity paymentEntity) async {
     try {
       final Map<String, dynamic> data = {
         'id': paymentEntity.id,
         'client_id': paymentEntity.clientId,
         'freelancer_id': paymentEntity.freelancerId,
-    'order_id': paymentEntity.orderId,
-
+        'order_id': paymentEntity.orderId,
         'amount': paymentEntity.amount,
         'status': paymentEntity.status,
-        'attachments': jsonEncode(paymentEntity.attachments.map((e) => e.toJson()).toList()),
+        'attachments': jsonEncode(
+            paymentEntity.attachments.map((e) => e.toJson()).toList()),
         'created_at': paymentEntity.createdAt.toIso8601String(),
         'updated_at': paymentEntity.updatedAt.toIso8601String(),
+        'payment_method': paymentEntity.paymentMethod,
+        'account_number': paymentEntity.accountNumber,
+        'requester_type': paymentEntity.requesterType,
       };
 
-      final response = await supabase.from('payments').insert(data).select().single();
+      final response =
+          await supabase.from('payments').insert(data).select().single();
 
       if (response == null) {
         return Left(ServerFailure("Failed to create payment"));
@@ -36,11 +42,9 @@ class CreatePaymentRemoteDataSourceImpl extends CreatePaymentRemoteDataSource {
       final updateOrderResponse = await supabase
           .from('orders')
           .update({
-        "status": "AwaitingPaymentConfirmation",
-   
-      })
-         .eq('id', paymentEntity.orderId) 
-
+            "status": "AwaitingPaymentConfirmation",
+          })
+          .eq('id', paymentEntity.orderId!)
           .select()
           .maybeSingle();
       //
@@ -55,11 +59,10 @@ class CreatePaymentRemoteDataSourceImpl extends CreatePaymentRemoteDataSource {
       //   return Left(ServerFailure("Failed to accept the offer"));
       // }
 
-
       if (updateOrderResponse == null) {
         return Left(ServerFailure("Failed to update order"));
       }
-  
+
       final createdPayment = PaymentEntity(
         id: response['id'],
         clientId: response['client_id'],
@@ -72,6 +75,9 @@ class CreatePaymentRemoteDataSourceImpl extends CreatePaymentRemoteDataSource {
             .toList(),
         createdAt: DateTime.parse(response['created_at']),
         updatedAt: DateTime.parse(response['updated_at']),
+        paymentMethod: response['payment_method'],
+        accountNumber: response['account_number'],
+        requesterType: response['requester_type'],
       );
 
       return Right(createdPayment);

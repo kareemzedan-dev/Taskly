@@ -21,25 +21,27 @@ class MessagesRemoteDataSourceImpl implements MessagesRemoteDataSource {
 
   @override
   Future<Either<Failures, List<OrderEntity>>> getAcceptedOrderMessages(
-      String userId, UserRole role) async {
+      String userId, {UserRole? role}) async {
     try {
-      final column = role == UserRole.freelancer ? 'freelancer_id' : 'client_id';
+      final query = supabase.from('orders').select();
 
-      final response = await supabase
-          .from('orders')
-          .select()
-          .eq(column, userId)
-          .inFilter('status', [
-        'Accepted',
-        'Rejected',
-        'Paid',
-        'AwaitingPaymentConfirmation',
+      // لو role موجود نفلتر على حسبه، لو مش موجود نجيب كل الأوردرات اللي ليك فيها
+      if (role != null) {
+        final column = role == UserRole.freelancer ? 'freelancer_id' : 'client_id';
+        query.eq(column, userId);
+      } else {
+        query.or('client_id.eq.$userId,freelancer_id.eq.$userId');
+      }
+
+      query.inFilter('status', [
         'In Progress',
         'Completed'
       ]);
 
+      final response = await query;
+
       final data = (response as List)
-          .map((e) => OrderDm.fromJson(e))
+          .map((e) => OrderDm.fromJson(e).toEntity())
           .toList();
 
       return Right(data);

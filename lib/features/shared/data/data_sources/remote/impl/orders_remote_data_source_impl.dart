@@ -67,4 +67,14 @@ class OrdersRemoteDataSourceImpl extends OrdersRemoteDataSource {
       _ordersChannel = null;
     }
   }
+
+  @override
+  Stream<OrderEntity> subscribeToOrder(String orderId) {
+    return supabaseService.supabaseClient
+        .from('orders')
+        .stream(primaryKey: ['id'])
+        .eq('id', orderId)
+        .map((records) => OrderDm.fromJson(records.first).toEntity());
+  }
+
 }

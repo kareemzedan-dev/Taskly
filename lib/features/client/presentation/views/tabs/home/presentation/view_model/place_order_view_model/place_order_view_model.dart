@@ -18,20 +18,26 @@ import '../../../../../../../../attachments/data/models/attachments_dm/attachmen
 class PlaceOrderViewModel extends Cubit<PlaceOrderViewModelStates> {
   PlaceOrderUseCase orderUseCase;
   PlaceOrderViewModel(this.orderUseCase ) : super(PlaceOrderViewModelStatesInitial());
-  final List<String> categories = [
-    "Academic Sources",
-    "Scientific Reports",
-    "Mind Maps",
-    "Translation",
-    "Summarization",
-    "Scientific Projects",
-    "Presentations",
-    "SPSS Analysis",
-    "Proofreading",
-    "Programming",
-    "Tutorials",
-    "Other",
-  ];
+  final Map<String, String> categories = {
+    "academic_sources": "Academic Sources",
+    "scientific_reports": "Scientific Reports",
+    "mind_maps": "Mind Maps",
+    "translation": "Translation",
+    "summaries": "Summaries",
+    "scientific_projects": "Scientific Projects",
+    "presentations": "Presentations",
+    "statistical_analysis": "Statistical Analysis",
+    "proofreading": "Proofreading",
+    "resume": "Resume",
+    "programming": "Programming",
+    "tutorials": "Tutorials",
+    "consultations": "Consultations",
+    "graphic_design": "Graphic Design",
+    "engineering_services": "Engineering Services",
+    "financial_services": "Financial Services",
+    "other": "Other",
+  };
+
   TextEditingController titleController = TextEditingController();
   List<File> localAttachments = [];
   List<AttachmentModel> uploadedAttachments = [];

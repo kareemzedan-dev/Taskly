@@ -4,4 +4,5 @@ import 'package:taskly/features/shared/domain/entities/order_entity/order_entity
 
 abstract class OrdersRemoteDataSource {
   Future<Either<Failures, List<OrderEntity>>> getUserOrdersByUserId(String userId, String role);
+  Stream<OrderEntity> subscribeToOrder(String orderId);
 }

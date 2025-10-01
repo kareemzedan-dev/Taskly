@@ -13,4 +13,5 @@ class OrdersUseCase {
     String userId,
     String role,
   ) => ordersRepo.getUserOrdersByUserId(userId, role);
+  Stream<OrderEntity> callSubscribeToOrder(String orderId) => ordersRepo.subscribeToOrder(orderId);
 }

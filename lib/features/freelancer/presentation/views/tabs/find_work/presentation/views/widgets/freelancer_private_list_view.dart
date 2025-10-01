@@ -21,22 +21,29 @@ class FreelancerPrivateOrdersList extends StatelessWidget {
     } else if (state is FreelancerPrivateOrdersViewModelStatesSuccess) {
       final orders = (state as FreelancerPrivateOrdersViewModelStatesSuccess).orders;
 
+      if (orders.isNotEmpty) {
+
+        orders.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+      }
+
       if (orders.isEmpty) {
         return ListView(
           physics: const AlwaysScrollableScrollPhysics(),
           children: [
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.5,   child: Center(
-            child: Column(
-            children: [
-            Image.asset(Assets.assetsImagesNoOrder,width: 240.w,height: 240.h,),
-            SizedBox(height: 10.h),
-            Text(
-              'No private orders',
-              style: TextStyle(fontSize: 18.sp),
-            ),
-          ],
-    ),   ),
+              height: MediaQuery.of(context).size.height * 0.5,
+              child: Center(
+                child: Column(
+                  children: [
+                    Image.asset(Assets.assetsImagesNoOrder, width: 240.w, height: 240.h,),
+                    SizedBox(height: 10.h),
+                    Text(
+                      'No private orders',
+                      style: TextStyle(fontSize: 18.sp),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ],
         );
@@ -44,19 +51,18 @@ class FreelancerPrivateOrdersList extends StatelessWidget {
 
       return ListView.separated(
         physics: const AlwaysScrollableScrollPhysics(),
-        separatorBuilder:
-            (context, index) => Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Divider(color: Colors.grey.shade300, thickness: 1.w),
-            ),
+        separatorBuilder: (context, index) => Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Divider(color: Colors.grey.shade300, thickness: 1.w),
+        ),
         itemCount: orders.length,
-        itemBuilder:
-            (context, index) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: FreelancerWorkCard(order: orders[index]),
-            ),
+        itemBuilder: (context, index) => Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: FreelancerWorkCard(order: orders[index]),
+        ),
       );
-    } else if (state is FreelancerPrivateOrdersViewModelStatesError) {
+    }
+    else if (state is FreelancerPrivateOrdersViewModelStatesError) {
       return FreelancerWorkCardShimmer();
     }
     return Container();

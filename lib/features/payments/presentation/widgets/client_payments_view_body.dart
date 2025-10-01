@@ -89,13 +89,16 @@ class ClientPaymentsViewBody extends StatelessWidget {
                     PaymentEntity(
                       id: paymentId,
                       clientId: order.clientId,
-                      freelancerId: "f8d58897-cbda-4643-a4cb-d1bc53530cd2",
+                      freelancerId:  order.freelancerId,
                       orderId: order.id,
                       attachments: uploadVM.uploadedAttachments,
                       amount: order.budget!,
                       status: "Pending",
                       createdAt: DateTime.now(),
                       updatedAt: DateTime.now(),
+                      paymentMethod: "",
+                      accountNumber: "",
+                      requesterType: "client",
                     ),
                   );
                 },

@@ -1,44 +1,46 @@
 import 'package:taskly/features/attachments/data/models/attachments_dm/attachments_dm.dart';
 import '../../domain/entities/payment_entity.dart';
 
+
 class PaymentModel extends PaymentEntity {
   PaymentModel({
-    required String id,
-    required String clientId,
-    required String freelancerId,
-    required String orderId,
-    required List<AttachmentModel> attachments,
-    required double amount,
-    required String status,
-    required DateTime createdAt,
-    required DateTime updatedAt,
-  }) : super(
-    id: id,
-    clientId: clientId,
-    freelancerId: freelancerId,
-    orderId: orderId,
-    attachments: attachments,
-    amount: amount,
-    status: status,
-    createdAt: createdAt,
-    updatedAt: updatedAt,
-  );
+    required super.id,
+    super.clientId,
+    super.freelancerId,
+    super.orderId,
+    required super.attachments,
+    required super.amount,
+    required super.status,
+    required super.createdAt,
+    required super.updatedAt,
+    super.paymentMethod,
+    super.accountNumber,
+    super.requesterType,
+  });
 
   factory PaymentModel.fromJson(Map<String, dynamic> json) {
+    final attachments = json['attachments'] != null
+        ? (json['attachments'] as List)
+        .map((a) => AttachmentModel.fromJson(a))
+        .toList()
+        : <AttachmentModel>[];
+
     return PaymentModel(
-      id: json['id'],
-      clientId: json['client_id'],
-      freelancerId: json['freelancer_id'],
-      orderId: json['order_id'],
-      attachments: (json['attachments'] as List<dynamic>)
-          .map((e) => AttachmentModel.fromJson(e))
-          .toList(),
+      id: json['id'] as String,
+      clientId: json['client_id'] as String?,
+      freelancerId: json['freelancer_id'] as String?,
+      orderId: json['order_id'] as String?,
+      attachments: attachments,
       amount: (json['amount'] as num).toDouble(),
-      status: json['status'],
-      createdAt: DateTime.parse(json['created_at']),
-      updatedAt: DateTime.parse(json['updated_at']),
+      status: json['status'] as String,
+      createdAt: DateTime.parse(json['created_at'] as String),
+      updatedAt: DateTime.parse(json['updated_at'] as String),
+      paymentMethod: json['payment_method'] as String?,
+      accountNumber: json['account_number'] as String?,
+      requesterType: json['requester_type'] as String?,
     );
   }
+
 
   Map<String, dynamic> toJson() {
     return {
@@ -51,7 +53,9 @@ class PaymentModel extends PaymentEntity {
       'status': status,
       'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
+      'payment_method': paymentMethod,
+      'account_number': accountNumber,
+      'requester_type': requesterType,
     };
   }
-
 }

@@ -14,8 +14,8 @@ class MessagesReposImpl implements MessagesRepos {
   MessagesReposImpl(this.remoteDataSource);
 
   @override
-  Future<Either<Failures, List<OrderEntity>>> getAcceptedOrderMessages(String userId, UserRole role) {
-    return remoteDataSource.getAcceptedOrderMessages(userId, role );
+  Future<Either<Failures, List<OrderEntity>>> getAcceptedOrderMessages(String userId, {UserRole? role}) {
+    return remoteDataSource.getAcceptedOrderMessages(userId,   role:   role  );
   }
   @override
   Future<Either<Failures, List<MessageEntity>>> getOrderMessages(String orderId) {

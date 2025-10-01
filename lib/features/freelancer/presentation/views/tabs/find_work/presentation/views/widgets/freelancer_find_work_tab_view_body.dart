@@ -45,7 +45,9 @@ class _FreelancerHomeTabViewBodyState extends State<FreelancerHomeTabViewBody> {
         getIt<ProfileViewModel>()..getUserInfo(userId, "freelancer");
 
     _pendingOrdersViewModel = getIt<FreelancerPendingOrdersViewModel>();
-    _pendingOrdersViewModel.fetchPendingFreelancerOrders();
+    _pendingOrdersViewModel.fetchPendingFreelancerOrders(
+
+    );
 
     _privateOrderViewModel = getIt<FreelancerPrivateOrdersViewModel>();
     _privateOrderViewModel.fetchPrivateOrders(userId);

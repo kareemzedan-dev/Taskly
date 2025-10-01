@@ -1,52 +1,97 @@
 import 'dart:async';
+
+import 'package:bloc/bloc.dart';
 import 'package:either_dart/either.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:taskly/core/cache/shared_preferences.dart';
 import 'package:taskly/core/errors/failures.dart';
 import 'package:taskly/core/utils/strings_manager.dart';
+import 'package:taskly/features/shared/data/models/order_dm/order_dm.dart';
 import 'package:taskly/features/shared/domain/entities/order_entity/order_entity.dart';
 import 'package:taskly/features/freelancer/domain/use_cases/freelancer_order_use_case/freelancer_order_use_case.dart';
-import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/cubit/freelancer_pending_order_view_model/freelancer_pending_order_view_model_states.dart';
+import 'freelancer_pending_order_view_model_states.dart';
+
+import 'dart:async';
+import 'package:bloc/bloc.dart';
+import 'package:either_dart/either.dart';
+import 'package:injectable/injectable.dart';
+import 'package:taskly/core/cache/shared_preferences.dart';
+import 'package:taskly/core/errors/failures.dart';
+import 'package:taskly/core/utils/strings_manager.dart';
+import 'package:taskly/features/shared/domain/entities/order_entity/order_entity.dart';
+import 'package:taskly/features/freelancer/domain/use_cases/freelancer_order_use_case/freelancer_order_use_case.dart';
+import 'freelancer_pending_order_view_model_states.dart';
+
 @injectable
-class FreelancerPendingOrdersViewModel
-    extends Cubit<FreelancerPendingOrdersState> {
+class FreelancerPendingOrdersViewModel extends Cubit<FreelancerPendingOrdersState> {
+  final FreelancerOrderUseCase freelancerOrderUseCase;
+  StreamSubscription<List<OrderEntity>>? _ordersSubscription;
+  final List<OrderEntity> _currentOrders = [];
+
   FreelancerPendingOrdersViewModel(this.freelancerOrderUseCase)
       : super(FreelancerPendingOrdersInitial());
 
-  final FreelancerOrderUseCase freelancerOrderUseCase;
-  StreamSubscription<List<OrderEntity>>? _ordersSubscription;
+  Future<Either<Failures, List<OrderEntity>>> fetchPendingFreelancerOrders() async {
+    emit(FreelancerPendingOrdersLoading());
 
-  Future<Either<Failures, List<OrderEntity>>>
-      fetchPendingFreelancerOrders() async {
-    try {
-      emit(FreelancerPendingOrdersLoading());
+    final freelancerId = SharedPrefHelper.getString(StringsManager.idKey)!;
 
-      final result = await freelancerOrderUseCase.fetchPendingFreelancerOrders(
-        SharedPrefHelper.getString(StringsManager.idKey)!,
-      );
+    final result = await freelancerOrderUseCase.fetchPendingFreelancerOrders(freelancerId);
 
-      result.fold(
-        (failure) => emit(FreelancerPendingOrdersError(failure.message)),
-        (orders) {
-          emit(FreelancerPendingOrdersSuccess(orders));
-          _subscribeRealtime(); // هنا تناديه
-        },
-      );
+    result.fold(
+          (failure) => emit(FreelancerPendingOrdersError(failure.message)),
+          (orders) {
+        _currentOrders
+          ..clear()
+          ..addAll(orders);
+        emit(FreelancerPendingOrdersSuccess(List.from(_currentOrders)));
+        _subscribeToPendingOrders(freelancerId);
+      },
+    );
 
-      return result;
-    } catch (e) {
-      return Left(ServerFailure(e.toString()));
-    }
+    return result;
+  }
+  void _subscribeToPendingOrders(String freelancerId) async {
+    _ordersSubscription?.cancel();
+
+    final offersResponse = await freelancerOrderUseCase.fetchPendingFreelancerOrders(freelancerId);
+    final offeredOrderIds = <String>[];
+    offersResponse.fold(
+          (_) {},
+          (orders) => offeredOrderIds.addAll(orders.map((o) => o.id)),
+    );
+
+    _ordersSubscription = freelancerOrderUseCase
+        .subscribeToPendingOrders(freelancerId)
+        .listen(
+          (orders) {
+        final newOrders = orders
+            .where((o) => o.serviceType.name == 'public')
+            .where((o) => !offeredOrderIds.contains(o.id))
+            .toList();
+
+        bool hasChanges = false;
+
+        for (var o in newOrders) {
+          if (!_currentOrders.any((existing) => existing.id == o.id)) {
+            _currentOrders.insert(0, o);
+            hasChanges = true;
+          }
+        }
+
+        _currentOrders.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+
+        if (hasChanges) {
+          emit(FreelancerPendingOrdersSuccess(List.from(_currentOrders)));
+        }
+      },
+      onError: (error) {
+        emit(FreelancerPendingOrdersError('Real-time subscription error: $error'));
+      },
+    );
   }
 
-  void _subscribeRealtime() {
-    _ordersSubscription =
-        freelancerOrderUseCase.subscribeToPendingOrders().listen((orders) {
-      emit(FreelancerPendingOrdersSuccess(orders));
-    });
-  }
 
   @override
   Future<void> close() {
@@ -54,4 +99,3 @@ class FreelancerPendingOrdersViewModel
     return super.close();
   }
 }
-

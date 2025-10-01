@@ -7,7 +7,7 @@ import '../../../domain/entities/message_entity.dart';
 
 abstract class MessagesRemoteDataSource {
   /// Get accepted orders for a specific user
-  Future<Either<Failures, List<OrderEntity>>> getAcceptedOrderMessages(String userId, UserRole role);
+  Future<Either<Failures, List<OrderEntity>>> getAcceptedOrderMessages(String userId,{UserRole? role});
 
   /// Get all messages for a specific order
   Future<Either<Failures, List<MessageEntity>>> getOrderMessages(String orderId);

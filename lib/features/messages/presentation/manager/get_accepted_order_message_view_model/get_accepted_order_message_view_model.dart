@@ -17,11 +17,11 @@ class GetAcceptedOrderMessageViewModel
 
   Future<Either<Failures, List<OrderEntity>>> getAcceptedOrderMessages(
     String userId,
-      UserRole role
+      {UserRole? role}
   ) async {
     try {
       emit(GetAcceptedOrderMessageStatesLoading());
-      final result = await getAcceptedOrderMessagesUseCase(userId,role );
+      final result = await getAcceptedOrderMessagesUseCase(userId, role: role );
       result.fold(
         (failure) =>
             emit(GetAcceptedOrderMessageStatesError(message: failure.message)),

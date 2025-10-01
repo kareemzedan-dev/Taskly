@@ -13,4 +13,9 @@ class OrdersRepoImpl extends OrdersRepo{
  return ordersRemoteDataSource.getUserOrdersByUserId(userId, role) ;
   }
 
+  @override
+  Stream<OrderEntity> subscribeToOrder(String orderId) {
+     return ordersRemoteDataSource.subscribeToOrder(orderId);
+  }
+
 }

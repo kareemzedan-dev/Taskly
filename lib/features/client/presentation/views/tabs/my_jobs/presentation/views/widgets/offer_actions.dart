@@ -1,20 +1,35 @@
-
- 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/components/dismissible_error_card.dart';
 import 'package:taskly/core/di/di.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/action_button.dart';
+import 'package:taskly/features/shared/domain/entities/order_entity/order_entity.dart';
 
 import '../../../../../../../../../config/routes/routes_manager.dart';
 import '../../view_model/update_offer_status_view_model/update_offer_status_states.dart';
 import '../../view_model/update_offer_status_view_model/update_offer_status_view_model.dart';
 
 class OfferActions extends StatelessWidget {
-  const OfferActions({super.key, required this.offerId, required this.onAcceptOffer});
+ const OfferActions({
+    super.key,
+    required this.offerId,
+    required this.onAcceptOffer,
+    required this.userName,
+    required this.userImage,
+    required this.order,
+    required this.currentUserId,
+    required this.receiverId,
+  });
+
   final String offerId;
   final void Function() onAcceptOffer;
+  final String userName;
+  final String userImage;
+  final OrderEntity order;
+
+  final String currentUserId;
+  final String receiverId;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +41,15 @@ class OfferActions extends StatelessWidget {
             icon: Icons.chat,
             color: Colors.blue,
             filled: false,
-            onTap: () {},
+            onTap: () {
+              Navigator.pushNamed(context, RoutesManager.chatView, arguments: {
+                "userName": userName,
+                "userImage": userImage,
+                "order": order,
+                "currentUserId": currentUserId,
+                "receiverId": receiverId,
+              });
+            },
           ),
         ),
         const SizedBox(width: 8),
@@ -36,7 +59,7 @@ class OfferActions extends StatelessWidget {
             icon: Icons.check,
             color: Colors.green,
             filled: true,
-           onTap: onAcceptOffer,
+            onTap: onAcceptOffer,
           ),
         ),
       ],

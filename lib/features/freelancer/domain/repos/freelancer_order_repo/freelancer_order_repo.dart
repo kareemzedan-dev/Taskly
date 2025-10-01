@@ -10,7 +10,7 @@ abstract class FreelancerOrderRepo {
   Future<Either<Failures, List<OrderEntity>>> fetchPendingFreelancerOrders(String freelancerId);
 
     Stream<List<OrderEntity>> subscribeToPendingOrders(
-      
+        String freelancerId
 
       );
   Future<Either<Failures,List<OrderEntity>>> fetchPrivateOrders(String freelancerId);

@@ -6,15 +6,17 @@ import 'package:taskly/features/shared/presentation/views/widgets/custom_states_
 class OrderStatusCard extends StatelessWidget {
   final double price;
   final String status;
-  final VoidCallback onButtonPressed;
   final String message;
+  final VoidCallback? onButtonPressed;
+  final String? buttonText; // الزرار دلوقتي optional
 
   const OrderStatusCard({
     super.key,
     required this.price,
     required this.status,
-    required this.onButtonPressed,
     required this.message,
+    this.onButtonPressed,
+    this.buttonText,
   });
 
   @override
@@ -25,41 +27,52 @@ class OrderStatusCard extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.all(16.w),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
-
           children: [
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Text(
-                  "Total Price: \$${price.toStringAsFixed(2)}",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.green,
-                    fontSize: 16.sp,
+                Expanded(
+                  child: Text(
+                    "Total Price: \$${price.toStringAsFixed(2)}",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.green,
+                      fontSize: 16.sp,
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 SizedBox(width: 8.w),
-
-                CustomStatesContainer(state:  status,),
+                CustomStatesContainer(state: status),
               ],
             ),
-            ElevatedButton(
-              onPressed: onButtonPressed,
-              style: ButtonStyle(
-                backgroundColor: WidgetStateProperty.all(
-                  ColorsManager.primary,
+
+            SizedBox(height: 12.h),
+
+
+
+
+            // الزرار يظهر فقط لو فيه buttonText
+            if (buttonText != null && onButtonPressed != null)
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: onButtonPressed,
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(ColorsManager.primary),
+                    padding: MaterialStateProperty.all(EdgeInsets.symmetric(vertical: 14.h)),
+                  ),
+                  child: Text(
+                    buttonText!,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ),
-              child: Text(
-                message,
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyLarge?.copyWith(color: Colors.white),
-              ),
-            ),
           ],
         ),
       ),

@@ -19,6 +19,8 @@ import '../../../../../core/di/di.dart';
 import '../../../../client/presentation/views/tabs/my_jobs/presentation/views/pdf_viewer_view.dart';
 import '../../../../messages/presentation/manager/get_messages_view_model/get_messages_view_model.dart';
 import '../../../domain/entities/order_entity/order_entity.dart';
+import '../../manager/subscribe_to_order_record_view_model/subscribe_to_order_record_states.dart';
+import '../../manager/subscribe_to_order_record_view_model/subscribe_to_order_record_view_model.dart';
 
 class ChatViewBody extends StatefulWidget {
   final OrderEntity order;
@@ -49,22 +51,56 @@ class _ChatViewBodyState extends State<ChatViewBody> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => GetMessagesViewModel(getIt())
-        ..getOrderMessages(widget.order.id)
-        ..subscribeToMessages(widget.order.id),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => getIt<SubscribeOrdersRecordViewModel>()
+            ..subscribe(widget.order.id),
+        ),
+        BlocProvider(
+          create: (context) => getIt<GetMessagesViewModel>()
+            ..getOrderMessages(widget.order.id)
+            ..subscribeToMessages(widget.order.id),
+        ),
+      ],
       child: Column(
         children: [
-          OrderStatusCard(
-            price: widget.order.budget ?? 0,
-            status: widget.order.status.name,
-            onButtonPressed: () {},
-            message: widget.currentUserId == widget.order.clientId ? "Work received." : "Submit delivery.",
+          BlocBuilder<SubscribeOrdersRecordViewModel, OrderViewModelState>(
+            builder: (context, state) {
+              final orderData = state is OrderSuccess ? state.order : widget.order;
+              final viewModel = context.read<SubscribeOrdersRecordViewModel>();
+
+              final adminMessage = viewModel.getAdminMessage(orderData);
+              final buttonText = viewModel.getActionButtonText(orderData, widget.currentUserId);
+
+              return Column(
+                children: [
+                  OrderStatusCard(
+                    price: orderData.budget ?? 0,
+                    status: orderData.status.name,
+                    message: "",
+                    buttonText: buttonText,
+                    onButtonPressed: buttonText != null
+                        ? () {
+                      if (buttonText == "Pay Now") {
+
+                      } else if (buttonText == "Submit Work") {
+
+                      }
+                    }
+                        : null,
+                  ),
+
+
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: AdminMessageCard(message: adminMessage),
+                  ),
+                ],
+              );
+            },
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: AdminMessageCard(message: "System: Order payment has been confirmed, you can start working on it.",),
-          ),
+
 
           Expanded(
             child: BlocConsumer<GetMessagesViewModel, GetMessagesViewModelStates>(
@@ -110,7 +146,6 @@ class _ChatViewBodyState extends State<ChatViewBody> {
                           ] else if (msg.messageType == "image" && msg.attachment != null && msg.attachment!.isNotEmpty) ...[
                             GestureDetector(
                               onTap: () {
-                                // تفتح الصورة في شاشة كاملة
                                 showDialog(
                                   context: context,
                                   builder: (_) => Dialog(

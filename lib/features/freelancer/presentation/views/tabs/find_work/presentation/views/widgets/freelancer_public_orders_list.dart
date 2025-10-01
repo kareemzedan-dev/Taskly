@@ -6,6 +6,7 @@ import 'package:taskly/core/utils/colors_manger.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/cubit/freelancer_pending_order_view_model/freelancer_pending_order_view_model_states.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/freelancer_work_card.dart';
 
+import '../../../../../../../../shared/domain/entities/order_entity/order_entity.dart';
 import 'freelancer_work_card_shimmer.dart';
 
 class FreelancerPublicOrdersList extends StatelessWidget {
@@ -21,7 +22,10 @@ class FreelancerPublicOrdersList extends StatelessWidget {
       final orders =
           (state as FreelancerPendingOrdersSuccess).pendingOrdersList;
 
-      if (orders.isEmpty) {
+      final sortedOrders = List<OrderEntity>.from(orders)
+        ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
+
+      if (sortedOrders.isEmpty) {
         return ListView(
           physics: const AlwaysScrollableScrollPhysics(),
           children: [
@@ -30,11 +34,10 @@ class FreelancerPublicOrdersList extends StatelessWidget {
               child: Center(
                 child: Column(
                   children: [
-                    Image.asset(Assets.assetsImagesNoOrder,width: 240.w,height: 240.h,),
-
+                    Image.asset(Assets.assetsImagesNoOrder, width: 240.w, height: 240.h,),
                     SizedBox(height: 10.h),
                     Text(
-                      'No Pubilc orders',
+                      'No Public orders',
                       style: TextStyle(fontSize: 18.sp),
                     ),
                   ],
@@ -46,19 +49,18 @@ class FreelancerPublicOrdersList extends StatelessWidget {
       }
 
       return ListView.separated(
-        separatorBuilder:
-            (context, index) => Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Divider(color: Colors.grey.shade300, thickness: 1.w),
-            ),
-        itemCount: orders.length,
-        itemBuilder:
-            (context, index) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: FreelancerWorkCard(order: orders[index]),
-            ),
+        separatorBuilder: (context, index) => Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Divider(color: Colors.grey.shade300, thickness: 1.w),
+        ),
+        itemCount: sortedOrders.length,
+        itemBuilder: (context, index) => Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: FreelancerWorkCard(order: sortedOrders[index]),
+        ),
       );
-    } else if (state is FreelancerPendingOrdersError) {
+    }
+    else if (state is FreelancerPendingOrdersError) {
       return FreelancerWorkCardShimmer();
     }
     return Container();

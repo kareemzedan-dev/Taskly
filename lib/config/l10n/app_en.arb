@@ -268,7 +268,25 @@
   "noReviewsGivenForThisClient": "No reviews given for this client",
   "noReviewsGivenForThisFreelancer": "No reviews given for this freelancer",
   "noReviewsReceivedForThisClient": "No reviews received for this client"
-
+,
+  "service1": "Providing academic sources and references",
+  "service2": "Scientific reports",
+  "service3": "Mind maps",
+  "service4": "Languages and translation",
+  "service5": "Summarizing books, articles, and lectures",
+  "service6": "Scientific projects",
+  "service7": "Presentations (PowerPoint)",
+  "service8": "Statistical analysis (SPSS)",
+  "service9": "Proofreading",
+  "service10": "Resume/CV",
+  "service11": "Programming and web design",
+  "service12": "Tutorials and courses",
+  "service13": "Specialized consultations by field",
+  "service14": "Graphic design 🎨",
+  "service15": "Engineering services",
+  "service16": "Financial and accounting services" ,
+  "orderNow": "Order Now",
+  "noServicesFound": "No services found"
 
 
 

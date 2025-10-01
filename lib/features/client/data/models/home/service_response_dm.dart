@@ -9,6 +9,7 @@ class ServiceDm extends ServiceEntity {
     required super.icon,
     required super.color,
     required super.buttonText,
+    required super.key,
   });
 
 factory ServiceDm.fromJson(Map<String, dynamic> json) {
@@ -17,6 +18,7 @@ factory ServiceDm.fromJson(Map<String, dynamic> json) {
     icon: json['icon']?.toString() ?? '',
     color: json['color']?.toString() ?? '#009688', // لون افتراضي
     buttonText: json['button_text']?.toString() ?? 'عرض',
+    key: json['key']?.toString() ?? '',
   );
 }
 

@@ -17,9 +17,9 @@ class FreelancerOrderUseCase {
 
 
   Stream<List<OrderEntity>>  subscribeToPendingOrders(
- 
 
+      String freelancerId
       ) {
-    return freelancerOrderRepo.subscribeToPendingOrders();
+    return freelancerOrderRepo.subscribeToPendingOrders(freelancerId);
   }
 }

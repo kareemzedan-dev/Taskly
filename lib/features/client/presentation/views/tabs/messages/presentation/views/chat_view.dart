@@ -7,6 +7,7 @@ import 'package:taskly/features/shared/presentation/views/widgets/custom_app_bar
 import '../../../../../../../../core/di/di.dart';
 import '../../../../../../../attachments/presentation/manager/download_attachments_view_model/download_attachments_view_model.dart';
 import '../../../../../../../shared/domain/entities/order_entity/order_entity.dart';
+import '../../../../../../../shared/presentation/manager/subscribe_to_order_record_view_model/subscribe_to_order_record_view_model.dart';
 
 class ChatView extends StatelessWidget {
   const ChatView({
@@ -31,6 +32,8 @@ class ChatView extends StatelessWidget {
         BlocProvider(
           create: (_) => getIt<DownloadAttachmentsViewModel>(),
         ),
+        BlocProvider(
+          create: (_) => getIt<SubscribeOrdersRecordViewModel>()  ),
       ],
       child: Scaffold(
         appBar: customAppBar(

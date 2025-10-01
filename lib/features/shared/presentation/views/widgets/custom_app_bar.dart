@@ -5,9 +5,12 @@ import 'package:taskly/core/utils/assets_manager.dart';
 import 'package:taskly/features/shared/presentation/views/widgets/custom_states_container.dart';
 
 import '../../../domain/entities/order_entity/order_entity.dart';
-
-AppBar customAppBar(BuildContext context, {required String userName, required String userImage, required OrderEntity order}) {
-
+  AppBar customAppBar(
+      BuildContext context, {
+        required String userName,
+        required String userImage,
+        required OrderEntity order,
+      }) {
     return AppBar(
       surfaceTintColor: Colors.transparent,
       backgroundColor: Colors.white,
@@ -42,45 +45,51 @@ AppBar customAppBar(BuildContext context, {required String userName, required St
               CircleAvatar(
                 backgroundColor: Colors.grey.shade300,
                 radius: 20.r,
-                backgroundImage: AssetImage(
-                  Assets.assetsImagesPortraitHappySmileyMan,
-                ),
+                backgroundImage: AssetImage(userImage),
               ),
-
               SizedBox(width: 8.w),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                   userName,
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 16.sp,
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                         order.title,
-                        style: Theme.of(
-                          context,
-                        ).textTheme.bodyLarge?.copyWith(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12.sp,
-                        ),
+              // Flexible for text responsiveness
+              Flexible(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // User name
+                    Text(
+                      userName,
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 16.sp,
                       ),
-                      SizedBox(width: 8.w),
-                      CustomStatesContainer(state: order.status.name,)
-                    ],
-                  ),
-                ],
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                    SizedBox(height: 2.h),
+                    Row(
+                      children: [
+                        // Order title
+                        Expanded(
+                          child: Text(
+                            order.title,
+                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 12.sp,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          ),
+                        ),
+                        SizedBox(width: 8.w),
+
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
         ),
       ),
-
       centerTitle: true,
     );
   }

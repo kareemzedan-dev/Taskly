@@ -114,6 +114,7 @@ class OrderStatesCard extends StatelessWidget {
                                 ],
                                 child: OffersBottomSheetContent(
                                   orderId: order.id,
+                                  order: order,
                                 ),
                               );
                             },

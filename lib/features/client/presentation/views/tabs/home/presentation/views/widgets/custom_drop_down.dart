@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomDropdown extends StatelessWidget {
-  final String? value;
-  final List<String> items;
+  final String? value; // selected key
+  final Map<String, String> items; // key -> title
   final String hint;
   final Function(String?) onChanged;
 
@@ -30,14 +30,12 @@ class CustomDropdown extends StatelessWidget {
         hint,
         style: TextStyle(fontSize: 16.sp),
       ),
-      items: items
-          .map(
-            (item) => DropdownMenuItem<String>(
-              value: item,
-              child: Text(item, style: TextStyle(fontSize: 16.sp)),
-            ),
-          )
-          .toList(),
+      items: items.entries.map((entry) {
+        return DropdownMenuItem<String>(
+          value: entry.key,
+          child: Text(entry.value, style: TextStyle(fontSize: 16.sp)), // اللي يظهر
+        );
+      }).toList(),
       value: value,
       onChanged: onChanged,
       dropdownStyleData: DropdownStyleData(

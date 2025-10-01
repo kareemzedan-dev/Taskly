@@ -155,6 +155,8 @@ import '../../features/messages/domain/use_cases/send_message_use_case/send_mess
     as _i366;
 import '../../features/messages/presentation/manager/get_accepted_order_message_view_model/get_accepted_order_message_view_model.dart'
     as _i12;
+import '../../features/messages/presentation/manager/get_messages_view_model/get_messages_view_model.dart'
+    as _i389;
 import '../../features/messages/presentation/manager/send_message_view_model/send_message_view_model.dart'
     as _i602;
 import '../../features/payments/data/data_sources/remote/create_payment_remote_data_source.dart'
@@ -209,6 +211,8 @@ import '../../features/shared/data/repos/orders/orders_repo_impl.dart' as _i553;
 import '../../features/shared/domain/repos/orders/orders_repo.dart' as _i46;
 import '../../features/shared/domain/use_cases/orders/orders_use_case.dart'
     as _i759;
+import '../../features/shared/presentation/manager/subscribe_to_order_record_view_model/subscribe_to_order_record_view_model.dart'
+    as _i28;
 import '../services/file_uploaded_services.dart' as _i383;
 import '../services/supabase_service.dart' as _i374;
 
@@ -274,7 +278,7 @@ extension GetItInjectableX on _i174.GetIt {
               gh<_i361.Dio>(),
               gh<_i374.SupabaseService>(),
               gh<_i454.SupabaseClient>(),
-            
+
             ));
     gh.factory<_i297.FreelancerOrderRemoteDataSource>(() =>
         _i500.FreelancerOrderRemoteDataSourceImpl(
@@ -360,6 +364,9 @@ extension GetItInjectableX on _i174.GetIt {
             gh<_i297.FreelancerOrderRemoteDataSource>()));
     gh.factory<_i517.CreatePaymentViewModel>(
         () => _i517.CreatePaymentViewModel(gh<_i618.CreatePaymentUseCase>()));
+    gh.factory<_i28.SubscribeOrdersRecordViewModel>(() =>
+        _i28.SubscribeOrdersRecordViewModel(
+            subscribeOrderUseCase: gh<_i759.OrdersUseCase>()));
     gh.factory<_i12.GetAcceptedOrderMessageViewModel>(() =>
         _i12.GetAcceptedOrderMessageViewModel(
             gh<_i997.GetAcceptedOrderMessagesUseCase>()));
@@ -380,6 +387,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i776.FreelancerInfoViewModel(gh<_i585.ProfileUseCase>()));
     gh.factory<_i1003.ProfileViewModel>(
         () => _i1003.ProfileViewModel(gh<_i585.ProfileUseCase>()));
+    gh.factory<_i389.GetMessagesViewModel>(
+        () => _i389.GetMessagesViewModel(gh<_i416.GetOrderMessagesUseCase>()));
     gh.factory<_i1052.SendOfferViewModel>(
         () => _i1052.SendOfferViewModel(gh<_i626.SendOfferUseCase>()));
     gh.factory<_i670.FetchAllFreelancersViewModel>(() =>

@@ -10,13 +10,15 @@ import 'package:taskly/features/freelancer/domain/entities/offer_entity/offer_en
 import 'package:taskly/features/freelancer/presentation/cubit/fetch_order_details_view_model/fetch_order_details_view_model.dart';
 
 import '../../../../../../../../../core/components/dismissible_error_card.dart';
+import '../../../../../../../../shared/domain/entities/order_entity/order_entity.dart';
 import '../../../../../client_home_view.dart';
 import '../../view_model/update_offer_status_view_model/update_offer_status_states.dart';
 import '../../view_model/update_offer_status_view_model/update_offer_status_view_model.dart';
 class OffersBottomSheetContent extends StatelessWidget {
   final String orderId;
+  final OrderEntity order;
 
-  const OffersBottomSheetContent({super.key, required this.orderId});
+  const OffersBottomSheetContent({super.key, required this.orderId, required this.order});
 
   @override
   Widget build(BuildContext context) {
@@ -70,6 +72,7 @@ class OffersBottomSheetContent extends StatelessWidget {
                         child: Column(
                           children: offers
                               .map((offer) => OfferCard(
+                            order: order,
                             offer: offer,
                             onAcceptOffer: () {
                               print("Calling updateOfferStatus with ${offer.id}");
@@ -77,6 +80,7 @@ class OffersBottomSheetContent extends StatelessWidget {
                               context.read<UpdateOfferStatusViewModel>().acceptOfferAndRejectOthers(
                                 offer.orderId,
                                 offer.id,
+
 
                               );
                             },

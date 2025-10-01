@@ -7,4 +7,6 @@ abstract class OrdersRepo {
     String userId,
     String role , 
   );
+  Stream<OrderEntity> subscribeToOrder(String orderId);
+
 }
