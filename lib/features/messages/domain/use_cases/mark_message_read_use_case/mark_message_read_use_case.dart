@@ -1,11 +1,11 @@
 import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
+import 'package:taskly/features/messages/domain/repositories/messages_repos/mark_messages_as_read_repo/mark_messages_as_read_repo.dart';
 import '../../../../../core/errors/failures.dart';
-import '../../repositories/messages_repos/messages_repos.dart';
 
 @lazySingleton
 class MarkMessagesAsReadUseCase {
-  final MessagesRepos repository;
+  final MarkMessagesAsReadRepo repository;
 
   MarkMessagesAsReadUseCase(this.repository);
 

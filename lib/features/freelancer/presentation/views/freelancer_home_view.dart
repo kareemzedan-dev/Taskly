@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:taskly/core/utils/assets_manager.dart';
 import 'package:taskly/core/components/custom_bottom_navigation_bar.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/find_work_tab_view.dart';
-import 'package:taskly/features/freelancer/presentation/views/tabs/messages/presentation/views/messages_tab_view.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/my_jobs/presentation/views/my_jobs_tab_view.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/profile/presentation/views/profile_view.dart';
+import 'package:taskly/features/messages/presentation/pages/user_messages_tab_view.dart';
 
 class FreelancerHomeView extends StatefulWidget {
     final int initialIndex;
@@ -20,7 +20,7 @@ class _FreelancerHomeView extends State<FreelancerHomeView> {
   List<Widget> items = [
    FreelancerHomeTabView(),
   FreelancerMyJobsTabView(),
-   FreelancerMessagesTabView(),
+   UserMessagesTabView(),
    FreelancerProfileViewTab(),
  
   ];

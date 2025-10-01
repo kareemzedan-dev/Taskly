@@ -5,7 +5,7 @@ import 'package:taskly/features/auth/presentation/views/login_view.dart';
 import 'package:taskly/features/auth/presentation/views/register_view.dart';
 import 'package:taskly/features/client/presentation/views/client_home_view.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/order_view.dart';
-import 'package:taskly/features/client/presentation/views/tabs/messages/presentation/views/chat_view.dart';
+import 'package:taskly/features/messages/presentation/pages/user_chat_view.dart';
 import 'package:taskly/features/freelancer/presentation/views/freelancer_home_view.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/favourite_orders_view.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/job_details_view.dart';
@@ -79,7 +79,7 @@ class RoutesManager {
         final currentUserId = args['currentUserId'] as String;
         final receiverId = args['receiverId'] as String;
         return MaterialPageRoute(
-            builder: (_) => ChatView(
+            builder: (_) => UserChatView(
                 userName: userName,
                 userImage: userImage,
                 order: order,

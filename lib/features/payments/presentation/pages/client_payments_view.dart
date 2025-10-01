@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../shared/domain/entities/order_entity/order_entity.dart';
-import '../../../shared/presentation/views/widgets/custom_app_bar.dart';
+import '../../../messages/presentation/widgets/custom_app_bar.dart';
 import '../widgets/client_payments_view_body.dart';
 
 class ClientPaymentsView extends StatelessWidget {
