@@ -14,13 +14,13 @@ import '../../domain/entities/message_entity.dart';
 import '../manager/send_message_view_model/send_message_view_model.dart';
 
 class ChatInputField extends StatelessWidget {
-  final String orderId;
+    String  ? orderId;
   final String currentUserId;
   final String receiverId;
 
-  const ChatInputField({
+    ChatInputField({
     super.key,
-    required this.orderId,
+      this.orderId,
     required this.currentUserId,
     required this.receiverId,
   });
@@ -53,7 +53,7 @@ class ChatInputField extends StatelessWidget {
                         final messageType = isImage ? "image" : "file";
 
                         context.read<SendMessageViewModel>().sendMessage(
-                          orderId,
+                          orderId!,
                           MessageEntity(
                             id: const Uuid().v4(),
                             orderId: orderId,
@@ -123,7 +123,7 @@ class ChatInputField extends StatelessWidget {
                               if (text.isEmpty) return;
 
                               context.read<SendMessageViewModel>().sendMessage(
-                                orderId,
+                                orderId!,
                                 MessageEntity(
                                   id: id, //it's sent from the data source implementation not from here
                                   orderId: orderId,

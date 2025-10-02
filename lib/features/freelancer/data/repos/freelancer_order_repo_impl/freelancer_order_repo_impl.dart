@@ -28,7 +28,7 @@ class FreelancerOrderRepoImpl extends FreelancerOrderRepo{
      return freelancerOrderRemoteDataSource.fetchPrivateOrders(freelancerId);
   }
   @override
-  Stream<(OrderEntity, String)> subscribeToPrivateOrders(String freelancerId,  ) {
+  Stream<List<OrderEntity>>  subscribeToPrivateOrders(String freelancerId,  ) {
     return freelancerOrderRemoteDataSource.subscribeToPrivateOrders(
         freelancerId,);
   }

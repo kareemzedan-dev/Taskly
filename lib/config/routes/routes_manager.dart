@@ -20,6 +20,7 @@ import 'package:taskly/features/splash/presentation/views/splash_view.dart';
 import 'package:taskly/features/welcome/presentation/views/welcome_view.dart';
 
 import '../../features/freelancer/presentation/views/tabs/my_jobs/presentation/views/offer_details_view.dart';
+import '../../features/messages/presentation/pages/admin_chat_view.dart';
 import '../../features/payments/presentation/pages/client_payments_view.dart';
 
 class RoutesManager {
@@ -43,6 +44,7 @@ class RoutesManager {
   static const String offerDetailsView = "offerDetailsView";
   static const String clientPaymentsView = "clientPaymentsView";
   static const String reviewsView = "reviewsView";
+  static const String adminChatView = "adminChatView";
 
   static Route onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -173,7 +175,11 @@ class RoutesManager {
             userRating: userRating!,
           ),
         );
-
+        case adminChatView:
+          final args = settings.arguments as Map<String, dynamic>;
+          final currentUserId = args['currentUserId'] as String;
+          return MaterialPageRoute(builder:(context) =>  AdminChatView(currentUserId: currentUserId)
+          );
       default:
         return MaterialPageRoute(builder: (_) => const Placeholder());
     }

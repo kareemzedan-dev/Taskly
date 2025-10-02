@@ -60,6 +60,7 @@ class _ClientHomeTabViewBodyState extends State<ClientHomeTabViewBody> {
                     return const UserInfoHomeHeaderShimmer();
                   } else if (state is ProfileViewModelStatesSuccess) {
                     return UserInfoHomeHeader(
+                      imageUrl: state.userInfoEntity.profileImage,
                       fullName: state.userInfoEntity.fullName,
                     );
                   } else if (state is ProfileViewModelStatesError) {

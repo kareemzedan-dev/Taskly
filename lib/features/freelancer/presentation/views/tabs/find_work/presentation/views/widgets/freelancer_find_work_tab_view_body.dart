@@ -74,6 +74,7 @@ class _FreelancerHomeTabViewBodyState extends State<FreelancerHomeTabViewBody> {
                     return shimmer.UserInfoHomeHeaderShimmer();
                   } else if (state is ProfileViewModelStatesSuccess) {
                     return header.UserInfoHomeHeader(
+                      imageUrl: state.userInfoEntity.profileImage,
                       fullName: state.userInfoEntity.fullName,
                     );
                   } else {

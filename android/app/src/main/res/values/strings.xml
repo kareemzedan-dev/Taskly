@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Taskly</string>
+
+    <!-- Facebook credentials -->
+    <string name="facebook_app_id">1229012975822743</string>
+    <string name="facebook_client_token">ad4901bb467dc352677260a76c037ea8</string>
+</resources>

@@ -61,35 +61,29 @@ class FreelancerPendingOrdersViewModel extends Cubit<FreelancerPendingOrdersStat
           (_) {},
           (orders) => offeredOrderIds.addAll(orders.map((o) => o.id)),
     );
-
     _ordersSubscription = freelancerOrderUseCase
         .subscribeToPendingOrders(freelancerId)
         .listen(
           (orders) {
-        final newOrders = orders
-            .where((o) => o.serviceType.name == 'public')
-            .where((o) => !offeredOrderIds.contains(o.id))
-            .toList();
+        _currentOrders
+          ..clear()
+          ..addAll(
+            orders.where((o) =>
+            o.serviceType.name == 'public' &&
+                !offeredOrderIds.contains(o.id)),
+          );
 
-        bool hasChanges = false;
-
-        for (var o in newOrders) {
-          if (!_currentOrders.any((existing) => existing.id == o.id)) {
-            _currentOrders.insert(0, o);
-            hasChanges = true;
-          }
-        }
-
+        // رتبهم حسب التاريخ
         _currentOrders.sort((a, b) => b.createdAt.compareTo(a.createdAt));
 
-        if (hasChanges) {
-          emit(FreelancerPendingOrdersSuccess(List.from(_currentOrders)));
-        }
+        // اعمل emit على طول
+        emit(FreelancerPendingOrdersSuccess(List.from(_currentOrders)));
       },
       onError: (error) {
         emit(FreelancerPendingOrdersError('Real-time subscription error: $error'));
       },
     );
+
   }
 
 

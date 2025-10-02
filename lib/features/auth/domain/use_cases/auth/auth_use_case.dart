@@ -29,7 +29,17 @@ class AuthUseCase {
     String role
   ) => authRepo.login(email, password,role);
 
-   Future<Either<Failures,GoogleAuthResponseEntity>> callGoogleLogin(
+   Future<Either<Failures,SocialAuthResponseEntity>> callGoogleLogin(
   String role
        )=>authRepo.googleLogin(role: role);
+
+
+   Future<Either<Failures,SocialAuthResponseEntity>> callFacebookLogin(
+     String role
+    )=>authRepo.facebookLogin(role: role);
+
+   Future<Either<Failures,SocialAuthResponseEntity>> callAppleLogin(
+  String role
+   )=>authRepo.appleLogin(role: role);
+
 }

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/utils/assets_manager.dart';
+import 'package:taskly/features/reviews/presentation/widgets/user_avatar.dart';
 
 class UserInfoHomeHeader extends StatelessWidget {
-  const UserInfoHomeHeader({super.key, required this.fullName});
+  const UserInfoHomeHeader({super.key, required this.fullName, required this.imageUrl});
   final String? fullName;
+  final String? imageUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -28,11 +30,7 @@ class UserInfoHomeHeader extends StatelessWidget {
             ),
           ],
         ),
-        CircleAvatar(
-          backgroundColor: Colors.grey.shade300,
-          radius: 30.r,
-          backgroundImage: AssetImage(Assets.assetsImagesIntialAvatar),
-        ),
+       UserAvatar( imagePath: imageUrl, radius: 24.r,)
       ],
     );
   }

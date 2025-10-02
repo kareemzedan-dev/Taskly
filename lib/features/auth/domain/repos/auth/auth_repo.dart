@@ -18,8 +18,16 @@ abstract class AuthRepo {
     String password,
         String role
   );
-  Future<Either<Failures, GoogleAuthResponseEntity>> googleLogin({
+  Future<Either<Failures, SocialAuthResponseEntity>> googleLogin({
 
+    required String role,
+  });
+
+
+  Future <Either<Failures, SocialAuthResponseEntity>> facebookLogin({
+    required String role,
+  });
+  Future <Either<Failures, SocialAuthResponseEntity>>  appleLogin({
     required String role,
   });
 

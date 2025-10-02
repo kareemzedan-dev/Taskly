@@ -11,5 +11,7 @@ class FetchPrivateOrdersUseCase {
   FetchPrivateOrdersUseCase(this.repo);
   Future<Either<Failures, List<OrderEntity>>> call(String freelancerId) => repo.fetchPrivateOrders(freelancerId);
 
-  Stream<(OrderEntity, String)> subscribeRealtime(String freelancerId, ) => repo.subscribeToPrivateOrders(freelancerId);
+  Stream<List<OrderEntity>>  subscribeRealtime(String freelancerId, ) => repo.subscribeToPrivateOrders(freelancerId);
+
+
 }

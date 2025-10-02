@@ -10,7 +10,11 @@ import 'package:taskly/features/client/presentation/views/tabs/home/presentation
 import 'package:shimmer/shimmer.dart';
 
 import '../../../../../../../../../config/l10n/app_localizations.dart';
-import '../../../../../../../../../core/helper/get_local_services.dart';class ServiceCategoryGridView extends StatelessWidget {
+import '../../../../../../../../../core/helper/get_local_services.dart';
+
+
+
+class ServiceCategoryGridView extends StatelessWidget {
   const ServiceCategoryGridView({super.key});
 
   @override
@@ -19,7 +23,7 @@ import '../../../../../../../../../core/helper/get_local_services.dart';class Se
     final services = getLocalServices(local);
 
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
+      padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 8.w),
       child: services.isEmpty
           ? Center(
         child: Column(
@@ -46,28 +50,31 @@ import '../../../../../../../../../core/helper/get_local_services.dart';class Se
         itemCount: services.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          crossAxisSpacing: 16.w,
+          crossAxisSpacing: 12.w,
+
           mainAxisSpacing: 16.h,
-          childAspectRatio: 0.75,
+          childAspectRatio: 0.85,
         ),
         itemBuilder: (context, index) {
           final service = services[index];
-          return ServiceCategory(
-            serviceEntity: service,
-            onTap: () {
-              Navigator.pushNamed(
-                context,
-               RoutesManager.serviceOrderView,
-                arguments: {
-                  'title': service.title,
-                  'category': service.key,
-                },
-              );
-            },
+          return AspectRatio(
+            aspectRatio: 0.8,
+            child: ServiceCategory(
+              serviceEntity: service,
+              onTap: () {
+                Navigator.pushNamed(
+                  context,
+                  RoutesManager.serviceOrderView,
+                  arguments: {
+                    'title': service.title,
+                    'category': service.key,
+                  },
+                );
+              },
+            ),
           );
         },
       ),
     );
   }
 }
-

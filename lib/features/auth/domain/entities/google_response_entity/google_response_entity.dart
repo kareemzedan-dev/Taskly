@@ -1,11 +1,11 @@
-class GoogleUserEntity {
+class SocialUserEntity {
   final String id;
   final String name;
   final String email;
   final String? avatarUrl;
   final String role; // admin, client, freelancer, etc.
 
-  GoogleUserEntity({
+  SocialUserEntity({
     required this.id,
     required this.name,
     required this.email,
@@ -14,10 +14,10 @@ class GoogleUserEntity {
   });
 }
 
-class GoogleAuthResponseEntity {
+class SocialAuthResponseEntity {
   final String? token;
-  final GoogleUserEntity? user;
+  final SocialUserEntity? user;
   final String? message;
 
-  GoogleAuthResponseEntity({this.token, this.user, this.message});
+  SocialAuthResponseEntity({this.token, this.user, this.message});
 }

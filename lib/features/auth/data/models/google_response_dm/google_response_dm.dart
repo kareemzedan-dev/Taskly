@@ -2,7 +2,7 @@
 // Model للمستخدم
 import '../../../domain/entities/google_response_entity/google_response_entity.dart';
 
-class GoogleUserDm extends GoogleUserEntity {
+class GoogleUserDm extends SocialUserEntity {
   GoogleUserDm({
     required String id,
     required String name,
@@ -37,8 +37,8 @@ class GoogleUserDm extends GoogleUserEntity {
     };
   }
 
-  GoogleUserEntity toEntity() {
-    return GoogleUserEntity(
+  SocialUserEntity toEntity() {
+    return SocialUserEntity(
       id: id,
       name: name,
       email: email,
@@ -48,7 +48,7 @@ class GoogleUserDm extends GoogleUserEntity {
   }
 }
 
-class GoogleAuthResponseDm extends GoogleAuthResponseEntity {
+class GoogleAuthResponseDm extends SocialAuthResponseEntity {
   GoogleAuthResponseDm({
     String? token,
     GoogleUserDm? user,

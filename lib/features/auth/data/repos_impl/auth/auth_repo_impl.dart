@@ -23,8 +23,17 @@ class AuthRepoImpl extends AuthRepo {
   }
 
   @override
-  Future<Either<Failures, GoogleAuthResponseEntity>> googleLogin({required String role}) {
+  Future<Either<Failures, SocialAuthResponseEntity>> googleLogin({required String role}) {
  return authRemoteDataSource.googleLogin(role);
   }
+  @override
+  Future<Either<Failures, SocialAuthResponseEntity>> facebookLogin({required String role}) {
+    return authRemoteDataSource.facebookLogin(role);
 
+  }
+
+  @override
+  Future<Either<Failures, SocialAuthResponseEntity>> appleLogin({required String role}) {
+    return authRemoteDataSource.appleLogin(role);
+  }
 }

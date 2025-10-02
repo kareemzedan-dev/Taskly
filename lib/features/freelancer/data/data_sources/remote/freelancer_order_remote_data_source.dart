@@ -11,7 +11,7 @@ abstract class FreelancerOrderRemoteDataSource {
       String freelancerId
       );
   Future<Either<Failures, List<OrderEntity>>> fetchPrivateOrders(String freelancerId);
-   Stream<(OrderEntity, String)> subscribeToPrivateOrders(
+  Stream<List<OrderEntity>>  subscribeToPrivateOrders(
     String freelancerId,
   
 

@@ -14,7 +14,8 @@ import 'package:taskly/features/messages/presentation/manager/get_accepted_order
 import 'package:taskly/features/messages/presentation/manager/get_accepted_order_message_view_model/get_accepted_order_message_states.dart';
 
 import '../../../welcome/presentation/cubit/welcome_states.dart';
-
+import '../manager/get_conversations_view_model/get_conversations_states.dart';
+import '../manager/get_conversations_view_model/get_conversations_view_model.dart';
 class UserMessagesTabViewBody extends StatelessWidget {
   const UserMessagesTabViewBody({super.key});
 
@@ -28,83 +29,126 @@ class UserMessagesTabViewBody extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 16.h),
-
-            CustomSearchTextField(
-              hintTexts: [
-                "Search messages_repos...",
-                "Search contacts...",
-                "Search groups..."
-              ],
-            ),
-
-            SizedBox(height: 40.h),
 
             BlocBuilder<GetAcceptedOrderMessageViewModel, GetAcceptedOrderMessageStates>(
               bloc: getIt<GetAcceptedOrderMessageViewModel>()
                 ..getAcceptedOrderMessages(
                   SharedPrefHelper.getString(StringsManager.idKey)!,
-                 role:  userRole,
+                  role: userRole,
                 ),
-              builder: (context, state) {
-                if (state is GetAcceptedOrderMessageStatesLoading) {
-                  return MessageCardShimmer();
-                }
-                if (state is GetAcceptedOrderMessageStatesError) {
-                  return Center(child: Text("Failed to load messages"));
-                }
-                if (state is GetAcceptedOrderMessageStatesSuccess) {
-                  if (state.orders == null || state.orders!.isEmpty) {
-                    return Center(child: Text("No messages"));
-                  }
+              builder: (context, orderState) {
 
-                  return ListView.builder(
-                    itemCount: state.orders.length,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      final order = state.orders![index];
+                return BlocBuilder<GetConversationsViewModel, GetConversationsStates>(
+                  bloc: getIt<GetConversationsViewModel>()
+                    ..getConversations(
+                      SharedPrefHelper.getString(StringsManager.idKey)!,
+                    ),
+                  builder: (context, convState) {
 
-                      final chatUserId =
-                      userRole == UserRole.client ? order.freelancerId : order.clientId;
+                    // تحقق من وجود بيانات في الاتنين
+                    final hasOrders = orderState is GetAcceptedOrderMessageStatesSuccess &&
+                        orderState.orders != null && orderState.orders!.isNotEmpty;
 
-                      final chatUserRole =
-                      userRole == UserRole.client ? UserRole.freelancer : UserRole.client;
+                    final hasConversations = convState is GetConversationsSuccessStates &&
+                        convState.conversationsList.isNotEmpty;
 
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: MessagesCard(
-                            chatUserId: chatUserId!,
-                            chatUserRole: chatUserRole,
-                            order: order,
-                              onTap: () {
+                    // لو الاتنين فاضيين
+                    if (!hasOrders && !hasConversations) {
+                      return Center(child: Text("No messages"));
+                    }
+                    return Column(
+                      children: [
+                        if (hasOrders)
+                          ListView.builder(
+                            itemCount: (orderState as GetAcceptedOrderMessageStatesSuccess).orders!.length,
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              final order = orderState.orders![index];
+                              final chatUserId = userRole == UserRole.client
+                                  ? order.freelancerId
+                                  : order.clientId;
+                              final chatUserRole = userRole == UserRole.client
+                                  ? UserRole.freelancer
+                                  : UserRole.client;
 
-                              },
-                              onUserInfoLoaded: (fullName, avatarUrl) {
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                child: MessagesCard(
+                                  chatUserId: chatUserId!,
+                                  chatUserRole: chatUserRole,
+                                  order: order,
+                                  onTap: () {},
+                                  onUserInfoLoaded: (fullName, avatarUrl) {
+                                    Navigator.pushNamed(
+                                      context,
+                                      RoutesManager.chatView,
+                                      arguments: {
+                                        "userName": fullName,
+                                        "userImage": avatarUrl,
+                                        "order": order,
+                                        "currentUserId": SharedPrefHelper.getString(StringsManager.idKey)!,
+                                        "receiverId": chatUserId,
+                                      },
+                                    );
+                                  },
+                                ),
+                              );
+                            },
+                          ),
 
-                                  Navigator.pushNamed(
-                                    context,
-                                    RoutesManager.chatView,
-                                    arguments: {
-                                      "userName": fullName,
-                                      "userImage": avatarUrl,
-                                      "order": order,
-                                      "currentUserId": SharedPrefHelper.getString(StringsManager.idKey)!,
-                                      "receiverId": chatUserId!,
-                                    },
-                                  );
+                        if (hasConversations)
+                          ListView.builder(
+                            itemCount: (convState as GetConversationsSuccessStates).conversationsList.length,
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              final conversation = convState.conversationsList[index];
 
+                              // ⛔️ فلترة: لو الـ order.id ظهر قبل كده في orders → ما نعرضوش
+                              final orderAlreadyExists = hasOrders &&
+                                  (orderState as GetAcceptedOrderMessageStatesSuccess)
+                                      .orders!
+                                      .any((o) => o.id == conversation.order?.id);
+
+                              if (orderAlreadyExists) {
+                                return const SizedBox.shrink(); // مظهرهوش
                               }
 
-                          )
+                              final user = conversation.user;
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                child: MessagesCard(
+                                  chatUserId: user.id,
+                                  chatUserRole: user.role == "client"
+                                      ? UserRole.client
+                                      : UserRole.freelancer,
+                                  order: conversation.order!,
+                                  onTap: () {},
+                                  onUserInfoLoaded: (fullName, avatarUrl) {
+                                    Navigator.pushNamed(
+                                      context,
+                                      RoutesManager.chatView,
+                                      arguments: {
+                                        "userName": fullName,
+                                        "userImage": avatarUrl,
+                                        "order": conversation.order,
+                                        "currentUserId": SharedPrefHelper.getString(StringsManager.idKey)!,
+                                        "receiverId": user.id,
+                                      },
+                                    );
+                                  },
+                                ),
+                              );
+                            },
+                          ),
+                      ],
+                    );
 
-
-                      );
-                    },
-                  );
-                }
-                return const SizedBox();
+                  },
+                );
               },
             ),
           ],

@@ -14,6 +14,7 @@ import 'package:taskly/features/shared/presentation/views/widgets/message_bubble
 import 'package:taskly/features/messages/presentation/widgets/order_status_card.dart';
 import 'package:taskly/features/profile/presentation/manager/profile_view_model/profile_view_model.dart';
 
+import '../../../../core/components/confirmation_dialog.dart';
 import '../../../../core/di/di.dart';
 import '../../../client/presentation/views/tabs/my_jobs/presentation/views/pdf_viewer_view.dart';
 import '../../../shared/domain/entities/order_entity/order_entity.dart';
@@ -104,6 +105,7 @@ class _ChatViewBodyState extends State<ChatViewBody> {
           getIt<SubscribeOrdersRecordViewModel>()..subscribe(widget.order.id),
         ),
         BlocProvider(create: (_) => getIt<UpdateOrderStatusViewModel>()),
+
       ],
       child: Column(
         children: [
@@ -133,12 +135,32 @@ class _ChatViewBodyState extends State<ChatViewBody> {
                           arguments: {'orderEntity': widget.order},
                         );
                       } else if (buttonText == "submit delivery") {
-                        context.read<UpdateOrderStatusViewModel>()
-                          ..updateOrderStatus(orderData.id, "Waiting");
-                      } else if (buttonText == "work received") {
-                        context.read<UpdateOrderStatusViewModel>()
-                          ..updateOrderStatus(orderData.id, "Completed");
+                        showConfirmationDialog(
+                          context: context,
+                          title: "Submit Delivery",
+                          message: "Are you sure you want to submit the delivery?",
+                          onConfirm: () {
+                            // هنا لو أكد
+                            context.read<UpdateOrderStatusViewModel>()
+                              ..updateOrderStatus(orderData.id, "Waiting");
+                          },
+                          onCancel: () {
+
+                          },
+                        );
                       }
+                      else if (buttonText == "work received") {
+                        showConfirmationDialog(
+                          context: context,
+                          title: "Confirmation",
+                          message: "Are you sure you have received the work?",
+                          onConfirm: () {
+                            context.read<UpdateOrderStatusViewModel>()
+                              ..updateOrderStatus(orderData.id, "Completed");
+                          },
+                        );
+                      }
+
                     }
                         : null,
                   ),
@@ -234,7 +256,7 @@ class _ChatViewBodyState extends State<ChatViewBody> {
                           );
                         }
 
-                        /// ✅ File Message
+
                         else if (msg.messageType == "file" &&
                             msg.attachment != null &&
                             msg.attachment!.isNotEmpty) {

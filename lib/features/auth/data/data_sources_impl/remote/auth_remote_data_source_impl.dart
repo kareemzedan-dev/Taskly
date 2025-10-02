@@ -1,8 +1,10 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:either_dart/src/either.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:injectable/injectable.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:taskly/config/l10n/app_localizations.dart';
 import 'package:taskly/core/errors/failures.dart';
 import 'package:taskly/core/cache/shared_preferences.dart';
@@ -264,7 +266,7 @@ Future<void> _insertRoleData(String id, String role) async {
   }
 
   @override
-  Future<Either<Failures, GoogleAuthResponseEntity>> googleLogin(
+  Future<Either<Failures, SocialAuthResponseEntity>> googleLogin(
     String role,
   ) async {
     try {
@@ -344,4 +346,162 @@ Future<void> _insertRoleData(String id, String role) async {
       return Left(ServerFailure(StringsManager.somethingWentWrong));
     }
   }
+
+  @override
+  Future<Either<Failures, SocialAuthResponseEntity>> appleLogin(String role) async {
+    try {
+      if (!await NetworkUtils.hasInternet()) {
+        return Left(NetworkFailure(StringsManager.noInternetConnection));
+      }
+
+      // هنا تستخدم مكتبة apple_sign_in أو sign_in_with_apple
+      final credential = await SignInWithApple.getAppleIDCredential(
+        scopes: [AppleIDAuthorizationScopes.email, AppleIDAuthorizationScopes.fullName],
+      );
+
+      if (credential == null) {
+        return Left(ServerFailure(StringsManager.appleLoginCancelled));
+      }
+
+      final res = await Supabase.instance.client.auth.signInWithIdToken(
+        provider: OAuthProvider.apple,
+        idToken: credential.identityToken!,
+        accessToken: credential.authorizationCode,
+      );
+
+      if (res.user == null || res.session == null) {
+        return Left(ServerFailure(StringsManager.loginFailed));
+      }
+
+      final supabaseUser = res.user!;
+      final supabaseToken = res.session!.accessToken;
+
+      final email = credential.email ?? '';
+      final fullName =
+      "${credential.givenName ?? ''} ${credential.familyName ?? ''}".trim();
+
+      final existingUser = await supabase
+          .from('users')
+          .select()
+          .eq('email', email)
+          .maybeSingle();
+
+      if (existingUser != null && existingUser['role'] != role) {
+        return Left(ServerFailure(
+          StringsManager.accountAlreadyRegistered,
+          params: {"existingRole": existingUser['role'], "role": role},
+        ));
+      }
+
+      final userId = existingUser != null ? existingUser['id'] : supabaseUser.id;
+
+      await _handleUserAfterAuth(
+        id: userId,
+        fullName: fullName,
+        email: email,
+        token: supabaseToken,
+        role: role,
+        avatarUrl: null,
+      );
+
+      final appleUser = GoogleUserDm(
+        id: userId,
+        name: fullName,
+        email: email,
+        role: role,
+        avatarUrl: null,
+      );
+
+      final appleResponse = GoogleAuthResponseDm(
+        token: supabaseToken,
+        user: appleUser,
+        message: StringsManager.appleLoginSuccessful,
+      );
+
+      return Right(appleResponse);
+    } catch (e, stackTrace) {
+      debugPrint("Error: $e\n$stackTrace");
+      return Left(ServerFailure(StringsManager.somethingWentWrong));
+    }
+  }
+  @override
+  Future<Either<Failures, SocialAuthResponseEntity>> facebookLogin(String role) async {
+    try {
+      if (!await NetworkUtils.hasInternet()) {
+        return Left(NetworkFailure(StringsManager.noInternetConnection));
+      }
+
+      // تسجيل الدخول عبر Facebook
+      final LoginResult result = await FacebookAuth.instance.login(
+        permissions: ['email', 'public_profile'],
+      );
+
+      if (result.status != LoginStatus.success || result.accessToken == null) {
+        return Left(ServerFailure(StringsManager.facebookLoginCancelled));
+      }
+
+      final accessToken = result.accessToken!.tokenString;
+
+      // جلب بيانات المستخدم
+      final userData = await FacebookAuth.instance.getUserData(
+        fields: "email,name,picture.width(200)",
+      );
+
+      final email = userData['email'] ?? '';
+      final fullName = userData['name'] ?? '';
+      final avatarUrl = userData['picture']['data']['url'];
+
+      // البحث عن المستخدم في جدول users
+      final existingUser = await supabase
+          .from('users')
+          .select()
+          .eq('email', email)
+          .maybeSingle();
+      if (existingUser != null && existingUser['role'] != role) {
+        return Left(
+          ServerFailure(
+            StringsManager.accountAlreadyRegistered,
+            params: {"existingRole": existingUser['role'], "role": role},
+          ),
+        );
+      }
+
+      String userId;
+      if (existingUser != null) {
+        userId = existingUser['id'];
+      } else {
+        // إدخال المستخدم الجديد
+        userId = const Uuid().v4();
+        await supabase.from('users').insert({
+          'id': userId,
+          'full_name': fullName,
+          'email': email,
+          'role': role,
+          'profile_image': avatarUrl,
+          'created_at': DateTime.now().toIso8601String(),
+        });
+      }
+
+      final facebookUser = GoogleUserDm(
+        id: userId,
+        name: fullName,
+        email: email,
+        role: role,
+        avatarUrl: avatarUrl,
+      );
+
+      final facebookResponse = GoogleAuthResponseDm(
+        token: accessToken,
+        user: facebookUser,
+        message: StringsManager.facebookLoginSuccessful,
+      );
+
+      return Right(facebookResponse);
+    } catch (e, stackTrace) {
+      debugPrint("Facebook login error: $e\n$stackTrace");
+      return Left(ServerFailure(StringsManager.somethingWentWrong));
+    }
+  }
+
+
 }

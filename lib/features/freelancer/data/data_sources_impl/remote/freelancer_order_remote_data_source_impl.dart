@@ -61,41 +61,53 @@ class FreelancerOrderRemoteDataSourceImpl
     } catch (e) {
       return Left(ServerFailure('Failed to fetch pending orders: $e'));
     }
-  }
-  @override
-  Stream<List<OrderEntity>> subscribeToPendingOrders(String freelancerId) {
+  }Stream<List<OrderEntity>> subscribeToPendingOrders(String freelancerId) async* {
     if (NetworkUtils.hasInternet() == false) {
       throw NetworkFailure('No internet connection');
     }
 
-    // هنا نحدد المفتاح الأساسي
-    final stream = _supabaseService.supabaseClient
-        .from('orders')
-        .stream(primaryKey: ['id']) // مهم جدًا
-        .map((records) {
-      // جلب الأوردرات اللي الفريلانسر قدم عليها مرة واحدة
-      final offersFuture = _supabaseService.supabaseClient
-          .from('offers')
-          .select('order_id')
-          .eq('freelancer_id', freelancerId)
-          .then((offersResponse) =>
-          (offersResponse as List).map((e) => e['order_id'] as String).toList());
+    final controller = StreamController<List<OrderEntity>>();
+    final currentOrders = <OrderEntity>[];
 
-      return offersFuture.then((offeredOrderIds) {
-        final orders = records
-            .map((e) => OrderDm.fromJson(e).toEntity())
-            .where((o) => o.serviceType.name == 'public')
-            .where((o) => !offeredOrderIds.contains(o.id))
-            .toList();
+    // 1- تحميل الحالة الأولية
+    final initialResult = await fetchPendingFreelancerOrders(freelancerId);
+    initialResult.fold(
+          (failure) => controller.addError(failure),
+          (orders) {
+        currentOrders.addAll(orders);
+        controller.add(List.from(currentOrders));
+      },
+    );
 
-        return orders;
-      });
-    }).asyncExpand((futureList) => Stream.fromFuture(futureList));
+    // 2- الاشتراك في التغييرات
+    _supabaseService.supabaseClient
+        .channel('orders-changes')
+        .onPostgresChanges(
+      event: PostgresChangeEvent.insert,
+      schema: 'public',
+      table: 'orders',
+      callback: (payload) {
+        final order = OrderDm.fromJson(payload.newRecord).toEntity();
+        if (order.serviceType.name == 'public') {
+          currentOrders.insert(0, order);
+          controller.add(List.from(currentOrders));
+        }
+      },
+    )
+        .onPostgresChanges(
+      event: PostgresChangeEvent.delete,
+      schema: 'public',
+      table: 'orders',
+      callback: (payload) {
+        final deletedId = payload.oldRecord['id'] as String;
+        currentOrders.removeWhere((o) => o.id == deletedId);
+        controller.add(List.from(currentOrders));
+      },
+    )
+        .subscribe();
 
-    return stream;
+    yield* controller.stream;
   }
-
-
 
 
 
@@ -125,43 +137,80 @@ class FreelancerOrderRemoteDataSourceImpl
       return Left(ServerFailure('Failed to fetch private orders: $e'));
     }
   }
-  @override
-  Stream<(OrderEntity, String)> subscribeToPrivateOrders(String freelancerId) {
+
+
+
+  Stream<List<OrderEntity>> subscribeToPrivateOrders(String freelancerId) {
     if (NetworkUtils.hasInternet() == false) {
       throw NetworkFailure('No internet connection');
     }
 
-    return _supabaseService.supabaseClient
-        .from('orders')
-        .stream(primaryKey: ['id'])
-        .asyncExpand((records) async* {
-      // فلترة الأوردرات الخاصة
-      final filtered = records
-          .map((json) => OrderDm.fromJson(json).toEntity())
-          .where((o) =>
-      o.serviceType.name == 'private' &&
-          o.status.name == 'Pending' &&
-          o.freelancerId == freelancerId)
-          .toList();
+    final controller = StreamController<List<OrderEntity>>();
+    final currentOrders = <OrderEntity>[];
 
-      // جلب الأوردرات اللي الفريلانسر قدم عليها
-      final offersResponse = await _supabaseService.supabaseClient
-          .from('offers')
-          .select('order_id')
-          .eq('freelancer_id', freelancerId);
-
-      final offeredOrderIds =
-      (offersResponse as List).map((e) => e['order_id'] as String).toList();
-
-      // الأوردرات الجديدة فقط
-      final newOrders =
-      filtered.where((o) => !offeredOrderIds.contains(o.id)).toList();
-
-      // إرسال كل أوردر مع نوع الحدث (INSERT هنا كمثال)
-      for (var order in newOrders) {
-        yield (order, "INSERT");
-      }
+    // 1- جلب الأوردرات الحالية
+    fetchPrivateOrders(freelancerId).then((result) {
+      result.fold(
+            (failure) => controller.addError(failure),
+            (orders) {
+          currentOrders.addAll(orders);
+          controller.add(List.from(currentOrders));
+        },
+      );
     });
+
+
+    final channel = _supabaseService.supabaseClient.channel('private-orders-changes');
+    void handleChange(dynamic payload, String action) {
+      switch (action) {
+        case 'INSERT':
+          final order = OrderDm.fromJson(payload.newRecord).toEntity();
+          if (order.serviceType.name != 'private' || order.freelancerId != freelancerId) return;
+          if (!currentOrders.any((o) => o.id == order.id)) currentOrders.insert(0, order);
+          break;
+
+        case 'UPDATE':
+          final order = OrderDm.fromJson(payload.newRecord).toEntity();
+          if (order.serviceType.name != 'private' || order.freelancerId != freelancerId) return;
+          final index = currentOrders.indexWhere((o) => o.id == order.id);
+          if (index != -1) currentOrders[index] = order;
+          break;
+
+        case 'DELETE':
+          final deletedId = payload.oldRecord['id'] as String;
+          currentOrders.removeWhere((o) => o.id == deletedId);
+          break;
+      }
+
+      currentOrders.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+      controller.add(List.from(currentOrders));
+    }
+
+
+    channel
+        .onPostgresChanges(
+      event: PostgresChangeEvent.insert,
+      schema: 'public',
+      table: 'orders',
+      callback: (payload) => handleChange(payload, 'INSERT'),
+    )
+        .onPostgresChanges(
+      event: PostgresChangeEvent.update,
+      schema: 'public',
+      table: 'orders',
+      callback: (payload) => handleChange(payload, 'UPDATE'),
+    )
+        .onPostgresChanges(
+      event: PostgresChangeEvent.delete,
+      schema: 'public',
+      table: 'orders',
+      callback: (payload) => handleChange(payload, 'DELETE'),
+    )
+        .subscribe();
+
+    controller.onCancel = () => channel.unsubscribe();
+
+    return controller.stream;
   }
 
 

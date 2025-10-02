@@ -39,7 +39,7 @@ class UserInfoSection extends StatelessWidget {
         children: [
          UserAvatar(
             imagePath: userInfo?.profileImage,
-            radius: photoSizeSelected ? 30.r : 20.r,
+            radius:   30.r  ,
           ),
           SizedBox(width: 20.w),
           Expanded(

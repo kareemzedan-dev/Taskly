@@ -294,7 +294,7 @@ class SupabaseService {
           (events) => events.map((e) => e).toList(),
     );
   }
-  /// Search records with full-text search
+
   Future<List<Map<String, dynamic>>> search({
     required String table,
     required String searchColumn,

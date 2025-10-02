@@ -16,12 +16,14 @@ import 'package:taskly/features/auth/presentation/cubit/auth_view_model.dart';
 import 'package:taskly/features/auth/presentation/views/widgets/build_privacy_policy.dart';
 import 'package:taskly/features/auth/presentation/views/widgets/social_login_button.dart';
 import 'package:taskly/config/l10n/app_localizations.dart';
+import 'package:taskly/features/auth/presentation/views/widgets/social_login_options.dart';
 
 import '../../../../../core/components/dismissible_error_card.dart';
 import '../../../../../core/utils/strings_manager.dart';
 
 class RegisterViewBody extends StatefulWidget {
   const RegisterViewBody({super.key, required this.role});
+
   final String role;
 
   @override
@@ -34,241 +36,285 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<AuthViewModel, AuthStates>(
-        listener: (context, state) {
-
-          if (state is AuthRegisterLoadingState || state is AuthGoogleLoadingState) {
-            showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (_) => Center(
-                child: LoadingAnimationWidget.threeRotatingDots(
-                  size: 60,
-                  color: ColorsManager.primary,
+      listener: (context, state) {
+        if (state is AuthRegisterLoadingState ||
+            state is AuthGoogleLoadingState || state is AuthFacebookLoadingState) {
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) =>
+                Center(
+                  child: LoadingAnimationWidget.threeRotatingDots(
+                    size: 60,
+                    color: ColorsManager.primary,
+                  ),
                 ),
-              ),
-            );
-          }
+          );
+        }
 
-          // Success states
-          if (state is AuthRegisterSuccessState || state is AuthGoogleSuccessState) {
-            if (mounted) Navigator.pop(context); // close dialog first
-            if (mounted) {
-              if (widget.role == StringsManager.freelancerRole) {
-                Navigator.pushNamedAndRemoveUntil(
-                    context, RoutesManager.freelancerHome, (_) => false);
-              } else {
-                Navigator.pushNamedAndRemoveUntil(
-                    context, RoutesManager.clientHome, (_) => false);
-              }
+        // Success states
+        if (state is AuthRegisterSuccessState || state is AuthGoogleSuccessState || state is AuthFacebookSuccessState) {
+          if (mounted) Navigator.pop(context); // close loading dialog first
+          if (mounted) {
+            if (widget.role == StringsManager.freelancerRole) {
+              Navigator.pushNamedAndRemoveUntil(
+                  context, RoutesManager.freelancerHome, (_) => false);
+            } else {
+              Navigator.pushNamedAndRemoveUntil(
+                  context, RoutesManager.clientHome, (_) => false);
             }
           }
+        }
 
-          // Error states
-          if (state is AuthRegisterErrorState || state is AuthGoogleErrorState) {
-            if (mounted) Navigator.pop(context);
 
-            final failure = state is AuthRegisterErrorState
-                ? state.error
-                : (state as AuthGoogleErrorState).error;
+        if (state is AuthRegisterErrorState) {
+          if (mounted) Navigator.pop(context);
+          final errorMessage = AppLocalizations.of(context)!.translate(
+            state.error.message,
+            params: state.error.params,
+          );
+          showTemporaryMessage(context, errorMessage, MessageType.error);
+        } else if (state is AuthGoogleErrorState) {
+          if (mounted) Navigator.pop(context);
+          final errorMessage = AppLocalizations.of(context)!.translate(
+            state.error.message,
+            params: state.error.params,
+          );
+          showTemporaryMessage(context, errorMessage, MessageType.error);
+        } else if (state is AuthFacebookErrorState) {
+          if (mounted) Navigator.pop(context);
+          final errorMessage = AppLocalizations.of(context)!.translate(
+            state.error.message,
+            params: state.error.params,
+          );
+          showTemporaryMessage(context, errorMessage, MessageType.error);
+        }},
 
-            final errorMessage = AppLocalizations.of(context)!.translate(
-              failure.message,
-              params: failure.params,
-            );
-
-            showTemporaryMessage(context, errorMessage, MessageType.error);
-          }
-
-        },
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-            key: authViewModel.formKey,
-            autovalidateMode: authViewModel.autovalidateMode,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+        child: SingleChildScrollView(
+          child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Form(
+                key: authViewModel.formKey,
+                autovalidateMode: authViewModel.autovalidateMode,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                 Center(
-                  child: Text(
-                    "Taskly",
-                    style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                      color: ColorsManager.primary,
-                      fontSize: 30.sp,
-                      fontFamily: 'DM Sans',
-                      fontWeight: FontWeight.w700,
-                    ),
+                child: Text(
+                "Taskly",
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .headlineLarge
+                      ?.copyWith(
+                    color: ColorsManager.primary,
+                    fontSize: 30.sp,
+                    fontFamily: 'DM Sans',
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
-                SizedBox(height: 16.h),
-                Center(
-                  child: Text(
-                    widget.role == StringsManager.freelancerRole
-                        ? AppLocalizations.of(
-                          context,
-                        )!.registerFreelancerSubtitle
-                        : AppLocalizations.of(context)!.registerClientSubtitle,
-                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontSize: 20.sp,
-                      fontFamily: 'DM Sans',
-                      fontWeight: FontWeight.w600,
-                    ),
+              ),
+              SizedBox(height: 16.h),
+              Center(
+                child: Text(
+                  widget.role == StringsManager.freelancerRole
+                      ? AppLocalizations.of(
+                    context,
+                  )!.registerFreelancerSubtitle
+                      : AppLocalizations.of(context)!.registerClientSubtitle,
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .headlineSmall
+                      ?.copyWith(
+                    fontSize: 20.sp,
+                    fontFamily: 'DM Sans',
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
-                SizedBox(height: 32.h),
-                Row(
-                  children: [
-                    Expanded(
-                      child: CustomTextFormField(
-                        prefixIcon: Icon(CupertinoIcons.person),
-                        autovalidateMode:
-                            authViewModel.autovalidateMode ??
-                            AutovalidateMode.onUserInteraction,
-                        hintText:  AppLocalizations.of(context)!.firstName,
-                        textEditingController: authViewModel.fNameController,
-
-                        validator:
-                            (p0) =>
-                                p0!.isEmpty ? AppLocalizations.of(context)!.thisFieldIsRequired : null,
-                        keyboardType: TextInputType.text,
-                        onSaved: (p0) {
-                          authViewModel.fNameController.text = p0!;
-                        },
-                      ),
-                    ),
-                    SizedBox(width: 16.w),
-                    Expanded(
-                      child: CustomTextFormField(
-                        prefixIcon: Icon(CupertinoIcons.person),
-                        autovalidateMode:
-                            authViewModel.autovalidateMode ??
-                            AutovalidateMode.onUserInteraction,
-                        hintText: AppLocalizations.of(context)!.lastName,
-                        textEditingController: authViewModel.lNameController,
-                        validator:
-                            (p0) =>
-                                p0!.isEmpty ? AppLocalizations.of(context)!.thisFieldIsRequired: null,
-                        keyboardType: TextInputType.text,
-                        onSaved: (p0) {
-                          authViewModel.lNameController.text = p0!;
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-
-                SizedBox(height: 24.h),
-                CustomTextFormField(
-                  autovalidateMode:
+              ),
+              SizedBox(height: 32.h),
+              Row(
+                children: [
+                  Expanded(
+                    child: CustomTextFormField(
+                      prefixIcon: Icon(CupertinoIcons.person),
+                      autovalidateMode:
                       authViewModel.autovalidateMode ??
-                      AutovalidateMode.onUserInteraction,
-                  prefixIcon: Icon(CupertinoIcons.mail),
-                  hintText: AppLocalizations.of(context)!.email,
-                  textEditingController: authViewModel.emailController,
-                  validator:
-                      (p0) => p0!.isEmpty ? AppLocalizations.of(context)!.thisFieldIsRequired : null,
-                  keyboardType: TextInputType.emailAddress,
-                  onSaved: (p0) {
-                    authViewModel.emailController.text = p0!;
-                  },
-                ),
-                SizedBox(height: 24.h),
-                CustomTextFormField(
-                  autovalidateMode:
-                      authViewModel.autovalidateMode ??
-                      AutovalidateMode.onUserInteraction,
-                  prefixIcon: Icon(CupertinoIcons.lock),
-                  hintText: AppLocalizations.of(context)!.password,
-                  textEditingController: authViewModel.passwordController,
-                  iconShow: true,
-                  validator:
-                      (p0) => p0!.isEmpty ? AppLocalizations.of(context)!.thisFieldIsRequired: null,
-                  keyboardType: TextInputType.visiblePassword,
-                  onSaved: (p0) {
-                    authViewModel.passwordController.text = p0!;
-                  },
-                ),
-                SizedBox(height: 20.h),
-                PrivacyPolicyWithCheck(),
-                SizedBox(height: 30.h),
-                OrDivider(),
-                SizedBox(height: 20.h),
-                SocialLoginButton(
-                  label: AppLocalizations.of(context)!.continueWithGoogle,
-                  iconPath: Assets.assetsImagesIcGoogle,
-                  onPressed: () {
-                    context.read<AuthViewModel>().googleLogin(role: widget.role);
-                  },
-                ),
-                SizedBox(height: 48.h),
+                          AutovalidateMode.onUserInteraction,
+                      hintText: AppLocalizations.of(context)!.firstName,
+                      textEditingController: authViewModel.fNameController,
 
-                CustomButton(
-                  title: AppLocalizations.of(context)!.createAccount,
-                  ontap: () {
-                    if (authViewModel.formKey.currentState!.validate()) {
-                      context.read<AuthViewModel>().registerUser(
-                        firstName: authViewModel.fNameController.text,
-                        lastName: authViewModel.lNameController.text,
-                        email: authViewModel.emailController.text,
-                        password: authViewModel.passwordController.text,
-                        role: widget.role,
-                      );
-                    } else {
-                      setState(() {
-                        authViewModel.autovalidateMode =
-                            AutovalidateMode.onUserInteraction;
-                      });
-                    }
-                  },
-                ),
-                SizedBox(height: 5.h),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      AppLocalizations.of(context)!.alreadyHaveAccount,
-
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Colors.grey,
-
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14.sp,
-                      ),
-                    ),
-                    SizedBox(width: 5.w,),
-
-                    GestureDetector(
-                      onTap: () {
-                        widget.role == StringsManager.freelancerRole
-                            ? Navigator.pushReplacementNamed(
-                              context,
-                              RoutesManager.login,
-                              arguments: StringsManager.freelancerRole,
-                            )
-                            : Navigator.pushReplacementNamed(
-                              context,
-                              RoutesManager.login,
-                              arguments:StringsManager.clientRole,
-                            );
+                      validator:
+                          (p0) =>
+                      p0!.isEmpty ? AppLocalizations.of(context)!
+                          .thisFieldIsRequired : null,
+                      keyboardType: TextInputType.text,
+                      onSaved: (p0) {
+                        authViewModel.fNameController.text = p0!;
                       },
-                      child: Text(
-                        AppLocalizations.of(context)!.login,
-
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: ColorsManager.primary,
-
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14.sp,
-                        ),
-                      ),
                     ),
-                  ],
-                ),
-              ],
+                  ),
+                  SizedBox(width: 16.w),
+                  Expanded(
+                    child: CustomTextFormField(
+                      prefixIcon: Icon(CupertinoIcons.person),
+                      autovalidateMode:
+                      authViewModel.autovalidateMode ??
+                          AutovalidateMode.onUserInteraction,
+                      hintText: AppLocalizations.of(context)!.lastName,
+                      textEditingController: authViewModel.lNameController,
+                      validator:
+                          (p0) =>
+                      p0!.isEmpty ? AppLocalizations.of(context)!
+                          .thisFieldIsRequired : null,
+                      keyboardType: TextInputType.text,
+                      onSaved: (p0) {
+                        authViewModel.lNameController.text = p0!;
+                      },
+                    ),
+                  ),
+                ],
+              ),
+
+              SizedBox(height: 24.h),
+              CustomTextFormField(
+                autovalidateMode:
+                authViewModel.autovalidateMode ??
+                    AutovalidateMode.onUserInteraction,
+                prefixIcon: Icon(CupertinoIcons.mail),
+                hintText: AppLocalizations.of(context)!.email,
+                textEditingController: authViewModel.emailController,
+                validator:
+                    (p0) =>
+                p0!.isEmpty
+                    ? AppLocalizations.of(context)!.thisFieldIsRequired
+                    : null,
+                keyboardType: TextInputType.emailAddress,
+                onSaved: (p0) {
+                  authViewModel.emailController.text = p0!;
+                },
+              ),
+              SizedBox(height: 24.h),
+              CustomTextFormField(
+                autovalidateMode:
+                authViewModel.autovalidateMode ??
+                    AutovalidateMode.onUserInteraction,
+                prefixIcon: Icon(CupertinoIcons.lock),
+                hintText: AppLocalizations.of(context)!.password,
+                textEditingController: authViewModel.passwordController,
+                iconShow: true,
+                validator:
+                    (p0) =>
+                p0!.isEmpty
+                    ? AppLocalizations.of(context)!.thisFieldIsRequired
+                    : null,
+                keyboardType: TextInputType.visiblePassword,
+                onSaved: (p0) {
+                  authViewModel.passwordController.text = p0!;
+                },
+              ),
+              SizedBox(height: 20.h),
+              PrivacyPolicyWithCheck(),
+              SizedBox(height: 30.h),
+              OrDivider(),
+              SizedBox(height: 20.h),
+
+              SocialLoginOptions(
+                  onGoogleLogin: () {
+                    context.read<AuthViewModel>().googleLogin(
+                        role: widget.role);
+                  },
+                  onAppleLogin: () {
+                    context.read<AuthViewModel>().appleLogin(role: widget.role);
+                  },
+                  onFacebookLogin: ()
+              {
+              context.read<AuthViewModel>().facebookLogin(role: widget.role);
+              }
+
+
+          ),
+
+          SizedBox(height: 48.h),
+
+      CustomButton(
+        title: AppLocalizations.of(context)!.createAccount,
+        ontap: () {
+          if (authViewModel.formKey.currentState!.validate()) {
+            context.read<AuthViewModel>().registerUser(
+              firstName: authViewModel.fNameController.text,
+              lastName: authViewModel.lNameController.text,
+              email: authViewModel.emailController.text,
+              password: authViewModel.passwordController.text,
+              role: widget.role,
+            );
+          } else {
+            setState(() {
+              authViewModel.autovalidateMode =
+                  AutovalidateMode.onUserInteraction;
+            });
+          }
+        },
+      ),
+      SizedBox(height: 5.h),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            AppLocalizations.of(context)!.alreadyHaveAccount,
+
+            style: Theme
+                .of(context)
+                .textTheme
+                .bodySmall
+                ?.copyWith(
+              color: Colors.grey,
+
+              fontWeight: FontWeight.bold,
+              fontSize: 14.sp,
             ),
           ),
-        ),
+          SizedBox(width: 5.w,),
+
+          GestureDetector(
+            onTap: () {
+              widget.role == StringsManager.freelancerRole
+                  ? Navigator.pushReplacementNamed(
+                context,
+                RoutesManager.login,
+                arguments: StringsManager.freelancerRole,
+              )
+                  : Navigator.pushReplacementNamed(
+                context,
+                RoutesManager.login,
+                arguments: StringsManager.clientRole,
+              );
+            },
+            child: Text(
+              AppLocalizations.of(context)!.login,
+
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .bodyMedium
+                  ?.copyWith(
+                color: ColorsManager.primary,
+
+                fontWeight: FontWeight.bold,
+                fontSize: 14.sp,
+              ),
+            ),
+          ),
+        ],
       ),
+      ],
+    ),)
+    ,
+    )
+    ,
+    )
+    ,
     );
   }
 }

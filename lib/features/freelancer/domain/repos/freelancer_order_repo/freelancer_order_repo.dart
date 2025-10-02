@@ -15,9 +15,9 @@ abstract class FreelancerOrderRepo {
       );
   Future<Either<Failures,List<OrderEntity>>> fetchPrivateOrders(String freelancerId);
   Future<Either<Failures, void >> updateOrderStatus(String orderId, String status);
-  Future<Either <Failures,void>>  withdrawOffer(String offerId, String orderId); 
+  Future<Either <Failures,void>>  withdrawOffer(String offerId, String orderId);
 
-  Stream<(OrderEntity, String)> subscribeToPrivateOrders(
+  Stream<List<OrderEntity>>  subscribeToPrivateOrders(
     String freelancerId,
    
       );

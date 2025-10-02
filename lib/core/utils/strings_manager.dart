@@ -19,4 +19,9 @@ class StringsManager {
   static const userRegisteredSuccessfully = "userRegisteredSuccessfully";
   static const userLoginSuccessfully = "userLoginSuccessfully";
   static const googleLoginSuccessful = "googleLoginSuccessful";
+  static const facebookLoginCancelled = "facebookLoginCancelled";
+  static const facebookLoginSuccessful = "facebookLoginSuccessful";
+  static const appleLoginCancelled = "appleLoginCancelled";
+  static const appleLoginSuccessful = "appleLoginSuccessful";
+
 }

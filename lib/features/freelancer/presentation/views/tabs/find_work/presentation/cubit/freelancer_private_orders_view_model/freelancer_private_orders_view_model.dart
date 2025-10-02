@@ -11,7 +11,7 @@ import 'freelancer_private_orders_view_model_states.dart';
 class FreelancerPrivateOrdersViewModel
     extends Cubit<FreelancerPrivateOrdersViewModelStates> {
   final FetchPrivateOrdersUseCase fetchPrivateOrdersUseCase;
-  StreamSubscription<(OrderEntity, String)>? _ordersSubscription;
+  StreamSubscription<List<OrderEntity>>? _ordersSubscription;
 
   FreelancerPrivateOrdersViewModel(this.fetchPrivateOrdersUseCase)
       : super(FreelancerPrivateOrdersViewModelStatesInitial());
@@ -42,40 +42,20 @@ class FreelancerPrivateOrdersViewModel
 
     _ordersSubscription =
         fetchPrivateOrdersUseCase.subscribeRealtime(freelancerId).listen(
-              (event) {
-            final order = event.$1;
-            final action = event.$2;
+              (orders) {
+            // الفلترة: نخلي بس الأوردرات اللي تخص الفريلانسر و private
+            final filteredOrders = orders
+                .where((o) =>
+            o.serviceType.name == 'private' &&
+                o.freelancerId == freelancerId)
+                .toList();
 
-            if (order.serviceType.name != 'private' || order.freelancerId != freelancerId) return;
+            // ترتيب حسب التاريخ
+            filteredOrders.sort((a, b) => b.createdAt.compareTo(a.createdAt));
 
-            final currentState = state;
-            if (currentState is FreelancerPrivateOrdersViewModelStatesSuccess) {
-              var updatedOrders = List<OrderEntity>.from(currentState.orders);
-
-              switch (action.toUpperCase()) {
-                case 'INSERT':
-                  if (!updatedOrders.any((o) => o.id == order.id)) {
-                    updatedOrders.insert(0, order); // INSERT فوق مباشرة
-                  }
-                  break;
-                case 'UPDATE':
-                  final index = updatedOrders.indexWhere((o) => o.id == order.id);
-                  if (index != -1) {
-                    updatedOrders[index] = order;
-                  }
-                  break;
-                case 'DELETE':
-                  updatedOrders.removeWhere((o) => o.id == order.id);
-                  break;
-              }
-
-              // ترتيب حسب createdAt دايمًا
-              updatedOrders.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-
-              emit(FreelancerPrivateOrdersViewModelStatesSuccess(orders: updatedOrders));
-            } else if (currentState is FreelancerPrivateOrdersViewModelStatesInitial) {
-              emit(FreelancerPrivateOrdersViewModelStatesSuccess(orders: [order]));
-            }
+            // اعمل Emit دايمًا بالقائمة الجديدة
+            emit(FreelancerPrivateOrdersViewModelStatesSuccess(
+                orders: List.from(filteredOrders)));
           },
           onError: (error) {
             emit(FreelancerPrivateOrdersViewModelStatesError(

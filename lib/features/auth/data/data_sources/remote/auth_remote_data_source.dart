@@ -16,5 +16,7 @@ abstract class AuthRemoteDataSource {
 
   Future<Either<Failures, LoginResponseEntity>> login(String email, String password, String role);
 
-Future<Either<Failures,GoogleAuthResponseEntity>> googleLogin(String role);
+Future<Either<Failures,SocialAuthResponseEntity>> googleLogin(String role);
+Future<Either<Failures,SocialAuthResponseEntity>> facebookLogin(String role);
+Future<Either<Failures,SocialAuthResponseEntity>> appleLogin(String role);
 }

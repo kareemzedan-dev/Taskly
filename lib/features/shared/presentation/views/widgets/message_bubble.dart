@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
 import 'package:taskly/features/reviews/presentation/widgets/user_avatar.dart';
 
-enum SenderType { client, freelancer }
+enum SenderType { client, freelancer , admin }
 
 class MessageBubble extends StatelessWidget {
   final String message;
