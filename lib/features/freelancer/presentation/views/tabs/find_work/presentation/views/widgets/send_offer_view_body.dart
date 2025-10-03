@@ -12,11 +12,11 @@ import 'package:taskly/core/components/custom_button.dart';
 import 'package:taskly/core/utils/strings_manager.dart';
 import 'package:taskly/features/freelancer/domain/entities/offer_entity/offer_entity.dart';
 import 'package:taskly/features/freelancer/presentation/views/freelancer_home_view.dart';
-import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/cubit/send_offer_view_model/send_offer_view_model.dart';
-import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/cubit/send_offer_view_model/send_offer_view_model_states.dart';
 import 'package:taskly/features/shared/domain/entities/order_entity/order_entity.dart';
 import 'package:taskly/features/shared/presentation/views/widgets/description_section.dart';
 import 'package:uuid/uuid.dart';
+import '../../view_model/send_offer_view_model/send_offer_view_model.dart';
+import '../../view_model/send_offer_view_model/send_offer_view_model_states.dart';
 import 'input_proposal_price.dart';
 import 'input_with_drop_down.dart';
 

@@ -1,13 +1,13 @@
 import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
 import 'package:taskly/core/errors/failures.dart';
-import 'package:taskly/features/freelancer/domain/repos/freelancer_order_repo/freelancer_order_repo.dart';
+import 'package:taskly/features/freelancer/domain/repos/freelancer_order_repo/update_order_status_repo/update_order_status_repo.dart';
 @injectable
 class UpdateOrderStatusUseCase {
-  FreelancerOrderRepo freelancerOrderRepo ;
+  UpdateOrderStatusRepo updateOrderStatusRepo ;
 
-  UpdateOrderStatusUseCase(this.freelancerOrderRepo);
+  UpdateOrderStatusUseCase(this.updateOrderStatusRepo);
 
-  Future<Either<Failures, void>> call(String orderId , String status) => freelancerOrderRepo.updateOrderStatus(orderId, status);
+  Future<Either<Failures, void>> call(String orderId , String status) => updateOrderStatusRepo.updateOrderStatus(orderId, status);
 
 }

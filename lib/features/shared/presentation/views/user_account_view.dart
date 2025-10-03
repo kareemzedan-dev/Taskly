@@ -3,13 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/features/shared/presentation/views/widgets/user_account_view_body.dart';
 
+import '../../../profile/domain/entities/user_info_entity/user_info_entity.dart';
+
 class UserAccountView extends StatelessWidget {
-  const UserAccountView({super.key});
+  const UserAccountView({super.key, required this.userInfoEntity});
+  final UserInfoEntity userInfoEntity;
 
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-      body: SafeArea(child: UserAccountViewBody()),
+      body: SafeArea(child: UserAccountViewBody( userInfoEntity: userInfoEntity)),
       appBar:  AppBar(
         surfaceTintColor: Colors.transparent,
         backgroundColor: Colors.white,

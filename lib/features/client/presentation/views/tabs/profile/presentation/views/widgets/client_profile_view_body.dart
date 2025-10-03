@@ -53,6 +53,7 @@ class _ClientProfileViewBodyState extends State<ClientProfileViewBody> {
                         Navigator.pushNamed(
                           context,
                           RoutesManager.userAccountView,
+                          arguments: state.userInfoEntity,
                         );
                       },
                       email: state.userInfoEntity.email,

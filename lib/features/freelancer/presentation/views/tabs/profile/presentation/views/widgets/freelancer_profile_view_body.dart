@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/config/routes/routes_manager.dart';
 import 'package:taskly/core/utils/assets_manager.dart';
@@ -7,6 +8,13 @@ import 'package:taskly/features/client/presentation/views/tabs/profile/presentat
 import 'package:taskly/features/shared/presentation/views/widgets/language_bottom_sheet_content.dart';
 import 'package:taskly/features/shared/presentation/views/widgets/profile_section.dart';
 import 'package:taskly/features/shared/presentation/views/widgets/theme_bottom_sheet_content.dart';
+
+import '../../../../../../../../../core/cache/shared_preferences.dart';
+import '../../../../../../../../../core/di/di.dart';
+import '../../../../../../../../../core/utils/strings_manager.dart';
+import '../../../../../../../../client/presentation/views/tabs/profile/presentation/views/widgets/user_info_section_shimmer.dart';
+import '../../../../../../../../profile/presentation/manager/profile_view_model/profile_view_model.dart';
+import '../../../../../../../../profile/presentation/manager/profile_view_model/profile_view_model_states.dart';
 
 class FreelancerProfileViewBody extends StatefulWidget {
   const FreelancerProfileViewBody({super.key});
@@ -30,13 +38,36 @@ class _FreelancerProfileViewBodyState extends State<FreelancerProfileViewBody> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 20),
-            UserInfoSection(
-              email: "Kareem@gmail.com",
-              name: "kareem",
-              onTap: () {
-                Navigator.pushNamed(context, RoutesManager.userAccountView);
-              },
-              isFreelancer: true,
+            BlocProvider(
+              create:
+                  (context) =>
+              getIt<ProfileViewModel>()..getUserInfo(
+                SharedPrefHelper.getString(StringsManager.idKey)!,
+                "client",
+              ),
+              child: BlocBuilder<ProfileViewModel, ProfileViewModelStates>(
+                builder: (context, state) {
+                  if (state is ProfileViewModelStatesLoading) {
+                    return const UserInfoSectionShimmer();
+                  } else if (state is ProfileViewModelStatesSuccess) {
+                    return UserInfoSection(
+                      userInfo: state.userInfoEntity,
+                      onTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          RoutesManager.userAccountView,
+                          arguments: state.userInfoEntity,
+                        );
+                      },
+                      email: state.userInfoEntity.email,
+                      name: state.userInfoEntity.fullName!,
+                    );
+                  } else if (state is ProfileViewModelStatesError) {
+                    return Text(state.message);
+                  }
+                  return Container();
+                },
+              ),
             ),
 
             SizedBox(height: 40.h),

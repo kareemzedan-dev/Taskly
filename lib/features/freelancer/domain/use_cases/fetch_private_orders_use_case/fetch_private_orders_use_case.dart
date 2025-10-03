@@ -4,14 +4,12 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../../core/errors/failures.dart';
 import '../../../../shared/domain/entities/order_entity/order_entity.dart';
-import '../../repos/freelancer_order_repo/freelancer_order_repo.dart';
+import '../../repos/freelancer_order_repo/fetch_private_orders_repo/fetch_private_orders_repo.dart';
 @injectable
 class FetchPrivateOrdersUseCase {
-  final FreelancerOrderRepo repo;
-  FetchPrivateOrdersUseCase(this.repo);
-  Future<Either<Failures, List<OrderEntity>>> call(String freelancerId) => repo.fetchPrivateOrders(freelancerId);
-
-  Stream<List<OrderEntity>>  subscribeRealtime(String freelancerId, ) => repo.subscribeToPrivateOrders(freelancerId);
+  final FetchPrivateOrdersRepo fetchPrivateOrdersRepo;
+  FetchPrivateOrdersUseCase(this.fetchPrivateOrdersRepo);
+  Future<Either<Failures, List<OrderEntity>>> call(String freelancerId) => fetchPrivateOrdersRepo.fetchPrivateOrders(freelancerId);
 
 
 }

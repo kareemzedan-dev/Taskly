@@ -5,7 +5,7 @@ import 'package:taskly/core/utils/colors_manger.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/freelancer_work_card.dart';
 
 import '../../../../../../../../../core/utils/assets_manager.dart';
-import '../../cubit/freelancer_private_orders_view_model/freelancer_private_orders_view_model_states.dart';
+import '../../view_model/freelancer_private_orders_view_model/freelancer_private_orders_view_model_states.dart';
 import 'freelancer_work_card_shimmer.dart';
 
 class FreelancerPrivateOrdersList extends StatelessWidget {

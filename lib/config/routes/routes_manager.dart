@@ -22,6 +22,7 @@ import 'package:taskly/features/welcome/presentation/views/welcome_view.dart';
 import '../../features/freelancer/presentation/views/tabs/my_jobs/presentation/views/offer_details_view.dart';
 import '../../features/messages/presentation/pages/admin_chat_view.dart';
 import '../../features/payments/presentation/pages/client_payments_view.dart';
+import '../../features/profile/domain/entities/user_info_entity/user_info_entity.dart';
 
 class RoutesManager {
   static const String splash = "/";
@@ -114,7 +115,9 @@ class RoutesManager {
       case privacyPolicyView:
         return MaterialPageRoute(builder: (_) => const PrivacyPolicyView());
       case userAccountView:
-        return MaterialPageRoute(builder: (_) => const UserAccountView());
+        final args = settings.arguments;
+        final userInfoEntity = args as UserInfoEntity;
+        return MaterialPageRoute(builder: (_) =>   UserAccountView( userInfoEntity:  userInfoEntity,));
       case changePasswordView:
         return MaterialPageRoute(builder: (_) => const ChangePasswordView());
 
