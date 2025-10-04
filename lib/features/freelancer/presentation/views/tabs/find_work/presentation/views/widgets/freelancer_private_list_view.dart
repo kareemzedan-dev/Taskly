@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/freelancer_work_card.dart';
 
 import '../../../../../../../../../core/utils/assets_manager.dart';
+import '../../view_model/add_favorite_order_view_model/add_favorite_order_view_model.dart';
 import '../../view_model/freelancer_private_orders_view_model/freelancer_private_orders_view_model_states.dart';
 import 'freelancer_work_card_shimmer.dart';
 
 class FreelancerPrivateOrdersList extends StatelessWidget {
   final FreelancerPrivateOrdersViewModelStates state;
+  final AddFavoriteOrderViewModel addFavViewModel;
 
-  const FreelancerPrivateOrdersList({super.key, required this.state});
+  const FreelancerPrivateOrdersList({super.key, required this.state, required this.addFavViewModel});
 
   @override
   Widget build(BuildContext context) {
+
     if (state is FreelancerPrivateOrdersViewModelStatesLoading) {
       return FreelancerWorkCardShimmer(
       );
@@ -58,7 +62,7 @@ class FreelancerPrivateOrdersList extends StatelessWidget {
         itemCount: orders.length,
         itemBuilder: (context, index) => Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: FreelancerWorkCard(order: orders[index]),
+          child: FreelancerWorkCard(order: orders[index], addFavViewModel: addFavViewModel,),
         ),
       );
     }

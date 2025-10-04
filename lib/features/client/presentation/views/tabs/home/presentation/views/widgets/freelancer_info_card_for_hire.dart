@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/utils/assets_manager.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
+import 'package:taskly/features/reviews/presentation/widgets/user_avatar.dart';
 import '../../../../../../../../profile/domain/entities/user_info_entity/user_info_entity.dart';
 
 class FreelancerInfoCardForHire extends StatelessWidget {
@@ -34,13 +35,7 @@ class FreelancerInfoCardForHire extends StatelessWidget {
         ),
         child: Row(
           children: [
-            CircleAvatar(
-              backgroundColor: Colors.grey.shade300,
-              radius: 16.r,
-              backgroundImage: AssetImage(
-                Assets.assetsImagesPortraitHappySmileyMan,
-              ),
-            ),
+            UserAvatar(radius: 16.r, imagePath: freelancer.profileImage),
             const SizedBox(width: 10),
             Expanded(
               child: Column(
@@ -49,17 +44,17 @@ class FreelancerInfoCardForHire extends StatelessWidget {
                   Text(
                     freelancer.fullName ?? "name is not available",
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16.sp,
-                    ),
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16.sp,
+                        ),
                     maxLines: 1,
                   ),
                   Text(
                     freelancer.bio ?? "Freelancer",
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 14.sp,
-                    ),
+                          fontWeight: FontWeight.w400,
+                          fontSize: 14.sp,
+                        ),
                     maxLines: 1,
                   ),
                 ],
@@ -72,9 +67,9 @@ class FreelancerInfoCardForHire extends StatelessWidget {
                 Text(
                   freelancer.rating?.toStringAsFixed(1) ?? "0.0",
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14.sp,
-                  ),
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14.sp,
+                      ),
                 ),
                 const Icon(Icons.star, color: Colors.amber, size: 16),
               ],

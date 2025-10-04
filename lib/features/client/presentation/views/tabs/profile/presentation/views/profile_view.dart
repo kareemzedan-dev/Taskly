@@ -4,8 +4,8 @@ import 'package:taskly/core/utils/assets_manager.dart';
 import 'package:taskly/core/components/circle_icon_button.dart';
 import 'package:taskly/features/client/presentation/views/tabs/profile/presentation/views/widgets/client_profile_view_body.dart';
 
-class ProfileViewTab extends StatelessWidget {
-  const ProfileViewTab({super.key});
+class ClientProfileViewTab extends StatelessWidget {
+  const ClientProfileViewTab({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -4,9 +4,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/di/di.dart';
 import 'package:taskly/core/helper/convert_to_days.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
+import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/view_model/update_offer_status_view_model/update_offer_status_view_model.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/offer_actions.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/price_duration_section.dart';
-import 'package:taskly/features/client/presentation/views/tabs/profile/presentation/views/widgets/user_info_section.dart';
+import 'package:taskly/features/profile/presentation/widgets/user_info_section.dart';
 import 'package:taskly/features/freelancer/domain/entities/offer_entity/offer_entity.dart';
 import 'package:taskly/features/profile/presentation/manager/profile_view_model/profile_view_model.dart';
 import 'package:taskly/features/profile/presentation/manager/profile_view_model/profile_view_model_states.dart';
@@ -49,9 +50,9 @@ class OfferCard extends StatelessWidget {
                   String freelancerName = '';
                   String freelancerImage = '';
 
-                  if (state is ProfileViewModelStatesSuccess) {freelancerName = state.userInfoEntity.fullName ?? '';
-                  freelancerImage = state.userInfoEntity.profileImage ?? '';
-
+                  if (state is ProfileViewModelStatesSuccess) {
+                    freelancerName = state.userInfoEntity.fullName ?? '';
+                    freelancerImage = state.userInfoEntity.profileImage ?? '';
                   }
 
                   return Column(
@@ -65,15 +66,17 @@ class OfferCard extends StatelessWidget {
                           children: [
                             Expanded(
                               child: state is ProfileViewModelStatesLoading
-                                  ? const Center(child: CircularProgressIndicator())
+                                  ? const Center(
+                                      child: CircularProgressIndicator())
                                   : state is ProfileViewModelStatesError
-                                  ? Center(child: Text(state.message))
-                                  : UserInfoSection(
-                                photoSizeSelected: true,
-                                userInfo: state is ProfileViewModelStatesSuccess
-                                    ? state.userInfoEntity
-                                    : null,
-                              ),
+                                      ? Center(child: Text(state.message))
+                                      : UserInfoSection(
+                                          photoSizeSelected: true,
+                                          userInfo: state
+                                                  is ProfileViewModelStatesSuccess
+                                              ? state.userInfoEntity
+                                              : null,
+                                        ),
                             ),
                             SizedBox(width: 8.w),
                             PriceDurationSection(
@@ -119,7 +122,14 @@ class OfferCard extends StatelessWidget {
                         text: "Decline Offer",
                         icon: Icons.close,
                         color: Colors.red,
-                        onTap: () {},
+                        onTap: () {
+                          context
+                              .read<UpdateOfferStatusViewModel>()
+                              .updateOfferStatus(
+                                offer.id,
+                                "Rejected",
+                              );
+                        },
                       ),
                     ],
                   );

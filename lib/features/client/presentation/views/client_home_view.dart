@@ -20,7 +20,7 @@ class _ClientHomeViewState extends State<ClientHomeView> {
     const HomeTabView(),
     MyJobsTabView(),
     const UserMessagesTabView(),
-    const ProfileViewTab(),
+    const ClientProfileViewTab(),
   ];
 
   @override

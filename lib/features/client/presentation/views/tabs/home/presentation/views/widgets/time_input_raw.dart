@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/view_model/place_order_view_model/place_order_view_model.dart';
@@ -27,6 +28,9 @@ class _TimeInputRawState extends State<TimeInputRaw> {
             Expanded(
               child: TextField(
                 keyboardType: TextInputType.number,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly, // ✅ يسمح بالأرقام فقط
+                ],
                 decoration: InputDecoration(
                   hintText: "Enter time",
                   border: InputBorder.none,

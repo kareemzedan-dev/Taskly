@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:marquee/marquee.dart';
 import 'package:taskly/config/routes/routes_manager.dart';
+import 'package:taskly/core/components/custom_button.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/view_model/update_offer_status_view_model/update_offer_status_states.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/view_model/update_offer_status_view_model/update_offer_status_view_model.dart';
-import 'package:taskly/features/client/presentation/views/tabs/profile/presentation/views/widgets/user_info_section.dart';
+import 'package:taskly/features/profile/presentation/widgets/user_info_section.dart';
 import 'package:taskly/features/client/presentation/views/tabs/profile/presentation/views/widgets/user_info_section_shimmer.dart';
 import 'package:taskly/features/freelancer/domain/entities/offer_entity/offer_entity.dart';
 import 'package:taskly/features/freelancer/presentation/cubit/withdraw_offer_view_model/withdraw_offer_states.dart';
@@ -15,6 +17,7 @@ import 'package:taskly/features/profile/domain/entities/user_info_entity/user_in
 import '../../../../../../../../../core/di/di.dart';
 import '../../../../../../../../../core/helper/convert_to_days.dart';
 import '../../../../../../../../../core/utils/colors_manger.dart';
+import '../../../../../../../../messages/presentation/widgets/admin_message_card.dart';
 import '../../../../../../../../profile/presentation/manager/profile_view_model/profile_view_model.dart';
 import '../../../../../../../../profile/presentation/manager/profile_view_model/profile_view_model_states.dart';
 import '../../../../find_work/presentation/views/widgets/action_row.dart';
@@ -22,11 +25,20 @@ import '../../../../find_work/presentation/views/widgets/delivery_info.dart';
 import '../../../../find_work/presentation/views/widgets/freelancer_work_card.dart';
 
 class TrackingOfferCard extends StatelessWidget {
-  TrackingOfferCard(
-      {super.key, required this.offerEntity, this.isPending = false});
+  TrackingOfferCard({
+    super.key,
+    required this.offerEntity,
+    this.isPending = false,
+    this.isAccepted = false,
+    this.isRejected = false,
+    this.isCompleted = false,
+  });
 
   OfferEntity offerEntity;
   bool isPending;
+  bool isAccepted;
+  bool isRejected;
+  bool isCompleted;
 
   @override
   Widget build(BuildContext context) {
@@ -44,35 +56,10 @@ class TrackingOfferCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (!isPending)
-                Container(
-                  height: 20,
-                  decoration: BoxDecoration(
-                    color: ColorsManager.primary.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(10.r),
-                    border: Border.all(
-                        color: ColorsManager.primary.withOpacity(0.1),
-                        width: 1.w),
-                  ),
-                  child: Marquee(
-                    text:
-                        "Please wait until the payment is confirmed. Once confirmed, you can contact the client and start the work.",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                    scrollAxis: Axis.horizontal,
-                    blankSpace: 50.0,
-                    velocity: 50.0,
-                    pauseAfterRound: Duration(seconds: 2),
-                    startPadding: 10.0,
-                    accelerationDuration: Duration(seconds: 2),
-                    accelerationCurve: Curves.linear,
-                    decelerationDuration: Duration(seconds: 2),
-                    decelerationCurve: Curves.easeOut,
-                  ),
-                ),
-
+              if (isAccepted)
+                AdminMessageCard(
+                    message:
+                        "Please wait until the payment is confirmed. Once confirmed, you can contact the client and start the work."),
               SizedBox(height: 5.h),
               BlocBuilder<ProfileViewModel, ProfileViewModelStates>(
                 bloc: getIt<ProfileViewModel>()
@@ -132,7 +119,6 @@ class TrackingOfferCard extends StatelessWidget {
                   ),
                 ],
               ),
-
               SizedBox(height: 8.h),
               Text(
                 "Proposal description:${offerEntity.offerDescription} ",
@@ -144,9 +130,10 @@ class TrackingOfferCard extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
               SizedBox(height: 8.h),
-              DeliveryInfo(
-                deliveryTime: offerEntity.offerDeliveryTime.formatMinutes(),
-              ),
+              if (!isRejected && !isCompleted)
+                DeliveryInfo(
+                  deliveryTime: offerEntity.offerDeliveryTime.formatMinutes(),
+                ),
               SizedBox(height: 8.h),
               Row(
                 children: [
@@ -157,25 +144,61 @@ class TrackingOfferCard extends StatelessWidget {
                   ),
                 ],
               ),
-
               SizedBox(height: 8.h),
+              if (isRejected)
+                GestureDetector(
+                  onTap: () {
+                    context.read<UpdateOfferStatusViewModel>()
+                      ..updateOfferStatus(offerEntity.id, "deleted");
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    height: 50.h,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12.r),
+                      color: Colors.white,
+                      border: Border.all(color: Colors.red, width: 2.w),
+                    ),
+                    child: Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Icon(
+                            FontAwesomeIcons.close,
+                            color: Colors.red,
+                          ),
+                          SizedBox(width: 6),
+                          Text(
+                            'Delete this offer',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16,
+                              color: Colors.red,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
               BlocBuilder<WithdrawOfferViewModel, WithdrawOfferStates>(
                 builder: (context, state) {
                   return ActionsRow(
                     actions: [
-                      ActionItem(
-                        title: "View details",
-                        icon: Icons.remove_red_eye_outlined,
-                        onTap: () {
-                          Navigator.pushNamed(
-                            context,
-                            RoutesManager.offerDetailsView,
-                            arguments: {
-                              'orderId': offerEntity.orderId,
-                            },
-                          );
-                        },
-                      ),
+                      if (!isRejected)
+                        ActionItem(
+                          title: "View details",
+                          icon: Icons.remove_red_eye_outlined,
+                          onTap: () {
+                            Navigator.pushNamed(
+                              context,
+                              RoutesManager.offerDetailsView,
+                              arguments: {
+                                'orderId': offerEntity.orderId,
+                              },
+                            );
+                          },
+                        ),
                       if (isPending)
                         ActionItem(
                           title: state is WithdrawOfferStatesLoading
@@ -196,8 +219,6 @@ class TrackingOfferCard extends StatelessWidget {
                   );
                 },
               ),
-
-              //ActionsRow(order:),
             ],
           ),
         ),

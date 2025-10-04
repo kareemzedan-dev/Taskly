@@ -1,124 +1,221 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:taskly/config/routes/routes_manager.dart';
+import 'package:taskly/core/cache/shared_preferences.dart';
 import 'package:taskly/core/components/custom_button.dart';
 import 'package:taskly/core/components/custom_text_field.dart';
-import 'package:taskly/core/utils/assets_manager.dart';
+import 'package:taskly/core/components/dismissible_error_card.dart';
+import 'package:taskly/core/di/di.dart';
+import 'package:taskly/core/utils/colors_manger.dart';
+import 'package:taskly/core/utils/strings_manager.dart';
 import 'package:taskly/features/profile/domain/entities/user_info_entity/user_info_entity.dart';
+import 'package:taskly/features/profile/presentation/manager/profile_view_model/profile_view_model.dart';
 import 'package:taskly/features/reviews/presentation/widgets/user_avatar.dart';
+import '../../../../../core/services/pick_image_from_camera.dart';
+import '../../../../profile/domain/use_cases/update_user_profile_use_case/update_user_profile_use_case.dart';
+import '../../../../profile/presentation/manager/update_user_profile_view_model/update_user_profile_states.dart';
+import '../../../../profile/presentation/manager/update_user_profile_view_model/update_user_profile_view_model.dart';
 
-Future<void> _pickImageFromCamera() async {
-  final ImagePicker picker = ImagePicker();
-
-  try {
-    final XFile? image = await picker.pickImage(source: ImageSource.camera);
-
-    if (image != null) {
-      print('📸 Image path: ${image.path}');
-      // هنا ممكن تعمل أي حاجة بالـ image.path
-      // زي رفعها للسيرفر أو تحديث الصورة في UI
-    }
-  } catch (e) {
-    print('❌ Error picking image: $e');
-  }
-}
-
-class UserAccountViewBody extends StatelessWidget {
-  const UserAccountViewBody({super.key, required this.userInfoEntity});
+class UserAccountViewBody extends StatefulWidget {
+  UserAccountViewBody({super.key, required this.userInfoEntity});
 
   final UserInfoEntity userInfoEntity;
 
   @override
+  State<UserAccountViewBody> createState() => _UserAccountViewBodyState();
+}
+
+class _UserAccountViewBodyState extends State<UserAccountViewBody> {
+  String? _pickedImagePath;
+
+  Future<void> _pickImage() async {
+    try {
+      final imagePath = await ImagePickerService.pickImageFromCamera();
+
+      if (imagePath != null) {
+        setState(() {
+          _pickedImagePath = imagePath;
+        });
+        print('📸 Image path: $imagePath');
+      }
+    } catch (e) {
+      print('❌ Error picking image: $e');
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 16.h),
-            Center(
-              child: Stack(
+    return BlocProvider(
+        create: (context) => UpdateUserProfileViewModel(
+              getIt<UpdateUserProfileUseCase>(),
+              widget.userInfoEntity,
+            ),
+        child:
+            BlocConsumer<UpdateUserProfileViewModel, UpdateUserProfileStates>(
+                listener: (context, state) {
+
+                  if (state is UpdateUserProfileStatesError) {
+            showTemporaryMessage(
+              context,
+              "Profile update failed, try again later",
+              MessageType.error,
+            );
+          }
+          if (state is UpdateUserProfileStatesSuccess) {
+            SharedPrefHelper.setString(
+                StringsManager.fullNameKey,
+                context
+                    .read<UpdateUserProfileViewModel>()
+                    .fullNameController
+                    .text);
+            SharedPrefHelper.setString(
+                StringsManager.emailKey,
+                context
+                    .read<UpdateUserProfileViewModel>()
+                    .emailController
+                    .text);
+            SharedPrefHelper.setString(
+                StringsManager.phoneNumberKey,
+                context
+                    .read<UpdateUserProfileViewModel>()
+                    .phoneNumberController
+                    .text);
+            SharedPrefHelper.setString(
+                StringsManager.profileImageKey,
+                _pickedImagePath ??
+                    SharedPrefHelper.getString(
+                        StringsManager.profileImageKey)!);
+
+
+            if (SharedPrefHelper.getString(StringsManager.roleKey) == "client") {
+              Navigator.pushNamed(context, RoutesManager.clientHome);
+            } else {
+              Navigator.pushNamed(context, RoutesManager.freelancerHome);
+            }
+            showTemporaryMessage(
+              context,
+              "Profile updated successfully",
+              MessageType.success,
+            );
+          }
+        }, builder: (context, state) {
+
+          return SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  UserAvatar(
-                    radius: 50.r,
-                    imagePath: userInfoEntity.profileImage,
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: GestureDetector(
-                      onTap: _pickImageFromCamera,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
+                  Center(
+                    child: Stack(
+                      children: [
+                        UserAvatar(
+                          radius: 50.r,
+                          imagePath: _pickedImagePath ??
+                              SharedPrefHelper.getString(
+                                  StringsManager.profileImageKey),
                         ),
-                        padding: EdgeInsets.all(4),
-                        child: Icon(
-                          Icons.camera_alt,
-                          size: 20.sp,
-                          color: Colors.grey[700],
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: GestureDetector(
+                            onTap: _pickImage,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                              ),
+                              padding: EdgeInsets.all(4),
+                              child: Icon(
+                                Icons.camera_alt,
+                                size: 20.sp,
+                                color: Colors.grey[700],
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
                   ),
+                  SizedBox(height: 16.h),
+                  Text(
+                    "User Name",
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16.sp,
+                        ),
+                  ),
+                  SizedBox(height: 8.h),
+                  CustomTextFormField(
+                      hintText: "Enter User Name",
+                      keyboardType: TextInputType.name,
+                      textEditingController: context
+                          .read<UpdateUserProfileViewModel>()
+                          .fullNameController),
+                  SizedBox(height: 16.h),
+                  Text(
+                    "Email Address",
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16.sp,
+                        ),
+                  ),
+                  SizedBox(height: 8.h),
+                  CustomTextFormField(
+                     isEnable:  false,
+                      hintText: "Enter Email Address",
+                      keyboardType: TextInputType.name,
+                      textEditingController: context
+                          .read<UpdateUserProfileViewModel>()
+                          .emailController),
+                  SizedBox(height: 16.h),
+                  Text(
+                    "Phone Number",
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16.sp,
+                        ),
+                  ),
+                  SizedBox(height: 8.h),
+                  CustomTextFormField(
+                      hintText: "Enter Phone Number",
+                      keyboardType: TextInputType.name,
+                      textEditingController: context
+                          .read<UpdateUserProfileViewModel>()
+                          .phoneNumberController),
+                  SizedBox(height: 50.h),
+                  CustomButton(
+                    title: "Save",
+                    ontap: () {
+                      final vm = context.read<UpdateUserProfileViewModel>();
+
+                      if (vm.fullNameController.text.isEmpty ||
+                          vm.emailController.text.isEmpty) {
+                        showTemporaryMessage(
+                          context,
+                          "Please fill Email and User Name fields",
+                          MessageType.error,
+                        );
+                        return;
+                      }
+
+                      vm.updateUserInfo(
+                        widget.userInfoEntity.id,
+                        vm.fullNameController.text,
+                        vm.emailController.text,
+                        vm.phoneNumberController.text,
+                        _pickedImagePath ??
+                            widget.userInfoEntity.profileImage ??
+                            SharedPrefHelper.getString(
+                                StringsManager.profileImageKey)!,
+                      );
+                    },
+                  )
                 ],
               ),
             ),
-            SizedBox(height: 16.h),
-            Text(
-              "User Name",
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16.sp,
-                  ),
-            ),
-            SizedBox(height: 8.h),
-            CustomTextFormField(
-              hintText: "Enter User Name",
-              keyboardType: TextInputType.name,
-              textEditingController:
-                  TextEditingController(text: userInfoEntity.fullName),
-            ),
-            SizedBox(height: 16.h),
-            Text(
-              "Email Address",
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16.sp,
-                  ),
-            ),
-            SizedBox(height: 8.h),
-            CustomTextFormField(
-              hintText: "Enter Email Address",
-              keyboardType: TextInputType.name,
-              textEditingController:
-                  TextEditingController(text: userInfoEntity.email),
-            ),
-            SizedBox(height: 16.h),
-            Text(
-              "Phone Number",
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16.sp,
-                  ),
-            ),
-            SizedBox(height: 8.h),
-            CustomTextFormField(
-              hintText: "Enter Phone Number",
-              keyboardType: TextInputType.name,
-              textEditingController:
-                  TextEditingController(text: userInfoEntity.phoneNumber),
-            ),
-            SizedBox(height: 50.h),
-            CustomButton(
-              title: "Save",
-              ontap: () {},
-            )
-          ],
-        ),
-      ),
-    );
+          );
+        }));
   }
 }

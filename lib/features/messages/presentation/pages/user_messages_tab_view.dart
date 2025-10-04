@@ -7,6 +7,7 @@ import 'package:taskly/features/messages/presentation/widgets/messages_tab_view_
 
 import '../../../../core/utils/strings_manager.dart';
 import '../../../shared/presentation/views/widgets/messages_card.dart';
+import '../widgets/admin_conversation_card.dart';
 
 class UserMessagesTabView extends StatelessWidget {
   const UserMessagesTabView({super.key});
@@ -41,34 +42,7 @@ class UserMessagesTabView extends StatelessWidget {
 
             },
 
-            child: Card(
-              elevation: 10,
-              child: Container(
-                  width: double.infinity,
-                  height: 60.h,
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12.r),
-                      border:
-                          Border.all(color: Colors.grey.shade300, width: 2.w)),
-                  child: Row(children: [
-                    CircleAvatar(
-                        radius: 30.r, backgroundColor: Colors.grey.shade400),
-                    SizedBox(width: 12.w),
-                    Column(children: [
-                      Text("John Doe",
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                fontWeight: FontWeight.w700,
-                                fontSize: 16.sp,
-                              )),
-                      Text("John Doe",
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                fontWeight: FontWeight.w700,
-                                fontSize: 16.sp,
-                              )),
-                    ])
-                  ])),
-            ),
+            child:  AdminConversationCard()
           ),
           UserMessagesTabViewBody(),
         ],

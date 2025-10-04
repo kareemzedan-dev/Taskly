@@ -5,7 +5,6 @@ import 'package:injectable/injectable.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:taskly/config/routes/routes_manager.dart';
 import 'package:taskly/core/cache/shared_preferences.dart';
-import 'package:taskly/core/components/dismissible_error_card.dart';
 import 'package:taskly/core/helper/convert_to_days.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
 import 'package:taskly/core/components/custom_button.dart';
@@ -15,8 +14,12 @@ import 'package:taskly/features/freelancer/presentation/views/freelancer_home_vi
 import 'package:taskly/features/shared/domain/entities/order_entity/order_entity.dart';
 import 'package:taskly/features/shared/presentation/views/widgets/description_section.dart';
 import 'package:uuid/uuid.dart';
+
+import '../../../../../../../../../core/components/dismissible_error_card.dart';
 import '../../view_model/send_offer_view_model/send_offer_view_model.dart';
 import '../../view_model/send_offer_view_model/send_offer_view_model_states.dart';
+import '../../view_model/get_commission_view_model/get_commission_view_model.dart';
+import '../../view_model/get_commission_view_model/get_commission_sates.dart';
 import 'input_proposal_price.dart';
 import 'input_with_drop_down.dart';
 
@@ -42,27 +45,43 @@ class _SendOfferViewBodyState extends State<SendOfferViewBody> {
   String? priceError;
   String? deliveryTimeError;
 
+  late GetCommissionViewModel commissionViewModel;
+
+  @override
+  void initState() {
+    super.initState();
+    commissionViewModel = context.read<GetCommissionViewModel>();
+    commissionViewModel.getCommission();
+  }
+
+  double getPriceAfterCommission() {
+    if (priceController.text.isEmpty) return 0;
+    final price = double.tryParse(priceController.text) ?? 0;
+    return commissionViewModel.calculatePriceAfterCommission(price);
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<SendOfferViewModel, SendOfferViewModelStates>(
+
       listener: (context, state) {
         if (state is SendOfferViewModelSuccess) {
-              showTemporaryMessage(
+          showTemporaryMessage(
             context,
             "Offer sent successfully",
             MessageType.success,
           );
           Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => FreelancerHomeView(initialIndex: 1)),
+            MaterialPageRoute(
+              builder: (context) => FreelancerHomeView(initialIndex: 1),
+            ),
                 (_) => false,
           );
-
         }
         if (state is SendOfferViewModelError) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(state.errorMessage)));
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(state.errorMessage)));
         }
       },
       builder: (context, state) {
@@ -96,9 +115,10 @@ class _SendOfferViewBodyState extends State<SendOfferViewBody> {
                               ),
                               child: Text(
                                 widget.orderEntity.title,
-                                style: Theme.of(
-                                  context,
-                                ).textTheme.bodyLarge?.copyWith(
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge
+                                    ?.copyWith(
                                   fontWeight: FontWeight.w600,
                                   fontSize: 16.sp,
                                   color: Colors.black,
@@ -141,6 +161,43 @@ class _SendOfferViewBodyState extends State<SendOfferViewBody> {
                                 });
                               },
                             ),
+
+                            SizedBox(height: 8.h),
+                            BlocBuilder<GetCommissionViewModel,
+                                GetCommissionSates>(
+
+                              builder: (context, commissionState) {
+                                if (commissionState
+                                is GetCommissionSatesLoading) {
+                                  return const SizedBox();
+                                }
+                                if (commissionState
+                                is GetCommissionSatesSuccess) {
+                                  final priceAfter = getPriceAfterCommission();
+                                  return Container(
+                                    width: double.infinity,
+                                    padding: EdgeInsets.all(8.w),
+                                    decoration: BoxDecoration(
+                                      color: ColorsManager.primary
+                                          .withOpacity(0.1),
+                                      borderRadius: BorderRadius.circular(8.r),
+                                    ),
+                                    child: Text(
+                                      "Price after commission: ${priceAfter.toStringAsFixed(2)} SAR",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(
+                                        fontWeight: FontWeight.w600,
+                                        color: ColorsManager.primary,
+                                      ),
+                                    ),
+                                  );
+                                }
+                                return const SizedBox();
+                              },
+                            ),
+
                             SizedBox(height: 16.h),
                             const Divider(thickness: 1, color: Colors.grey),
                             SizedBox(height: 16.h),
@@ -173,18 +230,16 @@ class _SendOfferViewBodyState extends State<SendOfferViewBody> {
                       title: "Send offer",
                       ontap: () {
                         setState(() {
-                          descriptionError =
-                              descriptionController.text.isEmpty
-                                  ? "Please enter a description"
-                                  : null;
-                          priceError =
-                              priceController.text.isEmpty
-                                  ? "Please enter a price"
-                                  : null;
+                          descriptionError = descriptionController.text.isEmpty
+                              ? "Please enter a description"
+                              : null;
+                          priceError = priceController.text.isEmpty
+                              ? "Please enter a price"
+                              : null;
                           deliveryTimeError =
-                              deliveryTimeController.text.isEmpty
-                                  ? "Please enter a delivery time"
-                                  : null;
+                          deliveryTimeController.text.isEmpty
+                              ? "Please enter a delivery time"
+                              : null;
                         });
 
                         if (descriptionError == null &&
@@ -192,9 +247,8 @@ class _SendOfferViewBodyState extends State<SendOfferViewBody> {
                             deliveryTimeError == null) {
                           final offerId = const Uuid().v4();
                           final now = DateTime.now();
-                          final deliveryTime = int.parse(
-                            deliveryTimeController.text,
-                          );
+                          final deliveryTime =
+                          int.parse(deliveryTimeController.text);
                           final deliveryTimeInDays = convertToMinutes(
                             deliveryTime,
                             selectedTimeUnit,
@@ -204,12 +258,12 @@ class _SendOfferViewBodyState extends State<SendOfferViewBody> {
                             OfferEntity(
                               id: offerId,
                               freelancerId:
-                                  SharedPrefHelper.getString(
-                                    StringsManager.idKey,
-                                  )!,
+                              SharedPrefHelper.getString(
+                                  StringsManager.idKey)!,
                               clientId: widget.orderEntity.clientId!,
                               orderId: widget.orderEntity.id!,
-                              offerAmount: double.parse(priceController.text),
+                              offerAmount:
+                              double.parse(priceController.text),
                               offerStatus: "pending",
                               offerDescription: descriptionController.text,
                               offerDeliveryTime: deliveryTimeInDays,
@@ -268,11 +322,9 @@ class _SendOfferViewBodyState extends State<SendOfferViewBody> {
           maxLines: 100,
           minLines: 1,
           decoration: InputDecoration(
-            border:
-                InputBorder
-                    .none, // خليها none عشان يظهر border الـ Container بس
+            border: InputBorder.none,
             hintText:
-                "Explain how you will execute this project, including methods or any specific conditions....",
+            "Explain how you will execute this project, including methods or any specific conditions....",
             errorText: descriptionError,
             hintStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
               fontWeight: FontWeight.w500,

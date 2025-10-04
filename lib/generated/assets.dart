@@ -14,7 +14,7 @@ class Assets {
   static const String fontsDMSansMedium = 'assets/fonts/DMSans-Medium.ttf';
   static const String fontsDMSansRegular = 'assets/fonts/DMSans-Regular.ttf';
   static const String fontsDMSansSemiBold = 'assets/fonts/DMSans-SemiBold.ttf';
-  static const String images9264822 = 'assets/images/empty.jpg';
+  static const String images5173532 = 'assets/images/admin_avatar.jpg';
   static const String images9440461 = 'assets/images/9440461.jpg';
   static const String imagesAccount3166234 = 'assets/images/account_3166234.png';
   static const String imagesAccountName = 'assets/images/account_name.png';
@@ -28,6 +28,7 @@ class Assets {
   static const String imagesClient = 'assets/images/client.png';
   static const String imagesCover = 'assets/images/cover.jpg';
   static const String imagesDocument10103871 = 'assets/images/document_10103871.png';
+  static const String imagesEmpty = 'assets/images/empty.jpg';
   static const String imagesEnglishFlag = 'assets/images/english_flag.png';
   static const String imagesFaq6736884 = 'assets/images/faq_6736884.png';
   static const String imagesFreelancer = 'assets/images/freelancer.png';

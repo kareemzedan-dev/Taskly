@@ -7,7 +7,7 @@ import 'package:taskly/core/di/di.dart';
 import 'package:taskly/core/utils/assets_manager.dart';
 import 'package:taskly/core/utils/strings_manager.dart';
 import 'package:taskly/features/client/presentation/views/tabs/profile/presentation/views/widgets/account_item_row.dart';
-import 'package:taskly/features/client/presentation/views/tabs/profile/presentation/views/widgets/user_info_section.dart';
+import 'package:taskly/features/profile/presentation/widgets/user_info_section.dart';
 import 'package:taskly/features/client/presentation/views/tabs/profile/presentation/views/widgets/user_info_section_shimmer.dart';
 import 'package:taskly/features/profile/presentation/manager/profile_view_model/profile_view_model.dart';
 import 'package:taskly/features/profile/presentation/manager/profile_view_model/profile_view_model_states.dart';
@@ -40,7 +40,7 @@ class _ClientProfileViewBodyState extends State<ClientProfileViewBody> {
                   (context) =>
                       getIt<ProfileViewModel>()..getUserInfo(
                         SharedPrefHelper.getString(StringsManager.idKey)!,
-                        "client",
+                      SharedPrefHelper.getString(StringsManager.roleKey)!,
                       ),
               child: BlocBuilder<ProfileViewModel, ProfileViewModelStates>(
                 builder: (context, state) {
@@ -48,7 +48,7 @@ class _ClientProfileViewBodyState extends State<ClientProfileViewBody> {
                     return const UserInfoSectionShimmer();
                   } else if (state is ProfileViewModelStatesSuccess) {
                     return UserInfoSection(
-                      userInfo: state.userInfoEntity,
+
                       onTap: () {
                         Navigator.pushNamed(
                           context,
@@ -56,8 +56,8 @@ class _ClientProfileViewBodyState extends State<ClientProfileViewBody> {
                           arguments: state.userInfoEntity,
                         );
                       },
-                      email: state.userInfoEntity.email,
-                      name: state.userInfoEntity.fullName!,
+                      rating:  state.userInfoEntity.rating!,
+
                     );
                   } else if (state is ProfileViewModelStatesError) {
                     return Text(state.message);
@@ -184,7 +184,10 @@ class _ClientProfileViewBodyState extends State<ClientProfileViewBody> {
                 borderRadius: BorderRadius.circular(12.r),
               ),
               child: InkWell(
-                onTap: () {},
+                onTap: () {
+                  SharedPrefHelper.clear();
+                  Navigator.pushNamedAndRemoveUntil(context, RoutesManager.splash, (route) => false);
+                },
                 child: Row(
                   children: [
                     Icon(Icons.logout, color: Colors.red),

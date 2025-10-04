@@ -6,6 +6,8 @@ class StringsManager {
   static const String emailKey = "email";
   static const String avatarUrlKey = "avatarUrl";
   static const String profileImageKey = "profileImage";
+  static const String ratingKey = "rating";
+  static const String phoneNumberKey = "phoneNumber";
 
   static const String freelancerRole = "freelancer";
   static const String clientRole = "client";

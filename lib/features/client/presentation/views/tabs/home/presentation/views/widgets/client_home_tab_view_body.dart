@@ -20,7 +20,6 @@ class ClientHomeTabViewBody extends StatefulWidget {
   State<ClientHomeTabViewBody> createState() => _ClientHomeTabViewBodyState();
 }
 
- 
 class _ClientHomeTabViewBodyState extends State<ClientHomeTabViewBody> {
   late final ProfileViewModel _userInfoViewModel;
   late final TextEditingController _searchController;
@@ -28,8 +27,10 @@ class _ClientHomeTabViewBodyState extends State<ClientHomeTabViewBody> {
   @override
   void initState() {
     super.initState();
-    _userInfoViewModel = getIt<ProfileViewModel>()..getUserInfo(SharedPrefHelper.getString(StringsManager.idKey)!, StringsManager.roleKey);
-   // _userInfoViewModel.loadUserInfo();
+    _userInfoViewModel = getIt<ProfileViewModel>()
+      ..getUserInfo(SharedPrefHelper.getString(StringsManager.idKey)!,
+          StringsManager.roleKey);
+    // _userInfoViewModel.loadUserInfo();
 
     _searchController = TextEditingController();
   }
@@ -52,35 +53,15 @@ class _ClientHomeTabViewBodyState extends State<ClientHomeTabViewBody> {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            BlocProvider(
-              create: (context) => _userInfoViewModel,
-              child: BlocBuilder<ProfileViewModel, ProfileViewModelStates>(
-                builder: (context, state) {
-                  if (state is ProfileViewModelStatesLoading) {
-                    return const UserInfoHomeHeaderShimmer();
-                  } else if (state is ProfileViewModelStatesSuccess) {
-                    return UserInfoHomeHeader(
-                      imageUrl: state.userInfoEntity.profileImage,
-                      fullName: state.userInfoEntity.fullName,
-                    );
-                  } else if (state is ProfileViewModelStatesError) {
-                    return Text(state.message);
-                  }
-                  return Container();
-                },
-              ),
-            ),
+            UserInfoHomeHeader(),
             SizedBox(height: 30.h),
-
-           
             CustomSearchTextField(
-              hintTexts:["Search for services"],
+              hintTexts: ["Search for services"],
               controller: _searchController,
-              onChanged: _onSearchChanged,  
+              onChanged: _onSearchChanged,
             ),
-
             SizedBox(height: 30.h),
-              ServiceCategoryGridView(),
+            ServiceCategoryGridView(),
           ],
         ),
       ),

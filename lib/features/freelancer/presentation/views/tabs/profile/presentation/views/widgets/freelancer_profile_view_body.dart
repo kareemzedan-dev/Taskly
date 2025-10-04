@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/config/routes/routes_manager.dart';
 import 'package:taskly/core/utils/assets_manager.dart';
 import 'package:taskly/features/client/presentation/views/tabs/profile/presentation/views/widgets/account_item_row.dart';
-import 'package:taskly/features/client/presentation/views/tabs/profile/presentation/views/widgets/user_info_section.dart';
+import 'package:taskly/features/profile/presentation/widgets/user_info_section.dart';
 import 'package:taskly/features/shared/presentation/views/widgets/language_bottom_sheet_content.dart';
 import 'package:taskly/features/shared/presentation/views/widgets/profile_section.dart';
 import 'package:taskly/features/shared/presentation/views/widgets/theme_bottom_sheet_content.dart';
@@ -43,7 +43,7 @@ class _FreelancerProfileViewBodyState extends State<FreelancerProfileViewBody> {
                   (context) =>
               getIt<ProfileViewModel>()..getUserInfo(
                 SharedPrefHelper.getString(StringsManager.idKey)!,
-                "client",
+                 SharedPrefHelper.getString(StringsManager.roleKey)!,
               ),
               child: BlocBuilder<ProfileViewModel, ProfileViewModelStates>(
                 builder: (context, state) {
@@ -51,7 +51,7 @@ class _FreelancerProfileViewBodyState extends State<FreelancerProfileViewBody> {
                     return const UserInfoSectionShimmer();
                   } else if (state is ProfileViewModelStatesSuccess) {
                     return UserInfoSection(
-                      userInfo: state.userInfoEntity,
+
                       onTap: () {
                         Navigator.pushNamed(
                           context,
@@ -59,8 +59,8 @@ class _FreelancerProfileViewBodyState extends State<FreelancerProfileViewBody> {
                           arguments: state.userInfoEntity,
                         );
                       },
-                      email: state.userInfoEntity.email,
-                      name: state.userInfoEntity.fullName!,
+                      rating:  state.userInfoEntity.rating!,
+
                     );
                   } else if (state is ProfileViewModelStatesError) {
                     return Text(state.message);
@@ -229,7 +229,10 @@ class _FreelancerProfileViewBodyState extends State<FreelancerProfileViewBody> {
                 borderRadius: BorderRadius.circular(12.r),
               ),
               child: InkWell(
-                onTap: () {},
+                onTap: () {
+                  SharedPrefHelper.clear();
+                  Navigator.pushNamed(context, RoutesManager.splash);
+                },
                 child: Row(
                   children: [
                     Icon(Icons.logout, color: Colors.red),

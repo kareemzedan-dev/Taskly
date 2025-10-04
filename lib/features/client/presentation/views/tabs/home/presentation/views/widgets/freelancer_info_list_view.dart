@@ -5,6 +5,7 @@ import 'package:taskly/features/client/presentation/views/tabs/home/presentation
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/freelancer_info_card_for_hire.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/reviews_card.dart';
 
+import '../../../../../../../../../config/routes/routes_manager.dart';
 import '../../view_model/place_order_view_model/place_order_view_model.dart';
 
 class FreelancerInfoListView extends StatefulWidget {
@@ -34,9 +35,16 @@ class _FreelancerInfoListViewState extends State<FreelancerInfoListView> {
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: FreelancerInfoCardForHire(
                   onReviewsTap: (){
-                    showModalBottomSheet(context: context, builder: (context) {
-                      return ReviewsCard();
-                    },);
+                   Navigator.pushNamed(context, RoutesManager.reviewsView , arguments:  {
+                     'userId': freelancer.id,
+                     "role" : "freelancer",
+                     "userName":freelancer.fullName,
+                     "userImage":freelancer.profileImage,
+                     "userRating":freelancer.rating,
+
+
+
+                   });
                   },
                   freelancer: freelancer,
                   isSelected: freelancer.id == widget.selectedId,

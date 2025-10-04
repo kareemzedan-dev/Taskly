@@ -3,10 +3,18 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/utils/assets_manager.dart';
 import 'package:taskly/features/reviews/presentation/widgets/user_avatar.dart';
 
+import '../../../../../../../../../core/cache/shared_preferences.dart';
+import '../../../../../../../../../core/utils/strings_manager.dart';
+
 class UserInfoHomeHeader extends StatelessWidget {
-  const UserInfoHomeHeader({super.key, required this.fullName, required this.imageUrl});
-  final String? fullName;
-  final String? imageUrl;
+  UserInfoHomeHeader({
+    super.key,
+  });
+
+  final String? fullName =
+      SharedPrefHelper.getString(StringsManager.fullNameKey)!;
+  final String? imageUrl =
+      SharedPrefHelper.getString(StringsManager.profileImageKey)  ;
 
   @override
   Widget build(BuildContext context) {
@@ -19,18 +27,24 @@ class UserInfoHomeHeader extends StatelessWidget {
               "Hi ${fullName ?? ""},",
               style: Theme.of(
                 context,
-              ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600,       fontSize: 16.sp,),
+              ).textTheme.bodyLarge?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16.sp,
+                  ),
             ),
             Text(
-              "Welcome back",
+              "Welcome To Taskly",
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                fontWeight: FontWeight.w800,
-                fontSize: 18.sp,
-              ),
+                    fontWeight: FontWeight.w800,
+                    fontSize: 18.sp,
+                  ),
             ),
           ],
         ),
-       UserAvatar( imagePath: imageUrl, radius: 24.r,)
+        UserAvatar(
+          imagePath: imageUrl,
+          radius: 24.r,
+        )
       ],
     );
   }

@@ -57,7 +57,7 @@ class OfferRemoteDataSourceImpl implements OfferRemoteDataSource {
         data: offerModel.toJson(),
       );
 
-      // زيادة offers_count للـ order
+
       final orderId = offerEntity.orderId;
       final order = await supabaseService.supabaseClient
           .from('orders')

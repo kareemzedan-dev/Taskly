@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
 import 'package:taskly/config/l10n/app_localizations.dart';
 
@@ -35,22 +36,32 @@ class PrivacyPolicyWithCheck extends FormField<bool> {
                       children: [
                         TextSpan(
                           text: AppLocalizations.of(state.context)!.privacyPolicyAgreement,
-                          style: Theme.of(state.context).textTheme.bodyMedium,
+                          style: Theme.of(state.context).textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: ColorsManager.primary,
+                            fontSize: 14.sp,
+                            ),
                         ),
                         TextSpan(
                           text: AppLocalizations.of(state.context)!.privacyPolicy,
                           style: Theme.of(state.context).textTheme.bodyMedium?.copyWith(
                                 color: ColorsManager.primary,
+                                fontSize: 14.sp,
                               ),
                         ),
                         TextSpan(
                           text: AppLocalizations.of(state.context)!.termsAgreement,
-                          style: Theme.of(state.context).textTheme.bodyMedium,
+                          style: Theme.of(state.context).textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: ColorsManager.primary,
+                            fontSize: 14.sp,
+                            ),
                         ),
                         TextSpan(
                           text: AppLocalizations.of(state.context)!.termsOfUse,
                           style: Theme.of(state.context).textTheme.bodyMedium?.copyWith(
                                 color: ColorsManager.primary,
+                                fontSize: 14.sp,
                               ),
                         ),
                       ],

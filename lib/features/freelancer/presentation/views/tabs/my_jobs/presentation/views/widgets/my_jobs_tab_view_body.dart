@@ -29,23 +29,18 @@ class _MyJobsTabViewBodyState extends State<MyJobsTabViewBody> {
   void initState() {
     super.initState();
     viewModel = getIt<GetFreelancerOffersViewModel>();
-
-    // أول تحميل للـ offers
     viewModel.getFreelancerOffers(freelancerId, null);
-
-    // الاشتراك في الـ stream
     _subscription = viewModel.subscribeToOffers(freelancerId).listen((event) {
       final (offer, action) = event;
 
-      // نعمل refresh للـ offers
       viewModel.getFreelancerOffers(freelancerId, null);
 
       // Notifications
-      if (offer.offerStatus == 'accepted') {
+      if (offer.offerStatus == 'Accepted') {
         NotificationHelper.showNotification(context, "Your offer got accepted!");
-      } else if (offer.offerStatus == 'rejected') {
+      } else if (offer.offerStatus == 'Rejected') {
         NotificationHelper.showNotification(context, "Your offer was rejected!");
-      } else if (offer.offerStatus == 'pending') {
+      } else if (offer.offerStatus == 'Pending') {
         NotificationHelper.showNotification(context, "New pending offer!");
       }
     });
@@ -119,7 +114,7 @@ class _MyJobsTabViewBodyState extends State<MyJobsTabViewBody> {
                     message: 'No accepted offers',
                   );
                 }
-                return TrackingOffersListView(offer: acceptedOffers);
+                return TrackingOffersListView(offer: acceptedOffers,isAccepted: true);
               }
               return const Center(child: Text("No offers"));
             },
@@ -141,7 +136,8 @@ class _MyJobsTabViewBodyState extends State<MyJobsTabViewBody> {
               }
               if (state is GetFreelancerOffersSuccessState) {
                 final completedOffers = state.offers
-                    .where((o) => o.offerStatus == "completed")
+                    .where((o) => o.offerStatus == "Completed")
+
                     .toList();
 
                 if (completedOffers.isEmpty) {
@@ -150,7 +146,7 @@ class _MyJobsTabViewBodyState extends State<MyJobsTabViewBody> {
                     message: 'No completed projects yet',
                   );
                 }
-                return TrackingOffersListView(offer: completedOffers);
+                return TrackingOffersListView(offer: completedOffers ,isCompleted: true);
               }
               return const Center(child: Text("No offers"));
             },
@@ -172,7 +168,7 @@ class _MyJobsTabViewBodyState extends State<MyJobsTabViewBody> {
               }
               if (state is GetFreelancerOffersSuccessState) {
                 final rejectedOffers = state.offers
-                    .where((o) => o.offerStatus == "rejected")
+                    .where((o) => o.offerStatus == "Rejected")
                     .toList();
 
                 if (rejectedOffers.isEmpty) {
@@ -181,7 +177,7 @@ class _MyJobsTabViewBodyState extends State<MyJobsTabViewBody> {
                     message: 'No rejected offers',
                   );
                 }
-                return TrackingOffersListView(offer: rejectedOffers);
+                return TrackingOffersListView(offer: rejectedOffers,isRejected: true);
               }
               return const Center(child: Text("No offers"));
             },

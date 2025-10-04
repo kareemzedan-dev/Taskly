@@ -1,66 +1,26 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:taskly/core/helper/date_time_formatter.dart';
+import 'package:taskly/core/cache/shared_preferences.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
-import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/action_row.dart';
-import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/delivery_info.dart';
-import 'package:taskly/features/shared/domain/entities/order_entity/order_entity.dart';
-
+import 'package:taskly/core/utils/strings_manager.dart';
+import '../../../../../../../data/models/favorite_order_model/favorite_order_model.dart';
+import '../../../../../../../domain/entities/favorite_order_entity/favorite_order_entity.dart';
+import '../../view_model/add_favorite_order_view_model/add_favorite_order_states.dart';
+import '../../view_model/add_favorite_order_view_model/add_favorite_order_view_model.dart';
+import '../../view_model/remove_favorite_order_view_model/remove_favorite_order_view_model.dart';
 import '../../../../../../../../../config/routes/routes_manager.dart';
+import '../../../../../../../../../core/helper/date_time_formatter.dart';
+import '../../../../../../../../../core/helper/relative_time.dart';
+import '../../../../../../../../../features/shared/domain/entities/order_entity/order_entity.dart';
+import 'action_row.dart';
+import 'delivery_info.dart';
 
-class FreelancerWorkCard extends StatefulWidget {
-  const FreelancerWorkCard({super.key, required this.order});
+class FreelancerWorkCard extends StatelessWidget {
+  const FreelancerWorkCard({super.key, required this.order,    required this.addFavViewModel,});
   final OrderEntity order;
-
-  @override
-  State<FreelancerWorkCard> createState() => _FreelancerWorkCardState();
-}
-
-extension RelativeTime on DateTime {
-  String toRelative() {
-    final now = DateTime.now();
-    final difference = this.difference(now);
-
-    bool isPast = difference.isNegative;
-
-    int totalSeconds = difference.inSeconds.abs();
-
-    final days = totalSeconds ~/ (24 * 3600);
-    totalSeconds -= days * 24 * 3600;
-
-    final hours = totalSeconds ~/ 3600;
-    totalSeconds -= hours * 3600;
-
-    final minutes = totalSeconds ~/ 60;
-    totalSeconds -= minutes * 60;
-
-    final seconds = totalSeconds;
-
-    String suffix = isPast ? " ago" : " left";
-
-    if (days > 0) {
-      String result = "$days day${days > 1 ? 's' : ''}";
-      if (hours > 0) {
-        result += " $hours hour${hours > 1 ? 's' : ''}";
-      }
-      return result + suffix;
-    } else if (hours > 0) {
-      String result = "$hours hour${hours > 1 ? 's' : ''}";
-      if (minutes > 0) {
-        result += " $minutes minute${minutes > 1 ? 's' : ''}";
-      }
-      return result + suffix;
-    } else if (minutes > 0) {
-      return "$minutes minute${minutes > 1 ? 's' : ''}$suffix";
-    } else {
-      return "just now";
-    }
-  }
-}
-
-
-class _FreelancerWorkCardState extends State<FreelancerWorkCard> {
-  bool isFavorite = false;
+  final AddFavoriteOrderViewModel addFavViewModel; // ✅ أضف هنا
 
   @override
   Widget build(BuildContext context) {
@@ -78,26 +38,18 @@ class _FreelancerWorkCardState extends State<FreelancerWorkCard> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              HeaderRow(
-                widget.order.createdAt.toTimeAgo(),
-                isFavorite: isFavorite,
-                onFavoriteTap: () {
-                  setState(() {
-                    isFavorite = !isFavorite;
-                  });
-                },
-              ),
+              HeaderRow(date: order.createdAt.toTimeAgo(), orderId: order.id, addFavViewModel: addFavViewModel,),
               SizedBox(height: 10),
-              Title(widget.order.title),
+              Title(order.title),
               SizedBox(height: 5),
-              CategoryChip(widget.order.category ?? "No category"),
+              CategoryChip(order.category ?? "No category"),
               SizedBox(height: 16),
-              Description(widget.order.description ?? "No description"),
+              Description(order.description ?? "No description"),
               SizedBox(height: 16),
-              DeliveryInfo(deliveryTime: widget.order.deadline!.toRelative()),
+              DeliveryInfo(deliveryTime: order.deadline!.toRelative()),
               SizedBox(height: 16),
               ActionsRow(
-                order: widget.order,
+                order: order,
                 actions: [
                   ActionItem(
                     title: "View details",
@@ -106,7 +58,7 @@ class _FreelancerWorkCardState extends State<FreelancerWorkCard> {
                       Navigator.pushNamed(
                         context,
                         RoutesManager.jobDetailsView,
-                        arguments:  widget.order,
+                        arguments: order,
                       );
                     },
                   ),
@@ -118,13 +70,12 @@ class _FreelancerWorkCardState extends State<FreelancerWorkCard> {
                       Navigator.pushNamed(
                         context,
                         RoutesManager.sendOfferView,
-                        arguments:  widget.order,
+                        arguments: order,
                       );
                     },
                   ),
                 ],
               )
-
             ],
           ),
         ),
@@ -134,39 +85,126 @@ class _FreelancerWorkCardState extends State<FreelancerWorkCard> {
 }
 
 class HeaderRow extends StatelessWidget {
-  const HeaderRow(
-    this.date, {
-      this.isFavorite = false,
-      this.onFavoriteTap,
-  });
-
+  const HeaderRow({super.key, required this.date, required this.orderId, required this.addFavViewModel});
   final String date;
-  final bool isFavorite;
-  final VoidCallback ?onFavoriteTap;
+  final String orderId;
+  final AddFavoriteOrderViewModel addFavViewModel;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          "Posted $date",
-          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-            fontWeight: FontWeight.w500,
-            fontSize: 12.sp,
-          ),
-        ),
-        GestureDetector(
-          onTap: onFavoriteTap,
-          child: Icon(
-            isFavorite ? Icons.favorite : Icons.favorite_border_rounded,
-            color: isFavorite ? Colors.red : Colors.black,
-          ),
-        ),
-      ],
+    return BlocListener<AddFavoriteOrderViewModel, AddFavoriteOrderStates>(
+      listener: (context, state) {
+        if (state is AddFavoriteOrderSuccessState && state.orderId == orderId) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(state.message)));
+        }
+        if (state is AddFavoriteOrderRemovedState && state.orderId == orderId) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(const SnackBar(content: Text("Removed from favorites")));
+        }
+        if (state is AddFavoriteOrderErrorState) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(state.error)));
+        }
+      },
+      child: _HeaderContent(date: date, orderId: orderId  , addFavViewModel: addFavViewModel,),
     );
   }
 }
+class _HeaderContent extends StatelessWidget {
+  final String date;
+  final String orderId;
+  final AddFavoriteOrderViewModel addFavViewModel; // أضف هذا
+
+  const _HeaderContent({
+    required this.date,
+    required this.orderId,
+    required this.addFavViewModel, // أضف هنا
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final removeFavViewModel = context.read<RemoveFavoriteOrderViewModel>();
+
+    return BlocBuilder<AddFavoriteOrderViewModel, AddFavoriteOrderStates>(
+      bloc: addFavViewModel, // ✅ استخدم النسخة الممررة
+      builder: (context, state) {
+        final isFavorite = addFavViewModel.isFavorite(orderId);
+
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              "Posted $date",
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                fontWeight: FontWeight.w500,
+                fontSize: 12.sp,
+              ),
+            ),
+            GestureDetector(
+              onTap: () async {
+                if (isFavorite) {
+                  final favEntity = addFavViewModel.getFavoriteEntityByOrderId(orderId);
+                  if (favEntity != null) {
+                    final result = await removeFavViewModel.removeFavoriteOrder(favEntity.id);
+                    result.fold(
+                          (failure) => ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Error removing favorite'))),
+                          (_) {
+                        addFavViewModel.removeFavorite(orderId);
+
+                        final updatedJsonList = addFavViewModel.favoriteOrderIds
+                            .map((id) {
+                          final e = addFavViewModel.getFavoriteEntityByOrderId(id)!;
+                          return jsonEncode(FavoriteOrderModel(
+                            id: e.id,
+                            userId: e.userId,
+                            orderId: e.orderId,
+                            createdAt: e.createdAt,
+                          ).toJson());
+                        }).toList();
+
+                        SharedPrefHelper.setStringList('favoriteOrders', updatedJsonList);
+                      },
+                    );
+                  }
+                } else {
+                  final favEntity = FavoriteOrderEntity(
+                    id: '',
+                    userId: SharedPrefHelper.getString(StringsManager.idKey) ?? "",
+                    orderId: orderId,
+                    createdAt: DateTime.now(),
+                  );
+
+                  await addFavViewModel.toggleFavorite(favEntity);
+
+                  final updatedJsonList = addFavViewModel.favoriteOrderIds
+                      .map((id) {
+                    final e = addFavViewModel.getFavoriteEntityByOrderId(id)!;
+                    return jsonEncode(FavoriteOrderModel(
+                      id: e.id,
+                      userId: e.userId,
+                      orderId: e.orderId,
+                      createdAt: e.createdAt,
+                    ).toJson());
+                  }).toList();
+
+                  SharedPrefHelper.setStringList('favoriteOrders', updatedJsonList);
+                }
+              },
+              child: Icon(
+                isFavorite ? Icons.favorite : Icons.favorite_border_rounded,
+                color: isFavorite ? Colors.red : Colors.black,
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+/// ------------------- باقي الويدجتس -------------------
 
 class Title extends StatelessWidget {
   const Title(this.title);

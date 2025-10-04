@@ -36,12 +36,16 @@ AuthRemoteDataSourceImpl(this.supabaseService);
     required String fullName,
     required String email,
     required String role,
+
   }) async {
     await SharedPrefHelper.setString(StringsManager.tokenKey, token);
     await SharedPrefHelper.setString(StringsManager.idKey, id);
     await SharedPrefHelper.setString(StringsManager.fullNameKey, fullName);
     await SharedPrefHelper.setString(StringsManager.emailKey, email);
     await SharedPrefHelper.setString(StringsManager.roleKey, role);
+    await SharedPrefHelper.setString(StringsManager.ratingKey, "0.0");
+    await SharedPrefHelper.setString(StringsManager.phoneNumberKey, "");
+    await SharedPrefHelper.setString(StringsManager.profileImageKey, "");
   }
 Future<void> _saveUserToSupabase({
   required String id,

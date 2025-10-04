@@ -6,9 +6,12 @@ import 'package:taskly/core/utils/assets_manager.dart';
 import 'package:taskly/features/profile/domain/entities/user_info_entity/user_info_entity.dart';
 import 'package:taskly/features/reviews/presentation/widgets/user_avatar.dart';
 
+import '../../../../core/cache/shared_preferences.dart';
+import '../../../../core/utils/strings_manager.dart';
+
 class UserInfoSection extends StatelessWidget {
   final String? name, email;
-  final double rating;
+  final double ? rating;
   final bool isFreelancer;
   final bool photoSizeSelected;
   final bool emailShow;
@@ -19,7 +22,7 @@ class UserInfoSection extends StatelessWidget {
     super.key,
     this.name,
     this.email,
-    this.rating = 1.0,
+     this.rating   ,
     this.isFreelancer = false,
     this.photoSizeSelected = false,
     this.emailShow = true,
@@ -29,16 +32,20 @@ class UserInfoSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final displayName = userInfo?.fullName ?? name ?? "Unknown";
-    final displayEmail = userInfo?.email ?? email ?? "Unknown";
-    final displayRating = userInfo?.rating ?? rating;
+    final displayName = SharedPrefHelper.getString(StringsManager.fullNameKey)!;
+    final displayEmail =  SharedPrefHelper.getString(StringsManager.emailKey)!;
+    final profileImage = SharedPrefHelper.getString(StringsManager.profileImageKey);
+    final displayRating = double.tryParse(
+        SharedPrefHelper.getString(StringsManager.ratingKey) ?? "0.0"
+    ) ?? 0.0;
+
 
     return GestureDetector(
       onTap: onTap,
       child: Row(
         children: [
          UserAvatar(
-            imagePath: userInfo?.profileImage,
+            imagePath:profileImage,
             radius:   30.r  ,
           ),
           SizedBox(width: 20.w),

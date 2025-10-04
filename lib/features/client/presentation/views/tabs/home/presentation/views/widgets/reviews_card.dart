@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
-import 'package:taskly/features/client/presentation/views/tabs/profile/presentation/views/widgets/user_info_section.dart';
+import 'package:taskly/features/profile/presentation/widgets/user_info_section.dart';
 
 class ReviewsCard extends StatelessWidget {
   const ReviewsCard({super.key});

@@ -13,9 +13,13 @@ import '../../../../../../../../profile/presentation/manager/profile_view_model/
 
 class TrackingOffersListView extends StatelessWidget {
   TrackingOffersListView(
-      {super.key, required this.offer, this.isPending = false});
+      {super.key, required this.offer, this.isPending = false,this.isAccepted = false, this.isRejected = false, this.isCompleted = false,});
   List<OfferEntity> offer;
   bool isPending;
+  bool isAccepted;
+  bool isRejected ;
+  bool isCompleted;
+
 
   @override
   Widget build(BuildContext context) {
@@ -31,12 +35,13 @@ class TrackingOffersListView extends StatelessWidget {
         itemBuilder: (context, index) {
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: BlocProvider(
-              create: (context) => getIt<WithdrawOfferViewModel>(),
-              child: TrackingOfferCard(
-                  offerEntity: offer[index], isPending: isPending),
-            ),
-          );
+            child:  MultiBlocProvider(providers: [
+              BlocProvider(create: (context) => getIt<WithdrawOfferViewModel>(),),
+          BlocProvider(create: (context) => getIt<UpdateOfferStatusViewModel>(),),
+          ],
+          child: TrackingOfferCard(
+            offerEntity: offer[index], isPending: isPending,isAccepted:   isAccepted, isRejected:   isRejected, isCompleted:   isCompleted, ),
+          ));
         });
   }
 }

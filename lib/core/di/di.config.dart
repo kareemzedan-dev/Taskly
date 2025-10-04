@@ -101,6 +101,16 @@ import '../../features/client/presentation/views/tabs/my_jobs/presentation/view_
     as _i855;
 import '../../features/client/presentation/views/tabs/my_jobs/presentation/view_model/update_offer_status_view_model/update_offer_status_view_model.dart'
     as _i376;
+import '../../features/freelancer/data/data_sources/remote/favorite_order_remote_data_source/add_favorite_order_remote_data_source/add_favorite_order_remote_data_source.dart'
+    as _i121;
+import '../../features/freelancer/data/data_sources/remote/favorite_order_remote_data_source/get_favorite_order_remote_data_source/get_favorite_order_remote_data_source.dart'
+    as _i490;
+import '../../features/freelancer/data/data_sources/remote/favorite_order_remote_data_source/get_favourite_order_details_remote_data_source/get_favourite_order_details_remote_data_source.dart'
+    as _i504;
+import '../../features/freelancer/data/data_sources/remote/favorite_order_remote_data_source/is_order_favorite_remote_data_source/is_order_favorite_remote_data_source.dart'
+    as _i346;
+import '../../features/freelancer/data/data_sources/remote/favorite_order_remote_data_source/remove_favorite_order_remote_data_source/remove_favorite_order_remote_data_source.dart'
+    as _i302;
 import '../../features/freelancer/data/data_sources/remote/freelancer_orders/fetch_private_orders_remote_data_source/fetch_private_orders_remote_data_source.dart'
     as _i765;
 import '../../features/freelancer/data/data_sources/remote/freelancer_orders/fetch_public_orders_remote_data_source/fetch_public_orders_remote_data_source.dart'
@@ -113,8 +123,20 @@ import '../../features/freelancer/data/data_sources/remote/freelancer_orders/upd
     as _i254;
 import '../../features/freelancer/data/data_sources/remote/freelancer_orders/withdraw_offer_remote_data_source/withdraw_offer_remote_data_source.dart'
     as _i735;
+import '../../features/freelancer/data/data_sources/remote/get_commission_remote_data_source/get_commission_remote_data_source.dart'
+    as _i884;
 import '../../features/freelancer/data/data_sources/remote/offer_data_source.dart'
     as _i358;
+import '../../features/freelancer/data/data_sources_impl/remote/favorite_order_remote_data_source_impl/add_favorite_order_remote_data_source_impl/add_favorite_order_remote_data_source_impl.dart'
+    as _i362;
+import '../../features/freelancer/data/data_sources_impl/remote/favorite_order_remote_data_source_impl/get_favorite_order_remote_data_source_impl/get_favorite_order_remote_data_source_impl.dart'
+    as _i740;
+import '../../features/freelancer/data/data_sources_impl/remote/favorite_order_remote_data_source_impl/get_favourite_order_details_remote_data_source_impl/get_favourite_order_details_remote_data_source_impl.dart'
+    as _i835;
+import '../../features/freelancer/data/data_sources_impl/remote/favorite_order_remote_data_source_impl/is_order_favorite_remote_data_source_impl/is_order_favorite_remote_data_source_impl.dart'
+    as _i216;
+import '../../features/freelancer/data/data_sources_impl/remote/favorite_order_remote_data_source_impl/remove_favorite_order_remote_data_source_impl/remove_favorite_order_remote_data_source_impl.dart'
+    as _i327;
 import '../../features/freelancer/data/data_sources_impl/remote/freelancer_orders/fetch_private_orders_remote_data_source_impl/fetch_private_orders_remote_data_source_impl.dart'
     as _i919;
 import '../../features/freelancer/data/data_sources_impl/remote/freelancer_orders/fetch_public_orders_remote_data_source_impl/fetch_public_orders_remote_data_source_impl.dart'
@@ -127,8 +149,20 @@ import '../../features/freelancer/data/data_sources_impl/remote/freelancer_order
     as _i1028;
 import '../../features/freelancer/data/data_sources_impl/remote/freelancer_orders/withdraw_offer_remote_data_source_impl/withdraw_offer_remote_data_source_impl.dart'
     as _i996;
+import '../../features/freelancer/data/data_sources_impl/remote/get_commission_remote_data_source_impl/get_commission_remote_data_source_impl.dart'
+    as _i22;
 import '../../features/freelancer/data/data_sources_impl/remote/offer_remote_data_source_impl.dart'
     as _i35;
+import '../../features/freelancer/data/repos/favorite_order_repos_impl/add_favorite_order_repo_impl/add_favorite_order_repo_impl.dart'
+    as _i961;
+import '../../features/freelancer/data/repos/favorite_order_repos_impl/get_favorite_order_repo_impl/get_favorite_order_repo_impl.dart'
+    as _i678;
+import '../../features/freelancer/data/repos/favorite_order_repos_impl/get_favourite_order_details_repo_impl/get_favourite_order_details_repo_impl.dart'
+    as _i453;
+import '../../features/freelancer/data/repos/favorite_order_repos_impl/is_order_favorite_repo_impl/is_order_favorite_repo_impl.dart'
+    as _i1032;
+import '../../features/freelancer/data/repos/favorite_order_repos_impl/remove_favorite_order_repo_impl/remove_favorite_order_repo_impl.dart'
+    as _i43;
 import '../../features/freelancer/data/repos/freelancer_order_repo_impl/fetch_private_orders_repo_impl/fetch_private_orders_repo_impl.dart'
     as _i101;
 import '../../features/freelancer/data/repos/freelancer_order_repo_impl/fetch_public_orders_repo_impl/fetch_public_orders_repo_impl.dart'
@@ -141,8 +175,20 @@ import '../../features/freelancer/data/repos/freelancer_order_repo_impl/update_o
     as _i90;
 import '../../features/freelancer/data/repos/freelancer_order_repo_impl/withdraw_offer_repo_impl/withdraw_offer_repo_impl.dart'
     as _i753;
+import '../../features/freelancer/data/repos/get_commission_repo_impl/get_commission_repo_impl.dart'
+    as _i948;
 import '../../features/freelancer/data/repos/offer_repository_impl/offer_repository_impl.dart'
     as _i792;
+import '../../features/freelancer/domain/repos/favorite_order_repos/add_favorite_order_repo/add_favorite_order_repo.dart'
+    as _i679;
+import '../../features/freelancer/domain/repos/favorite_order_repos/get_favorite_order_repo/get_favorite_order_repo.dart'
+    as _i554;
+import '../../features/freelancer/domain/repos/favorite_order_repos/get_favourite_order_details_repo/get_favourite_order_details.dart'
+    as _i6;
+import '../../features/freelancer/domain/repos/favorite_order_repos/is_order_favorite_repo/is_order_favorite_repo.dart'
+    as _i663;
+import '../../features/freelancer/domain/repos/favorite_order_repos/remove_favorite_order_repo/remove_favorite_order_repo.dart'
+    as _i157;
 import '../../features/freelancer/domain/repos/freelancer_order_repo/fetch_private_orders_repo/fetch_private_orders_repo.dart'
     as _i646;
 import '../../features/freelancer/domain/repos/freelancer_order_repo/fetch_public_orders_repo/fetch_public_orders_repo.dart'
@@ -155,16 +201,30 @@ import '../../features/freelancer/domain/repos/freelancer_order_repo/update_orde
     as _i778;
 import '../../features/freelancer/domain/repos/freelancer_order_repo/withdraw_offer_repo/withdraw_offer_repo.dart'
     as _i773;
+import '../../features/freelancer/domain/repos/offer_repository/get_commission_repo/get_commission_repo.dart'
+    as _i566;
 import '../../features/freelancer/domain/repos/offer_repository/offer_repository.dart'
     as _i363;
+import '../../features/freelancer/domain/use_cases/add_favorite_order_use_case/add_favorite_order_repo.dart'
+    as _i891;
 import '../../features/freelancer/domain/use_cases/fetch_order_details_use_case/fetch_order_details_use_case.dart'
     as _i988;
 import '../../features/freelancer/domain/use_cases/fetch_private_orders_use_case/fetch_private_orders_use_case.dart'
     as _i2;
 import '../../features/freelancer/domain/use_cases/fetch_public_orders_use_case/fetch_public_orders_use_case.dart'
     as _i166;
+import '../../features/freelancer/domain/use_cases/get_commission_use_case/get_commission_use_case.dart'
+    as _i935;
+import '../../features/freelancer/domain/use_cases/get_favorite_order_use_case/get_favorite_order_repo.dart'
+    as _i347;
+import '../../features/freelancer/domain/use_cases/get_favourite_order_details_use_case/get_favourite_order_details_use_case.dart'
+    as _i221;
 import '../../features/freelancer/domain/use_cases/get_freelancer_offers_use_case/get_freelancer_offers_use_case.dart'
     as _i90;
+import '../../features/freelancer/domain/use_cases/is_order_favorite_use_case/is_order_favorite_repo.dart'
+    as _i451;
+import '../../features/freelancer/domain/use_cases/remove_favorite_order_use_case/remove_favorite_order_repo.dart'
+    as _i772;
 import '../../features/freelancer/domain/use_cases/send_offer_use_case/send_offer_use_case.dart'
     as _i626;
 import '../../features/freelancer/domain/use_cases/subscribe_to_private_orders_use_case/subscribe_to_private_orders_use_case.dart'
@@ -185,10 +245,22 @@ import '../../features/freelancer/presentation/cubit/update_order_status_view_mo
     as _i975;
 import '../../features/freelancer/presentation/cubit/withdraw_offer_view_model/withdraw_offer_view_model.dart'
     as _i278;
+import '../../features/freelancer/presentation/views/tabs/find_work/presentation/view_model/add_favorite_order_view_model/add_favorite_order_view_model.dart'
+    as _i78;
 import '../../features/freelancer/presentation/views/tabs/find_work/presentation/view_model/freelancer_private_orders_view_model/freelancer_private_orders_view_model.dart'
     as _i370;
 import '../../features/freelancer/presentation/views/tabs/find_work/presentation/view_model/freelancer_public_order_view_model/freelancer_public_order_view_model.dart'
     as _i1000;
+import '../../features/freelancer/presentation/views/tabs/find_work/presentation/view_model/get_commission_view_model/get_commission_view_model.dart'
+    as _i946;
+import '../../features/freelancer/presentation/views/tabs/find_work/presentation/view_model/get_favorite_order_view_model/get_favorite_order_view_model.dart'
+    as _i553;
+import '../../features/freelancer/presentation/views/tabs/find_work/presentation/view_model/get_favourite_order_details_view_model/get_favourite_order_details_view_model.dart'
+    as _i737;
+import '../../features/freelancer/presentation/views/tabs/find_work/presentation/view_model/is_order_favorite_view_model/is_order_favorite_view_model.dart'
+    as _i123;
+import '../../features/freelancer/presentation/views/tabs/find_work/presentation/view_model/remove_favorite_order_view_model/remove_favorite_order_view_model.dart'
+    as _i520;
 import '../../features/freelancer/presentation/views/tabs/find_work/presentation/view_model/send_offer_view_model/send_offer_view_model.dart'
     as _i658;
 import '../../features/freelancer/presentation/views/tabs/find_work/presentation/view_model/subscribe_to_private_orders_view_model/subscribe_to_private_orders_view_model.dart'
@@ -321,16 +393,30 @@ import '../../features/payments/presentation/manager/get_payment_view_model/get_
     as _i483;
 import '../../features/profile/data/data_sources/profile_remote_data_source.dart'
     as _i1012;
-import '../../features/profile/data/data_sources_implem/profile_remote_data_source_impl.dart'
-    as _i51;
+import '../../features/profile/data/data_sources/update_user_profile_remote_data_source/update_user_profile_remote_data_source.dart'
+    as _i748;
+import '../../features/profile/data/data_sources_impl/profile_remote_data_source_impl.dart'
+    as _i226;
+import '../../features/profile/data/data_sources_impl/update_user_profile_remote_data_source_impl/update_user_profile_remote_data_source_impl.dart'
+    as _i965;
 import '../../features/profile/data/repositories/profile/profile_repo_impl.dart'
     as _i541;
+import '../../features/profile/data/repositories/update_user_profile_repo_impl/update_user_profile_repo_impl.dart'
+    as _i62;
+import '../../features/profile/domain/entities/user_info_entity/user_info_entity.dart'
+    as _i730;
 import '../../features/profile/domain/repositories/profile/profile_repo.dart'
     as _i821;
+import '../../features/profile/domain/repositories/update_user_profile_repo/update_user_profile_repo.dart'
+    as _i517;
 import '../../features/profile/domain/use_cases/profile/profile_use_case.dart'
     as _i585;
+import '../../features/profile/domain/use_cases/update_user_profile_use_case/update_user_profile_use_case.dart'
+    as _i669;
 import '../../features/profile/presentation/manager/profile_view_model/profile_view_model.dart'
     as _i1003;
+import '../../features/profile/presentation/manager/update_user_profile_view_model/update_user_profile_view_model.dart'
+    as _i34;
 import '../../features/reviews/data/data_sources/remote/reviews_remote_data_source/reviews_remote_data_source.dart'
     as _i114;
 import '../../features/reviews/data/data_sources_impl/remote/reviews_remote_data_source_impl/reviews_remote_data_source_impl.dart'
@@ -377,22 +463,29 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i458.MarkMessagesAsReadRemoteDataSource>(() =>
         _i1015.MarkMessagesAsReadRemoteDataSourceImpl(
             supabaseService: gh<_i374.SupabaseService>()));
+    gh.factory<_i884.GetCommissionRemoteDataSource>(() =>
+        _i22.GetCommissionRemoteDataSourceImpl(
+            supabaseService: gh<_i374.SupabaseService>()));
     gh.factory<_i1006.GetAcceptedOrderMessageRemoteDataSource>(() =>
         _i113.GetAcceptedOrderMessageRemoteDataSourceImpl(
             supabaseService: gh<_i374.SupabaseService>()));
     gh.factory<_i315.GetPaymentRemoteDataSource>(
         () => _i696.GetPaymentRemoteDataSourceImpl(gh<_i454.SupabaseClient>()));
+    gh.factory<_i566.GetCommissionRepo>(() => _i948.GetCommissionRepoImpl(
+        getCommissionRemoteDataSource:
+            gh<_i884.GetCommissionRemoteDataSource>()));
     gh.factory<_i968.CreatePaymentRemoteDataSource>(() =>
         _i795.CreatePaymentRemoteDataSourceImpl(gh<_i454.SupabaseClient>()));
     gh.factory<_i13.FetchPublicOrdersRemoteDataSource>(() =>
         _i301.FetchPublicOrdersRemoteDataSourceImpl(
             gh<_i374.SupabaseService>()));
-    gh.factory<_i1012.ProfileRemoteDataSource>(
-        () => _i51.ProfileRemoteDataSourceImpl(gh<_i374.SupabaseService>()));
     gh.factory<_i815.PaymentRepos>(() => _i488.CreatePaymentRepoImpl(
           gh<_i968.CreatePaymentRemoteDataSource>(),
           gh<_i315.GetPaymentRemoteDataSource>(),
         ));
+    gh.factory<_i121.AddFavoriteOrderRemoteDataSource>(() =>
+        _i362.AddFavoriteOrderRemoteDataSourceImpl(
+            gh<_i374.SupabaseService>()));
     gh.factory<_i219.GetOrderMessagesRemoteDataSource>(() =>
         _i652.GetOrderMessagesRemoteDataSourceImpl(
             gh<_i374.SupabaseService>()));
@@ -407,14 +500,23 @@ extension GetItInjectableX on _i174.GetIt {
         remoteDataSource: gh<_i114.ReviewsRemoteDataSource>()));
     gh.factory<_i432.AuthRemoteDataSource>(
         () => _i420.AuthRemoteDataSourceImpl(gh<_i374.SupabaseService>()));
+    gh.factory<_i504.GetFavouriteOrderDetailsRemoteDataSource>(() =>
+        _i835.GetFavouriteOrderDetailsRemoteDataSourceImpl(
+            gh<_i374.SupabaseService>()));
     gh.factory<_i833.GetOrderMessagesRepo>(() => _i661.GetOrderMessagesRepoImpl(
         remoteDataSource: gh<_i219.GetOrderMessagesRemoteDataSource>()));
     gh.factory<_i673.DeleteOrderRemoteDataSource>(
         () => _i930.DeleteOrderDataSourceImpl(gh<_i374.SupabaseService>()));
+    gh.factory<_i490.GetFavoriteOrderRemoteDataSource>(() =>
+        _i740.GetFavoriteOrderRemoteDataSourceImpl(
+            gh<_i374.SupabaseService>()));
     gh.factory<_i363.OfferRepository>(
         () => _i792.OfferRepositoryImpl(gh<_i358.OfferRemoteDataSource>()));
     gh.factory<_i746.AuthRepo>(
         () => _i529.AuthRepoImpl(gh<_i432.AuthRemoteDataSource>()));
+    gh.factory<_i302.RemoveFavoriteOrderRemoteDataSource>(() =>
+        _i327.RemoveFavoriteOrderRemoteDataSourceImpl(
+            gh<_i374.SupabaseService>()));
     gh.factory<_i118.SubscribeToPrivateOrdersRemoteDataSource>(
         () => _i737.SubscribeToPrivateOrdersRemoteDataSourceImpl(
               gh<_i374.SupabaseService>(),
@@ -433,8 +535,15 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i416.GetOrderMessagesUseCase(gh<_i833.GetOrderMessagesRepo>()));
     gh.factory<_i257.GetConversationRepo>(() => _i402.GetConversationRepoImpl(
         gh<_i572.GetConversationsRemoteDataSource>()));
+    gh.factory<_i346.IsOrderFavoriteRemoteDataSource>(() =>
+        _i216.IsOrderFavoriteRemoteDataSourceImpl(gh<_i374.SupabaseService>()));
+    gh.factory<_i1012.ProfileRemoteDataSource>(
+        () => _i226.ProfileRemoteDataSourceImpl(gh<_i374.SupabaseService>()));
     gh.factory<_i735.WithdrawOfferRemoteDataSource>(() =>
         _i996.WithdrawOfferRemoteDataSourceImpl(gh<_i374.SupabaseService>()));
+    gh.factory<_i748.UpdateUserProfileRemoteDataSource>(() =>
+        _i965.UpdateUserProfileRemoteDataSourceImpl(
+            gh<_i374.SupabaseService>()));
     gh.factory<_i815.GetAdminMessagesRemoteDataSource>(() =>
         _i422.GetAdminMessagesRemoteDataSourceImpl(
             gh<_i374.SupabaseService>()));
@@ -453,6 +562,9 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i988.FetchOrderDetailsUseCase(gh<_i363.OfferRepository>()));
     gh.factory<_i644.FetchOrderDetailsViewModel>(() =>
         _i644.FetchOrderDetailsViewModel(gh<_i988.FetchOrderDetailsUseCase>()));
+    gh.factory<_i157.RemoveFavoriteOrderRepo>(() =>
+        _i43.RemoveFavoriteOrderRepoImpl(
+            gh<_i302.RemoveFavoriteOrderRemoteDataSource>()));
     gh.factory<_i462.SubscribeToMessagesRemoteDataSource>(() =>
         _i894.SubscribeToMessagesRemoteDataSourceImpl(
             supabaseService: gh<_i374.SupabaseService>()));
@@ -465,13 +577,14 @@ extension GetItInjectableX on _i174.GetIt {
               gh<_i361.Dio>(),
               gh<_i374.SupabaseService>(),
               gh<_i454.SupabaseClient>(),
- 
             ));
     gh.factory<_i953.SubscribeToAdminMessagesRepo>(() =>
         _i1062.SubscribeToAdminMessagesRepoImpl(
             gh<_i798.SubscribeToAdminMessagesRemoteDataSource>()));
     gh.factory<_i630.AuthUseCase>(
         () => _i630.AuthUseCase(gh<_i746.AuthRepo>()));
+    gh.factory<_i935.GetCommissionUseCase>(() => _i935.GetCommissionUseCase(
+        getCommissionRepo: gh<_i566.GetCommissionRepo>()));
     gh.factory<_i896.MyJobsRepo>(() => _i1023.MyJobsRepoImpl(
         myJobsRemoteDataSource: gh<_i41.MyJobsRemoteDataSource>()));
     gh.factory<_i453.SubscribeToPublicOrdersRepo>(() =>
@@ -491,11 +604,17 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i61.GetConversationsUseCase(gh<_i257.GetConversationRepo>()));
     gh.factory<_i337.DeleteOrderRepo>(() =>
         _i402.DeleteOrderRepoImpl(gh<_i673.DeleteOrderRemoteDataSource>()));
+    gh.factory<_i679.AddFavoriteOrderRepo>(() => _i961.AddFavoriteOrderRepoImpl(
+        gh<_i121.AddFavoriteOrderRemoteDataSource>()));
     gh.factory<_i686.GetAdminMessagesRepo>(() =>
         _i1006.GetAdminMessagesRepoImpl(
             gh<_i815.GetAdminMessagesRemoteDataSource>()));
     gh.factory<_i618.CreatePaymentUseCase>(
         () => _i618.CreatePaymentUseCase(gh<_i815.PaymentRepos>()));
+    gh.factory<_i946.GetCommissionViewModel>(
+        () => _i946.GetCommissionViewModel(gh<_i935.GetCommissionUseCase>()));
+    gh.factory<_i554.GetFavoriteOrderRepo>(() => _i678.GetFavoriteOrderRepoImpl(
+        gh<_i490.GetFavoriteOrderRemoteDataSource>()));
     gh.factory<_i778.UpdateOrderStatusRepo>(() =>
         _i90.UpdateOrderStatusRepoImpl(
             gh<_i254.UpdateOrderStatusRemoteDataSource>()));
@@ -509,8 +628,13 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i345.AttachmentsRepository>(() =>
         _i727.AttachmentsRepositoryImpl(
             gh<_i1020.AttachmentsRemoteDataSource>()));
+    gh.factory<_i6.GetFavoriteOrderDetailsRepo>(() =>
+        _i453.GetFavouriteOrderDetailsRepoImpl(
+            gh<_i504.GetFavouriteOrderDetailsRemoteDataSource>()));
     gh.factory<_i163.GetUserReviewsViewModel>(
         () => _i163.GetUserReviewsViewModel(gh<_i701.GetUserReviewsUseCase>()));
+    gh.factory<_i772.RemoveFavoriteOrderUseCase>(() =>
+        _i772.RemoveFavoriteOrderUseCase(gh<_i157.RemoveFavoriteOrderRepo>()));
     gh.factory<_i646.FetchPrivateOrdersRepo>(() =>
         _i101.FetchPrivateOrdersRepoImpl(
             gh<_i765.FetchPrivateOrdersRemoteDataSource>()));
@@ -533,6 +657,9 @@ extension GetItInjectableX on _i174.GetIt {
             gh<_i118.SubscribeToPrivateOrdersRemoteDataSource>()));
     gh.factory<_i469.DeleteMessageRepo>(() =>
         _i718.DeleteMessageRepoImpl(gh<_i191.DeleteMessageRemoteDataSource>()));
+    gh.factory<_i517.UpdateUserProfileRepo>(() =>
+        _i62.UpdateUserProfileRepoImpl(
+            gh<_i748.UpdateUserProfileRemoteDataSource>()));
     gh.factory<_i90.GetFreelancerOffersUseCase>(() =>
         _i90.GetFreelancerOffersUseCase(
             offerRepository: gh<_i363.OfferRepository>()));
@@ -540,6 +667,8 @@ extension GetItInjectableX on _i174.GetIt {
         _i626.SendOfferUseCase(offerRepository: gh<_i363.OfferRepository>()));
     gh.lazySingleton<_i988.DeleteMessageUseCase>(
         () => _i988.DeleteMessageUseCase(gh<_i469.DeleteMessageRepo>()));
+    gh.factory<_i663.IsOrderFavoriteRepo>(() => _i1032.IsOrderFavoriteRepoImpl(
+        gh<_i346.IsOrderFavoriteRemoteDataSource>()));
     gh.factory<_i483.GetPaymentViewModel>(
         () => _i483.GetPaymentViewModel(gh<_i848.GetPaymentUseCase>()));
     gh.factory<_i416.DeleteAttachmentsUseCase>(() =>
@@ -548,6 +677,8 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i231.UploadAttachmentsUseCase>(() =>
         _i231.UploadAttachmentsUseCase(
             attachmentsRepository: gh<_i345.AttachmentsRepository>()));
+    gh.factory<_i347.GetFavoriteOrderUseCase>(
+        () => _i347.GetFavoriteOrderUseCase(gh<_i554.GetFavoriteOrderRepo>()));
     gh.lazySingleton<_i367.MarkMessagesAsReadUseCase>(() =>
         _i367.MarkMessagesAsReadUseCase(gh<_i113.MarkMessagesAsReadRepo>()));
     gh.factory<_i197.DownloadAttachmentsUseCase>(() =>
@@ -567,6 +698,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i576.SubscribeToOrderStatusUseCase(gh<_i896.MyJobsRepo>()));
     gh.factory<_i530.UpdateOfferStatusUseCase>(
         () => _i530.UpdateOfferStatusUseCase(gh<_i896.MyJobsRepo>()));
+    gh.factory<_i451.IsOrderFavoriteUseCase>(
+        () => _i451.IsOrderFavoriteUseCase(gh<_i663.IsOrderFavoriteRepo>()));
     gh.factory<_i859.DeleteOrderUseCase>(
         () => _i859.DeleteOrderUseCase(gh<_i337.DeleteOrderRepo>()));
     gh.factory<_i172.SubscribeToMessagesUseCase>(() =>
@@ -581,6 +714,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i997.GetAcceptedOrderMessagesUseCase>(() =>
         _i997.GetAcceptedOrderMessagesUseCase(
             gh<_i81.GetAcceptedOrderMessageRepo>()));
+    gh.factory<_i520.RemoveFavoriteOrderViewModel>(() =>
+        _i520.RemoveFavoriteOrderViewModel(
+            gh<_i772.RemoveFavoriteOrderUseCase>()));
     gh.factory<_i855.GetOrderViewModel>(() => _i855.GetOrderViewModel(
           gh<_i759.OrdersUseCase>(),
           gh<_i576.SubscribeToOrderStatusUseCase>(),
@@ -607,6 +743,9 @@ extension GetItInjectableX on _i174.GetIt {
             gh<_i1022.SubscribeToAdminMessagesUseCase>()));
     gh.factory<_i380.WithdrawOfferUseCase>(
         () => _i380.WithdrawOfferUseCase(gh<_i773.WithdrawOfferRepo>()));
+    gh.factory<_i221.GetFavoriteOrderDetailsUseCase>(() =>
+        _i221.GetFavoriteOrderDetailsUseCase(
+            gh<_i6.GetFavoriteOrderDetailsRepo>()));
     gh.factory<_i42.GetConversationsViewModel>(() =>
         _i42.GetConversationsViewModel(gh<_i61.GetConversationsUseCase>()));
     gh.factory<_i12.GetAcceptedOrderMessageViewModel>(() =>
@@ -614,14 +753,20 @@ extension GetItInjectableX on _i174.GetIt {
             gh<_i997.GetAcceptedOrderMessagesUseCase>()));
     gh.factory<_i841.GetAdminMessagesUseCase>(
         () => _i841.GetAdminMessagesUseCase(gh<_i686.GetAdminMessagesRepo>()));
+    gh.factory<_i891.AddFavoriteOrderUseCase>(
+        () => _i891.AddFavoriteOrderUseCase(gh<_i679.AddFavoriteOrderRepo>()));
     gh.lazySingleton<_i366.SendMessageUseCase>(
         () => _i366.SendMessageUseCase(gh<_i201.SendMessagesRepo>()));
+    gh.factory<_i123.IsOrderFavoriteViewModel>(() =>
+        _i123.IsOrderFavoriteViewModel(gh<_i451.IsOrderFavoriteUseCase>()));
     gh.factory<_i662.GetAdminMessagesViewModel>(() =>
         _i662.GetAdminMessagesViewModel(gh<_i841.GetAdminMessagesUseCase>()));
     gh.factory<_i278.WithdrawOfferViewModel>(
         () => _i278.WithdrawOfferViewModel(gh<_i380.WithdrawOfferUseCase>()));
     gh.factory<_i920.GetOffersViewModel>(
         () => _i920.GetOffersViewModel(gh<_i863.GetOffersForOrderUseCase>()));
+    gh.factory<_i553.GetFavoriteOrderViewModel>(() =>
+        _i553.GetFavoriteOrderViewModel(gh<_i347.GetFavoriteOrderUseCase>()));
     gh.factory<_i2.FetchPrivateOrdersUseCase>(() =>
         _i2.FetchPrivateOrdersUseCase(gh<_i646.FetchPrivateOrdersRepo>()));
     gh.factory<_i975.UpdateOrderStatusViewModel>(() =>
@@ -646,6 +791,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i776.FreelancerInfoViewModel(gh<_i585.ProfileUseCase>()));
     gh.factory<_i1003.ProfileViewModel>(
         () => _i1003.ProfileViewModel(gh<_i585.ProfileUseCase>()));
+    gh.factory<_i669.UpdateUserProfileUseCase>(() =>
+        _i669.UpdateUserProfileUseCase(gh<_i517.UpdateUserProfileRepo>()));
     gh.factory<_i658.SendOfferViewModel>(
         () => _i658.SendOfferViewModel(gh<_i626.SendOfferUseCase>()));
     gh.factory<_i532.SubscribeToPrivateOrdersUseCase>(() =>
@@ -675,6 +822,8 @@ extension GetItInjectableX on _i174.GetIt {
             ));
     gh.factory<_i602.SendMessageViewModel>(
         () => _i602.SendMessageViewModel(gh<_i366.SendMessageUseCase>()));
+    gh.factory<_i78.AddFavoriteOrderViewModel>(() =>
+        _i78.AddFavoriteOrderViewModel(gh<_i891.AddFavoriteOrderUseCase>()));
     gh.factory<_i370.FreelancerPrivateOrdersViewModel>(() =>
         _i370.FreelancerPrivateOrdersViewModel(
             gh<_i532.SubscribeToPrivateOrdersUseCase>()));
@@ -683,8 +832,16 @@ extension GetItInjectableX on _i174.GetIt {
               gh<_i532.SubscribeToPrivateOrdersUseCase>(),
               gh<_i2.FetchPrivateOrdersUseCase>(),
             ));
+    gh.factory<_i737.GetFavouriteOrderDetailsViewModel>(() =>
+        _i737.GetFavouriteOrderDetailsViewModel(
+            gh<_i221.GetFavoriteOrderDetailsUseCase>()));
     gh.factory<_i869.ServicesViewModel>(
         () => _i869.ServicesViewModel(gh<_i628.GetAllServicesUseCase>()));
+    gh.factory<_i34.UpdateUserProfileViewModel>(
+        () => _i34.UpdateUserProfileViewModel(
+              gh<_i669.UpdateUserProfileUseCase>(),
+              gh<_i730.UserInfoEntity>(),
+            ));
     return this;
   }
 }

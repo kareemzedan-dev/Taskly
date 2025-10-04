@@ -22,6 +22,12 @@ class SharedPrefHelper {
   static bool? getBool(String key) {
     return _prefs?.getBool(key);
   }
+  static Future setStringList(String key, List<String> value) async {
+    await _prefs?.setStringList(key, value);
+  }
+  static List<String>? getStringList(String key) {
+    return _prefs?.getStringList(key);
+  }
 
   static Future setInt(String key, int value) async {
     await _prefs?.setInt(key, value);

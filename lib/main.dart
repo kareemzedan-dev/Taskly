@@ -8,8 +8,11 @@ import 'package:taskly/core/helper/my_bloc_observer.dart';
 import 'package:taskly/core/cache/shared_preferences.dart';
 import 'package:taskly/config/theme/app_theme.dart';
 import 'package:taskly/config/routes/routes_manager.dart';
+import 'package:taskly/core/utils/strings_manager.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/view_model/services_view_model/services_view_model.dart';
 import 'package:taskly/config/l10n/app_localizations.dart';
+
+import 'features/profile/presentation/manager/profile_view_model/profile_view_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,6 +30,9 @@ void main() async {
         BlocProvider(
           create: (context) => getIt<ServicesViewModel>()..getServices(),
         ),
+        BlocProvider(create:
+        (context) => getIt<ProfileViewModel>()..getUserInfo(SharedPrefHelper.getString(StringsManager.idKey)!,  SharedPrefHelper.getString(StringsManager.roleKey)!,)
+        )
       ],
 
       child: const Taskly(),

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -19,8 +21,11 @@ import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/pre
 import 'package:taskly/features/profile/presentation/manager/profile_view_model/profile_view_model_states.dart';
 
 import '../../../../../../../../profile/presentation/manager/profile_view_model/profile_view_model.dart';
+import '../../../../../../../data/models/favorite_order_model/favorite_order_model.dart';
+import '../../view_model/add_favorite_order_view_model/add_favorite_order_view_model.dart';
 import '../../view_model/freelancer_private_orders_view_model/freelancer_private_orders_view_model.dart';
 import '../../view_model/freelancer_private_orders_view_model/freelancer_private_orders_view_model_states.dart';
+import '../../view_model/remove_favorite_order_view_model/remove_favorite_order_view_model.dart';
 
 class FreelancerHomeTabViewBody extends StatefulWidget {
   const FreelancerHomeTabViewBody({super.key});
@@ -34,6 +39,8 @@ class _FreelancerHomeTabViewBodyState extends State<FreelancerHomeTabViewBody> {
   late final ProfileViewModel _freelancerInfoViewModel;
   late final FreelancerPublicOrdersViewModel _pendingOrdersViewModel;
   late final FreelancerPrivateOrdersViewModel _privateOrderViewModel;
+  late final AddFavoriteOrderViewModel _addFavoriteOrderViewModel;
+  late final RemoveFavoriteOrderViewModel _removeFavoriteOrderViewModel;
 
   final List<String> searchHintTexts = ["Search for jobs..."];
   String userId = SharedPrefHelper.getString("id")!;
@@ -42,17 +49,26 @@ class _FreelancerHomeTabViewBodyState extends State<FreelancerHomeTabViewBody> {
   void initState() {
     super.initState();
 
-    _freelancerInfoViewModel =
-    getIt<ProfileViewModel>()..getUserInfo(userId, "freelancer");
+    _freelancerInfoViewModel = getIt<ProfileViewModel>()..getUserInfo(userId, "freelancer");
 
     _pendingOrdersViewModel = getIt<FreelancerPublicOrdersViewModel>();
     _pendingOrdersViewModel.fetchAndSubscribePendingOrders();
 
     _privateOrderViewModel = getIt<FreelancerPrivateOrdersViewModel>();
     _privateOrderViewModel.fetchAndSubscribePrivateOrders(userId);
-    ;
- 
+
+    _addFavoriteOrderViewModel = getIt<AddFavoriteOrderViewModel>();
+
+    final savedJsonList = SharedPrefHelper.getStringList('favoriteOrders') ?? [];
+    final savedFavorites = savedJsonList.map((jsonStr) {
+      return FavoriteOrderModel.fromJson(jsonDecode(jsonStr));
+    }).toList();
+    _addFavoriteOrderViewModel.loadFavorites(savedFavorites);
+
+    _removeFavoriteOrderViewModel = getIt<RemoveFavoriteOrderViewModel>();
   }
+
+
 
 
   @override
@@ -62,6 +78,9 @@ class _FreelancerHomeTabViewBodyState extends State<FreelancerHomeTabViewBody> {
         BlocProvider.value(value: _freelancerInfoViewModel),
         BlocProvider.value(value: _pendingOrdersViewModel),
         BlocProvider.value(value: _privateOrderViewModel),
+        BlocProvider.value(value: _addFavoriteOrderViewModel),
+        BlocProvider.value(value: _removeFavoriteOrderViewModel),
+
       ],
       child: DefaultTabController(
         length: 2,
@@ -70,21 +89,9 @@ class _FreelancerHomeTabViewBodyState extends State<FreelancerHomeTabViewBody> {
           child: Column(
             children: [
 
-              BlocBuilder<ProfileViewModel, ProfileViewModelStates>(
-                builder: (context, state) {
-                  if (state is ProfileViewModelStatesLoading) {
-                    return shimmer.UserInfoHomeHeaderShimmer();
-                  } else if (state is ProfileViewModelStatesSuccess) {
-                    return header.UserInfoHomeHeader(
-                      imageUrl: state.userInfoEntity.profileImage,
-                      fullName: state.userInfoEntity.fullName,
-                    );
-                  } else {
-                    return shimmer.UserInfoHomeHeaderShimmer();
-                  }
-                },
-              ),
+                header.UserInfoHomeHeader(
 
+          ),
               SizedBox(height: 20.h),
               SearchBarWithFavorite(hintTexts: searchHintTexts),
               SizedBox(height: 30.h),
@@ -112,6 +119,8 @@ class _FreelancerHomeTabViewBodyState extends State<FreelancerHomeTabViewBody> {
                                 },
                                 child: FreelancerPublicOrdersList(
                                   state: pendingState,
+                                  addFavViewModel: _addFavoriteOrderViewModel,
+
                                 ),
                               );
                             },
@@ -129,6 +138,7 @@ class _FreelancerHomeTabViewBodyState extends State<FreelancerHomeTabViewBody> {
                                 },
                                 child: FreelancerPrivateOrdersList(
                                   state: privateState,
+                                  addFavViewModel: _addFavoriteOrderViewModel,
                                 ),
                               );
                             },
