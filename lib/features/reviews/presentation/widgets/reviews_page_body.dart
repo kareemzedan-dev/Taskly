@@ -7,7 +7,6 @@ import 'package:taskly/features/reviews/presentation/widgets/user_avatar.dart';
 
 
 import '../../../../config/l10n/app_localizations.dart';
-import '../../../../core/components/custom_tab_bar.dart';
 import '../../../../core/di/di.dart';
 import '../../domain/entities/reviews_entity/reviews_entity.dart';
 import '../manager/get_user_reviews_view_model/get_user_reviews_states.dart';

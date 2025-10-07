@@ -96,7 +96,7 @@ class _FreelancerProfileViewBodyState extends State<FreelancerProfileViewBody> {
                   },
                 ),
                 SizedBox(height: 10.h),
-                AccountItemRow(
+                const AccountItemRow(
                   image: Assets.assetsImagesDocument10103871,
                   text: "My Orders",
                 ),
@@ -107,7 +107,7 @@ class _FreelancerProfileViewBodyState extends State<FreelancerProfileViewBody> {
               title: "Work",
               children: [
                 SizedBox(height: 10.h),
-                AccountItemRow(
+                const AccountItemRow(
                   image: Assets.assetsImagesStar967444,
                   text: "Reviews & Ratings",
                 ),
@@ -140,7 +140,7 @@ class _FreelancerProfileViewBodyState extends State<FreelancerProfileViewBody> {
                     final selected = await showModalBottomSheet<String>(
                       context: context,
                       backgroundColor: Colors.transparent,
-                      shape: RoundedRectangleBorder(
+                      shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.vertical(
                           top: Radius.circular(12),
                         ),
@@ -166,7 +166,7 @@ class _FreelancerProfileViewBodyState extends State<FreelancerProfileViewBody> {
                     final selectedTheme = await showModalBottomSheet<String>(
                       context: context,
                       backgroundColor: Colors.transparent,
-                      shape: RoundedRectangleBorder(
+                      shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.vertical(
                           top: Radius.circular(12),
                         ),
@@ -214,7 +214,7 @@ class _FreelancerProfileViewBodyState extends State<FreelancerProfileViewBody> {
                   },
                 ),
                 SizedBox(height: 10.h),
-                AccountItemRow(
+                const AccountItemRow(
                   image: Assets.assetsImagesDocument10103871,
                   text: "Terms & Conditions",
                 ),
@@ -235,7 +235,7 @@ class _FreelancerProfileViewBodyState extends State<FreelancerProfileViewBody> {
                 },
                 child: Row(
                   children: [
-                    Icon(Icons.logout, color: Colors.red),
+                    const Icon(Icons.logout, color: Colors.red),
                     const SizedBox(width: 12),
                     Text(
                       "Logout",

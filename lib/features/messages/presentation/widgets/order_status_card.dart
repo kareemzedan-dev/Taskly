@@ -55,8 +55,8 @@ class OrderStatusCard extends StatelessWidget {
                   onPressed: onButtonPressed,
                   style: ButtonStyle(
                     backgroundColor:
-                        MaterialStateProperty.all(ColorsManager.primary),
-                    padding: MaterialStateProperty.all(
+                        WidgetStateProperty.all(ColorsManager.primary),
+                    padding: WidgetStateProperty.all(
                         EdgeInsets.symmetric(vertical: 14.h)),
                   ),
                   child: Text(

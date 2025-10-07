@@ -39,15 +39,15 @@ class FreelancerWorkCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               HeaderRow(date: order.createdAt.toTimeAgo(), orderId: order.id, addFavViewModel: addFavViewModel,),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Title(order.title),
-              SizedBox(height: 5),
+              const SizedBox(height: 5),
               CategoryChip(order.category ?? "No category"),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Description(order.description ?? "No description"),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               DeliveryInfo(deliveryTime: order.deadline!.toRelative()),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               ActionsRow(
                 order: order,
                 actions: [
@@ -207,7 +207,7 @@ class _HeaderContent extends StatelessWidget {
 /// ------------------- باقي الويدجتس -------------------
 
 class Title extends StatelessWidget {
-  const Title(this.title);
+  const Title(this.title, {super.key});
   final String title;
 
   @override
@@ -225,7 +225,7 @@ class Title extends StatelessWidget {
 }
 
 class CategoryChip extends StatelessWidget {
-  const CategoryChip(this.category);
+  const CategoryChip(this.category, {super.key});
   final String category;
 
   @override
@@ -254,7 +254,7 @@ class CategoryChip extends StatelessWidget {
 }
 
 class Description extends StatelessWidget {
-  const Description(this.description);
+  const Description(this.description, {super.key});
   final String description;
 
   @override

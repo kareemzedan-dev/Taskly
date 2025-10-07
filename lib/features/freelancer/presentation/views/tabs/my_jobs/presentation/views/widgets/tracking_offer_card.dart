@@ -2,17 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:marquee/marquee.dart';
 import 'package:taskly/config/routes/routes_manager.dart';
-import 'package:taskly/core/components/custom_button.dart';
-import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/view_model/update_offer_status_view_model/update_offer_status_states.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/view_model/update_offer_status_view_model/update_offer_status_view_model.dart';
 import 'package:taskly/features/profile/presentation/widgets/user_info_section.dart';
 import 'package:taskly/features/client/presentation/views/tabs/profile/presentation/views/widgets/user_info_section_shimmer.dart';
 import 'package:taskly/features/freelancer/domain/entities/offer_entity/offer_entity.dart';
 import 'package:taskly/features/freelancer/presentation/cubit/withdraw_offer_view_model/withdraw_offer_states.dart';
 import 'package:taskly/features/freelancer/presentation/cubit/withdraw_offer_view_model/withdraw_offer_view_model.dart';
-import 'package:taskly/features/profile/domain/entities/user_info_entity/user_info_entity.dart';
 
 import '../../../../../../../../../core/di/di.dart';
 import '../../../../../../../../../core/helper/convert_to_days.dart';
@@ -22,7 +18,6 @@ import '../../../../../../../../profile/presentation/manager/profile_view_model/
 import '../../../../../../../../profile/presentation/manager/profile_view_model/profile_view_model_states.dart';
 import '../../../../find_work/presentation/views/widgets/action_row.dart';
 import '../../../../find_work/presentation/views/widgets/delivery_info.dart';
-import '../../../../find_work/presentation/views/widgets/freelancer_work_card.dart';
 
 class TrackingOfferCard extends StatelessWidget {
   TrackingOfferCard({
@@ -57,7 +52,7 @@ class TrackingOfferCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (isAccepted)
-                AdminMessageCard(
+                const AdminMessageCard(
                     message:
                         "Please wait until the payment is confirmed. Once confirmed, you can contact the client and start the work."),
               SizedBox(height: 5.h),
@@ -66,10 +61,10 @@ class TrackingOfferCard extends StatelessWidget {
                   ..getUserInfo(offerEntity.clientId, "client"),
                 builder: (context, state) {
                   if (state is ProfileViewModelStatesLoading) {
-                    return UserInfoSectionShimmer();
+                    return const UserInfoSectionShimmer();
                   }
                   if (state is ProfileViewModelStatesError) {
-                    return UserInfoSectionShimmer();
+                    return const UserInfoSectionShimmer();
                   }
                   if (state is ProfileViewModelStatesSuccess) {
                     return UserInfoSection(
@@ -149,7 +144,7 @@ class TrackingOfferCard extends StatelessWidget {
                 GestureDetector(
                   onTap: () {
                     context.read<UpdateOfferStatusViewModel>()
-                      ..updateOfferStatus(offerEntity.id, "deleted");
+                      .updateOfferStatus(offerEntity.id, "deleted");
                   },
                   child: Container(
                     width: double.infinity,
@@ -159,10 +154,10 @@ class TrackingOfferCard extends StatelessWidget {
                       color: Colors.white,
                       border: Border.all(color: Colors.red, width: 2.w),
                     ),
-                    child: Center(
+                    child: const Center(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
+                        children: [
                           Icon(
                             FontAwesomeIcons.close,
                             color: Colors.red,

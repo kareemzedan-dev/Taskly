@@ -4,11 +4,8 @@ import 'package:taskly/core/errors/failures.dart';
 import 'package:taskly/features/client/data/data_sources/remote/my_jobs_remote_data_source.dart';
 import 'package:taskly/features/client/domain/repos/my_jobs/my_jobs_repo.dart';
 import 'package:taskly/features/freelancer/domain/entities/offer_entity/offer_entity.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:taskly/features/shared/domain/entities/order_entity/order_entity.dart';
 
-import '../../../../../core/services/supabase_service.dart';
-import '../../../../shared/data/models/order_dm/order_dm.dart';
 
 @Injectable(as: MyJobsRepo)
 class MyJobsRepoImpl extends MyJobsRepo {

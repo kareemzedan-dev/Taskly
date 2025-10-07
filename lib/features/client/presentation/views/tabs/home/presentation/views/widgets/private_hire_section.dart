@@ -40,7 +40,7 @@ class PrivateHireSection extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              CustomSearchTextField(
+              const CustomSearchTextField(
                 hintTexts: [
                   "Search freelancers by skill...",
                   "Choose the best match for your project",

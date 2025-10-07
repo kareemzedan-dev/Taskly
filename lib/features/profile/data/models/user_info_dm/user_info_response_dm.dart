@@ -35,7 +35,8 @@ class UserInfoDm extends UserInfoEntity {
     super.clientStatus,
     super.freelancerStatus,
     super.freelancerBalance,
-    super.isVerified
+    super.isVerified,
+    super.totalEarnings,
 
   });
 
@@ -79,7 +80,9 @@ class UserInfoDm extends UserInfoEntity {
         freelancerStatus: json['freelancer_status'] ?? '',
         freelancerBalance: json['freelancer_balance'] != null ?
         (json['freelancer_balance'] as num).toDouble() : 0.0,
-        isVerified:  json['is_verified'] ?? false
+        isVerified:  json['is_verified'] ?? false,
+        totalEarnings: json['total_earnings'] != null ?
+            (json['total_earnings'] as num).toDouble() : 0.0
 
 
 
@@ -110,7 +113,8 @@ class UserInfoDm extends UserInfoEntity {
       'reviews_count': reviewsCount,
 
       'freelancer_balance': freelancerBalance,
-      'is_verified': isVerified
+      'is_verified': isVerified,
+      'total_earnings': totalEarnings
 
     };
   }
@@ -137,7 +141,8 @@ class UserInfoDm extends UserInfoEntity {
     String? clientStatus,
     String? freelancerStatus,
     double? freelancerBalance,
-    bool? isVerified
+    bool? isVerified,
+    double? totalEarnings,
   }) {
     return UserInfoDm(
         id: id ?? this.id,
@@ -161,7 +166,8 @@ class UserInfoDm extends UserInfoEntity {
         clientStatus: clientStatus ?? this.clientStatus,
         freelancerStatus: freelancerStatus ?? this.freelancerStatus,
         freelancerBalance: freelancerBalance ?? this.freelancerBalance,
-        isVerified: isVerified ?? this.isVerified
+        isVerified: isVerified ?? this.isVerified,
+      totalEarnings: totalEarnings ?? this.totalEarnings
     );
   }
 }

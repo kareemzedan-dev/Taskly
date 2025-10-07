@@ -1,6 +1,5 @@
 import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:taskly/core/errors/failures.dart';
 import 'package:taskly/core/services/supabase_service.dart';
 import 'package:taskly/core/utils/network_utils.dart';
@@ -22,7 +21,7 @@ class MyJobsRemoteDataSourceImpl extends MyJobsRemoteDataSource {
   Future<Either<Failures, List<OfferEntity>>> getOffers(String orderId) async {
     try {
       if (!await NetworkUtils.hasInternet()) {
-        return Left(NetworkFailure(StringsManager.noInternetConnection));
+        return const Left(NetworkFailure(StringsManager.noInternetConnection));
       }
 
       final response = await supabaseService.supabaseClient
@@ -31,8 +30,8 @@ class MyJobsRemoteDataSourceImpl extends MyJobsRemoteDataSource {
           .eq('order_id', orderId)
           .eq('status', 'pending');
 
-      if (response == null || response.isEmpty) {
-        return Right([]);
+      if (response.isEmpty) {
+        return const Right([]);
       }
 
       final offers = (response as List)
@@ -66,7 +65,7 @@ class MyJobsRemoteDataSourceImpl extends MyJobsRemoteDataSource {
   ) async {
     try {
       if (!await NetworkUtils.hasInternet()) {
-        return Left(NetworkFailure(StringsManager.noInternetConnection));
+        return const Left(NetworkFailure(StringsManager.noInternetConnection));
       }
 
       final response = await supabaseService.updateDataInSupabase(
@@ -79,7 +78,7 @@ class MyJobsRemoteDataSourceImpl extends MyJobsRemoteDataSource {
         final updatedOffer = OfferModel.fromJson(response).toEntity();
         return Right(updatedOffer);
       } else {
-        return Left(ServerFailure("Failed to update offer status"));
+        return const Left(ServerFailure("Failed to update offer status"));
       }
     } catch (e) {
       return Left(ServerFailure(e.toString()));
@@ -91,7 +90,7 @@ class MyJobsRemoteDataSourceImpl extends MyJobsRemoteDataSource {
       String orderId, String offerId) async {
     try {
       if (!await NetworkUtils.hasInternet()) {
-        return Left(NetworkFailure(StringsManager.noInternetConnection));
+        return const Left(NetworkFailure(StringsManager.noInternetConnection));
       }
 
       final offerResponse = await supabaseService.supabaseClient
@@ -101,7 +100,7 @@ class MyJobsRemoteDataSourceImpl extends MyJobsRemoteDataSource {
           .maybeSingle();
 
       if (offerResponse == null) {
-        return Left(ServerFailure("Offer not found"));
+        return const Left(ServerFailure("Offer not found"));
       }
 
       final acceptedOffer = OfferModel.fromJson(offerResponse);
@@ -114,7 +113,7 @@ class MyJobsRemoteDataSourceImpl extends MyJobsRemoteDataSource {
           .maybeSingle();
 
       if (acceptResponse == null) {
-        return Left(ServerFailure("Failed to accept the offer"));
+        return const Left(ServerFailure("Failed to accept the offer"));
       }
 
       final updateOrderResponse = await supabaseService.supabaseClient
@@ -129,7 +128,7 @@ class MyJobsRemoteDataSourceImpl extends MyJobsRemoteDataSource {
           .maybeSingle();
 
       if (updateOrderResponse == null) {
-        return Left(ServerFailure("Failed to update order"));
+        return const Left(ServerFailure("Failed to update order"));
       }
 
       await supabaseService.supabaseClient
@@ -146,6 +145,7 @@ class MyJobsRemoteDataSourceImpl extends MyJobsRemoteDataSource {
   }
 
  
+  @override
   Stream<(OrderEntity, String)> subscribeToOrders(
       Map<String, dynamic>? filters) {
     final filterString = filters?.entries

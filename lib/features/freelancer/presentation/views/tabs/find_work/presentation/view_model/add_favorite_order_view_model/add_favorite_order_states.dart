@@ -1,4 +1,3 @@
-import '../../../../../../../../../core/errors/failures.dart';
 
 class AddFavoriteOrderStates {}
 class AddFavoriteOrderInitial extends AddFavoriteOrderStates {}

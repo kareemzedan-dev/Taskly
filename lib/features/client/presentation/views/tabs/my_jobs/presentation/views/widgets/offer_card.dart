@@ -7,6 +7,7 @@ import 'package:taskly/core/utils/colors_manger.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/view_model/update_offer_status_view_model/update_offer_status_view_model.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/offer_actions.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/price_duration_section.dart';
+import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/user_info_display.dart';
 import 'package:taskly/features/profile/presentation/widgets/user_info_section.dart';
 import 'package:taskly/features/freelancer/domain/entities/offer_entity/offer_entity.dart';
 import 'package:taskly/features/profile/presentation/manager/profile_view_model/profile_view_model.dart';
@@ -49,10 +50,19 @@ class OfferCard extends StatelessWidget {
                 builder: (context, state) {
                   String freelancerName = '';
                   String freelancerImage = '';
+                  double rating = 0.0;
+                  bool isVerified = false;
+                  String? profileImage;
+                  String? email;
 
                   if (state is ProfileViewModelStatesSuccess) {
                     freelancerName = state.userInfoEntity.fullName ?? '';
                     freelancerImage = state.userInfoEntity.profileImage ?? '';
+                    rating = state.userInfoEntity.rating ?? 0.0;
+                    isVerified = state.userInfoEntity.isVerified ?? false;
+                    profileImage = state.userInfoEntity.profileImage ?? '';
+                    email = state.userInfoEntity.email ?? '';
+
                   }
 
                   return Column(
@@ -70,12 +80,13 @@ class OfferCard extends StatelessWidget {
                                       child: CircularProgressIndicator())
                                   : state is ProfileViewModelStatesError
                                       ? Center(child: Text(state.message))
-                                      : UserInfoSection(
-                                          photoSizeSelected: true,
-                                          userInfo: state
-                                                  is ProfileViewModelStatesSuccess
-                                              ? state.userInfoEntity
-                                              : null,
+                                      : UserInfoDisplay(
+                                name:  freelancerName,
+                              email:  email!,
+                              rating: rating,
+                              profileImage: profileImage,
+                              isFreelancer: isVerified,
+
                                         ),
                             ),
                             SizedBox(width: 8.w),

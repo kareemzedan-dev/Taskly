@@ -23,7 +23,7 @@ class OrdersRemoteDataSourceImpl extends OrdersRemoteDataSource {
     try {
       final connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult == ConnectivityResult.none) {
-        return Left(Failures("No internet connection"));
+        return const Left(Failures("No internet connection"));
       }
 
       String fieldName;
@@ -32,7 +32,7 @@ class OrdersRemoteDataSourceImpl extends OrdersRemoteDataSource {
       } else if (role.toLowerCase() == 'freelancer') {
         fieldName = "freelancer_id";
       } else {
-        return Left(Failures("Invalid role provided"));
+        return const Left(Failures("Invalid role provided"));
       }
 
       _ordersChannel ??= supabaseService.subscribeWithCallbacks(
@@ -50,7 +50,7 @@ class OrdersRemoteDataSourceImpl extends OrdersRemoteDataSource {
       );
 
       if (response == null || response.isEmpty) {
-        return Right([]);
+        return const Right([]);
       }
 
       final orders =

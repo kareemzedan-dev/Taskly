@@ -27,4 +27,26 @@ class PaymentEntity {
     this.accountNumber,
     this.requesterType,
   });
+  factory PaymentEntity.forFreelancer({
+    required String id,
+    required double amount,
+    required String status,
+    required DateTime createdAt,
+    required DateTime updatedAt,
+    String? freelancerId,
+    String? paymentMethod,
+    String? accountNumber,
+  }) {
+    return PaymentEntity(
+      id: id,
+      freelancerId: freelancerId,
+      amount: amount,
+      status: status,
+      createdAt: createdAt,
+      updatedAt: updatedAt,
+      paymentMethod: paymentMethod,
+      accountNumber: accountNumber,
+      attachments: [],
+    );
+  }
 }

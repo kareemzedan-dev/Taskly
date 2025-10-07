@@ -20,7 +20,7 @@ class GetPaymentRemoteDataSourceImpl extends GetPaymentRemoteDataSource {
   Future<Either<Failures, PaymentEntity>> getPayment(String orderId) async {
     try {
       if (!await NetworkUtils.hasInternet()) {
-        return Left(NetworkFailure(StringsManager.noInternetConnection));
+        return const Left(NetworkFailure(StringsManager.noInternetConnection));
       }
       final response = await supabase
           .from('payments')
@@ -30,7 +30,7 @@ class GetPaymentRemoteDataSourceImpl extends GetPaymentRemoteDataSource {
           .maybeSingle();
 
       if (response == null) {
-        return Left(ServerFailure("Payment not found"));
+        return const Left(ServerFailure("Payment not found"));
       }
 
       final attachmentsJson = response['attachments'];

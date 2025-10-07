@@ -16,9 +16,10 @@ class SubscribeToPrivateOrdersRemoteDataSourceImpl  implements SubscribeToPrivat
   final SupabaseService _supabaseService;
    final FetchPrivateOrdersRemoteDataSource _fetchPrivateOrdersRemoteDataSource;
   SubscribeToPrivateOrdersRemoteDataSourceImpl(this._supabaseService , this._fetchPrivateOrdersRemoteDataSource);
+  @override
   Stream<List<OrderEntity>> subscribeToPrivateOrders(String freelancerId) {
     if (NetworkUtils.hasInternet() == false) {
-      throw NetworkFailure('No internet connection');
+      throw const NetworkFailure('No internet connection');
     }
 
     final controller = StreamController<List<OrderEntity>>();

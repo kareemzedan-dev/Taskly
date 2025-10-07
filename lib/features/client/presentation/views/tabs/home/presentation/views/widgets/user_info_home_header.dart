@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:taskly/core/utils/assets_manager.dart';
 import 'package:taskly/features/reviews/presentation/widgets/user_avatar.dart';
 
 import '../../../../../../../../../core/cache/shared_preferences.dart';

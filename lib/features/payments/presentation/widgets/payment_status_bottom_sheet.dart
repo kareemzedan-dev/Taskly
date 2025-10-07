@@ -82,12 +82,12 @@ class PaymentStatusBottomSheet extends StatelessWidget {
                           color: ColorsManager.primary,
                           borderRadius: BorderRadius.circular(10.r),
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                        child: const Padding(
+                          padding: EdgeInsets.all(8.0),
                           child: Center(
                             child: Text(
                              "Awaiting approval",  
-                              style: const TextStyle(color: Colors.white),
+                              style: TextStyle(color: Colors.white),
                             ),
                           ),
                         ),

@@ -35,10 +35,6 @@ class CreatePaymentRemoteDataSourceImpl extends CreatePaymentRemoteDataSource {
 
       final response =
           await supabase.from('payments').insert(data).select().single();
-
-      if (response == null) {
-        return Left(ServerFailure("Failed to create payment"));
-      }
       final updateOrderResponse = await supabase
           .from('orders')
           .update({
@@ -60,7 +56,7 @@ class CreatePaymentRemoteDataSourceImpl extends CreatePaymentRemoteDataSource {
       // }
 
       if (updateOrderResponse == null) {
-        return Left(ServerFailure("Failed to update order"));
+        return const Left(ServerFailure("Failed to update order"));
       }
 
       final createdPayment = PaymentEntity(

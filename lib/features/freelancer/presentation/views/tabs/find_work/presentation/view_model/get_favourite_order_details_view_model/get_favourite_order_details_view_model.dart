@@ -5,7 +5,6 @@ import 'package:taskly/features/freelancer/domain/use_cases/get_favourite_order_
 
 import '../../../../../../../../../core/errors/failures.dart';
 import '../../../../../../../../shared/domain/entities/order_entity/order_entity.dart';
-import '../../../../../../../domain/repos/favorite_order_repos/get_favourite_order_details_repo/get_favourite_order_details.dart';
 import 'get_favourite_order_details_states.dart';
 @injectable
 class GetFavouriteOrderDetailsViewModel

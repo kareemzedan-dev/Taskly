@@ -23,7 +23,7 @@ class OfferDetailsViewBody extends StatelessWidget {
         builder: (context, state) {
           if(state is FetchOrderDetailsViewModelStatesLoading)
             {
-              return   Center(child: CircularProgressIndicator(color: ColorsManager.primary,));
+              return   const Center(child: CircularProgressIndicator(color: ColorsManager.primary,));
             }
           if(state is FetchOrderDetailsViewModelStatesError){
             return Center(child: Text(state.message),);
@@ -41,14 +41,14 @@ class OfferDetailsViewBody extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children:   [
                           JobHeader(title: state.orderEntity.title ,category:  state.orderEntity.category!,date:  state.orderEntity.createdAt.toTimeAgo(),),
-                          Divider(thickness: 1, color: Colors.grey),
+                          const Divider(thickness: 1, color: Colors.grey),
                           DescriptionSection(description: state.orderEntity.description ,),
-                          Divider(thickness: 1, color: Colors.grey),
+                          const Divider(thickness: 1, color: Colors.grey),
                           ClientDetailsSection(userId:  state.orderEntity.clientId,),
 
-                          Divider(thickness: 1, color: Colors.grey),
+                          const Divider(thickness: 1, color: Colors.grey),
                           AttachmentsSection(attachmentEntity:  state.orderEntity.attachments,isFreelancer: true,),
-                          Divider(thickness: 1, color: Colors.grey),
+                          const Divider(thickness: 1, color: Colors.grey),
 
                           AboutJobSection( order: state.orderEntity),
                         ],

@@ -7,7 +7,7 @@ class ServiceCategory extends StatelessWidget {
   final ServiceEntity serviceEntity;
   final VoidCallback? onTap;
 
-  ServiceCategory({
+  const ServiceCategory({
     super.key,
     required this.serviceEntity,
     required this.onTap,

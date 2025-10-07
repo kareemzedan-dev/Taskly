@@ -1,6 +1,5 @@
 import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:taskly/features/messages/domain/repositories/messages_repos/get_order_messages_repo/get_order_messages_repo.dart';
 import '../../../../../core/errors/failures.dart';
 import '../../../../../features/messages/domain/entities/message_entity.dart';

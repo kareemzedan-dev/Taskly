@@ -22,7 +22,7 @@ class GetCommissionRemoteDataSourceImpl implements GetCommissionRemoteDataSource
       // فحص الاتصال بالإنترنت
       final hasInternet = await NetworkUtils.hasInternet();
       if (!hasInternet) {
-        return Left(NetworkFailure('No internet connection'));
+        return const Left(NetworkFailure('No internet connection'));
       }
 
       // جلب البيانات من جدول admin_settings
@@ -30,10 +30,6 @@ class GetCommissionRemoteDataSourceImpl implements GetCommissionRemoteDataSource
           .from('admin_settings')
           .select()
           .single();
-
-      if (response == null) {
-        return Left(ServerFailure('No data found'));
-      }
 
       // تحويل response إلى Entity
       final adminSettings = AdminSettingsModel.fromJson(response);

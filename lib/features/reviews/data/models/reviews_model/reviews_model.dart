@@ -23,7 +23,7 @@ factory ReviewsModel.fromJson(Map<String, dynamic> json) {
     orderId: json['order_id'] ?? '',
     comment: json['comment'] ?? '',
     rating: json['rating']?.toString() ?? '0',
-    createdAt: json['created_at'] ?? '',
+    createdAt: DateTime.parse(json['created_at'] as String),
     role: json['role'] ?? '',
   );
 }
@@ -37,7 +37,7 @@ factory ReviewsModel.fromJson(Map<String, dynamic> json) {
       'order_id': orderId,
       'comment': comment,
       'rating': rating,
-      'created_at': createdAt,
+      'created_at': createdAt.toIso8601String(),
       'role': role
     };
   }

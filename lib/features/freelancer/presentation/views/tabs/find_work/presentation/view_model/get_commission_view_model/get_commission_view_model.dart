@@ -19,7 +19,7 @@ class GetCommissionViewModel extends Cubit<GetCommissionSates> {
       result.fold(
             (failure) => emit(GetCommissionSatesError(message: failure.message)),
             (commission) {
-          _adminSettings = commission; // حفظ البيانات داخليًا
+          _adminSettings = commission;
           emit(GetCommissionSatesSuccess(adminSettingsEntity: commission));
         },
       );

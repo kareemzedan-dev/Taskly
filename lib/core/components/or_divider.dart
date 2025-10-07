@@ -9,17 +9,17 @@ class OrDivider extends StatelessWidget {
   Widget build(BuildContext context) {
     return   Row(
       children:   [
-        Expanded(
+        const Expanded(
           child: Divider(
             thickness: 1,
             color: Colors.grey
           ),
         ),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 17.0),
+          padding: const EdgeInsets.symmetric(horizontal: 17.0),
           child: Text(  AppLocalizations.of(context)!.or, style: Theme.of(context).textTheme.bodyMedium,),
         ),
-        Expanded(
+        const Expanded(
           child: Divider(
             thickness: 1,
              color: Colors.grey

@@ -1,6 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:taskly/core/cache/shared_preferences.dart';
+import 'package:taskly/core/di/di.dart';
+import 'package:taskly/core/utils/strings_manager.dart';
+import 'package:taskly/features/freelancer/presentation/cubit/get_total_earnings_view_model/get_total_earnings_view_model.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/profile/presentation/views/widgets/freelancer_earning_view_body.dart';
 
 class FreelancerEarningView extends StatelessWidget {
@@ -21,7 +26,7 @@ class FreelancerEarningView extends StatelessWidget {
         ),
    leading: GestureDetector(
           onTap: () => Navigator.pop(context),
-          child: Icon(CupertinoIcons.back, color: Colors.black),
+          child: const Icon(CupertinoIcons.back, color: Colors.black),
         ),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1.0),
@@ -33,7 +38,9 @@ class FreelancerEarningView extends StatelessWidget {
         ),
       ),
       backgroundColor: Colors.white,
-      body: SafeArea(child: FreelancerEarningViewBody()),
+      body:   SafeArea(child: BlocProvider(
+          create:  (context) => getIt<GetTotalEarningsViewModel>()..getTotalEarnings(SharedPrefHelper.getString(StringsManager.idKey)!),
+          child: FreelancerEarningViewBody())),
     );
   }
 }

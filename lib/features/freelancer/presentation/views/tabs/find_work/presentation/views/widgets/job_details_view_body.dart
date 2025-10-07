@@ -30,14 +30,14 @@ class JobDetailsViewBody extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children:   [
                     JobHeader(title: orderEntity.title ,category: orderEntity.category!,date: orderEntity.createdAt.toTimeAgo(),),
-                    Divider(thickness: 1, color: Colors.grey),
+                    const Divider(thickness: 1, color: Colors.grey),
                     DescriptionSection(description:orderEntity.description ,),
-                    Divider(thickness: 1, color: Colors.grey),
+                    const Divider(thickness: 1, color: Colors.grey),
                     ClientDetailsSection(userId: orderEntity.clientId,),
 
-                    Divider(thickness: 1, color: Colors.grey),
+                    const Divider(thickness: 1, color: Colors.grey),
                     AttachmentsSection(attachmentEntity: orderEntity.attachments,isFreelancer: true,),
-                    Divider(thickness: 1, color: Colors.grey),
+                    const Divider(thickness: 1, color: Colors.grey),
                     AboutJobSection( order: orderEntity),
                   ],
                 ),
@@ -47,7 +47,7 @@ class JobDetailsViewBody extends StatelessWidget {
           CustomButton(title: "Send offer", ontap: () {
             Navigator.pushNamed(context, RoutesManager.sendOfferView, arguments:orderEntity);
           }),
-          SizedBox(height: 30),
+          const SizedBox(height: 30),
         ],
       ),
     );

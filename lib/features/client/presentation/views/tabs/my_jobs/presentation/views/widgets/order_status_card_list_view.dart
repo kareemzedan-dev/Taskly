@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:taskly/core/utils/colors_manger.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/view_model/get_order_view_model.dart/get_order_view_model.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/view_model/get_order_view_model.dart/get_order_view_model_states.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/order_states_card.dart';
@@ -10,7 +7,7 @@ import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentat
 import '../../../../../../../../shared/domain/entities/order_entity/order_entity.dart';
 import 'empty_state_animation.dart';
 class OrderStatusCardListView extends StatelessWidget {
-  OrderStatusCardListView({
+  const OrderStatusCardListView({
     super.key,
     required this.animationPath,
     required this.message,
@@ -27,9 +24,9 @@ class OrderStatusCardListView extends StatelessWidget {
       child: BlocBuilder<GetOrderViewModel, GetOrderViewModelStates>(
         builder: (context, state) {
           if (state is GetOrderViewModelStatesLoading) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (state is GetOrderViewModelStatesSuccess) {
-            // هنا الفلترة
+
             final filteredOrders = state.orderEntity.where((order) {
               switch (filter) {
                 case OrderStatusFilter.pending:
@@ -56,7 +53,7 @@ class OrderStatusCardListView extends StatelessWidget {
 
             return ListView.separated(
               itemCount: filteredOrders.length,
-              separatorBuilder: (_, __) => Divider(),
+              separatorBuilder: (_, __) => const Divider(),
               itemBuilder: (context, index) {
                 return Padding(
                   padding: const EdgeInsets.all(8.0),

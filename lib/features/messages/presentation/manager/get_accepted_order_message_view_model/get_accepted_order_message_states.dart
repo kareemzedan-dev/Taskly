@@ -1,4 +1,3 @@
-import '../../../../../core/errors/failures.dart';
 import '../../../../shared/domain/entities/order_entity/order_entity.dart';
 
 class  GetAcceptedOrderMessageStates {}

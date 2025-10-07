@@ -1,4 +1,3 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:either_dart/src/either.dart';
 import 'package:injectable/injectable.dart';
 
@@ -22,7 +21,7 @@ class FetchPrivateOrdersRemoteDataSourceImpl
       String freelancerId) async {
     try {
          if (NetworkUtils.hasInternet() == false) {
-        return Left(NetworkFailure('No internet connection'));
+        return const Left(NetworkFailure('No internet connection'));
       }
 
       final response = await _supabaseService.supabaseClient
@@ -37,7 +36,7 @@ class FetchPrivateOrdersRemoteDataSourceImpl
 
       if ((response as List).isEmpty) {
         print("⚠️ No orders found for freelancerId: $freelancerId");
-        return Right([]);
+        return const Right([]);
       }
 
       final orders = response.map((json) {

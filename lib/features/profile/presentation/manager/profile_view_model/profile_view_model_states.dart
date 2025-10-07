@@ -1,4 +1,3 @@
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:taskly/features/profile/domain/entities/user_info_entity/user_info_entity.dart';
 
 class ProfileViewModelStates {}

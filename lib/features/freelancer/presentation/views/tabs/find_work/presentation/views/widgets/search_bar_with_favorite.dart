@@ -32,7 +32,7 @@ class SearchBarWithFavorite extends StatelessWidget {
               ),
               borderRadius: BorderRadius.circular(30.r),
             ),
-            child:   Icon(
+            child:   const Icon(
               Icons.favorite,
               color: ColorsManager.primary,
             ),

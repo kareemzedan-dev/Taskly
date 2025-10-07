@@ -38,13 +38,18 @@ dependencies:
   open_file: ^3.3.3
   syncfusion_flutter_pdfviewer: ^31.1.19
   timeago: ^3.6.2
-  path_provider: ^2.1.1
   shimmer: ^3.0.0
   marquee: ^2.2.3
   url_launcher: ^6.1.11
   sign_in_with_apple: ^7.0.1
   flutter_facebook_auth: ^7.1.2
   image_picker: ^1.1.0
+  path_provider: ^2.1.2
+  audioplayers: ^6.1.0
+  permission_handler: ^12.0.1
+  record: ^6.1.2
+  flutter_rating_bar: ^4.0.1
+
 
 dev_dependencies:
   flutter_test:
@@ -61,6 +66,13 @@ flutter:
     - assets/images/
     - assets/videos/
     - assets/lotties/
+    - lib/features/freelancer/domain/entities/
+    - lib/features/freelancer/domain/entities/offer_entity/
+    - lib/features/freelancer/domain/entities/admin_settings_entity/
+    - lib/features/freelancer/domain/entities/favorite_order_entity/
+    - lib/features/reviews/presentation/manager/submit_rating_view_model/
+    - lib/features/reviews/domain/use_cases/
+    - lib/features/reviews/domain/use_cases/get_user_reviews_use_case/
 
   fonts:
     - family: Cairo

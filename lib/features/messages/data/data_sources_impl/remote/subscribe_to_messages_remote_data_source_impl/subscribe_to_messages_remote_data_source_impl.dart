@@ -33,7 +33,6 @@ class SubscribeToMessagesRemoteDataSourceImpl implements SubscribeToMessagesRemo
       ),
       callback: (payload) {
         final record = payload.newRecord;
-        if (record == null) return;
         final message = MessageModel.fromJson(
           Map<String, dynamic>.from(record),
         );
@@ -52,7 +51,6 @@ class SubscribeToMessagesRemoteDataSourceImpl implements SubscribeToMessagesRemo
       ),
       callback: (payload) {
         final record = payload.newRecord;
-        if (record == null) return;
         final message = MessageModel.fromJson(
           Map<String, dynamic>.from(record),
         );
@@ -71,7 +69,6 @@ class SubscribeToMessagesRemoteDataSourceImpl implements SubscribeToMessagesRemo
       ),
       callback: (payload) {
         final record = payload.oldRecord;
-        if (record == null) return;
         final message = MessageModel.fromJson(
           Map<String, dynamic>.from(record),
         );
@@ -79,7 +76,7 @@ class SubscribeToMessagesRemoteDataSourceImpl implements SubscribeToMessagesRemo
       },
     );
 
-    await channel.subscribe();
+    channel.subscribe();
     return channel;
   }
 }

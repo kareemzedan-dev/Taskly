@@ -1,14 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:taskly/core/components/dismissible_error_card.dart';
-import 'package:taskly/core/di/di.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/action_button.dart';
 import 'package:taskly/features/shared/domain/entities/order_entity/order_entity.dart';
 
 import '../../../../../../../../../config/routes/routes_manager.dart';
-import '../../view_model/update_offer_status_view_model/update_offer_status_states.dart';
-import '../../view_model/update_offer_status_view_model/update_offer_status_view_model.dart';
 
 class OfferActions extends StatelessWidget {
  const OfferActions({

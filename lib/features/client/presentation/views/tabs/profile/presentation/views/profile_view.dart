@@ -32,7 +32,7 @@ class ClientProfileViewTab extends StatelessWidget {
         ],
       ),
       backgroundColor: Colors.white,
-      body: ClientProfileViewBody(),
+      body: const ClientProfileViewBody(),
     );
   }
 }

@@ -31,7 +31,7 @@ class _TimeInputRawState extends State<TimeInputRaw> {
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly, // ✅ يسمح بالأرقام فقط
                 ],
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: "Enter time",
                   border: InputBorder.none,
                   focusedBorder: InputBorder.none,
@@ -40,7 +40,7 @@ class _TimeInputRawState extends State<TimeInputRaw> {
                 onChanged: (val) => context.read<PlaceOrderViewModel>().timeController.text = val,
               ),
             ),
-            SizedBox(width: 8),
+            const SizedBox(width: 8),
             DropdownButton<String>(
               value: context.read<PlaceOrderViewModel>().selectedTimeUnit,
               items:

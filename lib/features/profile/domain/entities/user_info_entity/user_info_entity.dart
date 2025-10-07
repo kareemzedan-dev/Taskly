@@ -29,11 +29,13 @@ class UserInfoEntity {
   final double ? freelancerBalance;
 
 
+
   final DateTime? createdAt;
   final BillingInfo? billingInfo;
   final double? balance;
   final DateTime? updatedAt;
   final bool? isVerified;
+  final double?totalEarnings;
 
   UserInfoEntity({
     required this.id,
@@ -59,6 +61,7 @@ class UserInfoEntity {
     this.reviewsCount,
     this.freelancerBalance,
     this.isVerified,
+    this.totalEarnings,
   });
 }
 class BillingInfo {

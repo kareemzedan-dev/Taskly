@@ -1,6 +1,5 @@
 import 'package:either_dart/src/either.dart';
 import 'package:injectable/injectable.dart';
-import 'package:realtime_client/src/realtime_channel.dart';
 import 'package:taskly/core/errors/failures.dart';
 import 'package:taskly/features/freelancer/data/data_sources/remote/offer_data_source.dart';
 import 'package:taskly/features/freelancer/domain/entities/offer_entity/offer_entity.dart';

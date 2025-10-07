@@ -31,14 +31,14 @@ class _ReceiveOffersState extends State<ReceiveOffers> {
             ),
             child:
                 isChecked!
-                    ? Center(
+                    ? const Center(
                       child: Icon(Icons.done, color: Colors.white, size: 16),
                     )
                     : null,
           ),
         ),
-        SizedBox(width: 10),
-        Text(
+        const SizedBox(width: 10),
+        const Text(
           'Yes, I want to receive offers and discounts',
           style: TextStyle(
             color: Colors.black,

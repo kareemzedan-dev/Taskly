@@ -32,7 +32,7 @@ class FreelancerProfileViewTab extends StatelessWidget {
         ],
       ),
       backgroundColor: Colors.white,
-      body: FreelancerProfileViewBody(),
+      body: const FreelancerProfileViewBody(),
     );
   }
 }

@@ -61,7 +61,7 @@ class _OrderViewBodyState extends State<OrderViewBody> {
           );
           Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => ClientHomeView(initialIndex: 1)),
+            MaterialPageRoute(builder: (context) => const ClientHomeView(initialIndex: 1)),
                 (_) => false,
           );
 
@@ -125,7 +125,7 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                       ),
                     ),
                     SizedBox(height: 16.h),
-                    DescriptionBox(),
+                    const DescriptionBox(),
 
                     SizedBox(height: 28.h),
                     Text(
@@ -136,7 +136,7 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                       ),
                     ),
                     SizedBox(height: 16.h),
-                    TimeInputRaw(),
+                    const TimeInputRaw(),
 
                     SizedBox(height: 28.h),
                     Text(

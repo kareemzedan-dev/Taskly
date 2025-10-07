@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:taskly/core/utils/app_text_styles.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
 
 import '../../config/l10n/app_localizations.dart';

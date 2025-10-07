@@ -8,8 +8,6 @@ import 'package:taskly/core/cache/shared_preferences.dart';
 import 'package:taskly/core/di/di.dart';
 import 'package:taskly/core/components/custom_tab_bar.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
-import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/user_info_header_shimmer.dart'
-    as shimmer;
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/user_info_home_header.dart'
     as header;
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/view_model/freelancer_public_order_view_model/freelancer_public_order_states.dart';
@@ -95,7 +93,7 @@ class _FreelancerHomeTabViewBodyState extends State<FreelancerHomeTabViewBody> {
               SizedBox(height: 20.h),
               SearchBarWithFavorite(hintTexts: searchHintTexts),
               SizedBox(height: 30.h),
-              CustomTabBar(tabs: ["Public Requests", "Private Requests"]),
+              const CustomTabBar(tabs: ["Public Requests", "Private Requests"]),
               SizedBox(height: 6.h),
               Divider(color: Colors.grey.shade300, thickness: 1.w),
 

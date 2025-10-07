@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:taskly/core/utils/assets_manager.dart';
 import 'package:taskly/core/utils/videos_manager.dart';
 import 'package:video_player/video_player.dart';
 import 'welcome_states.dart';

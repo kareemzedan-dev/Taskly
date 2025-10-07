@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:taskly/core/utils/colors_manger.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/freelancer_work_card.dart';
 
 import '../../../../../../../../../core/utils/assets_manager.dart';
@@ -20,7 +17,7 @@ class FreelancerPrivateOrdersList extends StatelessWidget {
   Widget build(BuildContext context) {
 
     if (state is FreelancerPrivateOrdersViewModelStatesLoading) {
-      return FreelancerWorkCardShimmer(
+      return const FreelancerWorkCardShimmer(
       );
     } else if (state is FreelancerPrivateOrdersViewModelStatesSuccess) {
       final orders = (state as FreelancerPrivateOrdersViewModelStatesSuccess).orders;
@@ -67,7 +64,7 @@ class FreelancerPrivateOrdersList extends StatelessWidget {
       );
     }
     else if (state is FreelancerPrivateOrdersViewModelStatesError) {
-      return FreelancerWorkCardShimmer();
+      return const FreelancerWorkCardShimmer();
     }
     return Container();
   }

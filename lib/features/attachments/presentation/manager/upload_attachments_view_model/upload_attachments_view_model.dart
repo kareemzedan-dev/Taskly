@@ -20,7 +20,7 @@ class UploadAttachmentsViewModel extends Cubit<UploadAttachmentsViewModelStates>
 
   List<File> files = [];
   Set<String> uploadedFileHashes = {};
-  Map<File, String> _fileKeys = {};
+  final Map<File, String> _fileKeys = {};
   int _fileCounter = 0;
   List<AttachmentModel> uploadedAttachments = [];
   

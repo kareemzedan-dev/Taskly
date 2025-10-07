@@ -35,10 +35,10 @@ class MessagesCard extends StatelessWidget {
       child: BlocBuilder<ProfileViewModel, ProfileViewModelStates>(
         builder: (context, state) {
           if (state is ProfileViewModelStatesLoading) {
-            return UserInfoSectionShimmer();
+            return const UserInfoSectionShimmer();
           }
           if (state is ProfileViewModelStatesError) {
-            return UserInfoSectionShimmer();
+            return const UserInfoSectionShimmer();
           }
           if (state is ProfileViewModelStatesSuccess) {
             return GestureDetector(
@@ -66,7 +66,7 @@ class MessagesCard extends StatelessWidget {
                     CircleAvatar(
                       backgroundColor: Colors.grey.shade300,
                       radius: 30.r,
-                      backgroundImage: AssetImage(
+                      backgroundImage: const AssetImage(
                         Assets.assetsImagesPortraitHappySmileyMan,
                       ),
                     ),
@@ -167,11 +167,11 @@ class MessagesCard extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               blankSpace: 20.0,
                               velocity: 30.0,
-                              pauseAfterRound: Duration(seconds: 1),
+                              pauseAfterRound: const Duration(seconds: 1),
                               startPadding: 10.0,
-                              accelerationDuration: Duration(seconds: 1),
+                              accelerationDuration: const Duration(seconds: 1),
                               accelerationCurve: Curves.linear,
-                              decelerationDuration: Duration(milliseconds: 500),
+                              decelerationDuration: const Duration(milliseconds: 500),
                               decelerationCurve: Curves.easeOut,
                             ),
                           ),

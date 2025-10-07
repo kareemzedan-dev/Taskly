@@ -79,7 +79,7 @@ class TechnicalSupportViewBody extends StatelessWidget {
                       SizedBox(height: 16.h),
                       Row(
                         children: [
-                          Icon(Icons.phone, color: ColorsManager.primary),
+                          const Icon(Icons.phone, color: ColorsManager.primary),
                           SizedBox(width: 10.w),
                           Text(
                             "011 000 0000",
@@ -93,7 +93,7 @@ class TechnicalSupportViewBody extends StatelessWidget {
                       SizedBox(height: 16.h),
                       Row(
                         children: [
-                          Icon(Icons.phone, color: ColorsManager.primary),
+                          const Icon(Icons.phone, color: ColorsManager.primary),
                           SizedBox(width: 10.w),
                           Text(
                             "111",
@@ -115,7 +115,7 @@ class TechnicalSupportViewBody extends StatelessWidget {
                       SizedBox(height: 16.h),
                       Row(
                         children: [
-                          Icon(Icons.email, color: ColorsManager.primary),
+                          const Icon(Icons.email, color: ColorsManager.primary),
                           SizedBox(width: 10.w),
                           Text(
                             "qN2bS@example.com",

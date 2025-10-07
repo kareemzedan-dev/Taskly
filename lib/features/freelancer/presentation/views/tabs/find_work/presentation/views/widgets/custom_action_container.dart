@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
 
 class CustomActionContainer extends StatelessWidget {
-  CustomActionContainer({
+  const CustomActionContainer({
     super.key,
     required this.title,
     required this.icon,

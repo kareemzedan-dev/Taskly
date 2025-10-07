@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:taskly/config/theme/app_theme.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
 
 class RoleBox extends StatelessWidget {
@@ -33,11 +32,11 @@ class RoleBox extends StatelessWidget {
             color: isSelected ? ColorsManager.primary : Colors.grey,
             width: 3.w,
           ),
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               color: Colors.black26,
               blurRadius: 6,
-              offset: const Offset(2, 2),
+              offset: Offset(2, 2),
             ),
           ],
         ),

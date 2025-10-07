@@ -1,5 +1,4 @@
 
-import 'package:taskly/features/profile/domain/entities/user_info_entity/user_info_entity.dart';
 
 import '../../../domain/entities/conversation_entity.dart';
 

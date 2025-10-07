@@ -33,11 +33,11 @@ class FavouriteOrdersView extends StatelessWidget {
           leading: GestureDetector(
             onTap: () => Navigator.pushReplacementNamed(
                 context, RoutesManager.freelancerHome),
-            child: Icon(CupertinoIcons.back, color: Colors.black),
+            child: const Icon(CupertinoIcons.back, color: Colors.black),
           ),
         ),
         backgroundColor: Colors.white,
-        body: SafeArea(child: FavouriteOrdersViewBody()),
+        body: const SafeArea(child: FavouriteOrdersViewBody()),
       ),
     );
   }

@@ -1,7 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/profile/presentation/views/widgets/request_withdrawal_view_body.dart';
+
+import '../../../../../../../../core/cache/shared_preferences.dart';
+import '../../../../../../../../core/di/di.dart';
+import '../../../../../../../../core/utils/strings_manager.dart';
+import '../../../../../cubit/get_total_earnings_view_model/get_total_earnings_view_model.dart';
+import '../../../../../cubit/place_withdrawal_balance_view_model/place_withdrawal_balance_view_model.dart';
 
 class RequestWithdrawalView extends StatelessWidget {
   const RequestWithdrawalView({super.key});
@@ -25,11 +32,17 @@ class RequestWithdrawalView extends StatelessWidget {
         ),
         leading: GestureDetector(
           onTap: () => Navigator.pop(context),
-          child: Icon(CupertinoIcons.back, color: Colors.black),
+          child: const Icon(CupertinoIcons.back, color: Colors.black),
         ),
       ),
       backgroundColor: Colors.white,
-      body: RequestWithdrawalViewBody(),
+      body: MultiBlocProvider(providers:
+    [
+      BlocProvider(create: (context) => getIt<GetTotalEarningsViewModel>()..getTotalEarnings(SharedPrefHelper.getString(StringsManager.idKey)!),),
+    BlocProvider(create: (context) => getIt<PlaceWithdrawalBalanceViewModel>()
+
+    )]
+    , child: const RequestWithdrawalViewBody(),)
     );
   }
 }

@@ -1,5 +1,4 @@
 import 'package:either_dart/either.dart';
-import 'package:injectable/injectable.dart';
 
 import '../../../../../core/errors/failures.dart';
 import '../../../domain/entities/payment_entity.dart';

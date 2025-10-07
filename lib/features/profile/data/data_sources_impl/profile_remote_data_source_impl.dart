@@ -22,7 +22,7 @@ class ProfileRemoteDataSourceImpl extends ProfileRemoteDataSource {
   ) async {
     try {
       if (userId.isEmpty) {
-        return Left(ServerFailure("User not logged in"));
+        return const Left(ServerFailure("User not logged in"));
       }
 
       final userResponse = await _client
@@ -55,6 +55,9 @@ class ProfileRemoteDataSourceImpl extends ProfileRemoteDataSource {
         role: userResponse?['role'] ?? "",
         profileImage: userResponse?['profile_image'],
         bio: userResponse?['bio'],
+        totalEarnings: userResponse?['total_earnings'] != null
+          ? (userResponse?['total_earnings'] as num).toDouble() : 0.0,
+
         createdAt: userResponse?['created_at'] != null
             ? DateTime.tryParse(userResponse?['created_at'])
             : null,
@@ -88,6 +91,7 @@ class ProfileRemoteDataSourceImpl extends ProfileRemoteDataSource {
             ? DateTime.tryParse(userResponse!['last_seen'].toString())
             : null,
         reviewsCount: userResponse?['reviews_count']?.toInt() ?? 0,
+
       );
 
       return Right(user);

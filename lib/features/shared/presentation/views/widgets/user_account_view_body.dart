@@ -7,10 +7,8 @@ import 'package:taskly/core/components/custom_button.dart';
 import 'package:taskly/core/components/custom_text_field.dart';
 import 'package:taskly/core/components/dismissible_error_card.dart';
 import 'package:taskly/core/di/di.dart';
-import 'package:taskly/core/utils/colors_manger.dart';
 import 'package:taskly/core/utils/strings_manager.dart';
 import 'package:taskly/features/profile/domain/entities/user_info_entity/user_info_entity.dart';
-import 'package:taskly/features/profile/presentation/manager/profile_view_model/profile_view_model.dart';
 import 'package:taskly/features/reviews/presentation/widgets/user_avatar.dart';
 import '../../../../../core/services/pick_image_from_camera.dart';
 import '../../../../profile/domain/use_cases/update_user_profile_use_case/update_user_profile_use_case.dart';
@@ -18,7 +16,7 @@ import '../../../../profile/presentation/manager/update_user_profile_view_model/
 import '../../../../profile/presentation/manager/update_user_profile_view_model/update_user_profile_view_model.dart';
 
 class UserAccountViewBody extends StatefulWidget {
-  UserAccountViewBody({super.key, required this.userInfoEntity});
+  const UserAccountViewBody({super.key, required this.userInfoEntity});
 
   final UserInfoEntity userInfoEntity;
 
@@ -103,7 +101,7 @@ class _UserAccountViewBodyState extends State<UserAccountViewBody> {
 
           return SingleChildScrollView(
             child: Padding(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -122,11 +120,11 @@ class _UserAccountViewBodyState extends State<UserAccountViewBody> {
                           child: GestureDetector(
                             onTap: _pickImage,
                             child: Container(
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                 color: Colors.white,
                                 shape: BoxShape.circle,
                               ),
-                              padding: EdgeInsets.all(4),
+                              padding: const EdgeInsets.all(4),
                               child: Icon(
                                 Icons.camera_alt,
                                 size: 20.sp,

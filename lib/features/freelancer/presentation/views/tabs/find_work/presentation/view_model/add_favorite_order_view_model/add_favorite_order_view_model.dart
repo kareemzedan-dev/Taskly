@@ -1,10 +1,7 @@
 import 'package:bloc/bloc.dart';
-import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
-import 'package:taskly/features/freelancer/data/data_sources/remote/favorite_order_remote_data_source/add_favorite_order_remote_data_source/add_favorite_order_remote_data_source.dart';
 import 'package:taskly/features/freelancer/domain/use_cases/add_favorite_order_use_case/add_favorite_order_repo.dart';
 
-import '../../../../../../../../../core/errors/failures.dart';
 import '../../../../../../../domain/entities/favorite_order_entity/favorite_order_entity.dart';
 import 'add_favorite_order_states.dart';
 

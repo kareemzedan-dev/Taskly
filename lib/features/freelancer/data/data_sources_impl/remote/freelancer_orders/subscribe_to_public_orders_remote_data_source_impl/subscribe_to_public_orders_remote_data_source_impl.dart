@@ -1,4 +1,4 @@
-import 'dart:async';
+ import 'dart:async';
 
 import 'package:injectable/injectable.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -17,15 +17,15 @@ class SubscribeToPublicOrdersRemoteDataSourceImpl implements SubscribeToPublicOr
   SubscribeToPublicOrdersRemoteDataSourceImpl(this._supabaseService,this._fetchPublicOrdersRemoteDataSource);
 
 
+  @override
   Stream<List<OrderEntity>> subscribeToPublicOrders(String freelancerId) async* {
     if (NetworkUtils.hasInternet() == false) {
-      throw NetworkFailure('No internet connection');
+      throw const NetworkFailure('No internet connection');
     }
 
     final controller = StreamController<List<OrderEntity>>();
     final currentOrders = <OrderEntity>[];
 
-    // 1- تحميل الحالة الأولية
     final initialResult = await _fetchPublicOrdersRemoteDataSource.fetchPublicOrders(freelancerId);
     initialResult.fold(
           (failure) => controller.addError(failure),
@@ -35,7 +35,6 @@ class SubscribeToPublicOrdersRemoteDataSourceImpl implements SubscribeToPublicOr
       },
     );
 
-    // 2- الاشتراك في التغييرات
     _supabaseService.supabaseClient
         .channel('orders-changes')
         .onPostgresChanges(

@@ -1,7 +1,5 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:taskly/core/errors/failures.dart';
 import 'package:taskly/core/services/supabase_service.dart';
 import 'package:taskly/core/utils/network_utils.dart';
@@ -11,19 +9,7 @@ import 'package:taskly/features/freelancer/domain/entities/offer_entity/offer_en
 import 'package:taskly/features/shared/domain/entities/order_entity/order_entity.dart';
 
 import '../../../../shared/data/models/order_dm/order_dm.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:either_dart/either.dart';
-import 'package:injectable/injectable.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:taskly/core/errors/failures.dart';
-import 'package:taskly/core/services/supabase_service.dart';
-import 'package:taskly/core/utils/network_utils.dart';
-import 'package:taskly/features/freelancer/data/data_sources/remote/offer_data_source.dart';
-import 'package:taskly/features/freelancer/data/models/offer_dm/offer_dm.dart';
-import 'package:taskly/features/freelancer/domain/entities/offer_entity/offer_entity.dart';
-import 'package:taskly/features/shared/domain/entities/order_entity/order_entity.dart';
 
-import '../../../../shared/data/models/order_dm/order_dm.dart';
 
 @Injectable(as: OfferRemoteDataSource)
 class OfferRemoteDataSourceImpl implements OfferRemoteDataSource {
@@ -36,7 +22,7 @@ class OfferRemoteDataSourceImpl implements OfferRemoteDataSource {
       OfferEntity offerEntity) async {
     try {
       if (NetworkUtils.hasInternet() == false) {
-        return Left(NetworkFailure('No internet connection'));
+        return const Left(NetworkFailure('No internet connection'));
       }
 
       final offerModel = OfferModel(
@@ -83,7 +69,7 @@ class OfferRemoteDataSourceImpl implements OfferRemoteDataSource {
       String freelancerId, String status) async {
     try {
       if (NetworkUtils.hasInternet() == false) {
-        return Left(NetworkFailure('No internet connection'));
+        return const Left(NetworkFailure('No internet connection'));
       }
 
       final query = supabaseService.supabaseClient
@@ -98,8 +84,8 @@ class OfferRemoteDataSourceImpl implements OfferRemoteDataSource {
 
       final response = await query;
 
-      if (response == null || (response is List && response.isEmpty)) {
-        return Right([]);
+      if ((response.isEmpty)) {
+        return const Right([]);
       }
 
       final offers = (response as List)
@@ -117,7 +103,7 @@ class OfferRemoteDataSourceImpl implements OfferRemoteDataSource {
       String orderId) async {
     try {
       if (NetworkUtils.hasInternet() == false) {
-        return Left(NetworkFailure('No internet connection'));
+        return const Left(NetworkFailure('No internet connection'));
       }
 
       final orderResponse = await supabaseService.supabaseClient
@@ -127,7 +113,7 @@ class OfferRemoteDataSourceImpl implements OfferRemoteDataSource {
           .maybeSingle();
 
       if (orderResponse == null) {
-        return Left(ServerFailure('Order not found'));
+        return const Left(ServerFailure('Order not found'));
       }
 
       final order = OrderDm.fromJson(orderResponse);

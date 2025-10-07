@@ -6,7 +6,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/di/di.dart';
 import 'package:taskly/features/attachments/presentation/manager/upload_attachments_view_model/upload_attachments_view_model_states.dart';
 
-import '../../../../../../../../attachments/data/models/attachments_dm/attachments_dm.dart';
  
 import '../../../../../../../../attachments/presentation/manager/delete_attachments_view_model/delete_attachments_view_model.dart';
 import '../../../../../../../../attachments/presentation/manager/delete_attachments_view_model/delete_attachments_view_model_states.dart';

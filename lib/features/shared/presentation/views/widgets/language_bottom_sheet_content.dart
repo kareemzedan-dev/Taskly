@@ -49,7 +49,7 @@ class _LanguageBottomSheetContentState
             padding: EdgeInsets.all(12.w),
             itemCount: languages.length,
             separatorBuilder:
-                (_, __) => Divider(color: Colors.grey, thickness: 0.5),
+                (_, __) => const Divider(color: Colors.grey, thickness: 0.5),
             itemBuilder: (context, index) {
               final lang = languages[index];
               final isSelected = lang["title"] == _selectedLanguage;

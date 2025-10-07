@@ -112,7 +112,7 @@ if (state is AuthLoginErrorState || state is AuthGoogleErrorState) {
                 SizedBox(height: 32.h),
                 
                  CustomTextFormField(
-                  prefixIcon: Icon(CupertinoIcons.mail),
+                  prefixIcon: const Icon(CupertinoIcons.mail),
                   hintText: AppLocalizations.of(context)!.email,
                   textEditingController: authViewModel.emailController,
                   validator:
@@ -126,7 +126,7 @@ if (state is AuthLoginErrorState || state is AuthGoogleErrorState) {
 
           
                 CustomTextFormField(
-                  prefixIcon: Icon(CupertinoIcons.lock),
+                  prefixIcon: const Icon(CupertinoIcons.lock),
                   hintText: AppLocalizations.of(context)!.password,
                   textEditingController: authViewModel.passwordController,
                   iconShow: true,
@@ -139,7 +139,7 @@ if (state is AuthLoginErrorState || state is AuthGoogleErrorState) {
                 ),
 
                 SizedBox(height: 20.h),
-                OrDivider(),
+                const OrDivider(),
                 SizedBox(height: 20.h),
 
                 SocialLoginButton(

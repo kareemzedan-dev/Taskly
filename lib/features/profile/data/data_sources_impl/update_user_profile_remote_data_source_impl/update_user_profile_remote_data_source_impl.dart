@@ -1,6 +1,5 @@
 import 'package:either_dart/src/either.dart';
 import 'package:injectable/injectable.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'package:taskly/core/errors/failures.dart';
 import 'package:taskly/core/utils/network_utils.dart';
@@ -24,7 +23,7 @@ class UpdateUserProfileRemoteDataSourceImpl
       String profileImagePath) async {
     try {
       if (NetworkUtils.hasInternet() == false) {
-        return Left(NetworkFailure(StringsManager.noInternetConnection));
+        return const Left(NetworkFailure(StringsManager.noInternetConnection));
       }
       String? profileImageUrl = profileImagePath;
 
@@ -48,7 +47,7 @@ class UpdateUserProfileRemoteDataSourceImpl
       );
 
 
-      return Right(null);
+      return const Right(null);
     } catch (e) {
       return Left(ServerFailure(e.toString()));
     }

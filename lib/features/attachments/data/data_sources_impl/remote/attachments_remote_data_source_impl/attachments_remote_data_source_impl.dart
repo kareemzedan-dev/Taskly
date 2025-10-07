@@ -40,7 +40,7 @@ class AttachmentsRemoteDataSourceImpl extends AttachmentsRemoteDataSource {
       final file = File(savePath);
 
       if (!file.existsSync()) {
-        return Left(ServerFailure("File not found after download"));
+        return const Left(ServerFailure("File not found after download"));
       }
 
       return Right(file);
@@ -57,7 +57,7 @@ class AttachmentsRemoteDataSourceImpl extends AttachmentsRemoteDataSource {
       }) async {
     try {
       final supabase = supabaseService.supabaseClient;
-      final uuid = const Uuid();
+      const uuid = Uuid();
       final bucket = bucketName ?? defaultBucket;
 
       List<AttachmentEntity> uploadedAttachments = [];
@@ -109,6 +109,7 @@ uploadedAttachments.add(
         return 'application/octet-stream';
     }
   }
+  @override
   Future<Either<Failures, void>> deleteAttachment(
       String storagePath, {
         String? bucketName,
@@ -119,11 +120,11 @@ uploadedAttachments.add(
       final removedFiles = await supabase.storage.from(bucket).remove([storagePath]);
 
       if (removedFiles.isEmpty) {
-        return Left(ServerFailure('File not found or already deleted'));
+        return const Left(ServerFailure('File not found or already deleted'));
       }
 
       return const Right(null);
-    } catch (e, st) {
+    } catch (e) {
       return Left(ServerFailure(e.toString()));
     }
   }

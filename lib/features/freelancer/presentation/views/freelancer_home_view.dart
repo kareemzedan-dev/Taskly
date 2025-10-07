@@ -18,10 +18,10 @@ class _FreelancerHomeView extends State<FreelancerHomeView> {
   late int currentIndex;
 
   List<Widget> items = [
-   FreelancerHomeTabView(),
-  FreelancerMyJobsTabView(),
-   UserMessagesTabView(),
-   FreelancerProfileViewTab(),
+   const FreelancerHomeTabView(),
+  const FreelancerMyJobsTabView(),
+   const UserMessagesTabView(),
+   const FreelancerProfileViewTab(),
  
   ];
   @override

@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/utils/app_text_styles.dart';
-import 'package:taskly/core/utils/assets_manager.dart';
 import 'package:taskly/features/profile/domain/entities/user_info_entity/user_info_entity.dart';
 import 'package:taskly/features/reviews/presentation/widgets/user_avatar.dart';
 

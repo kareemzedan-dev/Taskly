@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/helper/relative_time.dart';
-import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/freelancer_work_card.dart';
 import 'package:taskly/features/shared/domain/entities/order_entity/order_entity.dart';
 
 class AboutJobSection extends StatelessWidget {

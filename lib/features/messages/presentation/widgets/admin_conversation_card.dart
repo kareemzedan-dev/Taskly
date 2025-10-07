@@ -1,9 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import '../../../../core/utils/assets_manager.dart';
-
 class AdminConversationCard extends StatelessWidget {
   const AdminConversationCard({super.key});
 
@@ -28,7 +25,7 @@ class AdminConversationCard extends StatelessWidget {
               CircleAvatar(
                   radius: 20.r,
                   backgroundColor: Colors.grey.shade400,
-                  backgroundImage: AssetImage(Assets.assetsAdminAvatar)),
+                  backgroundImage: const AssetImage(Assets.assetsAdminAvatar)),
               SizedBox(width: 12.w),
               Column(
 
@@ -48,7 +45,7 @@ class AdminConversationCard extends StatelessWidget {
 
                         )),
               ]),
-                  Spacer(),
+                  const Spacer(),
                   Icon(Icons.arrow_forward_ios_rounded,
                   size: 16.sp,)
             ])),

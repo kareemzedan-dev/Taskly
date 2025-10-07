@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:taskly/core/errors/failures.dart';
 import 'package:taskly/core/cache/shared_preferences.dart';
-import 'package:taskly/core/services/supabase_service.dart';
 import 'package:taskly/features/client/domain/use_cases/home/place_order_use_case/place_order_use_case.dart';
 import 'package:taskly/features/shared/domain/entities/order_entity/order_entity.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/view_model/place_order_view_model/place_order_view_model_states.dart';
@@ -42,7 +41,7 @@ class PlaceOrderViewModel extends Cubit<PlaceOrderViewModelStates> {
   List<File> localAttachments = [];
   List<AttachmentModel> uploadedAttachments = [];
   TextEditingController timeController = TextEditingController();
-  final orderId = Uuid().v4();
+  final orderId = const Uuid().v4();
   Map<String, double> uploadProgress = {};
   String selectedTimeUnit = "Days";
   final List<String> timeUnits = ["Hours", "Days", "Weeks"];

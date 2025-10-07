@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taskly/config/routes/routes_manager.dart';
 import 'package:taskly/core/cache/shared_preferences.dart';
 import 'package:taskly/features/messages/presentation/widgets/messages_tab_view_body.dart';
 
 import '../../../../core/utils/strings_manager.dart';
-import '../../../shared/presentation/views/widgets/messages_card.dart';
 import '../widgets/admin_conversation_card.dart';
 
 class UserMessagesTabView extends StatelessWidget {
@@ -32,21 +30,22 @@ class UserMessagesTabView extends StatelessWidget {
       ),
       backgroundColor: Colors.white,
       body: SafeArea(
-          child: Column(
-        children: [
-          GestureDetector(
-            onTap: () {
-       Navigator.pushNamed(context, RoutesManager.adminChatView , arguments: {
-         "currentUserId": SharedPrefHelper.getString( StringsManager.idKey)
-       });
-
-            },
-
-            child:  AdminConversationCard()
-          ),
-          UserMessagesTabViewBody(),
-        ],
-      )),
+          child: SingleChildScrollView(
+            child: Column(
+                    children: [
+            GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, RoutesManager.adminChatView,
+                      arguments: {
+                        "currentUserId":
+                            SharedPrefHelper.getString(StringsManager.idKey)
+                      });
+                },
+                child: const AdminConversationCard()),
+            const UserMessagesTabViewBody(),
+                    ],
+                  ),
+          )),
     );
   }
 }

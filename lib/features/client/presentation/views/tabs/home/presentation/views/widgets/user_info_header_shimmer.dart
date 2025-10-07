@@ -33,7 +33,7 @@ class UserInfoHomeHeaderShimmer extends StatelessWidget {
           Container(
             width: 60.r,
             height: 60.r,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.white,
               shape: BoxShape.circle,
             ),

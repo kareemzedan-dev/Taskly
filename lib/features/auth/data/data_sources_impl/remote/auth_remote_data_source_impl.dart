@@ -1,11 +1,9 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:either_dart/src/either.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:injectable/injectable.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-import 'package:taskly/config/l10n/app_localizations.dart';
 import 'package:taskly/core/errors/failures.dart';
 import 'package:taskly/core/cache/shared_preferences.dart';
 import 'package:taskly/core/services/supabase_service.dart';
@@ -72,6 +70,7 @@ Future<void> _saveUserToSupabase({
         'rating': 0.0,
         'jobs_count': 0,
         'reviews_count': 0,
+        'total_earnings': 0.0,
       },
       conflictColumn: 'email',
     );
@@ -161,8 +160,9 @@ Future<void> _insertRoleData(String id, String role) async {
     String role,
   ) async {
     try {
-      if (!await NetworkUtils.hasInternet())
-        return Left(NetworkFailure(StringsManager.noInternetConnection));
+      if (!await NetworkUtils.hasInternet()) {
+        return const Left(NetworkFailure(StringsManager.noInternetConnection));
+      }
 
       final response = await supabase.auth.signUp(
         email: email,
@@ -171,7 +171,7 @@ Future<void> _insertRoleData(String id, String role) async {
       );
 
       if (response.user != null && response.session == null) {
-        return Left(ServerFailure(StringsManager.emailAlreadyExists));
+        return const Left(ServerFailure(StringsManager.emailAlreadyExists));
       }
 
       final user = response.user!;
@@ -204,7 +204,7 @@ Future<void> _insertRoleData(String id, String role) async {
       return Left(ServerFailure(e.message));
     } catch (e, stackTrace) {
       debugPrint("Error: $e\n$stackTrace");
-      return Left(ServerFailure(StringsManager.somethingWentWrong));
+      return const Left(ServerFailure(StringsManager.somethingWentWrong));
     }
   }
 
@@ -215,8 +215,9 @@ Future<void> _insertRoleData(String id, String role) async {
     String role,
   ) async {
     try {
-      if (!await NetworkUtils.hasInternet())
-        return Left(NetworkFailure(StringsManager.noInternetConnection));
+      if (!await NetworkUtils.hasInternet()) {
+        return const Left(NetworkFailure(StringsManager.noInternetConnection));
+      }
 
       final response = await supabase.auth.signInWithPassword(
         email: email,
@@ -228,7 +229,7 @@ Future<void> _insertRoleData(String id, String role) async {
       final token = session?.accessToken;
 
       if (user == null || session == null) {
-        return Left(ServerFailure(StringsManager.loginFailed));
+        return const Left(ServerFailure(StringsManager.loginFailed));
       }
 
       final userRole = user.userMetadata?['role'] ?? '';
@@ -265,7 +266,7 @@ Future<void> _insertRoleData(String id, String role) async {
       return Left(ServerFailure(e.message));
     } catch (e, stackTrace) {
       debugPrint("Error: $e\n$stackTrace");
-      return Left(ServerFailure(StringsManager.somethingWentWrong));
+      return const Left(ServerFailure(StringsManager.somethingWentWrong));
     }
   }
 
@@ -275,12 +276,12 @@ Future<void> _insertRoleData(String id, String role) async {
   ) async {
     try {
       if (!await NetworkUtils.hasInternet()) {
-        return Left(NetworkFailure(StringsManager.noInternetConnection));
+        return const Left(NetworkFailure(StringsManager.noInternetConnection));
       }
 
       final GoogleSignInAccount? account = await _googleSignIn.signIn();
       if (account == null) {
-        return Left(ServerFailure(StringsManager.googleLoginCancelled));
+        return const Left(ServerFailure(StringsManager.googleLoginCancelled));
       }
 
       final GoogleSignInAuthentication googleAuth =
@@ -293,7 +294,7 @@ Future<void> _insertRoleData(String id, String role) async {
       );
 
       if (res.user == null || res.session == null) {
-        return Left(ServerFailure(StringsManager.loginFailed));
+        return const Left(ServerFailure(StringsManager.loginFailed));
       }
 
       final supabaseUser = res.user!;
@@ -347,7 +348,7 @@ Future<void> _insertRoleData(String id, String role) async {
       return Right(googleResponse);
     } catch (e, stackTrace) {
       debugPrint("Error: $e\n$stackTrace");
-      return Left(ServerFailure(StringsManager.somethingWentWrong));
+      return const Left(ServerFailure(StringsManager.somethingWentWrong));
     }
   }
 
@@ -355,17 +356,13 @@ Future<void> _insertRoleData(String id, String role) async {
   Future<Either<Failures, SocialAuthResponseEntity>> appleLogin(String role) async {
     try {
       if (!await NetworkUtils.hasInternet()) {
-        return Left(NetworkFailure(StringsManager.noInternetConnection));
+        return const Left(NetworkFailure(StringsManager.noInternetConnection));
       }
 
       // هنا تستخدم مكتبة apple_sign_in أو sign_in_with_apple
       final credential = await SignInWithApple.getAppleIDCredential(
         scopes: [AppleIDAuthorizationScopes.email, AppleIDAuthorizationScopes.fullName],
       );
-
-      if (credential == null) {
-        return Left(ServerFailure(StringsManager.appleLoginCancelled));
-      }
 
       final res = await Supabase.instance.client.auth.signInWithIdToken(
         provider: OAuthProvider.apple,
@@ -374,7 +371,7 @@ Future<void> _insertRoleData(String id, String role) async {
       );
 
       if (res.user == null || res.session == null) {
-        return Left(ServerFailure(StringsManager.loginFailed));
+        return const Left(ServerFailure(StringsManager.loginFailed));
       }
 
       final supabaseUser = res.user!;
@@ -425,14 +422,14 @@ Future<void> _insertRoleData(String id, String role) async {
       return Right(appleResponse);
     } catch (e, stackTrace) {
       debugPrint("Error: $e\n$stackTrace");
-      return Left(ServerFailure(StringsManager.somethingWentWrong));
+      return const Left(ServerFailure(StringsManager.somethingWentWrong));
     }
   }
   @override
   Future<Either<Failures, SocialAuthResponseEntity>> facebookLogin(String role) async {
     try {
       if (!await NetworkUtils.hasInternet()) {
-        return Left(NetworkFailure(StringsManager.noInternetConnection));
+        return const Left(NetworkFailure(StringsManager.noInternetConnection));
       }
 
       // تسجيل الدخول عبر Facebook
@@ -441,7 +438,7 @@ Future<void> _insertRoleData(String id, String role) async {
       );
 
       if (result.status != LoginStatus.success || result.accessToken == null) {
-        return Left(ServerFailure(StringsManager.facebookLoginCancelled));
+        return const Left(ServerFailure(StringsManager.facebookLoginCancelled));
       }
 
       final accessToken = result.accessToken!.tokenString;
@@ -483,6 +480,8 @@ Future<void> _insertRoleData(String id, String role) async {
           'role': role,
           'profile_image': avatarUrl,
           'created_at': DateTime.now().toIso8601String(),
+          'total_earnings': 0.0,
+
         });
       }
 
@@ -503,7 +502,7 @@ Future<void> _insertRoleData(String id, String role) async {
       return Right(facebookResponse);
     } catch (e, stackTrace) {
       debugPrint("Facebook login error: $e\n$stackTrace");
-      return Left(ServerFailure(StringsManager.somethingWentWrong));
+      return const Left(ServerFailure(StringsManager.somethingWentWrong));
     }
   }
 

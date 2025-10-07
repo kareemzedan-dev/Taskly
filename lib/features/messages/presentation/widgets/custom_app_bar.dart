@@ -2,16 +2,17 @@
 
   import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:taskly/core/utils/assets_manager.dart';
-import 'package:taskly/features/messages/presentation/widgets/custom_states_container.dart';
 import 'package:taskly/features/reviews/presentation/widgets/user_avatar.dart';
 
+import '../../../../core/helper/format_last_seen.dart';
 import '../../../shared/domain/entities/order_entity/order_entity.dart';
   AppBar customAppBar(
       BuildContext context, {
         required String userName,
         required String userImage,
         required OrderEntity order,
+        required bool isOnline,
+        required DateTime lastSeen,
       }) {
     return AppBar(
       surfaceTintColor: Colors.transparent,
@@ -65,25 +66,37 @@ import '../../../shared/domain/entities/order_entity/order_entity.dart';
                     SizedBox(height: 2.h),
                     Row(
                       children: [
-                        // Order title
+                        // Online indicator
+                        if (isOnline)
+                          Container(
+                            width: 8.w,
+                            height: 8.h,
+                            decoration: BoxDecoration(
+                              color: Colors.green,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                        if (isOnline)
+                          SizedBox(width: 4.w), // مسافة بين الدائرة والنص
+                        // Last seen or online text
                         Expanded(
                           child: Text(
-                            order.title,
+                            formatLastSeen(isOnline: isOnline, lastSeen: lastSeen),
                             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                               fontWeight: FontWeight.w400,
                               fontSize: 12.sp,
+                              color: isOnline ? Colors.green : Colors.grey.shade600,
                             ),
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
                           ),
                         ),
-                        SizedBox(width: 8.w),
-
                       ],
                     ),
                   ],
                 ),
               ),
+
             ],
           ),
         ),

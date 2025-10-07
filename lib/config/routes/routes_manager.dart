@@ -61,9 +61,9 @@ class RoutesManager {
         final role = settings.arguments as String;
         return MaterialPageRoute(builder: (_) => RegisterView(role: role));
       case clientHome:
-        return MaterialPageRoute(builder: (_) => ClientHomeView());
+        return MaterialPageRoute(builder: (_) => const ClientHomeView());
       case freelancerHome:
-        return MaterialPageRoute(builder: (_) => FreelancerHomeView());
+        return MaterialPageRoute(builder: (_) => const FreelancerHomeView());
       case RoutesManager.serviceOrderView:
         final args = settings.arguments as Map<String, dynamic>;
 
@@ -98,7 +98,7 @@ class RoutesManager {
           );
         } else {
           return MaterialPageRoute(
-            builder: (_) => Scaffold(
+            builder: (_) => const Scaffold(
               body: Center(child: Text('No order data provided')),
             ),
           );
@@ -149,7 +149,7 @@ class RoutesManager {
 
         if (args == null) {
           return MaterialPageRoute(
-            builder: (_) => Scaffold(
+            builder: (_) => const Scaffold(
               body: Center(child: Text('No arguments provided')),
             ),
           );
@@ -163,7 +163,7 @@ class RoutesManager {
 
         if ([userId, role, userName, userRating].contains(null)) {
           return MaterialPageRoute(
-            builder: (_) => Scaffold(
+            builder: (_) => const Scaffold(
               body: Center(child: Text('Incomplete arguments provided')),
             ),
           );

@@ -39,11 +39,11 @@ class HireMethodCard extends StatelessWidget {
             color: isSelected ? ColorsManager.primary : Colors.grey.shade300,
             width: 2.w,
           ),
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               color: Colors.black12,
               blurRadius: 6,
-              offset: const Offset(2, 2),
+              offset: Offset(2, 2),
             ),
           ],
         ),

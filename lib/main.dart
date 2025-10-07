@@ -12,7 +12,10 @@ import 'package:taskly/core/utils/strings_manager.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/view_model/services_view_model/services_view_model.dart';
 import 'package:taskly/config/l10n/app_localizations.dart';
 
+import 'core/services/supabase_service.dart';
+import 'core/services/user_status_service.dart';
 import 'features/profile/presentation/manager/profile_view_model/profile_view_model.dart';
+late final UserStatusService userStatusService;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,6 +26,11 @@ void main() async {
   );
   await SharedPrefHelper.init();
   configureDependencies();
+  final userId = SharedPrefHelper.getString(StringsManager.idKey)!;
+  userStatusService = UserStatusService(
+    supabaseService: getIt<SupabaseService>(),
+    userId: userId,
+  );
   Bloc.observer = MyBlocObserver();
   runApp(
     MultiBlocProvider(

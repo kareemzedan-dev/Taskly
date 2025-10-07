@@ -10,6 +10,7 @@ class OfferEntity {
   final int offerDeliveryTime;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final double? freelancerRating;
 
   OfferEntity({
     required this.id,
@@ -22,5 +23,6 @@ class OfferEntity {
     required this.offerDeliveryTime,
     required this.createdAt,
     required this.updatedAt,
+    this.freelancerRating,
   });
 }

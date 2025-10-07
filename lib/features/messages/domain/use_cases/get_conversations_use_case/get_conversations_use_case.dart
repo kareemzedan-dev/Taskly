@@ -2,7 +2,6 @@ import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../../../core/errors/failures.dart';
-import '../../../../profile/domain/entities/user_info_entity/user_info_entity.dart';
 import '../../entities/conversation_entity.dart';
 import '../../repositories/messages_repos/get_conversation_repo/get_conversation_repo.dart';
 

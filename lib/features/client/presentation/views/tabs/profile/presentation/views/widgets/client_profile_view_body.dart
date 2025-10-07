@@ -94,7 +94,7 @@ class _ClientProfileViewBodyState extends State<ClientProfileViewBody> {
                     final selected = await showModalBottomSheet<String>(
                       context: context,
                       backgroundColor: Colors.transparent,
-                      shape: RoundedRectangleBorder(
+                      shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.vertical(
                           top: Radius.circular(12),
                         ),
@@ -120,7 +120,7 @@ class _ClientProfileViewBodyState extends State<ClientProfileViewBody> {
                     final selectedTheme = await showModalBottomSheet<String>(
                       context: context,
                       backgroundColor: Colors.transparent,
-                      shape: RoundedRectangleBorder(
+                      shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.vertical(
                           top: Radius.circular(12),
                         ),
@@ -169,7 +169,7 @@ class _ClientProfileViewBodyState extends State<ClientProfileViewBody> {
                 ),
 
                 SizedBox(height: 10.h),
-                AccountItemRow(
+                const AccountItemRow(
                   image: Assets.assetsImagesDocument10103871,
                   text: "Terms & Conditions",
                 ),
@@ -190,7 +190,7 @@ class _ClientProfileViewBodyState extends State<ClientProfileViewBody> {
                 },
                 child: Row(
                   children: [
-                    Icon(Icons.logout, color: Colors.red),
+                    const Icon(Icons.logout, color: Colors.red),
                     const SizedBox(width: 12),
                     Text(
                       "Logout",

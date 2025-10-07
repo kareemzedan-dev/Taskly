@@ -49,7 +49,7 @@ class InputProposalPrice extends StatelessWidget {
           ),
           SizedBox(width: 8.w),
           Container(
-            padding: EdgeInsets.all(8),
+            padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10.r),
               color: ColorsManager.white,

@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:taskly/core/cache/shared_preferences.dart';
 import 'package:taskly/core/di/di.dart';
 import 'package:taskly/core/utils/strings_manager.dart';
-import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/order_states_card.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/view_model/get_favorite_order_view_model/get_favorite_order_states.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/view_model/get_favorite_order_view_model/get_favorite_order_view_model.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/view_model/get_favourite_order_details_view_model/get_favourite_order_details_states.dart';
@@ -49,10 +48,8 @@ class FavouriteOrderList extends StatelessWidget {
                             (f) => f.orderId == order.id,
 
                       );
-                      if (fav != null) {
-                        addFavViewModel.loadFavorites([fav]);
-                      }
-                    }
+                      addFavViewModel.loadFavorites([fav]);
+                                        }
 
                     return ListView.separated(
                       itemCount: detailsState.orders.length,

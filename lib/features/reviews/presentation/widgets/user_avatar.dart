@@ -17,7 +17,7 @@ class UserAvatar extends StatelessWidget {
           ? (imagePath!.startsWith('http')
           ? NetworkImage(imagePath!)
           : FileImage(File(imagePath!)) as ImageProvider)
-          : AssetImage(Assets.assetsUserAvatar)  as ImageProvider,
+          : const AssetImage(Assets.assetsUserAvatar)  as ImageProvider,
     );
   }
 }

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:injectable/injectable.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:taskly/config/routes/routes_manager.dart';
 import 'package:taskly/core/cache/shared_preferences.dart';
 import 'package:taskly/core/helper/convert_to_days.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
@@ -74,7 +72,7 @@ class _SendOfferViewBodyState extends State<SendOfferViewBody> {
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
-              builder: (context) => FreelancerHomeView(initialIndex: 1),
+              builder: (context) => const FreelancerHomeView(initialIndex: 1),
             ),
                 (_) => false,
           );
@@ -260,8 +258,8 @@ class _SendOfferViewBodyState extends State<SendOfferViewBody> {
                               freelancerId:
                               SharedPrefHelper.getString(
                                   StringsManager.idKey)!,
-                              clientId: widget.orderEntity.clientId!,
-                              orderId: widget.orderEntity.id!,
+                              clientId: widget.orderEntity.clientId,
+                              orderId: widget.orderEntity.id,
                               offerAmount:
                               double.parse(priceController.text),
                               offerStatus: "pending",

@@ -1,9 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:taskly/core/cache/shared_preferences.dart';
 import 'package:taskly/core/components/custom_button.dart';
 import 'package:taskly/core/components/custom_text_field.dart';
+import 'package:taskly/core/components/dismissible_error_card.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
+import 'package:taskly/core/utils/strings_manager.dart';
+import 'package:taskly/features/freelancer/domain/entities/earings_entity/earings_entity.dart';
+import 'package:taskly/features/freelancer/presentation/cubit/get_total_earnings_view_model/get_total_earnings_states.dart';
+import 'package:taskly/features/freelancer/presentation/cubit/get_total_earnings_view_model/get_total_earnings_view_model.dart';
+import 'package:taskly/features/freelancer/presentation/cubit/place_withdrawal_balance_view_model/place_withdrawal_balance_states.dart';
+import 'package:taskly/features/freelancer/presentation/cubit/place_withdrawal_balance_view_model/place_withdrawal_balance_view_model.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/profile/presentation/views/widgets/wallet_card.dart';
+import 'package:taskly/features/payments/domain/entities/payment_entity.dart';
+import 'package:uuid/uuid.dart';
 
 class WithdrawalRequestTabContent extends StatefulWidget {
   const WithdrawalRequestTabContent({super.key});
@@ -17,227 +28,359 @@ class _WithdrawalRequestTabContentState
     extends State<WithdrawalRequestTabContent> {
   final TextEditingController amountController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
+  String? selectedMethod;
 
-  String? selectedMethod; // "vodafone" or "instapay"
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<PlaceWithdrawalBalanceViewModel,
+        PlaceWithdrawalBalanceStates>(
+      listener: (context, state) {
+        if (state is PlaceWithdrawalBalanceSuccessState) {
+       showTemporaryMessage(context,
+           "Withdrawal request placed successfully", MessageType.success);
+       Navigator.pop(context);
+        } else if (state is PlaceWithdrawalBalanceErrorState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message)),
+          );
+        }
+      },
+      builder: (context, state) {
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Wallet Card Section
+                BlocBuilder<GetTotalEarningsViewModel, GetTotalEarningsStates>(
+                  builder: (context, state) {
+                    if (state is GetTotalEarningsLoadingState) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (state is GetTotalEarningsSuccessState) {
+                      return WalletCardSection(earnings: state.earningsEntity);
+                    } else if (state is GetTotalEarningsErrorState) {
+                      return const Center(
+                          child: Text("Error fetching earnings"));
+                    }
+                    return const WalletCardSectionIntital();
+                  },
+                ),
+                SizedBox(height: 20.h),
+
+                // Amount Input
+                AmountInputSection(controller: amountController),
+                SizedBox(height: 20.h),
+
+                // Payment Method
+                PaymentMethodSection(
+                  selectedMethod: selectedMethod,
+                  onMethodChanged: (value) {
+                    setState(() {
+                      selectedMethod = value;
+                    });
+                  },
+                ),
+                SizedBox(height: 20.h),
+
+                // Mobile Number
+                MobileNumberSection(controller: phoneController),
+                SizedBox(height: 30.h),
+
+                // Submit Button
+                SubmitButtonSection(
+                  onTap: () {
+                    final amount =
+                        double.tryParse(amountController.text.trim());
+                    final phone = phoneController.text.trim();
+
+                    final earningsState =
+                        context.read<GetTotalEarningsViewModel>().state;
+                    double availableBalance = 0;
+                    if (earningsState is GetTotalEarningsSuccessState) {
+                      availableBalance = earningsState.earningsEntity.balance;
+                    }
+
+                    if (amount == null || amount <= 0) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Enter a valid amount")),
+                      );
+                      return;
+                    }
+
+                    if (amount > availableBalance) {
+                      showTemporaryMessage(
+                          context,
+                          "You cannot withdraw more than your available balance ($availableBalance SAR)",
+                          MessageType.error);
+                      return;
+                    }
+
+                    if (phone.isEmpty || selectedMethod == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            content: Text("Select method and enter phone")),
+                      );
+                      return;
+                    }
+
+                    context
+                        .read<PlaceWithdrawalBalanceViewModel>()
+                        .placeWithdrawalBalance(
+                          PaymentEntity.forFreelancer(
+                            id: Uuid().v4(),
+                            freelancerId: SharedPrefHelper.getString(
+                                StringsManager.idKey),
+                            amount: amount,
+                            accountNumber: phone,
+                            paymentMethod: selectedMethod,
+                            status: "pending",
+
+                            createdAt: DateTime.now(),
+                            updatedAt: DateTime.now(),
+                          ),
+                        );
+                  },
+                ),
+
+                SizedBox(height: 20.h),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+/// ========================== WIDGETS ==========================
+
+class WalletCardSection extends StatelessWidget {
+  const WalletCardSection({super.key, required this.earnings});
+
+  final EarningsEntity earnings;
+
+  @override
+  Widget build(BuildContext context) {
+    return WalletCard(
+        availableBalance: "${earnings.balance} SAR",
+        totalEarnings: "${earnings.totalEarnings} SAR",
+        withdrawn: "${earnings.totalEarnings - earnings.balance} SAR");
+  }
+}
+
+class WalletCardSectionIntital extends StatelessWidget {
+  const WalletCardSectionIntital({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const WalletCard(
+        availableBalance: "0 SAR", totalEarnings: "0 SAR", withdrawn: "0 SAR");
+  }
+}
+
+class AmountInputSection extends StatelessWidget {
+  final TextEditingController controller;
+
+  const AmountInputSection({super.key, required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12.r),
+        side: BorderSide(color: Colors.grey.shade200),
+      ),
+      elevation: 2,
+      child: Padding(
+        padding: EdgeInsets.all(16.w),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Withdrawal Amount",
+              style: textTheme.bodyLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+                fontSize: 16.sp,
+              ),
+            ),
+            SizedBox(height: 8.h),
+            CustomTextFormField(
+              textEditingController: controller,
+              hintText: "Enter Amount",
+              keyboardType: TextInputType.number,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class PaymentMethodSection extends StatelessWidget {
+  final String? selectedMethod;
+  final ValueChanged<String?> onMethodChanged;
+
+  const PaymentMethodSection({
+    super.key,
+    required this.selectedMethod,
+    required this.onMethodChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: SingleChildScrollView(
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12.r),
+        side: BorderSide(color: Colors.grey.shade200),
+      ),
+      elevation: 2,
+      child: Padding(
+        padding: EdgeInsets.all(8.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const WalletCard(
-              availableBalance: "\$1200",
-              totalEarnings: "\$3000",
-              withdrawn: "\$1800",
-            ),
-            SizedBox(height: 20.h),
-
-            /// Amount Section
-            Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.r),
-                side: BorderSide(color: Colors.grey.shade200),
-              ),
-              elevation: 2,
-              child: Padding(
-                padding: EdgeInsets.all(16.w),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Withdrawal Amount",
-                      style: textTheme.bodyLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16.sp,
-                      ),
-                    ),
-                    SizedBox(height: 8.h),
-                    CustomTextFormField(
-                      hintText: "Enter Amount",
-                      keyboardType: TextInputType.number,
-                    ),
-                  ],
-                ),
+            Text(
+              "Select Payment Method",
+              style: textTheme.bodyLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+                fontSize: 16.sp,
               ),
             ),
-            SizedBox(height: 20.h),
-
-            /// Payment Method Section
-            Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.r),
-                side: BorderSide(color: Colors.grey.shade200),
-              ),
-              elevation: 2,
-              child: Padding(
-                padding: EdgeInsets.all(8.w),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Select Payment Method",
-                      style: textTheme.bodyLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16.sp,
-                      ),
-                    ),
-                    SizedBox(height: 8.h),
-
-                    /// Vodafone
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          selectedMethod = "vodafone";
-                        });
-                      },
-                      child: Container(
-                        margin: EdgeInsets.only(bottom: 12.h),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color:
-                                selectedMethod == "vodafone"
-                                    ? ColorsManager.primary
-                                    : Colors.grey.shade300,
-                            width: selectedMethod == "vodafone" ? 2 : 1,
-                          ),
-                          borderRadius: BorderRadius.circular(12.r),
-                        ),
-                        child: RadioListTile<String>(
-                          value: "vodafone",
-                          groupValue: selectedMethod,
-                          activeColor: ColorsManager.primary,
-                          onChanged: (value) {
-                            setState(() {
-                              selectedMethod = value;
-                            });
-                          },
-                          title: Row(
-                            children: [
-                              const Icon(
-                                Icons.account_balance_wallet_outlined,
-                                color: Colors.red,
-                              ),
-                              SizedBox(width: 8.w),
-                              const Text("Vodafone Cash"),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-
-                    /// InstaPay
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          selectedMethod = "instapay";
-                        });
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color:
-                                selectedMethod == "instapay"
-                                    ? ColorsManager.primary
-                                    : Colors.grey.shade300,
-                            width: selectedMethod == "instapay" ? 2 : 1,
-                          ),
-                          borderRadius: BorderRadius.circular(12.r),
-                        ),
-                        child: RadioListTile<String>(
-                          value: "instapay",
-                          groupValue: selectedMethod,
-                          activeColor: ColorsManager.primary,
-                          onChanged: (value) {
-                            setState(() {
-                              selectedMethod = value;
-                            });
-                          },
-                          title: Row(
-                            children: [
-                              const Icon(
-                                Icons.account_balance,
-                                color: Colors.blue,
-                              ),
-                              SizedBox(width: 8.w),
-                              const Text("InstaPay"),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+            SizedBox(height: 8.h),
+            _buildMethodOption(
+              context,
+              method: "Vodafone Cash",
+              icon: Icons.account_balance_wallet_outlined,
+              color: Colors.red,
+              title: "Vodafone Cash",
             ),
-            SizedBox(height: 20.h),
-
-            Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.r),
-                side: BorderSide(color: Colors.grey.shade200),
-              ),
-              elevation: 2,
-              child: Padding(
-                padding: EdgeInsets.all(8.w),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Mobile Number",
-                      style: textTheme.bodyLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16.sp,
-                      ),
-                    ),
-                    SizedBox(height: 8.h),
-                    TextField(
-                      controller: phoneController,
-                      keyboardType: TextInputType.phone,
-                      decoration: InputDecoration(
-                        prefixIcon: const Icon(
-                          Icons.phone_android,
-                          color: ColorsManager.primary,
-                        ),
-                        hintText: "Enter mobile number",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
-                          borderSide: BorderSide(color: ColorsManager.primary),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 6.h),
-                    Text(
-                      "⚠️ Please enter the Vodafone Cash number registered in your name",
-                      style: textTheme.bodySmall?.copyWith(
-                        color: Colors.grey[600],
-                        fontSize: 12.sp,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+            _buildMethodOption(
+              context,
+              method: "InstaPay",
+              icon: Icons.account_balance,
+              color: Colors.blue,
+              title: "InstaPay",
             ),
-
-            SizedBox(height: 30.h),
-
-            CustomButton(title: "Submit Request", ontap: () {}),
-
-            SizedBox(height: 20.h),
           ],
         ),
       ),
     );
+  }
+
+  Widget _buildMethodOption(
+    BuildContext context, {
+    required String method,
+    required IconData icon,
+    required Color color,
+    required String title,
+  }) {
+    return GestureDetector(
+      onTap: () => onMethodChanged(method),
+      child: Container(
+        margin: EdgeInsets.only(bottom: 12.h),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: selectedMethod == method
+                ? ColorsManager.primary
+                : Colors.grey.shade300,
+            width: selectedMethod == method ? 2 : 1,
+          ),
+          borderRadius: BorderRadius.circular(12.r),
+        ),
+        child: RadioListTile<String>(
+          value: method,
+          groupValue: selectedMethod,
+          activeColor: ColorsManager.primary,
+          onChanged: onMethodChanged,
+          title: Row(
+            children: [
+              Icon(icon, color: color),
+              SizedBox(width: 8.w),
+              Text(title),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class MobileNumberSection extends StatelessWidget {
+  final TextEditingController controller;
+
+  const MobileNumberSection({super.key, required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12.r),
+        side: BorderSide(color: Colors.grey.shade200),
+      ),
+      elevation: 2,
+      child: Padding(
+        padding: EdgeInsets.all(8.w),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Mobile Number",
+              style: textTheme.bodyLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+                fontSize: 16.sp,
+              ),
+            ),
+            SizedBox(height: 8.h),
+            TextField(
+              controller: controller,
+              keyboardType: TextInputType.phone,
+              decoration: InputDecoration(
+                prefixIcon: const Icon(
+                  Icons.phone_android,
+                  color: ColorsManager.primary,
+                ),
+                hintText: "Enter mobile number",
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.r),
+                  borderSide: const BorderSide(color: ColorsManager.primary),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.r),
+                  borderSide: const BorderSide(color: Colors.grey),
+                ),
+              ),
+            ),
+            SizedBox(height: 6.h),
+            Text(
+              "⚠️ Please enter the Vodafone Cash number registered in your name",
+              style: textTheme.bodySmall?.copyWith(
+                color: Colors.grey[600],
+                fontSize: 12.sp,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class SubmitButtonSection extends StatelessWidget {
+  final VoidCallback onTap;
+
+  const SubmitButtonSection({super.key, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomButton(title: "Submit Request", ontap: onTap);
   }
 }

@@ -20,7 +20,7 @@ class FetchPublicOrdersRemoteDataSourceImpl implements FetchPublicOrdersRemoteDa
   Future<Either<Failures, List<OrderEntity>>> fetchPublicOrders(String freelancerId) async {
     try {
       if (NetworkUtils.hasInternet() == false) {
-        return Left(NetworkFailure('No internet connection'));
+        return const Left(NetworkFailure('No internet connection'));
       }
 
       // جلب الأوردرات اللي الفريلانسر قدم عليها
@@ -29,7 +29,7 @@ class FetchPublicOrdersRemoteDataSourceImpl implements FetchPublicOrdersRemoteDa
           .select('order_id')
           .eq('freelancer_id', freelancerId);
 
-      final offeredOrderIds = (offersResponse == null || (offersResponse as List).isEmpty)
+      final offeredOrderIds = ((offersResponse as List).isEmpty)
           ? <String>[]
           : (offersResponse as List).map((e) => e['order_id'] as String).toList();
 
@@ -47,7 +47,7 @@ class FetchPublicOrdersRemoteDataSourceImpl implements FetchPublicOrdersRemoteDa
 
       final response = await query;
 
-      if ((response as List).isEmpty) return Right([]);
+      if ((response as List).isEmpty) return const Right([]);
 
       final orders = response
           .map((json) => OrderDm.fromJson(json).toEntity())

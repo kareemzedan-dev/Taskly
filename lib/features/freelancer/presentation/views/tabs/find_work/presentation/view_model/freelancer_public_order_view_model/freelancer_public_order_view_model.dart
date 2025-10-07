@@ -1,15 +1,10 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:taskly/core/cache/shared_preferences.dart';
-import 'package:taskly/core/errors/failures.dart';
 import 'package:taskly/core/utils/strings_manager.dart';
-import 'package:taskly/features/shared/data/models/order_dm/order_dm.dart';
 import 'package:taskly/features/shared/domain/entities/order_entity/order_entity.dart';
- import '../../../../../../../../../core/di/di.dart';
 import '../../../../../../../domain/use_cases/fetch_public_orders_use_case/fetch_public_orders_use_case.dart';
 import '../../../../../../../domain/use_cases/subscribe_to_public_orders_use_case/subscribe_to_public_orders_use_case.dart';
 import 'freelancer_public_order_states.dart';

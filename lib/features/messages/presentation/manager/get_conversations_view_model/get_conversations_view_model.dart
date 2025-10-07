@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../../../core/errors/failures.dart';
-import '../../../../profile/domain/entities/user_info_entity/user_info_entity.dart';
 import '../../../domain/entities/conversation_entity.dart';
 import '../../../domain/use_cases/get_conversations_use_case/get_conversations_use_case.dart';
 import 'get_conversations_states.dart';

@@ -6,7 +6,6 @@ import 'package:taskly/features/freelancer/domain/entities/offer_entity/offer_en
 import 'package:taskly/features/freelancer/domain/use_cases/send_offer_use_case/send_offer_use_case.dart';
 
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/view_model/send_offer_view_model/send_offer_view_model_states.dart';
-import 'package:taskly/features/shared/domain/entities/order_entity/order_entity.dart';
 @injectable
 class SendOfferViewModel extends Cubit<SendOfferViewModelStates> {
   SendOfferViewModel(this.sendOfferUseCase)

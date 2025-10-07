@@ -21,47 +21,38 @@ class GetOffersViewModel extends Cubit<GetOffersViewModelStates> {
 
   void init(String orderId) async {
     await getOffers(orderId);
-    subscribeToOffers(
-      orderId: orderId,
-      onChange: (offersList) {
-        _offers = offersList;
-        _offersCount = _offers.length;
-        emit(GetOffersViewModelSuccess(List.from(_offers), offersCount: _offersCount));
-      },
-    );
+    // بدل ما تمرر onChange، بس نشتغل مباشرة
+    subscribeToOffers(orderId: orderId);
     _subscribeToOffersCountRealtime(orderId);
   }
 
 
 
-Future<void> getOffers(String orderId) async {
-  try {
-    if (isClosed) return;
-    emit(GetOffersViewModelLoading());
+  Future<void> getOffers(String orderId) async {
+    try {
+      if (isClosed) return;
+      emit(GetOffersViewModelLoading());
 
-    final Either<Failures, List<OfferEntity>> result =
-        await getOfferUseCase.call(orderId);
+      final Either<Failures, List<OfferEntity>> result =
+      await getOfferUseCase.call(orderId);
 
-    if (isClosed) return;
-    result.fold(
-      (failure) => emit(GetOffersViewModelError(failure.message)),
-      (offers) {
-        _offers = offers;
-        _offersCount = offers.length;
-        emit(GetOffersViewModelSuccess(List.from(_offers),
-            offersCount: _offersCount));
-      },
-    );
-  } catch (e) {
-    if (isClosed) return;
-    emit(GetOffersViewModelError(e.toString()));
+      if (isClosed) return;
+      result.fold(
+            (failure) => emit(GetOffersViewModelError(failure.message)),
+            (offers) {
+          _offers = offers;
+          _offersCount = offers.length;
+          emit(GetOffersViewModelSuccess(List.from(_offers),
+              offersCount: _offersCount));
+        },
+      );
+    } catch (e) {
+      if (isClosed) return;
+      emit(GetOffersViewModelError(e.toString()));
+    }
   }
-}
-
-
   RealtimeChannel subscribeToOffers({
     required String orderId,
-    required void Function(List<OfferEntity>) onChange,
   }) {
     final channel = Supabase.instance.client
         .channel('offers_$orderId')
@@ -75,54 +66,57 @@ Future<void> getOffers(String orderId) async {
         value: orderId,
       ),
       callback: (payload) {
-
         final offer = OfferModel.fromJson(payload.newRecord!).toEntity();
+
+        _offers = List.from(_offers);
         _offers.add(offer);
-        onChange(List.from(_offers));
+
+        emit(GetOffersViewModelSuccess(
+          List.from(_offers),
+          offersCount: _offers.length,
+        ));
       },
+
     )
         .subscribe();
 
     return channel;
   }
 
+  void _subscribeToOffersCountRealtime(String orderId) {
+    _offersCountChannel?.unsubscribe();
 
-
-void _subscribeToOffersCountRealtime(String orderId) {
-  _offersCountChannel?.unsubscribe();
-
-  _offersCountChannel = Supabase.instance.client
-      .channel('offers_count_$orderId')
-      .onPostgresChanges(
-        event: PostgresChangeEvent.update,
-        schema: 'public',
-        table: 'offers',
-        filter: PostgresChangeFilter(
-          type: PostgresChangeFilterType.eq,
-          column: 'order_id',
-          value: orderId,
-        ),
-        callback: (payload) {
-          final updatedOffer = OfferModel.fromJson(payload.newRecord!).toEntity();
-
- 
-          if (updatedOffer.offerStatus == "withdrawn") {
-            _offers.removeWhere((o) => o.id == updatedOffer.id);
-          } else {
-            final index = _offers.indexWhere((o) => o.id == updatedOffer.id);
-            if (index != -1) {
-              _offers[index] = updatedOffer;
-            }
+    _offersCountChannel = Supabase.instance.client
+        .channel('offers_count_$orderId')
+        .onPostgresChanges(
+      event: PostgresChangeEvent.update,
+      schema: 'public',
+      table: 'offers',
+      filter: PostgresChangeFilter(
+        type: PostgresChangeFilterType.eq,
+        column: 'order_id',
+        value: orderId,
+      ),
+      callback: (payload) {
+        final updatedOffer = OfferModel.fromJson(payload.newRecord!).toEntity();
+        if (updatedOffer.offerStatus == "withdrawn") {
+          _offers = List.from(_offers);
+          _offers.removeWhere((o) => o.id == updatedOffer.id);
+        } else {
+          final index = _offers.indexWhere((o) => o.id == updatedOffer.id);
+          if (index != -1) {
+            _offers = List.from(_offers);
+            _offers[index] = updatedOffer;
           }
+        }
+        emit(GetOffersViewModelSuccess(List.from(_offers), offersCount: _offers.length));
 
-          emit(GetOffersViewModelSuccess(
-            List.from(_offers),
-            offersCount: _offers.length,
-          ));
-        },
-      )
-      .subscribe();
-}
+
+        // ✅ Emit مباشر بعد أي تعديل
+        emit(GetOffersViewModelSuccess(List.from(_offers), offersCount: _offers.length));
+      },
+    ).subscribe();
+  }
 
 
   @override

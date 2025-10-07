@@ -67,6 +67,7 @@ class SubscribeOrdersRecordViewModel extends Cubit<OrderViewModelState> {
       default:
         return null;
     }
+    return null;
   }
 
   bool shouldShowButton(OrderEntity order, String currentUserId) {

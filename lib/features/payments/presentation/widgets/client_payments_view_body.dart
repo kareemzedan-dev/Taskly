@@ -18,10 +18,10 @@ import 'package:uuid/uuid.dart';
 import '../../../shared/domain/entities/order_entity/order_entity.dart';
 
 class ClientPaymentsViewBody extends StatelessWidget {
-  ClientPaymentsViewBody({super.key, required this.order});
+    ClientPaymentsViewBody({super.key, required this.order});
 
   final OrderEntity order;
-  final uuid = Uuid();
+    Uuid uuid = Uuid();
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +40,7 @@ class ClientPaymentsViewBody extends StatelessWidget {
           padding: EdgeInsets.all(16.h),
           child: Column(
             children: [
-              Expanded(child: PaymentsContent()),
+              const Expanded(child: PaymentsContent()),
 
               const UploadAttachmentsSection(),
               SizedBox(height: 16.h),
@@ -59,7 +59,7 @@ class ClientPaymentsViewBody extends StatelessWidget {
                     );
                     Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(builder: (_) => ClientHomeView(initialIndex: 1)),
+                      MaterialPageRoute(builder: (_) => const ClientHomeView(initialIndex: 1)),
                       (route) => false,
                     );
                   }

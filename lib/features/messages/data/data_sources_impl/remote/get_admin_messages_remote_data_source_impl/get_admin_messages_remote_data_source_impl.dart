@@ -21,7 +21,7 @@ class GetAdminMessagesRemoteDataSourceImpl implements GetAdminMessagesRemoteData
       final adminIds = (adminsResponse as List).map((e) => e['id'].toString()).toList();
 
       // لو مفيش admins، ارجع قائمة فارغة
-      if (adminIds.isEmpty) return Right([]);
+      if (adminIds.isEmpty) return const Right([]);
 
       final orQuery = adminIds.map((id) => 'sender_id.eq.$currentUserId,receiver_id.eq.$id').join(',');
 
@@ -61,7 +61,7 @@ class GetAdminMessagesRemoteDataSourceImpl implements GetAdminMessagesRemoteData
       return Right(filteredMessages);
     } catch (e, st) {
       print('Error in GetAdminMessagesRemoteDataSourceImpl: $e\n$st');
-      return Right([]); // بدل ما نرجع Left، نرجع قائمة فارغة
+      return const Right([]);
     }
   }
 }

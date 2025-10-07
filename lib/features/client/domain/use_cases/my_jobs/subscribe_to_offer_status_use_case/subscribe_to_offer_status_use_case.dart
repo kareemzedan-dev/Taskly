@@ -1,4 +1,3 @@
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:taskly/features/client/domain/repos/my_jobs/my_jobs_repo.dart';
 import 'package:injectable/injectable.dart';
 @injectable

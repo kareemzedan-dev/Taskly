@@ -16,7 +16,7 @@ class DeleteOrderDataSourceImpl implements DeleteOrderRemoteDataSource {
   Future<Either<Failures, void>> deleteOrder(String orderId) async {
     try {
       if (NetworkUtils.hasInternet() == false) {
-        return Left(NetworkFailure(StringsManager.noInternetConnection));
+        return const Left(NetworkFailure(StringsManager.noInternetConnection));
       }
 
       await supabaseService.delete(

@@ -46,7 +46,7 @@ class ImageAndText extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      shadows: [
+                      shadows: const [
                         BoxShadow(
                           color: Color(0x3F000000),
                           blurRadius: 4,
@@ -55,13 +55,13 @@ class ImageAndText extends StatelessWidget {
                         ),
                       ],
                     ),
-                    child: Icon(Icons.add, color: ColorsManager.primary),
+                    child: const Icon(Icons.add, color: ColorsManager.primary),
                   ),
                 )
                 : Container(),
           ],
         ),
-        SizedBox(height: 6),
+        const SizedBox(height: 6),
         istrending
             ? Text(
               text,

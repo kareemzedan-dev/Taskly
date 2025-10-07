@@ -5,7 +5,6 @@ import 'package:injectable/injectable.dart';
 
 import 'package:taskly/core/errors/failures.dart';
 
-import 'package:taskly/features/profile/domain/entities/user_info_entity/user_info_entity.dart';
 
 import '../../../domain/entities/conversation_entity.dart';
 import '../../../domain/repositories/messages_repos/get_conversation_repo/get_conversation_repo.dart';

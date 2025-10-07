@@ -6,7 +6,7 @@ class ReviewsEntity {
   final String comment;
 final String role;
   final String rating;
-  final String createdAt;
+  final DateTime createdAt;
   ReviewsEntity({
     required this.id,
     required this.freelancerId,

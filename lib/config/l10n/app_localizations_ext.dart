@@ -1,4 +1,3 @@
-import 'package:flutter/widgets.dart';
 import 'package:taskly/config/l10n/app_localizations.dart';
 
 extension AppLocalizationsX on AppLocalizations {

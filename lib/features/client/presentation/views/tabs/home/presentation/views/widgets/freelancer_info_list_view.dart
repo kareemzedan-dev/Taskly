@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/view_model/freelancers_view_model/freelancers_view_model.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/view_model/freelancers_view_model/freelancers_view_model_states.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/freelancer_info_card_for_hire.dart';
-import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/reviews_card.dart';
 
 import '../../../../../../../../../config/routes/routes_manager.dart';
 import '../../view_model/place_order_view_model/place_order_view_model.dart';

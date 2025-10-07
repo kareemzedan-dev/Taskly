@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/config/routes/routes_manager.dart';
 import 'package:taskly/core/cache/shared_preferences.dart';
-import 'package:taskly/core/components/custom_search_text_field.dart';
-import 'package:taskly/core/components/dismissible_error_card.dart';
 import 'package:taskly/core/di/di.dart';
 import 'package:taskly/core/utils/strings_manager.dart';
-import 'package:taskly/features/messages/presentation/widgets/message_card_shimmer.dart';
-import 'package:taskly/features/shared/domain/entities/order_entity/order_entity.dart';
 import 'package:taskly/features/shared/presentation/views/widgets/messages_card.dart';
 import 'package:taskly/features/messages/presentation/manager/get_accepted_order_message_view_model/get_accepted_order_message_view_model.dart';
 import 'package:taskly/features/messages/presentation/manager/get_accepted_order_message_view_model/get_accepted_order_message_states.dart';
@@ -48,25 +43,24 @@ class UserMessagesTabViewBody extends StatelessWidget {
                   builder: (context, convState) {
 
                     // تحقق من وجود بيانات في الاتنين
-                    final hasOrders = orderState is GetAcceptedOrderMessageStatesSuccess &&
-                        orderState.orders != null && orderState.orders!.isNotEmpty;
+                    final hasOrders = orderState is GetAcceptedOrderMessageStatesSuccess && orderState.orders.isNotEmpty;
 
                     final hasConversations = convState is GetConversationsSuccessStates &&
                         convState.conversationsList.isNotEmpty;
 
                     // لو الاتنين فاضيين
                     if (!hasOrders && !hasConversations) {
-                      return Center(child: Text("No messages"));
+                      return const Center(child: Text("No messages"));
                     }
                     return Column(
                       children: [
                         if (hasOrders)
                           ListView.builder(
-                            itemCount: (orderState as GetAcceptedOrderMessageStatesSuccess).orders!.length,
+                            itemCount: (orderState).orders.length,
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
                             itemBuilder: (context, index) {
-                              final order = orderState.orders![index];
+                              final order = orderState.orders[index];
                               final chatUserId = userRole == UserRole.client
                                   ? order.freelancerId
                                   : order.clientId;
@@ -101,7 +95,7 @@ class UserMessagesTabViewBody extends StatelessWidget {
 
                         if (hasConversations)
                           ListView.builder(
-                            itemCount: (convState as GetConversationsSuccessStates).conversationsList.length,
+                            itemCount: (convState).conversationsList.length,
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
                             itemBuilder: (context, index) {
@@ -109,8 +103,8 @@ class UserMessagesTabViewBody extends StatelessWidget {
 
                               // ⛔️ فلترة: لو الـ order.id ظهر قبل كده في orders → ما نعرضوش
                               final orderAlreadyExists = hasOrders &&
-                                  (orderState as GetAcceptedOrderMessageStatesSuccess)
-                                      .orders!
+                                  (orderState)
+                                      .orders
                                       .any((o) => o.id == conversation.order?.id);
 
                               if (orderAlreadyExists) {

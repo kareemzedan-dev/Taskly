@@ -1,9 +1,7 @@
-import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:taskly/core/errors/failures.dart';
 import 'package:taskly/core/services/supabase_service.dart';
 import 'package:taskly/core/utils/network_utils.dart';
@@ -29,14 +27,14 @@ class HomeRemoteDataSourceImpl extends HomeRemoteDataSource {
     try {
       var result = await Connectivity().checkConnectivity();
   if(NetworkUtils.hasInternet() == false) {
-    return Left(NetworkFailure('No internet connection'));
+    return const Left(NetworkFailure('No internet connection'));
   }
         final response = await supabaseService.getDataFromSupabase(
           tableName: "services",
         );
 
         if (response == null || response.isEmpty) {
-          return Left(ServerFailure("Services not found"));
+          return const Left(ServerFailure("Services not found"));
         }
 
         final services = response.map((e) => ServiceDm.fromJson(e)).toList();
@@ -53,7 +51,7 @@ class HomeRemoteDataSourceImpl extends HomeRemoteDataSource {
     try {
       var result = await Connectivity().checkConnectivity();
   if(NetworkUtils.hasInternet() == false) {
-    return Left(NetworkFailure('No internet connection'));
+    return const Left(NetworkFailure('No internet connection'));
   }
         final orderDm = OrderDm.fromEntity(orderEntity);
 
@@ -75,7 +73,7 @@ class HomeRemoteDataSourceImpl extends HomeRemoteDataSource {
     try {
       var result = await Connectivity().checkConnectivity();
   if(NetworkUtils.hasInternet() == false) {
-    return Left(NetworkFailure('No internet connection'));
+    return const Left(NetworkFailure('No internet connection'));
   }
 
         final userResponse = await supabaseService.getDataFromSupabase(
@@ -84,7 +82,7 @@ class HomeRemoteDataSourceImpl extends HomeRemoteDataSource {
         );
 
         if (userResponse == null || userResponse.isEmpty) {
-          return Left(ServerFailure("No freelancers found"));
+          return const Left(ServerFailure("No freelancers found"));
         }
 
 

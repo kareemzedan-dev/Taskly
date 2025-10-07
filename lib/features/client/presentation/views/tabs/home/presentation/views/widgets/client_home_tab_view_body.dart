@@ -5,11 +5,9 @@ import 'package:taskly/core/di/di.dart';
 import 'package:taskly/core/components/custom_search_text_field.dart';
 import 'package:taskly/core/utils/strings_manager.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/view_model/services_view_model/services_view_model.dart';
-import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/user_info_header_shimmer.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/user_info_home_header.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/service_category_grid_view.dart';
 import 'package:taskly/features/profile/presentation/manager/profile_view_model/profile_view_model.dart';
-import 'package:taskly/features/profile/presentation/manager/profile_view_model/profile_view_model_states.dart';
 
 import '../../../../../../../../../core/cache/shared_preferences.dart';
 
@@ -56,12 +54,12 @@ class _ClientHomeTabViewBodyState extends State<ClientHomeTabViewBody> {
             UserInfoHomeHeader(),
             SizedBox(height: 30.h),
             CustomSearchTextField(
-              hintTexts: ["Search for services"],
+              hintTexts: const ["Search for services"],
               controller: _searchController,
               onChanged: _onSearchChanged,
             ),
             SizedBox(height: 30.h),
-            ServiceCategoryGridView(),
+            const ServiceCategoryGridView(),
           ],
         ),
       ),

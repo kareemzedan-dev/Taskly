@@ -101,6 +101,14 @@ import '../../features/client/presentation/views/tabs/my_jobs/presentation/view_
     as _i855;
 import '../../features/client/presentation/views/tabs/my_jobs/presentation/view_model/update_offer_status_view_model/update_offer_status_view_model.dart'
     as _i376;
+import '../../features/freelancer/data/data_sources/remote/earings_remote_data_source/add_earning_remote_data_source/add_earning_remote_data_source.dart'
+    as _i224;
+import '../../features/freelancer/data/data_sources/remote/earings_remote_data_source/get_earning_remote_data_source/get_earning_remote_data_source.dart'
+    as _i706;
+import '../../features/freelancer/data/data_sources/remote/earings_remote_data_source/get_withdrawal_history_remote_data_source/get_withdrawal_history_remote_data_source.dart'
+    as _i329;
+import '../../features/freelancer/data/data_sources/remote/earings_remote_data_source/place_withdrawal_balance_remote_data_source/place_withdrawal_balance_remote_data_source.dart'
+    as _i778;
 import '../../features/freelancer/data/data_sources/remote/favorite_order_remote_data_source/add_favorite_order_remote_data_source/add_favorite_order_remote_data_source.dart'
     as _i121;
 import '../../features/freelancer/data/data_sources/remote/favorite_order_remote_data_source/get_favorite_order_remote_data_source/get_favorite_order_remote_data_source.dart'
@@ -127,6 +135,14 @@ import '../../features/freelancer/data/data_sources/remote/get_commission_remote
     as _i884;
 import '../../features/freelancer/data/data_sources/remote/offer_data_source.dart'
     as _i358;
+import '../../features/freelancer/data/data_sources_impl/remote/earings_remote_data_source_impl/add_earning_remote_data_source_impl/add_earning_remote_data_source_impl.dart'
+    as _i806;
+import '../../features/freelancer/data/data_sources_impl/remote/earings_remote_data_source_impl/get_earning_remote_data_source_impl/get_earning_remote_data_source_impl.dart'
+    as _i874;
+import '../../features/freelancer/data/data_sources_impl/remote/earings_remote_data_source_impl/get_withdrawal_history_remote_data_source_impl/get_withdrawal_history_remote_data_source_impl.dart'
+    as _i715;
+import '../../features/freelancer/data/data_sources_impl/remote/earings_remote_data_source_impl/place_withdrawal_balance_remote_data_source_impl/place_withdrawal_balance_remote_data_source_impl.dart'
+    as _i633;
 import '../../features/freelancer/data/data_sources_impl/remote/favorite_order_remote_data_source_impl/add_favorite_order_remote_data_source_impl/add_favorite_order_remote_data_source_impl.dart'
     as _i362;
 import '../../features/freelancer/data/data_sources_impl/remote/favorite_order_remote_data_source_impl/get_favorite_order_remote_data_source_impl/get_favorite_order_remote_data_source_impl.dart'
@@ -153,6 +169,14 @@ import '../../features/freelancer/data/data_sources_impl/remote/get_commission_r
     as _i22;
 import '../../features/freelancer/data/data_sources_impl/remote/offer_remote_data_source_impl.dart'
     as _i35;
+import '../../features/freelancer/data/repos/earings_repos_impl/add_earning_repo_impl/add_earning_repo_impl.dart'
+    as _i862;
+import '../../features/freelancer/data/repos/earings_repos_impl/get_earing_repo_impl/get_earing_repo_impl.dart'
+    as _i636;
+import '../../features/freelancer/data/repos/earings_repos_impl/get_withdrawal_history_repo_impl/get_withdrawal_history_repo_impl.dart'
+    as _i216;
+import '../../features/freelancer/data/repos/earings_repos_impl/place_withdrawal_balance_repo_impl/place_withdrawal_balance_repo_impl.dart'
+    as _i536;
 import '../../features/freelancer/data/repos/favorite_order_repos_impl/add_favorite_order_repo_impl/add_favorite_order_repo_impl.dart'
     as _i961;
 import '../../features/freelancer/data/repos/favorite_order_repos_impl/get_favorite_order_repo_impl/get_favorite_order_repo_impl.dart'
@@ -179,6 +203,14 @@ import '../../features/freelancer/data/repos/get_commission_repo_impl/get_commis
     as _i948;
 import '../../features/freelancer/data/repos/offer_repository_impl/offer_repository_impl.dart'
     as _i792;
+import '../../features/freelancer/domain/repos/earings_repos/add_earing_repo/add_earing_repo.dart'
+    as _i241;
+import '../../features/freelancer/domain/repos/earings_repos/get_earning_repo/get_earning_repo.dart'
+    as _i176;
+import '../../features/freelancer/domain/repos/earings_repos/get_withdrawal_history_repo/get_withdrawal_history_repo.dart'
+    as _i563;
+import '../../features/freelancer/domain/repos/earings_repos/place_withdrawal_balance_repo/place_withdrawal_balance_repo.dart'
+    as _i199;
 import '../../features/freelancer/domain/repos/favorite_order_repos/add_favorite_order_repo/add_favorite_order_repo.dart'
     as _i679;
 import '../../features/freelancer/domain/repos/favorite_order_repos/get_favorite_order_repo/get_favorite_order_repo.dart'
@@ -205,6 +237,8 @@ import '../../features/freelancer/domain/repos/offer_repository/get_commission_r
     as _i566;
 import '../../features/freelancer/domain/repos/offer_repository/offer_repository.dart'
     as _i363;
+import '../../features/freelancer/domain/use_cases/add_earning_use_case/add_earning_use_case.dart'
+    as _i403;
 import '../../features/freelancer/domain/use_cases/add_favorite_order_use_case/add_favorite_order_repo.dart'
     as _i891;
 import '../../features/freelancer/domain/use_cases/fetch_order_details_use_case/fetch_order_details_use_case.dart'
@@ -215,14 +249,20 @@ import '../../features/freelancer/domain/use_cases/fetch_public_orders_use_case/
     as _i166;
 import '../../features/freelancer/domain/use_cases/get_commission_use_case/get_commission_use_case.dart'
     as _i935;
+import '../../features/freelancer/domain/use_cases/get_earning_use_case/get_earning_use_case.dart'
+    as _i922;
 import '../../features/freelancer/domain/use_cases/get_favorite_order_use_case/get_favorite_order_repo.dart'
     as _i347;
 import '../../features/freelancer/domain/use_cases/get_favourite_order_details_use_case/get_favourite_order_details_use_case.dart'
     as _i221;
 import '../../features/freelancer/domain/use_cases/get_freelancer_offers_use_case/get_freelancer_offers_use_case.dart'
     as _i90;
+import '../../features/freelancer/domain/use_cases/get_withdrawal_history_use_case/get_withdrawal_history_use_case.dart'
+    as _i169;
 import '../../features/freelancer/domain/use_cases/is_order_favorite_use_case/is_order_favorite_repo.dart'
     as _i451;
+import '../../features/freelancer/domain/use_cases/place_withdrawal_balance_use_case/place_withdrawal_balance_use_case.dart'
+    as _i788;
 import '../../features/freelancer/domain/use_cases/remove_favorite_order_use_case/remove_favorite_order_repo.dart'
     as _i772;
 import '../../features/freelancer/domain/use_cases/send_offer_use_case/send_offer_use_case.dart'
@@ -235,12 +275,20 @@ import '../../features/freelancer/domain/use_cases/update_order_status_use_case/
     as _i785;
 import '../../features/freelancer/domain/use_cases/withdraw_offer_use_case/withdraw_offer_use_case.dart'
     as _i380;
+import '../../features/freelancer/presentation/cubit/add_earnings_view_model/add_earnings_view_model.dart'
+    as _i775;
 import '../../features/freelancer/presentation/cubit/fetch_order_details_view_model/fetch_order_details_view_model.dart'
     as _i644;
 import '../../features/freelancer/presentation/cubit/freelancer_info_view_model/freelancer_info_view_model.dart'
     as _i776;
 import '../../features/freelancer/presentation/cubit/get_freelancer_offers_view_model/get_freelancer_offers_view_model.dart'
     as _i552;
+import '../../features/freelancer/presentation/cubit/get_total_earnings_view_model/get_total_earnings_view_model.dart'
+    as _i196;
+import '../../features/freelancer/presentation/cubit/get_withdrawal_history_view_model/get_withdrawal_history_view_model.dart'
+    as _i364;
+import '../../features/freelancer/presentation/cubit/place_withdrawal_balance_view_model/place_withdrawal_balance_view_model.dart'
+    as _i195;
 import '../../features/freelancer/presentation/cubit/update_order_status_view_model/update_order_status_view_model.dart'
     as _i975;
 import '../../features/freelancer/presentation/cubit/withdraw_offer_view_model/withdraw_offer_view_model.dart'
@@ -285,6 +333,8 @@ import '../../features/messages/data/data_sources/remote/subscribe_to_admin_mess
     as _i798;
 import '../../features/messages/data/data_sources/remote/subscribe_to_messages_remote_data_source/subscribe_to_messages_remote_data_source.dart'
     as _i462;
+import '../../features/messages/data/data_sources/remote/user_status_remote_data_source/user_status_remote_data_source.dart'
+    as _i703;
 import '../../features/messages/data/data_sources_impl/remote/delete_message_remote_data_source_impl/delete_message_remote_data_source_impl.dart'
     as _i65;
 import '../../features/messages/data/data_sources_impl/remote/get_accepted_order_message_remote_data_source_impl/get_accepted_order_message_remote_data_source_impl.dart'
@@ -303,6 +353,8 @@ import '../../features/messages/data/data_sources_impl/remote/subscribe_to_admin
     as _i579;
 import '../../features/messages/data/data_sources_impl/remote/subscribe_to_messages_remote_data_source_impl/subscribe_to_messages_remote_data_source_impl.dart'
     as _i894;
+import '../../features/messages/data/data_sources_impl/remote/user_status_remote_data_source_impl/user_status_remote_data_source_impl.dart'
+    as _i301;
 import '../../features/messages/data/repositories/delete_message_repo_impl/delete_message_repo_impl.dart'
     as _i718;
 import '../../features/messages/data/repositories/get_accepted_order_message_repo_impl/get_accepted_order_message_repo_impl.dart'
@@ -321,6 +373,8 @@ import '../../features/messages/data/repositories/subscribe_to_admin_messages_re
     as _i1062;
 import '../../features/messages/data/repositories/subscribe_to_messages_repo_impl/subscribe_to_messages_repo_impl.dart'
     as _i92;
+import '../../features/messages/data/repositories/user_status_repo_impl/user_status_repo_impl.dart'
+    as _i755;
 import '../../features/messages/domain/repositories/messages_repos/delete_message_repo/delete_message_repo.dart'
     as _i469;
 import '../../features/messages/domain/repositories/messages_repos/get_accepted_order_message_repo/get_accepted_order_message_repo.dart'
@@ -339,6 +393,8 @@ import '../../features/messages/domain/repositories/messages_repos/subscribe_to_
     as _i953;
 import '../../features/messages/domain/repositories/messages_repos/subscribe_to_messages_repo/subscribe_to_messages_repo.dart'
     as _i196;
+import '../../features/messages/domain/repositories/messages_repos/user_status_repo/user_status_repo.dart'
+    as _i325;
 import '../../features/messages/domain/use_cases/delete_message_use_case/delete_message_use_case.dart'
     as _i988;
 import '../../features/messages/domain/use_cases/get_accepted_order_message_use_case/get_accepted_order_message_use_case.dart'
@@ -357,6 +413,8 @@ import '../../features/messages/domain/use_cases/subscribe_to_admin_messages_use
     as _i1022;
 import '../../features/messages/domain/use_cases/subscribe_to_messages_use_case/subscribe_to_messages_use_case.dart'
     as _i172;
+import '../../features/messages/domain/use_cases/user_status_use_case/user_status_use_case.dart'
+    as _i258;
 import '../../features/messages/presentation/manager/get_accepted_order_message_view_model/get_accepted_order_message_view_model.dart'
     as _i12;
 import '../../features/messages/presentation/manager/get_admin_messages_view_model/get_admin_messages_view_model.dart'
@@ -371,6 +429,8 @@ import '../../features/messages/presentation/manager/subscribe_to_admin_messages
     as _i448;
 import '../../features/messages/presentation/manager/subscribe_to_messages_view_model/subscribe_to_messages_view_model.dart'
     as _i61;
+import '../../features/messages/presentation/manager/user_status_view_model/user_status_view_model.dart'
+    as _i953;
 import '../../features/payments/data/data_sources/remote/create_payment_remote_data_source.dart'
     as _i968;
 import '../../features/payments/data/data_sources/remote/get_payment_remote_data_source.dart'
@@ -419,16 +479,28 @@ import '../../features/profile/presentation/manager/update_user_profile_view_mod
     as _i34;
 import '../../features/reviews/data/data_sources/remote/reviews_remote_data_source/reviews_remote_data_source.dart'
     as _i114;
+import '../../features/reviews/data/data_sources/remote/submit_rating_remote_data_source/submit_rating_remote_data_source.dart'
+    as _i913;
 import '../../features/reviews/data/data_sources_impl/remote/reviews_remote_data_source_impl/reviews_remote_data_source_impl.dart'
     as _i716;
+import '../../features/reviews/data/data_sources_impl/remote/submit_rating_remote_data_source_impl/submit_rating_remote_data_source_impl.dart'
+    as _i346;
 import '../../features/reviews/data/repositories/reviews_repo_impl/reviews_repo_impl.dart'
     as _i81;
+import '../../features/reviews/data/repositories/submit_rating_repo_impl/submit_rating_repo_impl.dart'
+    as _i557;
 import '../../features/reviews/domain/repositories/reviews_repo/reviews_repo.dart'
     as _i420;
+import '../../features/reviews/domain/repositories/submit_rating_repo/submit_rating_repo.dart'
+    as _i805;
 import '../../features/reviews/domain/use_cases/get_user_reviews_use_case/get_user_reviews_use_case.dart'
     as _i701;
+import '../../features/reviews/domain/use_cases/submit_rating_use_case/submit_rating_use_case.dart'
+    as _i769;
 import '../../features/reviews/presentation/manager/get_user_reviews_view_model/get_user_reviews_view_model.dart'
     as _i163;
+import '../../features/reviews/presentation/manager/submit_rating_view_model/submit_rating_view_model.dart'
+    as _i504;
 import '../../features/shared/data/data_sources/remote/impl/orders_remote_data_source_impl.dart'
     as _i237;
 import '../../features/shared/data/data_sources/remote/orders_remote_data_source.dart'
@@ -441,6 +513,7 @@ import '../../features/shared/presentation/manager/subscribe_to_order_record_vie
     as _i28;
 import '../services/file_uploaded_services.dart' as _i383;
 import '../services/supabase_service.dart' as _i374;
+import '../services/user_status_service.dart' as _i870;
 
 extension GetItInjectableX on _i174.GetIt {
 // initializes the registration of main-scope dependencies inside of GetIt
@@ -460,8 +533,14 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i374.SupabaseService(gh<_i454.SupabaseClient>()),
       dispose: (i) => i.dispose(),
     );
+    gh.factory<_i224.AddEarningRemoteDataSource>(() =>
+        _i806.AddEarningRemoteDataSourceImpl(
+            supabaseService: gh<_i374.SupabaseService>()));
     gh.factory<_i458.MarkMessagesAsReadRemoteDataSource>(() =>
         _i1015.MarkMessagesAsReadRemoteDataSourceImpl(
+            supabaseService: gh<_i374.SupabaseService>()));
+    gh.factory<_i778.PlaceWithdrawalBalanceRemoteDataSource>(() =>
+        _i633.PlaceWithdrawalBalanceRemoteDataSourceImpl(
             supabaseService: gh<_i374.SupabaseService>()));
     gh.factory<_i884.GetCommissionRemoteDataSource>(() =>
         _i22.GetCommissionRemoteDataSourceImpl(
@@ -471,6 +550,14 @@ extension GetItInjectableX on _i174.GetIt {
             supabaseService: gh<_i374.SupabaseService>()));
     gh.factory<_i315.GetPaymentRemoteDataSource>(
         () => _i696.GetPaymentRemoteDataSourceImpl(gh<_i454.SupabaseClient>()));
+    gh.factory<_i199.PlaceWithdrawalBalanceRepo>(() =>
+        _i536.PlaceWithdrawalBalanceRepoImpl(
+            placeWithdrawalBalanceRemoteDataSource:
+                gh<_i778.PlaceWithdrawalBalanceRemoteDataSource>()));
+    gh.factory<_i788.PlaceWithdrawalBalanceUseCase>(() =>
+        _i788.PlaceWithdrawalBalanceUseCase(
+            placeWithdrawalBalanceRepo:
+                gh<_i199.PlaceWithdrawalBalanceRepo>()));
     gh.factory<_i566.GetCommissionRepo>(() => _i948.GetCommissionRepoImpl(
         getCommissionRemoteDataSource:
             gh<_i884.GetCommissionRemoteDataSource>()));
@@ -479,6 +566,8 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i13.FetchPublicOrdersRemoteDataSource>(() =>
         _i301.FetchPublicOrdersRemoteDataSourceImpl(
             gh<_i374.SupabaseService>()));
+    gh.factory<_i913.SubmitRatingRemoteDataSource>(() =>
+        _i346.SubmitRatingRemoteDataSourceImpl(gh<_i374.SupabaseService>()));
     gh.factory<_i815.PaymentRepos>(() => _i488.CreatePaymentRepoImpl(
           gh<_i968.CreatePaymentRemoteDataSource>(),
           gh<_i315.GetPaymentRemoteDataSource>(),
@@ -537,6 +626,8 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i572.GetConversationsRemoteDataSource>()));
     gh.factory<_i346.IsOrderFavoriteRemoteDataSource>(() =>
         _i216.IsOrderFavoriteRemoteDataSourceImpl(gh<_i374.SupabaseService>()));
+    gh.factory<_i703.UserStatusRemoteDataSource>(() =>
+        _i301.UserStatusRemoteDataSourceImpl(gh<_i374.SupabaseService>()));
     gh.factory<_i1012.ProfileRemoteDataSource>(
         () => _i226.ProfileRemoteDataSourceImpl(gh<_i374.SupabaseService>()));
     gh.factory<_i735.WithdrawOfferRemoteDataSource>(() =>
@@ -544,6 +635,8 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i748.UpdateUserProfileRemoteDataSource>(() =>
         _i965.UpdateUserProfileRemoteDataSourceImpl(
             gh<_i374.SupabaseService>()));
+    gh.factory<_i241.AddEarningRepo>(() => _i862.AddEarningRepoImpl(
+        addEarningRemoteDataSource: gh<_i224.AddEarningRemoteDataSource>()));
     gh.factory<_i815.GetAdminMessagesRemoteDataSource>(() =>
         _i422.GetAdminMessagesRemoteDataSourceImpl(
             gh<_i374.SupabaseService>()));
@@ -560,6 +653,10 @@ extension GetItInjectableX on _i174.GetIt {
             gh<_i374.SupabaseService>()));
     gh.factory<_i988.FetchOrderDetailsUseCase>(
         () => _i988.FetchOrderDetailsUseCase(gh<_i363.OfferRepository>()));
+    gh.factory<_i870.UserStatusService>(() => _i870.UserStatusService(
+          supabaseService: gh<_i374.SupabaseService>(),
+          userId: gh<String>(),
+        ));
     gh.factory<_i644.FetchOrderDetailsViewModel>(() =>
         _i644.FetchOrderDetailsViewModel(gh<_i988.FetchOrderDetailsUseCase>()));
     gh.factory<_i157.RemoveFavoriteOrderRepo>(() =>
@@ -572,15 +669,30 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i701.GetUserReviewsUseCase(gh<_i420.ReviewsRepo>()));
     gh.factory<_i307.HomeRemoteDataSource>(() => _i426.HomeRemoteDataSourceImpl(
         supabaseService: gh<_i374.SupabaseService>()));
+    gh.factory<_i805.SubmitRatingRepo>(() => _i557.SubmitRatingRepoImpl(
+        remoteDataSource: gh<_i913.SubmitRatingRemoteDataSource>()));
+    gh.factory<_i403.AddEarningUseCase>(() =>
+        _i403.AddEarningUseCase(addEarningRepo: gh<_i241.AddEarningRepo>()));
     gh.factory<_i1020.AttachmentsRemoteDataSource>(
         () => _i568.AttachmentsRemoteDataSourceImpl(
               gh<_i361.Dio>(),
               gh<_i374.SupabaseService>(),
               gh<_i454.SupabaseClient>(),
             ));
+    gh.factory<_i706.GetEarningRemoteDataSource>(() =>
+        _i874.GetEarningRemoteDataSourceImpl(
+            supabaseService: gh<_i374.SupabaseService>()));
     gh.factory<_i953.SubscribeToAdminMessagesRepo>(() =>
         _i1062.SubscribeToAdminMessagesRepoImpl(
             gh<_i798.SubscribeToAdminMessagesRemoteDataSource>()));
+    gh.factory<_i195.PlaceWithdrawalBalanceViewModel>(() =>
+        _i195.PlaceWithdrawalBalanceViewModel(
+            gh<_i788.PlaceWithdrawalBalanceUseCase>()));
+    gh.factory<_i329.GetWithdrawalHistoryRemoteDataSource>(() =>
+        _i715.GetWithdrawalHistoryRemoteDataSourceImpl(
+            supabaseService: gh<_i374.SupabaseService>()));
+    gh.factory<_i325.UserStatusRepo>(
+        () => _i755.UserStatusRepoImpl(gh<_i703.UserStatusRemoteDataSource>()));
     gh.factory<_i630.AuthUseCase>(
         () => _i630.AuthUseCase(gh<_i746.AuthRepo>()));
     gh.factory<_i935.GetCommissionUseCase>(() => _i935.GetCommissionUseCase(
@@ -633,6 +745,8 @@ extension GetItInjectableX on _i174.GetIt {
             gh<_i504.GetFavouriteOrderDetailsRemoteDataSource>()));
     gh.factory<_i163.GetUserReviewsViewModel>(
         () => _i163.GetUserReviewsViewModel(gh<_i701.GetUserReviewsUseCase>()));
+    gh.factory<_i769.SubmitRatingUseCase>(
+        () => _i769.SubmitRatingUseCase(gh<_i805.SubmitRatingRepo>()));
     gh.factory<_i772.RemoveFavoriteOrderUseCase>(() =>
         _i772.RemoveFavoriteOrderUseCase(gh<_i157.RemoveFavoriteOrderRepo>()));
     gh.factory<_i646.FetchPrivateOrdersRepo>(() =>
@@ -640,6 +754,8 @@ extension GetItInjectableX on _i174.GetIt {
             gh<_i765.FetchPrivateOrdersRemoteDataSource>()));
     gh.factory<_i389.GetMessagesViewModel>(
         () => _i389.GetMessagesViewModel(gh<_i416.GetOrderMessagesUseCase>()));
+    gh.factory<_i775.AddEarningsViewModel>(
+        () => _i775.AddEarningsViewModel(gh<_i403.AddEarningUseCase>()));
     gh.factory<_i848.GetPaymentUseCase>(
         () => _i848.GetPaymentUseCase(gh<_i815.PaymentRepos>()));
     gh.factory<_i773.WithdrawOfferRepo>(() =>
@@ -648,8 +764,14 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i745.AuthViewModel(authUseCase: gh<_i630.AuthUseCase>()));
     gh.factory<_i201.SendMessagesRepo>(() =>
         _i406.SendMessagesRepoImpl(gh<_i902.SendMessagesRemoteDataSource>()));
+    gh.factory<_i504.SubmitRatingViewModel>(
+        () => _i504.SubmitRatingViewModel(gh<_i769.SubmitRatingUseCase>()));
     gh.factory<_i759.OrdersUseCase>(
         () => _i759.OrdersUseCase(gh<_i46.OrdersRepo>()));
+    gh.factory<_i563.GetWithdrawalHistoryRepo>(() =>
+        _i216.GetWithdrawalHistoryRepoImpl(
+            getWithdrawalHistoryRemoteDataSource:
+                gh<_i329.GetWithdrawalHistoryRemoteDataSource>()));
     gh.factory<_i660.HomeRepos>(() => _i86.HomeRepoImpl(
         homeremoteDataSource: gh<_i307.HomeRemoteDataSource>()));
     gh.factory<_i221.SubscribeToPrivateOrdersRepo>(() =>
@@ -677,12 +799,17 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i231.UploadAttachmentsUseCase>(() =>
         _i231.UploadAttachmentsUseCase(
             attachmentsRepository: gh<_i345.AttachmentsRepository>()));
+    gh.factory<_i176.GetTotalEarningRepo>(() => _i636.GetEarningRepoImpl(
+        getTotalEarningRemoteDataSource:
+            gh<_i706.GetEarningRemoteDataSource>()));
     gh.factory<_i347.GetFavoriteOrderUseCase>(
         () => _i347.GetFavoriteOrderUseCase(gh<_i554.GetFavoriteOrderRepo>()));
     gh.lazySingleton<_i367.MarkMessagesAsReadUseCase>(() =>
         _i367.MarkMessagesAsReadUseCase(gh<_i113.MarkMessagesAsReadRepo>()));
     gh.factory<_i197.DownloadAttachmentsUseCase>(() =>
         _i197.DownloadAttachmentsUseCase(gh<_i345.AttachmentsRepository>()));
+    gh.factory<_i258.UserStatusUseCase>(() =>
+        _i258.UserStatusUseCase(userStatusRepo: gh<_i325.UserStatusRepo>()));
     gh.factory<_i1022.SubscribeToAdminMessagesUseCase>(() =>
         _i1022.SubscribeToAdminMessagesUseCase(
             gh<_i953.SubscribeToAdminMessagesRepo>()));
@@ -791,6 +918,9 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i776.FreelancerInfoViewModel(gh<_i585.ProfileUseCase>()));
     gh.factory<_i1003.ProfileViewModel>(
         () => _i1003.ProfileViewModel(gh<_i585.ProfileUseCase>()));
+    gh.factory<_i169.GetWithdrawalHistoryUseCase>(() =>
+        _i169.GetWithdrawalHistoryUseCase(
+            getWithdrawalHistoryRepo: gh<_i563.GetWithdrawalHistoryRepo>()));
     gh.factory<_i669.UpdateUserProfileUseCase>(() =>
         _i669.UpdateUserProfileUseCase(gh<_i517.UpdateUserProfileRepo>()));
     gh.factory<_i658.SendOfferViewModel>(
@@ -808,8 +938,15 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i61.SubscribeToMessagesViewModel>(() =>
         _i61.SubscribeToMessagesViewModel(
             gh<_i172.SubscribeToMessagesUseCase>()));
+    gh.factory<_i364.GetWithdrawalHistoryViewModel>(() =>
+        _i364.GetWithdrawalHistoryViewModel(
+            gh<_i169.GetWithdrawalHistoryUseCase>()));
+    gh.factory<_i953.UserStatusViewModel>(
+        () => _i953.UserStatusViewModel(gh<_i258.UserStatusUseCase>()));
     gh.factory<_i195.DeleteAttachmentsViewModel>(() =>
         _i195.DeleteAttachmentsViewModel(gh<_i416.DeleteAttachmentsUseCase>()));
+    gh.factory<_i922.GetEarningUseCase>(() => _i922.GetEarningUseCase(
+        getEarningRepo: gh<_i176.GetTotalEarningRepo>()));
     gh.factory<_i779.PlaceOrderViewModel>(
         () => _i779.PlaceOrderViewModel(gh<_i904.PlaceOrderUseCase>()));
     gh.factory<_i765.ClientOrderStatusViewModel>(() =>
@@ -837,6 +974,8 @@ extension GetItInjectableX on _i174.GetIt {
             gh<_i221.GetFavoriteOrderDetailsUseCase>()));
     gh.factory<_i869.ServicesViewModel>(
         () => _i869.ServicesViewModel(gh<_i628.GetAllServicesUseCase>()));
+    gh.factory<_i196.GetTotalEarningsViewModel>(
+        () => _i196.GetTotalEarningsViewModel(gh<_i922.GetEarningUseCase>()));
     gh.factory<_i34.UpdateUserProfileViewModel>(
         () => _i34.UpdateUserProfileViewModel(
               gh<_i669.UpdateUserProfileUseCase>(),

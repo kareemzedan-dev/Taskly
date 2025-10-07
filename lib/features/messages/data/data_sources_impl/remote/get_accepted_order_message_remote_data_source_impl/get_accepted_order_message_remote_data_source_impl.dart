@@ -16,19 +16,23 @@ class GetAcceptedOrderMessageRemoteDataSourceImpl
 
   @override
   Future<Either<Failures, List<OrderEntity>>> getAcceptedOrderMessages(
-      String userId, {UserRole? role}) async {
+      String userId,
+      {UserRole? role}) async {
     try {
       Map<String, dynamic> filters = {};
       String? or;
 
       if (role != null) {
         final column =
-        role == UserRole.freelancer ? 'freelancer_id' : 'client_id';
+            role == UserRole.freelancer ? 'freelancer_id' : 'client_id';
         filters[column] = userId;
-        or = 'status.eq.In Progress,status.eq.Completed,status.eq.Waiting,status.eq.Rejected';
-      } else {
+
         or =
-        'client_id.eq.$userId,freelancer_id.eq.$userId,status.eq.In Progress,status.eq.Completed';
+            'status.eq.Accepted,status.eq.Paid,status.eq.In Progress,status.eq.Completed,status.eq.Waiting,status.eq.Cancelled';
+      } else {
+        filters['client_id'] = userId;
+        or =
+            'status.eq.Accepted,status.eq.Paid,status.eq.In Progress,status.eq.Waiting,status.eq.Completed,status.eq.Cancelled';
       }
 
       final response = await supabaseService.getDataFromSupabase(
@@ -39,7 +43,7 @@ class GetAcceptedOrderMessageRemoteDataSourceImpl
 
       final responseList = response ?? [];
       final data =
-      responseList.map((e) => OrderDm.fromJson(e).toEntity()).toList();
+          responseList.map((e) => OrderDm.fromJson(e).toEntity()).toList();
 
       return Right(data);
     } catch (e, st) {

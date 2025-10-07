@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:taskly/config/l10n/app_localizations_ext.dart';
 import 'package:taskly/core/di/di.dart';
-import 'package:taskly/core/utils/assets_manager.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
 import 'package:taskly/config/routes/routes_manager.dart';
 import 'package:taskly/core/components/custom_button.dart';
@@ -14,7 +13,6 @@ import 'package:taskly/core/components/or_divider.dart';
 import 'package:taskly/features/auth/presentation/cubit/auth_states.dart';
 import 'package:taskly/features/auth/presentation/cubit/auth_view_model.dart';
 import 'package:taskly/features/auth/presentation/views/widgets/build_privacy_policy.dart';
-import 'package:taskly/features/auth/presentation/views/widgets/social_login_button.dart';
 import 'package:taskly/config/l10n/app_localizations.dart';
 import 'package:taskly/features/auth/presentation/views/widgets/social_login_options.dart';
 
@@ -138,7 +136,7 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
                 children: [
                   Expanded(
                     child: CustomTextFormField(
-                      prefixIcon: Icon(CupertinoIcons.person),
+                      prefixIcon: const Icon(CupertinoIcons.person),
                       autovalidateMode:
                       authViewModel.autovalidateMode ??
                           AutovalidateMode.onUserInteraction,
@@ -158,7 +156,7 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
                   SizedBox(width: 16.w),
                   Expanded(
                     child: CustomTextFormField(
-                      prefixIcon: Icon(CupertinoIcons.person),
+                      prefixIcon: const Icon(CupertinoIcons.person),
                       autovalidateMode:
                       authViewModel.autovalidateMode ??
                           AutovalidateMode.onUserInteraction,
@@ -182,7 +180,7 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
                 autovalidateMode:
                 authViewModel.autovalidateMode ??
                     AutovalidateMode.onUserInteraction,
-                prefixIcon: Icon(CupertinoIcons.mail),
+                prefixIcon: const Icon(CupertinoIcons.mail),
                 hintText: AppLocalizations.of(context)!.email,
                 textEditingController: authViewModel.emailController,
                 validator:
@@ -200,7 +198,7 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
                 autovalidateMode:
                 authViewModel.autovalidateMode ??
                     AutovalidateMode.onUserInteraction,
-                prefixIcon: Icon(CupertinoIcons.lock),
+                prefixIcon: const Icon(CupertinoIcons.lock),
                 hintText: AppLocalizations.of(context)!.password,
                 textEditingController: authViewModel.passwordController,
                 iconShow: true,
@@ -217,7 +215,7 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
               SizedBox(height: 20.h),
               PrivacyPolicyWithCheck(),
               SizedBox(height: 30.h),
-              OrDivider(),
+              const OrDivider(),
               SizedBox(height: 20.h),
 
               SocialLoginOptions(

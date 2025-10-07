@@ -9,7 +9,7 @@ class ChangePasswordView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-      body: SafeArea(child: ChangePasswordViewBody()),
+      body: const SafeArea(child: ChangePasswordViewBody()),
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
         backgroundColor: Colors.white,
@@ -26,7 +26,7 @@ class ChangePasswordView extends StatelessWidget {
         ),
         leading: GestureDetector(
           onTap: () => Navigator.pop(context),
-          child: Icon(CupertinoIcons.back, color: Colors.black),
+          child: const Icon(CupertinoIcons.back, color: Colors.black),
         ),
       ),
     );

@@ -52,7 +52,7 @@ class FreelancerWorkCardShimmer extends StatelessWidget {
                       Row(
                         children: [
                           Container(width: 100.w, height: 32.h, color: Colors.white),
-                           Spacer(),
+                           const Spacer(),
                           Container(width: 100.w, height: 32.h, color: Colors.white),
                         ],
                       ),

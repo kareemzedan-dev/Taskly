@@ -11,7 +11,6 @@ class NotificationHelper {
         Duration duration = const Duration(seconds: 3),
       }) {
     final overlay = Overlay.of(context);
-    if (overlay == null) return;
 
     final overlayEntry = OverlayEntry(
       builder: (context) {

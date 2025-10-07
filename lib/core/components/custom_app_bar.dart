@@ -44,7 +44,7 @@ final VoidCallback? onMenuPressed;
           Navigator.pop(context);
         },
       )
-    :menuIconShow! ? IconButton(onPressed:  onMenuPressed, icon: Icon( Icons.menu)):null,
+    :menuIconShow! ? IconButton(onPressed:  onMenuPressed, icon: const Icon( Icons.menu)):null,
 
       shape: Border(
         bottom: BorderSide(color: borderColor, width: borderWidth),
@@ -69,5 +69,5 @@ final VoidCallback? onMenuPressed;
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

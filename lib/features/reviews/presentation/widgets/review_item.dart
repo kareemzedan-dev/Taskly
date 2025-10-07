@@ -179,9 +179,9 @@ class ReviewItem extends StatelessWidget {
             ],
           ),
         ),
-        Spacer(),
+        const Spacer(),
         Text(
-          DateFormat('yyyy-MM-dd ').format(DateTime.parse(review.createdAt)),
+          DateFormat('yyyy-MM-dd ').format(DateTime.parse(review.createdAt.toString())),
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
                 fontSize: 11.sp,
                 color: Colors.grey.shade600,

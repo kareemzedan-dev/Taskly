@@ -18,7 +18,7 @@ class OrderView extends StatelessWidget {
         backgroundColor: Colors.white,
         leading: GestureDetector(
           onTap: () => Navigator.pop(context),
-          child: Icon(CupertinoIcons.back, color: Colors.black),
+          child: const Icon(CupertinoIcons.back, color: Colors.black),
         ),
         title: Text(
           'Service Order',

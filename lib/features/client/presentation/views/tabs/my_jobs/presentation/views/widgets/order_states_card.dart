@@ -36,7 +36,7 @@ int getStep(OrderStatus status) {
 }
 
 class OrderStatesCard extends StatelessWidget {
-  const  OrderStatesCard({super.key, required this.order});
+  const OrderStatesCard({super.key, required this.order});
 
   final OrderEntity order;
 
@@ -71,20 +71,18 @@ class OrderStatesCard extends StatelessWidget {
                   orderStatus: order.status.name,
                 ),
                 SizedBox(height: 20.h),
-
                 OrderProgressTimeline(
                   steps: ['Created', 'Paid', 'Executing', 'Completed'],
                   currentStep: getStep(order.status),
                 ),
-
                 SizedBox(height: 26.h),
-
                 BlocBuilder<GetOffersViewModel, GetOffersViewModelStates>(
                   builder: (context, state) {
                     int count = 0;
                     if (state is GetOffersViewModelSuccess) {
-                      count = state.offersCount;
+                      count = state.offersCount; // دايمًا بياخد القيمة الأحدث
                     }
+
                     if (order.status == OrderStatus.Pending) {
                       return OrderActionButton(
                         text: "Offers You’ve Received",
@@ -93,32 +91,23 @@ class OrderStatesCard extends StatelessWidget {
                         count: count,
                         onTap: () {
                           final viewModel = context.read<GetOffersViewModel>();
-
                           showModalBottomSheet(
-                            context: context,
-                            isScrollControlled: true,
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.vertical(
-                                top: Radius.circular(20),
+                              context: context,
+                              isScrollControlled: true,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(20)),
                               ),
-                            ),
-                            builder: (ctx) {
-                              return MultiBlocProvider(
-                                providers: [
-                                  BlocProvider.value(value: viewModel),
-                                  BlocProvider(
-                                    create:
-                                        (_) =>
-                                            getIt<UpdateOfferStatusViewModel>(),
-                                  ),
-                                ],
-                                child: OffersBottomSheetContent(
-                                  orderId: order.id,
-                                  order: order,
-                                ),
-                              );
-                            },
-                          );
+                              builder: (ctx) => MultiBlocProvider(
+                                    providers: [
+                                      BlocProvider.value(value: viewModel),
+                                      BlocProvider(
+                                          create: (_) => getIt<
+                                              UpdateOfferStatusViewModel>()),
+                                    ],
+                                    child: OffersBottomSheetContent(
+                                        orderId: order.id, order: order),
+                                  ));
                         },
                       );
                     } else if (order.status == OrderStatus.Accepted) {
@@ -134,40 +123,42 @@ class OrderStatesCard extends StatelessWidget {
                           );
                         },
                       );
-                    }  else if (order.status == OrderStatus.Paid)  {
+                    } else if (order.status == OrderStatus.Paid) {
                       return CustomButton(
                         title: " Payment under review ",
                         ontap: () {
-                          showModalBottomSheet(context: context, builder: (context) {
-                            return  BlocBuilder<GetPaymentViewModel, GetPaymentViewModelStates>(
-                              bloc: getIt<GetPaymentViewModel>()..getPayment(order.id),
-                              builder: (context, state) {
-                                if (state is GetPaymentViewModelLoading) {
-                                  return const Center(child: CircularProgressIndicator());
-                                }
-                                if (state is GetPaymentViewModelError) {
-                                  return Center(child: Text(state.message));
-                                }
-                                if (state is GetPaymentViewModelSuccess) {
-                                  return PaymentStatusBottomSheet(payment: state.payments);
-                                }
-                                return Container();
-                        
-                              },
-                            );
-                      
-                          },);
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (context) {
+                              return BlocBuilder<GetPaymentViewModel,
+                                  GetPaymentViewModelStates>(
+                                bloc: getIt<GetPaymentViewModel>()
+                                  ..getPayment(order.id),
+                                builder: (context, state) {
+                                  if (state is GetPaymentViewModelLoading) {
+                                    return const Center(
+                                        child: CircularProgressIndicator());
+                                  }
+                                  if (state is GetPaymentViewModelError) {
+                                    return Center(child: Text(state.message));
+                                  }
+                                  if (state is GetPaymentViewModelSuccess) {
+                                    return PaymentStatusBottomSheet(
+                                        payment: state.payments);
+                                  }
+                                  return Container();
+                                },
+                              );
+                            },
+                          );
                         },
                       );
-                    }
-                    else {
+                    } else {
                       return Container();
                     }
                   },
                 ),
-
                 SizedBox(height: 10.h),
-
                 OrderActionButton(
                   text: "View details",
                   icon: Icons.remove_red_eye_outlined,

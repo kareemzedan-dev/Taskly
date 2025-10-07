@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
@@ -24,7 +23,7 @@ class ReviewsCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10.r),
                 border: Border.all(color: ColorsManager.primary),
               ),
-              child: Column(
+              child: const Column(
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

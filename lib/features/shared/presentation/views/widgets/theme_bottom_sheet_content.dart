@@ -47,7 +47,7 @@ class _ThemeBottomSheetContentState extends State<ThemeBottomSheetContent> {
             padding: EdgeInsets.all(12.w),
             itemCount: themes.length,
             separatorBuilder:
-                (_, __) => Divider(color: Colors.grey, thickness: 0.5),
+                (_, __) => const Divider(color: Colors.grey, thickness: 0.5),
             itemBuilder: (context, index) {
               final theme = themes[index];
               final isSelected = theme["title"] == _selectedTheme;

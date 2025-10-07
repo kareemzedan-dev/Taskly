@@ -1,6 +1,5 @@
 import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../../core/errors/failures.dart';
 import '../../entities/offer_entity/offer_entity.dart';

@@ -26,10 +26,10 @@ class TechnicalSupportView extends StatelessWidget {
         ),
         leading: GestureDetector(
           onTap: () => Navigator.pop(context),
-          child: Icon(CupertinoIcons.back, color: Colors.black),
+          child: const Icon(CupertinoIcons.back, color: Colors.black),
         ),
       ),
-      body: SafeArea(child: TechnicalSupportViewBody()),
+      body: const SafeArea(child: TechnicalSupportViewBody()),
     );
   }
 }

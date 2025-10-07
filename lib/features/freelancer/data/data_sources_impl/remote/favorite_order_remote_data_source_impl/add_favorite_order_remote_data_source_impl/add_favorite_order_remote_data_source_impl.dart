@@ -28,7 +28,7 @@ class AddFavoriteOrderRemoteDataSourceImpl
 
       // لو الـ order موجود بالفعل، نرجع فشل
       if (existingOrders.contains(favoriteOrder.orderId)) {
-        return Left(ServerFailure('Order already added to favorites'));
+        return const Left(ServerFailure('Order already added to favorites'));
       }
 
       // لو مش موجود، نضيفه
