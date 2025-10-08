@@ -15,6 +15,8 @@ class MessageEntity   {
   final DateTime? seenAt;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final String senderType;
+  final String receiverType;
 
   const MessageEntity({
     required this.id,
@@ -30,6 +32,8 @@ class MessageEntity   {
     this.seenAt,
     required this.createdAt,
     required this.updatedAt,
+    required this.senderType,
+    required this.receiverType,
   });
 
   @override
@@ -47,23 +51,9 @@ class MessageEntity   {
     seenAt,
     createdAt,
     updatedAt,
+    senderType,
+    receiverType,
   ];
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'orderId': orderId,
-      'paymentId': paymentId,
-      'senderId': senderId,
-      'receiverId': receiverId,
-      'messageType': messageType,
-      'content': content,
-      'attachment': attachment?.map((a) => a.toJson()).toList(),
-      'status': status,
-      'deliveredAt': deliveredAt?.toIso8601String(),
-      'seenAt': seenAt?.toIso8601String(),
-      'createdAt': createdAt.toIso8601String(),
-      'updatedAt': updatedAt.toIso8601String(),
-    };
-  }
+
 
 }

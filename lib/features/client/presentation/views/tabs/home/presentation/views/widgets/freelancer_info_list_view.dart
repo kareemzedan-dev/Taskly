@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:taskly/features/client/presentation/views/tabs/home/presentation/view_model/freelancers_view_model/freelancers_view_model.dart';
-import 'package:taskly/features/client/presentation/views/tabs/home/presentation/view_model/freelancers_view_model/freelancers_view_model_states.dart';
+import 'package:taskly/features/client/presentation/views/tabs/home/presentation/view_model/fetch_all_freelancers_view_model/fetch_all_freelancers_view_model_states.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/freelancer_info_card_for_hire.dart';
 
 import '../../../../../../../../../config/routes/routes_manager.dart';
+import '../../view_model/fetch_all_freelancers_view_model/fetch_all_freelancers_view_model.dart';
 import '../../view_model/place_order_view_model/place_order_view_model.dart';
 
 class FreelancerInfoListView extends StatefulWidget {
@@ -19,7 +19,7 @@ class _FreelancerInfoListViewState extends State<FreelancerInfoListView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<FreelancersViewModel, FreelancersViewModelStates>(
+    return BlocBuilder<FetchAllFreelancersViewModel, FetchAllFreelancersViewModelStates>(
       builder: (context, state) {
         if (state is FreelancersViewModelStatesLoading) {
           return const Center(child: CircularProgressIndicator());

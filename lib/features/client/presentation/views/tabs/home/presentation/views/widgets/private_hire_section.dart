@@ -10,18 +10,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/di/di.dart';
 import 'package:taskly/core/components/custom_search_text_field.dart';
-import 'package:taskly/features/client/presentation/views/tabs/home/presentation/view_model/freelancers_view_model/freelancers_view_model.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/freelancer_info_list_view.dart';
 
+import '../../view_model/fetch_all_freelancers_view_model/fetch_all_freelancers_view_model.dart';
 class PrivateHireSection extends StatelessWidget {
-    PrivateHireSection({super.key, required this.selectedId});
+  PrivateHireSection({super.key, required this.selectedId});
   String? selectedId;
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = getIt<FetchAllFreelancersViewModel>()..getAllFreelancer();
+
     return Container(
       height: 260.h,
-
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10.r),
@@ -38,25 +39,23 @@ class PrivateHireSection extends StatelessWidget {
       child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              const CustomSearchTextField(
-                hintTexts: [
-                  "Search freelancers by skill...",
-                  "Choose the best match for your project",
-                  "Find experts for your task",
-                  "Select a freelancer to hire",
-                  "Search by name or specialty",
-                  "Pick the right talent for you",
-                ],
-              ),
-
-              SizedBox(height: 16.h),
-              BlocProvider(
-                create: (context) =>  getIt<FreelancersViewModel>()..getAllFreelancer(),
-                child: FreelancerInfoListView(selectedId:selectedId ,),
-              ),
-            ],
+          child: BlocProvider(
+            create: (_) => viewModel,
+            child: Column(
+              children: [
+                CustomSearchTextField(
+                  hintTexts: [
+                    "Search freelancers by name...",
+                    "choose the best match for your project"
+                  ],
+                  onChanged: (query) {
+                    viewModel.searchFreelancers(query);
+                  },
+                ),
+                SizedBox(height: 16.h),
+                FreelancerInfoListView(selectedId: selectedId),
+              ],
+            ),
           ),
         ),
       ),

@@ -23,7 +23,7 @@ class ConfirmationDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Material(
-        color: Colors.black54,
+        color: Colors.transparent,
         child: Container(
           margin: EdgeInsets.symmetric(horizontal: 24.w),
           padding: EdgeInsets.all(16.w),

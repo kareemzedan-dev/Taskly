@@ -1,4 +1,5 @@
 class StringsManager {
+  static const String currencyKey = "SAR";
   static const String tokenKey = "token";
   static const String roleKey = "role";
   static const String idKey = "id";
@@ -25,5 +26,6 @@ class StringsManager {
   static const facebookLoginSuccessful = "facebookLoginSuccessful";
   static const appleLoginCancelled = "appleLoginCancelled";
   static const appleLoginSuccessful = "appleLoginSuccessful";
+
 
 }

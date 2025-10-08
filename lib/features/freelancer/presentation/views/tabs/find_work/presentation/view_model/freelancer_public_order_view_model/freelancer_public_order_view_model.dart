@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:taskly/core/cache/shared_preferences.dart';
@@ -15,51 +14,78 @@ class FreelancerPublicOrdersViewModel extends Cubit<FreelancerPublicOrdersState>
   final SubscribeToPublicOrdersUseCase subscribeToPublicOrdersUseCase;
 
   StreamSubscription<List<OrderEntity>>? _ordersSubscription;
-  final List<OrderEntity> _currentOrders = [];
+
+  final List<OrderEntity> _allOrders = []; // كل الأوردرات
+  List<OrderEntity> _filteredOrders = []; // الأوردرات بعد البحث
 
   FreelancerPublicOrdersViewModel(
       this.freelancerOrderUseCase,
       this.subscribeToPublicOrdersUseCase
       ) : super(FreelancerPendingOrdersInitial());
 
+  /// جلب الأوردرات والاشتراك في التحديثات اللحظية
   Future<void> fetchAndSubscribePendingOrders() async {
     emit(FreelancerPendingOrdersLoading());
 
     final freelancerId = SharedPrefHelper.getString(StringsManager.idKey)!;
 
-    // أولاً نجيب الطلبات الحالية
     final result = await freelancerOrderUseCase.fetchPublicOrders(freelancerId);
 
-    final offeredOrderIds = <String>[];
     result.fold(
           (_) {},
-          (orders) => offeredOrderIds.addAll(orders.map((o) => o.id)),
+          (orders) {
+        _allOrders
+          ..clear()
+          ..addAll(orders.where((o) => o.serviceType.name.toLowerCase() == 'public'));
+      },
     );
 
+    // ترتيب الأوردرات: الأحدث فوق
+    _allOrders.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+    _filteredOrders = List.from(_allOrders);
+
+    emit(FreelancerPendingOrdersSuccess(List.from(_filteredOrders)));
+
+    // الاشتراك في الوقت الحقيقي
     _ordersSubscription = subscribeToPublicOrdersUseCase
         .subscribeToPublicOrders(freelancerId)
         .listen(
           (orders) {
         print("📥 Orders from stream: ${orders.length}");
 
-        _currentOrders
+        _allOrders
           ..clear()
           ..addAll(
             orders.where((o) => o.serviceType.name.toLowerCase() == 'public'),
           );
 
-        _currentOrders.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+        // ترتيب حسب الأحدث
+        _allOrders.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+        _filteredOrders = List.from(_allOrders);
 
-        print("✅ After filter: ${_currentOrders.length}");
-        emit(FreelancerPendingOrdersSuccess(List.from(_currentOrders)));
+        emit(FreelancerPendingOrdersSuccess(List.from(_filteredOrders)));
       },
       onError: (error) {
         emit(FreelancerPendingOrdersError('Real-time subscription error: $error'));
       },
     );
- 
   }
 
+  /// فلترة الأوردرات حسب البحث
+  void searchOrders(String query) {
+    if (query.isEmpty) {
+      _filteredOrders = List.from(_allOrders);
+    } else {
+      _filteredOrders = _allOrders.where((order) {
+        final title = order.title.toLowerCase();
+        final serviceName = order.serviceType.name.toLowerCase();
+        return title.contains(query.toLowerCase()) ||
+            serviceName.contains(query.toLowerCase());
+      }).toList();
+    }
+
+    emit(FreelancerPendingOrdersSuccess(List.from(_filteredOrders)));
+  }
 
   @override
   Future<void> close() {
@@ -67,4 +93,3 @@ class FreelancerPublicOrdersViewModel extends Cubit<FreelancerPublicOrdersState>
     return super.close();
   }
 }
-

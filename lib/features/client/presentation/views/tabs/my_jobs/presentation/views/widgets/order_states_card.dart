@@ -80,7 +80,7 @@ class OrderStatesCard extends StatelessWidget {
                   builder: (context, state) {
                     int count = 0;
                     if (state is GetOffersViewModelSuccess) {
-                      count = state.offersCount; // دايمًا بياخد القيمة الأحدث
+                      count = state.offersCount;
                     }
 
                     if (order.status == OrderStatus.Pending) {

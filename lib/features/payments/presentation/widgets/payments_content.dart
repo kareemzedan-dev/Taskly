@@ -7,9 +7,12 @@ import 'package:taskly/features/payments/presentation/widgets/call_center_icon.d
 import 'package:taskly/features/payments/presentation/widgets/payment_note_card.dart';
 import 'package:taskly/features/payments/presentation/widgets/secure_payment_bannar.dart';
 
+import '../../../../core/di/di.dart';
 import '../../../attachments/presentation/manager/upload_attachments_view_model/upload_attachments_view_model.dart';
 import '../../../attachments/presentation/manager/upload_attachments_view_model/upload_attachments_view_model_states.dart';
 import '../../../shared/presentation/views/widgets/attachments_section.dart';
+import '../manager/get_bank_account_view_model/get_bank_account_view_model.dart';
+import 'bank_details_card_list.dart';
 
 class PaymentsContent extends StatelessWidget {
   const PaymentsContent({super.key});
@@ -26,7 +29,9 @@ class PaymentsContent extends StatelessWidget {
             children: [
               const SecurePaymentBanner(),
               SizedBox(height: 16.h),
-              const BankDetailsCard(),
+              BlocProvider(
+                  create:  (context) => getIt<GetBankAccountViewModel>()..fetchBankAccounts(),
+                  child: BankDetailsCardList()),
               SizedBox(height: 40.h),
               Divider(thickness: 1, color: ColorsManager.primary.withOpacity(0.2)),
               SizedBox(height: 16.h),

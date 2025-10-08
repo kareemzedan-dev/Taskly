@@ -61,32 +61,28 @@ class AttachmentsRemoteDataSourceImpl extends AttachmentsRemoteDataSource {
       final bucket = bucketName ?? defaultBucket;
 
       List<AttachmentEntity> uploadedAttachments = [];
-
       for (var file in files) {
-    final fileName = file.path.split('/').last;
-final uniqueName = "${uuid.v4()}_$fileName";
-final fileBytes = await file.readAsBytes();
+        final fileName = file.path.split('/').last;
+        final sanitizedName = fileName.replaceAll(RegExp(r'[^A-Za-z0-9._-]'), '_');
+        final uniqueName = "${const Uuid().v4()}_$sanitizedName";
+        final fileBytes = await file.readAsBytes();
 
-// رفع الملف
-await supabase.storage.from(bucket).uploadBinary(uniqueName, fileBytes);
+        await supabase.storage.from(bucket).uploadBinary(uniqueName, fileBytes);
 
-String safeUrl = supabase.storage.from(bucket).getPublicUrl(Uri.encodeComponent(uniqueName));
-safeUrl = safeUrl.endsWith('/') ? safeUrl.substring(0, safeUrl.length - 1) : safeUrl;
+        final safeUrl = supabase.storage.from(bucket).getPublicUrl(uniqueName);
 
-
- 
-uploadedAttachments.add(
-  AttachmentEntity(
-    id: uuid.v4(),
-    name: fileName,
-    storagePath: uniqueName,
-    url: safeUrl,
-    size: file.lengthSync(),
-    type: _getMimeType(fileName),
-  ),
-);
-
+        uploadedAttachments.add(
+          AttachmentEntity(
+            id: const Uuid().v4(),
+            name: fileName,
+            storagePath: uniqueName,
+            url: safeUrl,
+            size: file.lengthSync(),
+            type: _getMimeType(fileName),
+          ),
+        );
       }
+
 
       return Right(uploadedAttachments);
     } catch (e) {

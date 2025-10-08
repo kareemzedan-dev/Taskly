@@ -7,41 +7,43 @@ import 'package:taskly/features/freelancer/domain/use_cases/subscribe_to_private
 import 'freelancer_private_orders_view_model_states.dart';
 
 @injectable
-class FreelancerPrivateOrdersViewModel 
+class FreelancerPrivateOrdersViewModel
     extends Cubit<FreelancerPrivateOrdersViewModelStates> {
-  
+
   final SubscribeToPrivateOrdersUseCase subscribeToPrivateOrdersUseCase;
   StreamSubscription<List<OrderEntity>>? _ordersSubscription;
   String? _currentFreelancerId;
 
+  // قائمة لكل الأوردرات + filtered list
+  List<OrderEntity> _allOrders = [];
+  List<OrderEntity> _filteredOrders = [];
+
   FreelancerPrivateOrdersViewModel(
-    this.subscribeToPrivateOrdersUseCase,
-  ) : super(FreelancerPrivateOrdersViewModelStatesInitial());
+      this.subscribeToPrivateOrdersUseCase,
+      ) : super(FreelancerPrivateOrdersViewModelStatesInitial());
 
   Future<void> fetchAndSubscribePrivateOrders(String freelancerId) async {
     try {
       emit(FreelancerPrivateOrdersViewModelStatesLoading());
       _currentFreelancerId = freelancerId;
 
-      // إلغاء أي subscription سابق
       _ordersSubscription?.cancel();
 
-      // البدء في الاستماع للتحديثات
       _ordersSubscription = subscribeToPrivateOrdersUseCase
           .subscribeToPrivateOrders(freelancerId)
           .listen(
-            _handleOrdersUpdate,
-            onError: (error) {
-              emit(FreelancerPrivateOrdersViewModelStatesError(
-                message: 'Real-time subscription error: $error'
-              ));
-            },
-          );
+        _handleOrdersUpdate,
+        onError: (error) {
+          emit(FreelancerPrivateOrdersViewModelStatesError(
+              message: 'Real-time subscription error: $error'
+          ));
+        },
+      );
 
     } catch (e) {
       final failure = Failures(e.toString());
       emit(FreelancerPrivateOrdersViewModelStatesError(
-        message: failure.message
+          message: failure.message
       ));
     }
   }
@@ -49,21 +51,40 @@ class FreelancerPrivateOrdersViewModel
   void _handleOrdersUpdate(List<OrderEntity> orders) {
     if (_currentFreelancerId == null) return;
 
-    // تصفية الـ orders لهذا الـ freelancer
-    final filteredOrders = orders.where((order) =>
-      order.serviceType.name.toLowerCase() == 'private' &&
-      order.freelancerId == _currentFreelancerId
+    _allOrders = orders.where((order) =>
+    order.serviceType.name.toLowerCase() == 'private' &&
+        order.freelancerId == _currentFreelancerId
     ).toList();
 
-    // ترتيب حسب التاريخ (الأحدث أولاً)
-    filteredOrders.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+    // ترتيب حسب الأحدث أولاً
+    _allOrders.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+
+    // نسخة للفلترة
+    _filteredOrders = List.from(_allOrders);
 
     emit(FreelancerPrivateOrdersViewModelStatesSuccess(
-      orders: filteredOrders
+        orders: List.from(_filteredOrders)
     ));
   }
 
-  // دالة لـ refresh البيانات يدوياً
+  /// دالة للبحث في الأوردرات
+  void searchOrders(String query) {
+    if (query.isEmpty) {
+      _filteredOrders = List.from(_allOrders);
+    } else {
+      _filteredOrders = _allOrders.where((order) {
+        final title = order.title.toLowerCase();
+        final serviceName = order.serviceType.name.toLowerCase();
+        return title.contains(query.toLowerCase()) ||
+            serviceName.contains(query.toLowerCase());
+      }).toList();
+    }
+
+    emit(FreelancerPrivateOrdersViewModelStatesSuccess(
+        orders: List.from(_filteredOrders)
+    ));
+  }
+
   Future<void> refreshOrders() async {
     if (_currentFreelancerId != null) {
       await fetchAndSubscribePrivateOrders(_currentFreelancerId!);

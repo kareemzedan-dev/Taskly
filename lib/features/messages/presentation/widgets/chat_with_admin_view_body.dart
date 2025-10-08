@@ -121,14 +121,14 @@ class _ChatWithAdminViewBodyState extends State<ChatWithAdminViewBody> {
               ),
             ),
 
-            Padding(
-              padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-              child: ChatInputField(
-                orderId: null,
-                currentUserId: widget.currentUserId,
-                receiverId: "97ea47d8-d66b-4d44-97fe-112fc59251b0" ?? "",
-              ),
-            ),
+            // Padding(
+            //   padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+            //   child: ChatInputField(
+            //     orderId: null,
+            //     currentUserId: widget.currentUserId,
+            //     receiverId: "97ea47d8-d66b-4d44-97fe-112fc59251b0" ?? "",
+            //   ),
+            // ),
             SizedBox(height: 16.h),
           ],
         ),

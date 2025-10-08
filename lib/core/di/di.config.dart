@@ -85,8 +85,6 @@ import '../../features/client/domain/use_cases/my_jobs/update_offer_status_use_c
     as _i530;
 import '../../features/client/presentation/views/tabs/home/presentation/view_model/fetch_all_freelancers_view_model/fetch_all_freelancers_view_model.dart'
     as _i670;
-import '../../features/client/presentation/views/tabs/home/presentation/view_model/freelancers_view_model/freelancers_view_model.dart'
-    as _i938;
 import '../../features/client/presentation/views/tabs/home/presentation/view_model/place_order_view_model/place_order_view_model.dart'
     as _i779;
 import '../../features/client/presentation/views/tabs/home/presentation/view_model/services_view_model/services_view_model.dart'
@@ -415,6 +413,10 @@ import '../../features/messages/domain/use_cases/subscribe_to_messages_use_case/
     as _i172;
 import '../../features/messages/domain/use_cases/user_status_use_case/user_status_use_case.dart'
     as _i258;
+import '../../features/messages/presentation/manager/chat_avatars_view_model/chat_avatars_view_model.dart'
+    as _i44;
+import '../../features/messages/presentation/manager/chat_input_view_model/chat_input_view_model.dart'
+    as _i5;
 import '../../features/messages/presentation/manager/get_accepted_order_message_view_model/get_accepted_order_message_view_model.dart'
     as _i12;
 import '../../features/messages/presentation/manager/get_admin_messages_view_model/get_admin_messages_view_model.dart'
@@ -433,22 +435,34 @@ import '../../features/messages/presentation/manager/user_status_view_model/user
     as _i953;
 import '../../features/payments/data/data_sources/remote/create_payment_remote_data_source.dart'
     as _i968;
+import '../../features/payments/data/data_sources/remote/get_bank_accounts_remote_data_source/get_bank_accounts_remote_data_source.dart'
+    as _i92;
 import '../../features/payments/data/data_sources/remote/get_payment_remote_data_source.dart'
     as _i315;
 import '../../features/payments/data/data_sources_impl/remote/create_payment_remote_data_source_impl.dart'
     as _i795;
+import '../../features/payments/data/data_sources_impl/remote/get_bank_accounts_remote_data_source_impl/get_bank_accounts_remote_data_source_impl.dart'
+    as _i326;
 import '../../features/payments/data/data_sources_impl/remote/get_payment_remote_data_source_impl.dart'
     as _i696;
+import '../../features/payments/data/repositories/get_bank_accounts_repo_impl/get_bank_accounts_repo_impl.dart'
+    as _i706;
 import '../../features/payments/data/repositories/payment_repo_impl/payment_repo_impl.dart'
     as _i488;
+import '../../features/payments/domain/repositories/get_bank_account_repos/get_bank_account_repos.dart'
+    as _i408;
 import '../../features/payments/domain/repositories/payment_repos/payment_repo.dart'
     as _i815;
 import '../../features/payments/domain/use_cases/create_payment_use_case/create_payment_use_case.dart'
     as _i618;
+import '../../features/payments/domain/use_cases/get_bank_accounts_use_case/get_bank_accounts_use_case.dart'
+    as _i837;
 import '../../features/payments/domain/use_cases/get_payment/get_payment.dart'
     as _i848;
 import '../../features/payments/presentation/manager/create_payment_view_model/create_payment_view_model.dart'
     as _i517;
+import '../../features/payments/presentation/manager/get_bank_account_view_model/get_bank_account_view_model.dart'
+    as _i227;
 import '../../features/payments/presentation/manager/get_payment_view_model/get_payment_view_model.dart'
     as _i483;
 import '../../features/profile/data/data_sources/profile_remote_data_source.dart'
@@ -527,6 +541,7 @@ extension GetItInjectableX on _i174.GetIt {
       environmentFilter,
     );
     gh.singleton<_i383.FilePickerService>(() => _i383.FilePickerService());
+    gh.singleton<_i5.ChatInputViewModel>(() => _i5.ChatInputViewModel());
     gh.factory<_i114.ReviewsRemoteDataSource>(
         () => _i716.ReviewsRemoteDataSourceImpl(gh<_i454.SupabaseClient>()));
     gh.singleton<_i374.SupabaseService>(
@@ -550,6 +565,8 @@ extension GetItInjectableX on _i174.GetIt {
             supabaseService: gh<_i374.SupabaseService>()));
     gh.factory<_i315.GetPaymentRemoteDataSource>(
         () => _i696.GetPaymentRemoteDataSourceImpl(gh<_i454.SupabaseClient>()));
+    gh.factory<_i92.GetBankAccountsRemoteDataSource>(() =>
+        _i326.GetBankAccountsRemoteDataSourceImpl(gh<_i374.SupabaseService>()));
     gh.factory<_i199.PlaceWithdrawalBalanceRepo>(() =>
         _i536.PlaceWithdrawalBalanceRepoImpl(
             placeWithdrawalBalanceRemoteDataSource:
@@ -705,6 +722,8 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i113.MarkMessagesAsReadRepo>(() =>
         _i718.MarkMessagesAsReadRepoImpl(
             gh<_i458.MarkMessagesAsReadRemoteDataSource>()));
+    gh.factory<_i408.GetBankAccountsRepos>(() => _i706.GetBankAccountsRepoImpl(
+        gh<_i92.GetBankAccountsRemoteDataSource>()));
     gh.factory<_i81.GetAcceptedOrderMessageRepo>(() =>
         _i1048.GetAcceptedOrderMessageRepoImpl(
             getAcceptedOrderMessageRemoteDataSource:
@@ -829,6 +848,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i451.IsOrderFavoriteUseCase(gh<_i663.IsOrderFavoriteRepo>()));
     gh.factory<_i859.DeleteOrderUseCase>(
         () => _i859.DeleteOrderUseCase(gh<_i337.DeleteOrderRepo>()));
+    gh.factory<_i837.GetBankAccountsUseCase>(
+        () => _i837.GetBankAccountsUseCase(gh<_i408.GetBankAccountsRepos>()));
     gh.factory<_i172.SubscribeToMessagesUseCase>(() =>
         _i172.SubscribeToMessagesUseCase(gh<_i196.SubscribeToMessagesRepo>()));
     gh.factory<_i253.SubscribeToPublicOrdersUseCase>(() =>
@@ -848,6 +869,8 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i759.OrdersUseCase>(),
           gh<_i576.SubscribeToOrderStatusUseCase>(),
         ));
+    gh.factory<_i227.GetBankAccountViewModel>(() =>
+        _i227.GetBankAccountViewModel(gh<_i837.GetBankAccountsUseCase>()));
     gh.factory<_i988.GetAllFreelancersUseCase>(
         () => _i988.GetAllFreelancersUseCase(gh<_i660.HomeRepos>()));
     gh.factory<_i585.ProfileUseCase>(
@@ -923,6 +946,8 @@ extension GetItInjectableX on _i174.GetIt {
             getWithdrawalHistoryRepo: gh<_i563.GetWithdrawalHistoryRepo>()));
     gh.factory<_i669.UpdateUserProfileUseCase>(() =>
         _i669.UpdateUserProfileUseCase(gh<_i517.UpdateUserProfileRepo>()));
+    gh.factory<_i44.ChatAvatarsCubit>(
+        () => _i44.ChatAvatarsCubit(gh<_i1003.ProfileViewModel>()));
     gh.factory<_i658.SendOfferViewModel>(
         () => _i658.SendOfferViewModel(gh<_i626.SendOfferUseCase>()));
     gh.factory<_i532.SubscribeToPrivateOrdersUseCase>(() =>
@@ -931,8 +956,6 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i670.FetchAllFreelancersViewModel>(() =>
         _i670.FetchAllFreelancersViewModel(
             gh<_i988.GetAllFreelancersUseCase>()));
-    gh.factory<_i938.FreelancersViewModel>(
-        () => _i938.FreelancersViewModel(gh<_i988.GetAllFreelancersUseCase>()));
     gh.factory<_i413.DeleteOrderViewModel>(
         () => _i413.DeleteOrderViewModel(gh<_i859.DeleteOrderUseCase>()));
     gh.factory<_i61.SubscribeToMessagesViewModel>(() =>

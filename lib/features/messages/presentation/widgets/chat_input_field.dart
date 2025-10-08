@@ -1,19 +1,15 @@
-import 'dart:io';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:record/record.dart';
-import 'package:uuid/uuid.dart';
-import '../../../../core/di/di.dart';
-import '../../../../core/services/message_validation_service.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
+import 'package:taskly/core/di/di.dart';
+import 'package:taskly/features/messages/presentation/widgets/attachment_button.dart';
+import 'package:taskly/features/messages/presentation/widgets/message_input_field.dart';
+import 'package:taskly/features/messages/presentation/widgets/send_record_button.dart';
 import '../../../attachments/data/models/attachments_dm/attachments_dm.dart';
 import '../../../attachments/presentation/manager/upload_attachments_view_model/upload_attachments_view_model.dart';
 import '../../../attachments/presentation/manager/upload_attachments_view_model/upload_attachments_view_model_states.dart';
-import '../../domain/entities/message_entity.dart';
+import '../manager/chat_input_view_model/chat_input_view_model.dart';
 import '../manager/send_message_view_model/send_message_view_model.dart';
 import '../manager/send_message_view_model/send_message_view_model_states.dart';
 
@@ -21,343 +17,171 @@ class ChatInputField extends StatefulWidget {
   final String? orderId;
   final String currentUserId;
   final String receiverId;
+  final String currentUserRole;
+  final String receiverUserRole;
+  final VoidCallback? onMessageSent;
 
   const ChatInputField({
     super.key,
     this.orderId,
     required this.currentUserId,
     required this.receiverId,
+    required this.currentUserRole,
+    required this.receiverUserRole,
+    this.onMessageSent,
   });
 
   @override
   State<ChatInputField> createState() => _ChatInputFieldState();
 }
 
-final MessageValidationService _validationService = MessageValidationService();
-
 class _ChatInputFieldState extends State<ChatInputField> {
-  final TextEditingController _controller = TextEditingController();
-  final AudioRecorder _audioRecorder = AudioRecorder();
-  bool _isRecording = false;
-  bool _isSending = false;
-  String? _recordingPath;
+  late final ChatInputViewModel _viewModel;
 
-  Future<bool> _checkPermission() async {
-    final status = await Permission.microphone.request();
-    return status.isGranted;
-  }
-
-  Future<void> _startRecording() async {
-    try {
-      final hasPermission = await _checkPermission();
-      if (!hasPermission) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Microphone permission required')),
-        );
-        return;
-      }
-
-      final dir = await getTemporaryDirectory();
-      _recordingPath = '${dir.path}/${const Uuid().v4()}.m4a';
-
-      await _audioRecorder.start(
-        const RecordConfig(),
-        path: _recordingPath!,
-      );
-
-      setState(() => _isRecording = true);
-    } catch (e) {
-      print('Error starting recording: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to start recording: $e')),
-      );
-    }
-  }
-
-  Future<void> _stopRecording() async {
-    try {
-      await _audioRecorder.stop();
-      setState(() => _isRecording = false);
-
-      if (_recordingPath != null && File(_recordingPath!).existsSync()) {
-        await _sendVoiceMessage(_recordingPath!);
-      }
-    } catch (e) {
-      print('Error stopping recording: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to stop recording: $e')),
-      );
-    } finally {
-      _recordingPath = null;
-    }
-  }
-
-  Future<void> _sendVoiceMessage(String filePath) async {
-    if (!mounted) return;
-
-    setState(() => _isSending = true);
-
-    try {
-      final uploadVM = context.read<UploadAttachmentsViewModel>();
-
-      uploadVM.files = [File(filePath)];
-      await uploadVM.uploadAttachments(bucketName: "attachments");
-
-      await Future.doWhile(() async {
-        await Future.delayed(const Duration(milliseconds: 100));
-        return uploadVM.state is! UploadAttachmentsViewModelStatesSuccess &&
-            uploadVM.state is! UploadAttachmentsViewModelStatesError;
-      });
-
-      if (uploadVM.state is UploadAttachmentsViewModelStatesSuccess &&
-          mounted) {
-        final attachments =
-            (uploadVM.state as UploadAttachmentsViewModelStatesSuccess)
-                .attachments
-                .map((e) => AttachmentModel.fromEntity(e))
-                .toList();
-
-        context.read<SendMessageViewModel>().sendMessage(
-              widget.orderId!,
-              MessageEntity(
-                id: const Uuid().v4(),
-                orderId: widget.orderId,
-                senderId: widget.currentUserId,
-                receiverId: widget.receiverId,
-                paymentId: null,
-                messageType: "voice",
-                content: null,
-                attachment: attachments,
-                status: "sent",
-                createdAt: DateTime.now(),
-                updatedAt: DateTime.now(),
-              ),
-            );
-        print("✅ Voice message sent successfully");
-      } else {
-        print("❌ Upload state is not success or widget unmounted.");
-      }
-    } catch (e) {
-      print('Error sending voice message: $e');
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to send voice message: $e')),
-        );
-      }
-    } finally {
-      if (mounted) {
-        setState(() => _isSending = false);
-      }
-    }
-  }
-
-  void _sendTextMessage() {
-    final text = _controller.text.trim();
-    if (text.isEmpty) return;
-
-    // Validate message
-    final validationMessage = _validationService.validate(text);
-    if (validationMessage != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(validationMessage),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return; // stop sending
-    }
-
-    // Message is valid, send it
-    context.read<SendMessageViewModel>().sendMessage(
-          widget.orderId!,
-          MessageEntity(
-            id: const Uuid().v4(),
-            orderId: widget.orderId,
-            senderId: widget.currentUserId,
-            receiverId: widget.receiverId,
-            paymentId: null,
-            messageType: "text",
-            content: text,
-            attachment: null,
-            status: "sent",
-            createdAt: DateTime.now(),
-            updatedAt: DateTime.now(),
-          ),
-        );
-
-    _controller.clear();
+  @override
+  void initState() {
+    super.initState();
+    _viewModel = ChatInputViewModel();
   }
 
   @override
   void dispose() {
-    _audioRecorder.dispose();
-    _controller.dispose();
+    _viewModel.dispose();
     super.dispose();
+  }
+
+  void _sendTextMessage() {
+    _viewModel.sendTextMessage(
+      context: context,
+      orderId: widget.orderId,
+      currentUserId: widget.currentUserId,
+      receiverId: widget.receiverId,
+      senderType: widget.currentUserRole,
+      receiverType: widget.receiverUserRole,
+      onMessageSent: widget.onMessageSent,
+    );
+  }
+
+  Future<void> _startOrStopRecording() async {
+    await _viewModel.startOrStopRecording(
+      context: context,
+      orderId: widget.orderId,
+      currentUserId: widget.currentUserId,
+      receiverId: widget.receiverId,
+      senderType: widget.currentUserRole,
+      receiverType: widget.receiverUserRole,
+      onMessageSent: widget.onMessageSent,
+    );
+  }
+
+  void _handleAttachmentUpload(List<AttachmentModel> attachments) {
+    _viewModel.handleAttachmentUpload(
+      attachments: attachments,
+      context: context,
+      orderId: widget.orderId,
+      currentUserId: widget.currentUserId,
+      receiverId: widget.receiverId,
+      senderType: widget.currentUserRole,
+      receiverType: widget.receiverUserRole,
+      onMessageSent: widget.onMessageSent,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Builder(
-      builder: (context) {
-        return Container(
-          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.05),
-                blurRadius: 8,
-                offset: const Offset(0, -2),
-              ),
-            ],
-          ),
-          child: Row(
-            children: [
-              _buildAttachmentButton(),
-              SizedBox(width: 8.w),
-              _buildVoiceRecordButton(),
-              SizedBox(width: 8.w),
-              Expanded(child: _buildMessageInput()),
-              SizedBox(width: 8.w),
-              _buildSendState(),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildAttachmentButton() {
-    return BlocBuilder<UploadAttachmentsViewModel,
-        UploadAttachmentsViewModelStates>(
-      builder: (context, uploadState) {
-        final isLoading =
-            uploadState is UploadAttachmentsViewModelStatesLoading;
-
-        return Container(
-          width: 44.w,
-          height: 44.h,
-          decoration: BoxDecoration(
-            color: Colors.grey.shade100,
-            shape: BoxShape.circle,
-          ),
-          child: isLoading
-              ? const Center(
-                  child: SizedBox(
-                    width: 16,
-                    height: 16,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  ),
-                )
-              : IconButton(
-                  padding: EdgeInsets.zero,
-                  icon: Icon(
-                    FontAwesomeIcons.paperclip,
-                    size: 18.sp,
-                    color: Colors.grey.shade600,
-                  ),
-                  onPressed: () {
-                    context
-                        .read<UploadAttachmentsViewModel>()
-                        .pickFilesFromDevice(
+    return ChangeNotifierProvider.value(
+      value: _viewModel,
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider.value(value: getIt<SendMessageViewModel>()),
+          BlocProvider.value(value: getIt<UploadAttachmentsViewModel>()),
+        ],
+        child: MultiBlocListener(
+          listeners: [
+            BlocListener<SendMessageViewModel, SendMessageViewModelStates>(
+              listener: (context, state) {
+                if (state is SendMessageViewModelStatesError) {
+                  context.read<ChatInputViewModel>().updateSending(false);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Failed to send message: ${state.failure}'),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
+              },
+            ),
+            BlocListener<UploadAttachmentsViewModel, UploadAttachmentsViewModelStates>(
+              listener: (context, state) {
+                if (state is UploadAttachmentsViewModelStatesSuccess) {
+                  final attachments = state.attachments
+                      .map((e) => AttachmentModel.fromEntity(e))
+                      .toList();
+                  _handleAttachmentUpload(attachments);
+                } else if (state is UploadAttachmentsViewModelStatesError) {
+                  context.read<ChatInputViewModel>().updateSending(false);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text("Upload failed: ${state.message}"),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
+              },
+            ),
+          ],
+          child: Consumer<ChatInputViewModel>(
+            builder: (context, viewModel, child) {
+              return Container(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom + 10.h,
+                  left: 12.w,
+                  right: 12.w,
+                  top: 8.h,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 8,
+                      offset: const Offset(0, -2),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    AttachmentButton(
+                      onPressed: () async {
+                        await context.read<UploadAttachmentsViewModel>().pickFilesFromDevice(
                           bucketName: "attachments",
                           singleFileMode: true,
                         );
-                  },
+                      },
+                    ),
+                    SizedBox(width: 8.w),
+                    Expanded(
+                      child: MessageInputField(
+                        controller: viewModel.textController,
+                        onChanged: (value) => viewModel.updateTyping(value.trim().isNotEmpty),
+                        isTyping: viewModel.isTyping,
+                      ),
+                    ),
+                    SizedBox(width: 8.w),
+                    SendRecordButton(
+                      isTyping: viewModel.isTyping,
+                      isSending: viewModel.isSending,
+                      isRecording: viewModel.isRecording,
+                      onSendText: _sendTextMessage,
+                      onStartStopRecord: _startOrStopRecording,
+                    ),
+                  ],
                 ),
-        );
-      },
-    );
-  }
-
-  Widget _buildVoiceRecordButton() {
-    return Container(
-      width: 44.w,
-      height: 44.h,
-      decoration: BoxDecoration(
-        color:
-            _isRecording ? Colors.red.withOpacity(0.1) : Colors.grey.shade100,
-        shape: BoxShape.circle,
-      ),
-      child: IconButton(
-        padding: EdgeInsets.zero,
-        icon: Icon(
-          _isRecording ? Icons.stop_rounded : Icons.mic_rounded,
-          size: 20.sp,
-          color: _isRecording ? Colors.red : Colors.grey.shade700,
+              );
+            },
+          ),
         ),
-        onPressed: _isSending
-            ? null
-            : _isRecording
-                ? _stopRecording
-                : _startRecording,
       ),
-    );
-  }
-
-  Widget _buildMessageInput() {
-    return Container(
-      height: 44.h,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(22.r),
-        color: Colors.grey.shade100,
-        border: Border.all(color: Colors.grey.shade300, width: 1.w),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.w),
-              child: TextField(
-                controller: _controller,
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: 'Type a message...',
-                  hintStyle: TextStyle(
-                    color: Colors.grey.shade500,
-                    fontSize: 14.sp,
-                  ),
-                  contentPadding: EdgeInsets.zero,
-                ),
-                maxLines: 1,
-                onSubmitted: (_) => _sendTextMessage(),
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(right: 8.w),
-            child: IconButton(
-              icon: Icon(
-                CupertinoIcons.paperplane_fill,
-                size: 20.sp,
-                color: Colors.blue,
-              ),
-              onPressed: _sendTextMessage,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSendState() {
-    return BlocBuilder<SendMessageViewModel, SendMessageViewModelStates>(
-      builder: (context, state) {
-        final isLoading = state is SendMessageViewModelStatesLoading;
-
-        if (isLoading || _isSending) {
-          return SizedBox(
-            width: 20.w,
-            height: 20.h,
-            child: CircularProgressIndicator(
-              strokeWidth: 2.w,
-              color: Colors.blue,
-            ),
-          );
-        }
-
-        return const SizedBox.shrink();
-      },
     );
   }
 }

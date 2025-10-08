@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:taskly/core/di/di.dart';
+import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 import 'package:taskly/core/components/custom_search_text_field.dart';
-import 'package:taskly/core/utils/strings_manager.dart';
-import 'package:taskly/features/client/presentation/views/tabs/home/presentation/view_model/services_view_model/services_view_model.dart';
-import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/user_info_home_header.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/service_category_grid_view.dart';
-import 'package:taskly/features/profile/presentation/manager/profile_view_model/profile_view_model.dart';
-
-import '../../../../../../../../../core/cache/shared_preferences.dart';
+import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/user_info_home_header.dart';
+import 'package:taskly/config/l10n/app_localizations.dart';
+import '../../view_model/client_home_view_model/client_home_view_model.dart';
 
 class ClientHomeTabViewBody extends StatefulWidget {
   const ClientHomeTabViewBody({super.key});
@@ -19,19 +16,18 @@ class ClientHomeTabViewBody extends StatefulWidget {
 }
 
 class _ClientHomeTabViewBodyState extends State<ClientHomeTabViewBody> {
-  late final ProfileViewModel _userInfoViewModel;
-  late final TextEditingController _searchController;
+  late TextEditingController _searchController;
 
   @override
   void initState() {
     super.initState();
-    _userInfoViewModel = getIt<ProfileViewModel>()
-      ..getUserInfo(SharedPrefHelper.getString(StringsManager.idKey)!,
-          StringsManager.roleKey);
-    // _userInfoViewModel.loadUserInfo();
-
     _searchController = TextEditingController();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final viewModel = Provider.of<ClientHomeViewModel>(context, listen: false);
+      viewModel.loadServices(context);
+    });
   }
+
 
   @override
   void dispose() {
@@ -39,27 +35,41 @@ class _ClientHomeTabViewBodyState extends State<ClientHomeTabViewBody> {
     super.dispose();
   }
 
-  void _onSearchChanged(String query) {
-    debugPrint("Searching for: $query");
-    context.read<ServicesViewModel>().searchServices(query);
-  }
-
   @override
   Widget build(BuildContext context) {
+    final viewModel = context.watch<ClientHomeViewModel>();
+    final local = AppLocalizations.of(context)!;
+
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            UserInfoHomeHeader(),
+              UserInfoHomeHeader(),
             SizedBox(height: 30.h),
             CustomSearchTextField(
               hintTexts: const ["Search for services"],
               controller: _searchController,
-              onChanged: _onSearchChanged,
+              onChanged: viewModel.onSearchChanged,
             ),
             SizedBox(height: 30.h),
-            const ServiceCategoryGridView(),
+            if (!viewModel.isLoaded)
+              const Center(child: CircularProgressIndicator())
+            else if (viewModel.filteredServices.isEmpty)
+              Column(
+                children: [
+                  Lottie.asset("assets/lotties/empty.json", height: 200.h),
+                  Text(
+                    local.noServicesFound,
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
+              )
+            else
+              ServiceCategoryGridView(services: viewModel.filteredServices),
           ],
         ),
       ),

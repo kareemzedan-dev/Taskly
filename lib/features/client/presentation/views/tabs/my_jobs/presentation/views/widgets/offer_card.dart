@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:taskly/config/routes/routes_manager.dart';
 import 'package:taskly/core/di/di.dart';
 import 'package:taskly/core/helper/convert_to_days.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
@@ -13,6 +14,7 @@ import 'package:taskly/features/freelancer/domain/entities/offer_entity/offer_en
 import 'package:taskly/features/profile/presentation/manager/profile_view_model/profile_view_model.dart';
 import 'package:taskly/features/profile/presentation/manager/profile_view_model/profile_view_model_states.dart';
 
+import '../../../../../../../../../core/utils/strings_manager.dart';
 import '../../../../../../../../shared/domain/entities/order_entity/order_entity.dart';
 import 'order_action_button.dart';
 
@@ -62,7 +64,6 @@ class OfferCard extends StatelessWidget {
                     isVerified = state.userInfoEntity.isVerified ?? false;
                     profileImage = state.userInfoEntity.profileImage ?? '';
                     email = state.userInfoEntity.email ?? '';
-
                   }
 
                   return Column(
@@ -80,18 +81,31 @@ class OfferCard extends StatelessWidget {
                                       child: CircularProgressIndicator())
                                   : state is ProfileViewModelStatesError
                                       ? Center(child: Text(state.message))
-                                      : UserInfoDisplay(
-                                name:  freelancerName,
-                              email:  email!,
-                              rating: rating,
-                              profileImage: profileImage,
-                              isFreelancer: isVerified,
-
+                                      : GestureDetector(
+                                          onTap: () {
+                                            Navigator.pushNamed(context,
+                                                RoutesManager.reviewsView,
+                                                arguments: {
+                                                  "userId": offer.freelancerId,
+                                                  "role": "freelancer",
+                                                  "userName": freelancerName,
+                                                  "userRating": rating,
+                                                  "userImage": profileImage,
+                                                });
+                                          },
+                                          child: UserInfoDisplay(
+                                            name: freelancerName,
+                                            email: email!,
+                                            rating: rating,
+                                            profileImage: profileImage,
+                                            isFreelancer: isVerified,
+                                          ),
                                         ),
                             ),
                             SizedBox(width: 8.w),
                             PriceDurationSection(
-                              price: "\$${offer.offerAmount} SAR",
+                              price:
+                                  "${offer.offerAmount} ${StringsManager.currencyKey}",
                               duration: offer.offerDeliveryTime.formatMinutes(),
                             ),
                           ],

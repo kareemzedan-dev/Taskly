@@ -40,14 +40,20 @@ class _FreelancerHomeTabViewBodyState extends State<FreelancerHomeTabViewBody> {
   late final AddFavoriteOrderViewModel _addFavoriteOrderViewModel;
   late final RemoveFavoriteOrderViewModel _removeFavoriteOrderViewModel;
 
-  final List<String> searchHintTexts = ["Search for jobs..."];
+  final List<String> searchHintTexts = [
+    "Search for orders...",
+    "Search for private orders...",
+    "Search for public orders...",
+    "Search for favorite orders...",
+  ];
   String userId = SharedPrefHelper.getString("id")!;
 
   @override
   void initState() {
     super.initState();
 
-    _freelancerInfoViewModel = getIt<ProfileViewModel>()..getUserInfo(userId, "freelancer");
+    _freelancerInfoViewModel = getIt<ProfileViewModel>()
+      ..getUserInfo(userId, "freelancer");
 
     _pendingOrdersViewModel = getIt<FreelancerPublicOrdersViewModel>();
     _pendingOrdersViewModel.fetchAndSubscribePendingOrders();
@@ -57,7 +63,8 @@ class _FreelancerHomeTabViewBodyState extends State<FreelancerHomeTabViewBody> {
 
     _addFavoriteOrderViewModel = getIt<AddFavoriteOrderViewModel>();
 
-    final savedJsonList = SharedPrefHelper.getStringList('favoriteOrders') ?? [];
+    final savedJsonList =
+        SharedPrefHelper.getStringList('favoriteOrders') ?? [];
     final savedFavorites = savedJsonList.map((jsonStr) {
       return FavoriteOrderModel.fromJson(jsonDecode(jsonStr));
     }).toList();
@@ -65,9 +72,6 @@ class _FreelancerHomeTabViewBodyState extends State<FreelancerHomeTabViewBody> {
 
     _removeFavoriteOrderViewModel = getIt<RemoveFavoriteOrderViewModel>();
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +82,6 @@ class _FreelancerHomeTabViewBodyState extends State<FreelancerHomeTabViewBody> {
         BlocProvider.value(value: _privateOrderViewModel),
         BlocProvider.value(value: _addFavoriteOrderViewModel),
         BlocProvider.value(value: _removeFavoriteOrderViewModel),
-
       ],
       child: DefaultTabController(
         length: 2,
@@ -86,17 +89,27 @@ class _FreelancerHomeTabViewBodyState extends State<FreelancerHomeTabViewBody> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-
-                header.UserInfoHomeHeader(
-
-          ),
+              header.UserInfoHomeHeader(),
               SizedBox(height: 20.h),
-              SearchBarWithFavorite(hintTexts: searchHintTexts),
+              Builder(
+                builder: (context) {
+                  return SearchBarWithFavorite(
+                    hintTexts: searchHintTexts,
+                    onChanged: (query) {
+                      context
+                          .read<FreelancerPublicOrdersViewModel>()
+                          .searchOrders(query);
+                      context
+                          .read<FreelancerPrivateOrdersViewModel>()
+                          .searchOrders(query);
+                    },
+                  );
+                },
+              ),
               SizedBox(height: 30.h),
               const CustomTabBar(tabs: ["Public Requests", "Private Requests"]),
               SizedBox(height: 6.h),
               Divider(color: Colors.grey.shade300, thickness: 1.w),
-
               BlocBuilder<ProfileViewModel, ProfileViewModelStates>(
                 builder: (context, state) {
                   if (state is ProfileViewModelStatesSuccess &&
@@ -104,10 +117,8 @@ class _FreelancerHomeTabViewBodyState extends State<FreelancerHomeTabViewBody> {
                     return Expanded(
                       child: TabBarView(
                         children: [
-                          BlocBuilder<
-                              FreelancerPublicOrdersViewModel,
-                              FreelancerPublicOrdersState
-                          >(
+                          BlocBuilder<FreelancerPublicOrdersViewModel,
+                              FreelancerPublicOrdersState>(
                             builder: (context, pendingState) {
                               return RefreshIndicator(
                                 onRefresh: () async {
@@ -118,15 +129,12 @@ class _FreelancerHomeTabViewBodyState extends State<FreelancerHomeTabViewBody> {
                                 child: FreelancerPublicOrdersList(
                                   state: pendingState,
                                   addFavViewModel: _addFavoriteOrderViewModel,
-
                                 ),
                               );
                             },
                           ),
-                          BlocBuilder<
-                            FreelancerPrivateOrdersViewModel,
-                            FreelancerPrivateOrdersViewModelStates
-                          >(
+                          BlocBuilder<FreelancerPrivateOrdersViewModel,
+                              FreelancerPrivateOrdersViewModelStates>(
                             builder: (context, privateState) {
                               return RefreshIndicator(
                                 onRefresh: () async {
@@ -158,7 +166,6 @@ class _FreelancerHomeTabViewBodyState extends State<FreelancerHomeTabViewBody> {
                             width: 1.w,
                           ),
                         ),
-
                         child: Lottie.asset("assets/lotties/waiting.json"),
                       ),
                       SizedBox(height: 20.h),

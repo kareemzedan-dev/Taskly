@@ -24,7 +24,7 @@ class UploadAttachmentsViewModel extends Cubit<UploadAttachmentsViewModelStates>
   int _fileCounter = 0;
   List<AttachmentModel> uploadedAttachments = [];
   
-  String _generateFileKey(File file) {
+  String generateFileKey(File file) {
     if (!_fileKeys.containsKey(file)) {
       _fileKeys[file] = 'file_${_fileCounter++}_${DateTime.now().millisecondsSinceEpoch}';
     }
@@ -69,7 +69,7 @@ class UploadAttachmentsViewModel extends Cubit<UploadAttachmentsViewModelStates>
             }
 
             files.add(file);
-            _generateFileKey(file);
+            generateFileKey(file);
 
             emit(UploadAttachmentsViewModelStatesInitial());
 

@@ -54,7 +54,7 @@ class TrackingOfferCard extends StatelessWidget {
               if (isAccepted)
                 const AdminMessageCard(
                     message:
-                        "Please wait until the payment is confirmed. Once confirmed, you can contact the client and start the work."),
+                        "Please wait until the payment is confirmed. Once confirmed, you can start the work."),
               SizedBox(height: 5.h),
               BlocBuilder<ProfileViewModel, ProfileViewModelStates>(
                 bloc: getIt<ProfileViewModel>()

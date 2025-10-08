@@ -14,16 +14,16 @@ import 'package:taskly/config/l10n/app_localizations.dart';
 
 import 'core/services/supabase_service.dart';
 import 'core/services/user_status_service.dart';
+import 'core/utils/constants_manager.dart';
 import 'features/profile/presentation/manager/profile_view_model/profile_view_model.dart';
 late final UserStatusService userStatusService;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Supabase.initialize(
-    url: 'https://bztszvzfcnbfmsxkhkhn.supabase.co',
-    anonKey:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ6dHN6dnpmY25iZm1zeGtoa2huIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY2Njc1NzcsImV4cCI6MjA3MjI0MzU3N30.wErI53sqLbmnK_WXe3oJhuYffS7Xcl9yGne1arhhLoA',
-  );
+    url:ConstantsManager.supabaseUrl,
+    anonKey:ConstantsManager.supabaseAnonKey,
+   );
   await SharedPrefHelper.init();
   configureDependencies();
   final userId = SharedPrefHelper.getString(StringsManager.idKey)!;

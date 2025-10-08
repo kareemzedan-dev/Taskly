@@ -22,14 +22,19 @@ class GetFreelancerOffersViewModel extends Cubit<GetFreelancerOffersStates> {
       final result = await getFreelancerOffersUseCase.call(freelancerId, status ?? "all");
 
       result.fold(
-        (failure) => emit(GetFreelancerOffersErrorState(failure.message)),
-        (offers) => emit(GetFreelancerOffersSuccessState(offers)),
+            (failure) => emit(GetFreelancerOffersErrorState(failure.message)),
+            (offers) {
+          // ترتيب حسب الأحدث أولاً
+          offers.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+          emit(GetFreelancerOffersSuccessState(offers));
+        },
       );
       return result;
     } catch (e) {
       return Left(ServerFailure(e.toString()));
     }
   }
+
 Stream<(OfferEntity, String)> subscribeToOffers(String freelancerId) {
   return getFreelancerOffersUseCase.subscribeToOffers(freelancerId);
 }

@@ -13,7 +13,6 @@ class SendMessageViewModel extends Cubit<SendMessageViewModelStates> {
   Future<void> sendMessage(String orderId, MessageEntity message) async {
     try {
       emit(SendMessageViewModelStatesLoading());
-      print("Sending message: ${message.toJson()}");  
 
       final result = await sendMessageUseCase.call(orderId, message);
 

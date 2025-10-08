@@ -51,6 +51,8 @@ class GetAdminMessagesRemoteDataSourceImpl implements GetAdminMessagesRemoteData
           seenAt: data['seen_at'] != null ? DateTime.tryParse(data['seen_at']) : null,
           createdAt: DateTime.parse(data['created_at']),
           updatedAt: DateTime.parse(data['updated_at']),
+          senderType: data['sender_type'],
+          receiverType: data['receiver_type'],
         );
       }).toList();
 

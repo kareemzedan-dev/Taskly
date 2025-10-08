@@ -6,17 +6,15 @@ import 'package:taskly/features/client/presentation/views/tabs/home/presentation
 
 import '../../../../../../../../../config/l10n/app_localizations.dart';
 import '../../../../../../../../../core/helper/get_local_services.dart';
-
-
+import '../../../../../../../domain/entities/home/service_response_entity.dart';
 
 class ServiceCategoryGridView extends StatelessWidget {
-  const ServiceCategoryGridView({super.key});
+  final List<dynamic> services;
+
+  const ServiceCategoryGridView({super.key, required this.services});
 
   @override
   Widget build(BuildContext context) {
-    final local = AppLocalizations.of(context)!;
-    final services = getLocalServices(local);
-
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 8.w),
       child: services.isEmpty
@@ -25,12 +23,12 @@ class ServiceCategoryGridView extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(
-              height: 200,
+              height: 200.h,
               child: Lottie.asset("assets/lotties/empty.json"),
             ),
             const SizedBox(height: 16),
             Text(
-              local.noServicesFound,
+              "No services found",
               style: TextStyle(
                 fontSize: 16.sp,
                 fontWeight: FontWeight.w700,
@@ -46,7 +44,6 @@ class ServiceCategoryGridView extends StatelessWidget {
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           crossAxisSpacing: 12.w,
-
           mainAxisSpacing: 16.h,
           childAspectRatio: 0.85,
         ),

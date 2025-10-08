@@ -1,5 +1,6 @@
 import 'dart:convert';
-import 'package:either_dart/src/either.dart';
+import 'package:either_dart/either.dart';
+import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:taskly/core/errors/failures.dart';
@@ -18,25 +19,36 @@ class SendMessagesRemoteDataSourceImpl extends SendMessagesRemoteDataSource {
   @override
   Future<Either<Failures, MessageEntity>> sendMessage(
       String orderId, MessageEntity message) async {
-
+    debugPrint("📩 [SendMessagesRemoteDataSource] Sending message...");
+    debugPrint("🧾 Order ID: $orderId");
+    debugPrint("👤 Sender ID: ${message.senderId}");
+    debugPrint("📦 Message type: ${message.messageType}");
+    debugPrint("💬 Content: ${message.content}");
+    debugPrint("📎 Attachments count: ${message.attachment?.length ?? 0}");
 
     final phoneRegex = RegExp(r'(\+201[0-9]{9}|01[0-9]{9}|[0-9]{8,})');
-    final urlRegex = RegExp(r'(https?:\/\/|www\.|facebook\.com|wa\.me|whatsapp\.com)');
-    final emailRegex = RegExp(r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}');
+    final urlRegex =
+    RegExp(r'(https?:\/\/|www\.|facebook\.com|wa\.me|whatsapp\.com)');
+    final emailRegex =
+    RegExp(r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}');
 
-    if (phoneRegex.hasMatch( message.content!)) {
+    if (message.content != null && phoneRegex.hasMatch(message.content!)) {
+      debugPrint("🚫 Message blocked: contains phone number");
       return Left(ServerFailure("🚫 يمنع إرسال أرقام التليفون داخل الرسائل"));
     }
 
-    if (urlRegex.hasMatch(message.content!)) {
+    if (message.content != null && urlRegex.hasMatch(message.content!)) {
+      debugPrint("🚫 Message blocked: contains URL");
       return Left(ServerFailure("🚫 يمنع إرسال الروابط داخل الرسائل"));
     }
 
-    if (emailRegex.hasMatch(message.content!)) {
+    if (message.content != null && emailRegex.hasMatch(message.content!)) {
+      debugPrint("🚫 Message blocked: contains email");
       return Left(ServerFailure("🚫 يمنع إرسال الإيميلات داخل الرسائل"));
     }
 
     try {
+      debugPrint("🧠 Checking payment for order...");
       final String generatedId = const Uuid().v4();
 
       final paymentResponse = await supabase
@@ -47,11 +59,13 @@ class SendMessagesRemoteDataSourceImpl extends SendMessagesRemoteDataSource {
 
       final paymentId =
       paymentResponse != null ? paymentResponse['id'] as String : null;
+      debugPrint("💰 Payment ID found: $paymentId");
 
       final attachmentJson = message.attachment != null
           ? jsonEncode(message.attachment!.map((e) => e.toJson()).toList())
           : null;
 
+      debugPrint("🧱 Preparing insert data...");
       final insertData = {
         'id': generatedId,
         'order_id': orderId,
@@ -66,17 +80,20 @@ class SendMessagesRemoteDataSourceImpl extends SendMessagesRemoteDataSource {
         'updated_at': message.updatedAt.toIso8601String(),
       };
 
+      debugPrint("🚀 Inserting message into Supabase...");
       final response =
       await supabase.from('messages').insert(insertData).select().single();
 
+      debugPrint("✅ Message inserted successfully: ${response['id']}");
       final messageModel = MessageModel.fromJson(response);
-
       return Right(messageModel);
     } on PostgrestException catch (e) {
+      debugPrint("❌ PostgrestException: ${e.message}");
       return Left(ServerFailure(e.message));
-    } catch (e) {
+    } catch (e, stack) {
+      debugPrint("💥 Unknown Error: $e");
+      debugPrint("🧩 StackTrace: $stack");
       return Left(ServerFailure(e.toString()));
     }
   }
-
 }

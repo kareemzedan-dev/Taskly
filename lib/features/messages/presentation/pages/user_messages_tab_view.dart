@@ -31,8 +31,8 @@ class UserMessagesTabView extends StatelessWidget {
       backgroundColor: Colors.white,
       body: SafeArea(
           child: SingleChildScrollView(
-            child: Column(
-                    children: [
+        child: Column(
+          children: [
             GestureDetector(
                 onTap: () {
                   Navigator.pushNamed(context, RoutesManager.adminChatView,
@@ -43,9 +43,9 @@ class UserMessagesTabView extends StatelessWidget {
                 },
                 child: const AdminConversationCard()),
             const UserMessagesTabViewBody(),
-                    ],
-                  ),
-          )),
+          ],
+        ),
+      )),
     );
   }
 }

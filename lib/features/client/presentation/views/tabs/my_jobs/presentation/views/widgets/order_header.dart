@@ -33,6 +33,7 @@ class OrderHeader extends StatelessWidget {
               icon: Icons.pending_actions_outlined,
             ),
             SizedBox(width: 5.w),
+            if(orderStatus != "Paid" && orderStatus != "In Progress" && orderStatus != "Waiting")
             GestureDetector(
               onTap: () {
                 showConfirmationDialog(
@@ -60,15 +61,7 @@ class OrderHeader extends StatelessWidget {
           ),
           softWrap: true,
         ),
-        SizedBox(height: 3.h),
-        Text(
-          "#$orderId ",
-          softWrap: true,
-          style: Theme.of(context)
-              .textTheme
-              .bodyMedium
-              ?.copyWith(color: Colors.grey.shade600),
-        ),
+
       ],
     );
   }

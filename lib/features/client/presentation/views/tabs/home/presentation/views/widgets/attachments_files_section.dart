@@ -89,13 +89,6 @@ class _AttachmentsFilesSectionState extends State<AttachmentsFilesSection> {
                       ),
                     ),
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.clear_all, color: Colors.red),
-                    onPressed: widget.onClearAll ?? () {
-                      widget.uploadAttachmentsViewModel.clearFiles();
-                    },
-                    tooltip: 'Clear unuploaded files',
-                  ),
                 ],
               ),
               SizedBox(height: 10.h),

@@ -18,6 +18,8 @@ class MessageModel extends MessageEntity {
     super.seenAt,
     required super.createdAt,
     required super.updatedAt,
+    required super.senderType,
+    required super.receiverType,
   });
 
   factory MessageModel.fromJson(Map<String, dynamic> json) {
@@ -59,25 +61,29 @@ class MessageModel extends MessageEntity {
           : null,
       createdAt: DateTime.parse(json['created_at'] as String),
       updatedAt: DateTime.parse(json['updated_at'] as String),
+      senderType: json['sender_type'] as String,
+      receiverType: json['receiver_type'] as String,
     );
   }
 
-  @override
+
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'order_id': orderId,
-      'payment_id': paymentId,
-      'sender_id': senderId,
-      'receiver_id': receiverId,
-      'message_type': messageType,
+      'orderId': orderId,
+      'paymentId': paymentId,
+      'senderId': senderId,
+      'receiverId': receiverId,
+      'messageType': messageType,
       'content': content,
       'attachment': attachment?.map((a) => a.toJson()).toList(),
       'status': status,
-      'delivered_at': deliveredAt?.toIso8601String(),
-      'seen_at': seenAt?.toIso8601String(),
-      'created_at': createdAt.toIso8601String(),
-      'updated_at': updatedAt.toIso8601String(),
+      'deliveredAt': deliveredAt?.toIso8601String(),
+      'seenAt': seenAt?.toIso8601String(),
+      'createdAt': createdAt.toIso8601String(),
+      'updatedAt': updatedAt.toIso8601String(),
+      'senderType': senderType,
+      'receiverType': receiverType,
     };
   }
 
