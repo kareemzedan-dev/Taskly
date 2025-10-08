@@ -251,6 +251,7 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                                  createdAt: DateTime.now(),
                                  updatedAt: DateTime.now(),
                                  offersCount: 0,
+                                 offerId: null,
 
 
                                ),
@@ -286,6 +287,7 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                                 createdAt: DateTime.now(),
                                 updatedAt: DateTime.now(),
                                 offersCount: 0,
+                                offerId: null,
 
 
                               ),

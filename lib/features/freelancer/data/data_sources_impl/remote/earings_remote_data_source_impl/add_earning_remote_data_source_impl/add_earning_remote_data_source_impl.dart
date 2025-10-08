@@ -18,49 +18,92 @@ class AddEarningRemoteDataSourceImpl implements AddEarningRemoteDataSource {
     required double amount,
   }) async {
     try {
+      // ✅ تحقق من الاتصال بالإنترنت
       if (!await NetworkUtils.hasInternet()) {
         return Left(Failures('No internet connection'));
       }
 
-      // تحديث بيانات الفريلانسر
+      final commissionData = await supabaseService.supabaseClient
+          .from('admin_settings')
+          .select('commission')
+          .maybeSingle();
+
+      if (commissionData == null || commissionData['commission'] == null) {
+        return Left(Failures('Commission percentage not found'));
+      }
+
+      final commissionPercentage =
+      (commissionData['commission'] as num).toDouble();
+
+      final commissionAmount = amount * (commissionPercentage / 100);
+      final netAmount = amount - commissionAmount;
+
+      print(
+          "💰 Total: $amount | Commission: $commissionAmount | Net: $netAmount");
+
       final freelancerData = await supabaseService.supabaseClient
           .from('freelancers')
-          .select('freelancer_balance, total_orders, completed_orders')
+          .select('freelancer_balance')
           .eq('id', freelancerId)
-          .single();
+          .maybeSingle();
 
-      final currentBalance = (freelancerData['freelancer_balance'] ?? 0).toDouble();
-      final currentTotalOrders = (freelancerData['total_orders'] ?? 0) as int;
-      final currentCompletedOrders = (freelancerData['completed_orders'] ?? 0) as int;
+      if (freelancerData == null) {
+        return Left(Failures('Freelancer not found'));
+      }
+
+      final currentBalance =
+      (freelancerData['freelancer_balance'] ?? 0).toDouble();
 
       await supabaseService.supabaseClient
           .from('freelancers')
-          .update({
-        'freelancer_balance': currentBalance + amount,
-        'total_orders': currentTotalOrders + 1,
-      })
+          .update({'freelancer_balance': currentBalance + netAmount})
           .eq('id', freelancerId);
 
-      // تحديث بيانات العميل
-      final clientData = await supabaseService.supabaseClient
+      final freelancerUserData = await supabaseService.supabaseClient
+          .from('users')
+          .select('total_orders, completed_orders, total_earnings')
+          .eq('id', freelancerId)
+          .maybeSingle();
+
+      final clientUserData = await supabaseService.supabaseClient
           .from('users')
           .select('total_orders, completed_orders, total_earnings')
           .eq('id', clientId)
-          .single();
+          .maybeSingle();
 
-      final clientTotalOrders = (clientData['total_orders'] ?? 0) as int;
-      final clientTotalEarnings = (clientData['total_earnings'] ?? 0).toDouble();
+      if (freelancerUserData == null || clientUserData == null) {
+        return Left(Failures('User data not found'));
+      }
 
-      await supabaseService.supabaseClient
-          .from('users')
-          .update({
+      final freelancerTotalOrders =
+      (freelancerUserData['total_orders'] ?? 0) as int;
+      final freelancerCompletedOrders =
+      (freelancerUserData['completed_orders'] ?? 0) as int;
+      final freelancerTotalEarnings =
+      (freelancerUserData['total_earnings'] ?? 0).toDouble();
+
+      final clientTotalOrders = (clientUserData['total_orders'] ?? 0) as int;
+      final clientCompletedOrders =
+      (clientUserData['completed_orders'] ?? 0) as int;
+      final clientTotalEarnings =
+      (clientUserData['total_earnings'] ?? 0).toDouble();
+
+      await supabaseService.supabaseClient.from('users').update({
+        'total_orders': freelancerTotalOrders + 1,
+        'completed_orders': freelancerCompletedOrders + 1,
+        'total_earnings': freelancerTotalEarnings + netAmount,
+      }).eq('id', freelancerId);
+
+      await supabaseService.supabaseClient.from('users').update({
         'total_orders': clientTotalOrders + 1,
+        'completed_orders': clientCompletedOrders + 1,
         'total_earnings': clientTotalEarnings + amount,
-      })
-          .eq('id', clientId);
+      }).eq('id', clientId);
 
+      print("✅ Freelancer & Client stats updated successfully after payment.");
       return const Right(null);
     } catch (e) {
+      print("❌ Error in addEarning: $e");
       return Left(Failures(e.toString()));
     }
   }

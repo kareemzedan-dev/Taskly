@@ -8,6 +8,7 @@ import 'package:taskly/features/reviews/presentation/manager/submit_rating_view_
 
 import '../../../../core/di/di.dart';
 import '../../../attachments/presentation/manager/download_attachments_view_model/download_attachments_view_model.dart';
+import '../../../client/presentation/views/tabs/my_jobs/presentation/view_model/update_offer_status_view_model/update_offer_status_view_model.dart';
 import '../../../freelancer/presentation/cubit/add_earnings_view_model/add_earnings_view_model.dart';
 import '../../../freelancer/presentation/views/tabs/find_work/presentation/view_model/get_commission_view_model/get_commission_view_model.dart';
 import '../../../shared/domain/entities/order_entity/order_entity.dart';
@@ -47,6 +48,7 @@ class UserChatView extends StatelessWidget {
         BlocProvider(
           create: (context) => getIt<AddEarningsViewModel>(),
         ),
+        BlocProvider(create:  (context) => getIt<UpdateOfferStatusViewModel>(),)
 
       ],
       child: BlocBuilder<UserStatusViewModel, UserStatusStates>(

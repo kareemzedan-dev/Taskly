@@ -11,6 +11,7 @@ import 'package:taskly/features/auth/data/data_sources/remote/auth_remote_data_s
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../../../core/services/fcm_service.dart';
 import '../../../../../core/utils/constants_manager.dart';
 import '../../../../../core/utils/network_utils.dart';
 import '../../../../../core/utils/strings_manager.dart';
@@ -21,7 +22,8 @@ import '../../models/register_response_dm/register_response_dm.dart';
 
 @Injectable(as: AuthRemoteDataSource)
 class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
- 
+  final FcmService _fcmService = FcmService();
+
   final SupabaseService supabaseService  ;
   final GoogleSignIn _googleSignIn = GoogleSignIn(
     serverClientId: ConstantsManager.supabaseServerClientId,
@@ -192,7 +194,7 @@ Future<void> _insertRoleData(String id, String role) async {
         token: token,
         role: role,
       );
-
+      await _fcmService.registerDeviceToken(user.id);
       final registerResponse = RegisterResponseDm(
         user: userDm,
         message: StringsManager.userRegisteredSuccessfully,
@@ -253,7 +255,7 @@ Future<void> _insertRoleData(String id, String role) async {
         token: token ?? '',
         role: role,
       );
-
+      await _fcmService.registerDeviceToken(user.id);
       final userDm = LoginUserDm(email: user.email, password: password);
       final loginResponse = LoginResponseDm(
         user: userDm,
@@ -330,7 +332,7 @@ Future<void> _insertRoleData(String id, String role) async {
         role: role,
         avatarUrl: avatarUrl,
       );
-
+      await _fcmService.registerDeviceToken(userId);
       final googleUser = GoogleUserDm(
         id: userId,
         name: fullName,
@@ -404,7 +406,7 @@ Future<void> _insertRoleData(String id, String role) async {
         role: role,
         avatarUrl: null,
       );
-
+      await _fcmService.registerDeviceToken(userId);
       final appleUser = GoogleUserDm(
         id: userId,
         name: fullName,
@@ -484,7 +486,7 @@ Future<void> _insertRoleData(String id, String role) async {
 
         });
       }
-
+      await _fcmService.registerDeviceToken(userId);
       final facebookUser = GoogleUserDm(
         id: userId,
         name: fullName,

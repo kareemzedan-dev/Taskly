@@ -15,6 +15,7 @@ class OrderEntity {
   final DateTime createdAt;
   final DateTime updatedAt;
   final int ? offersCount;
+  final String? offerId;
 
 
   OrderEntity({
@@ -32,6 +33,7 @@ class OrderEntity {
     required this.createdAt,
     required this.updatedAt,
     required this.offersCount,
+    required this.offerId
   });
 }
 

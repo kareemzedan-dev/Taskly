@@ -3,6 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:firebase_core/firebase_core.dart'; // 👈 أضف دي
+import 'package:firebase_messaging/firebase_messaging.dart'; // 👈 لو هتستخدم الإشعارات
+
 import 'package:taskly/core/di/di.dart';
 import 'package:taskly/core/helper/my_bloc_observer.dart';
 import 'package:taskly/core/cache/shared_preferences.dart';
@@ -15,12 +18,19 @@ import 'core/services/supabase_service.dart';
 import 'core/services/user_status_service.dart';
 import 'core/utils/constants_manager.dart';
 import 'features/profile/presentation/manager/profile_view_model/profile_view_model.dart';
+import 'firebase_options.dart';
 
-late final UserStatusService ?userStatusService;
+late final UserStatusService? userStatusService;
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // 👇 1. تهيئة Firebase
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  // 👇 2. تهيئة Supabase
   await Supabase.initialize(
     url: ConstantsManager.supabaseUrl,
     anonKey: ConstantsManager.supabaseAnonKey,
@@ -40,6 +50,12 @@ void main() async {
       : null;
 
   Bloc.observer = MyBlocObserver();
+
+  // 👇 3. تفعيل Firebase Messaging (اختياري)
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+  await messaging.requestPermission();
+  final fcmToken = await messaging.getToken();
+  print("FCM Token: $fcmToken"); // 👈 تقدر تبعته للسيرفر (Supabase مثلًا)
 
   runApp(
     MultiBlocProvider(
@@ -85,7 +101,7 @@ class Taskly extends StatelessWidget {
           },
           theme: AppTheme.lightTheme,
           onGenerateRoute: (settings) => RoutesManager.onGenerateRoute(settings),
-          initialRoute: RoutesManager.splash,
+          initialRoute: RoutesManager.welcome,
         );
       },
     );

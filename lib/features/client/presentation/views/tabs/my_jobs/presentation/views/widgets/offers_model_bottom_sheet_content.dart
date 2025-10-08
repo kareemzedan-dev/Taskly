@@ -7,6 +7,7 @@ import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentat
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/view_model/get_offers_view_model/get_offers_view_model_states.dart';
 import '../../../../../../../../../core/components/dismissible_error_card.dart';
 import '../../../../../../../../../core/utils/assets_manager.dart';
+import '../../../../../../../../freelancer/presentation/cubit/update_order_status_view_model/update_order_status_view_model.dart';
 import '../../../../../../../../shared/domain/entities/order_entity/order_entity.dart';
 import '../../../../../client_home_view.dart';
 import '../../view_model/update_offer_status_view_model/update_offer_status_states.dart';
@@ -41,7 +42,7 @@ class OffersBottomSheetContent extends StatelessWidget {
                 (route) => false,
           );
           showTemporaryMessage(
-              context, "Offer Accepted Successfully", MessageType.success);
+              context, "Offer ${order.status == OrderStatus.Accepted ? "Accepted" : "Rejected"} Successfully", MessageType.success);
 
           offersViewModel.getOffers(orderId); // refresh offers
         }
@@ -74,6 +75,7 @@ class OffersBottomSheetContent extends StatelessWidget {
                             order: order,
                             offer: offer,
                             onAcceptOffer: () {
+
                               context
                                   .read<UpdateOfferStatusViewModel>()
                                   .acceptOfferAndRejectOthers(
@@ -81,7 +83,7 @@ class OffersBottomSheetContent extends StatelessWidget {
                                 offer.id,
                               );
                             },
-                         
+
                           );
                         },
                       )

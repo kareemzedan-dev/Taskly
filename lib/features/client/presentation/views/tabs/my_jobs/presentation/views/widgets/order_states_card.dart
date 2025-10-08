@@ -30,6 +30,8 @@ int getStep(OrderStatus status) {
       return 2;
     case OrderStatus.Completed:
       return 3;
+    case OrderStatus.Cancelled:
+      return 3;
     default:
       return 0;
   }
@@ -72,7 +74,7 @@ class OrderStatesCard extends StatelessWidget {
                 ),
                 SizedBox(height: 20.h),
                 OrderProgressTimeline(
-                  steps: ['Created', 'Paid', 'Executing', 'Completed'],
+                  steps: ['Created', 'Paid', 'Executing', order.status.name == OrderStatus.Cancelled.name ? "Cancelled" : "Completed" ],
                   currentStep: getStep(order.status),
                 ),
                 SizedBox(height: 26.h),

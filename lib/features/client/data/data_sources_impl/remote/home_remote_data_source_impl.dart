@@ -72,7 +72,7 @@ class HomeRemoteDataSourceImpl extends HomeRemoteDataSource {
   getAllFreelancerInfo() async {
     try {
       var result = await Connectivity().checkConnectivity();
-  if(NetworkUtils.hasInternet() == false) {
+  if(!await NetworkUtils.hasInternet() ) {
     return const Left(NetworkFailure('No internet connection'));
   }
 

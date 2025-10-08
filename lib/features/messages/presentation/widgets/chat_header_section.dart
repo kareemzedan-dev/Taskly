@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:taskly/core/components/custom_button.dart';
 import 'package:taskly/core/components/confirmation_dialog.dart';
 import 'package:taskly/config/routes/routes_manager.dart';
+import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/view_model/update_offer_status_view_model/update_offer_status_view_model.dart';
 import 'package:taskly/features/freelancer/presentation/cubit/add_earnings_view_model/add_earnings_view_model.dart';
 import 'package:taskly/features/freelancer/presentation/cubit/update_order_status_view_model/update_order_status_view_model.dart';
 import 'package:taskly/features/reviews/presentation/manager/get_user_reviews_view_model/get_user_reviews_states.dart';
@@ -92,6 +93,7 @@ class ChatHeaderSection extends StatelessWidget {
                     title: "Confirmation",
                     message: "Are you sure you have received the work?",
                     onConfirm: () {
+                      context.read<UpdateOfferStatusViewModel>()..updateOfferStatus( orderData.offerId! , "Completed");
                       context
                           .read<UpdateOrderStatusViewModel>()
                           .updateOrderStatus(orderData.id, "Completed");

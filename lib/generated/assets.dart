@@ -274,6 +274,7 @@ class Assets {
   static const String l10nAppLocalizationsAr = 'lib/config/l10n/app_localizations_ar.dart';
   static const String l10nAppLocalizationsEn = 'lib/config/l10n/app_localizations_en.dart';
   static const String l10nAppLocalizationsExt = 'lib/config/l10n/app_localizations_ext.dart';
+  static const String libFirebaseOptions = 'lib/firebase_options.dart';
   static const String libMain = 'lib/main.dart';
   static const String loginResponseDmLoginResponseDm = 'lib/features/auth/data/models/login_response_dm/login_response_dm.dart';
   static const String loginResponseEntityLoginResponseEntity = 'lib/features/auth/domain/entities/login_response_entity/login_response_entity.dart';
@@ -364,11 +365,13 @@ class Assets {
   static const String sendMessagesRemoteDataSourceSendMessagesRemoteDataSource = 'lib/features/messages/data/data_sources/remote/send_messages_remote_data_source/send_messages_remote_data_source.dart';
   static const String sendMessagesRepoImplSendMessagesRepoImpl = 'lib/features/messages/data/repositories/send_messages_repo_impl/send_messages_repo_impl.dart';
   static const String sendMessagesRepoSendMessagesRepo = 'lib/features/messages/domain/repositories/messages_repos/send_messages_repo/send_messages_repo.dart';
+  static const String sendNotificationIndex = 'lib/core/supabase/send-notification/index.ts';
   static const String sendOfferUseCaseSendOfferUseCase = 'lib/features/freelancer/domain/use_cases/send_offer_use_case/send_offer_use_case.dart';
   static const String sendOfferViewModelSendOfferViewModel = 'lib/features/freelancer/presentation/views/tabs/find_work/presentation/view_model/send_offer_view_model/send_offer_view_model.dart';
   static const String sendOfferViewModelSendOfferViewModelStates = 'lib/features/freelancer/presentation/views/tabs/find_work/presentation/view_model/send_offer_view_model/send_offer_view_model_states.dart';
   static const String servicesCopyToClipboard = 'lib/core/services/copy_to_clipboard.dart';
   static const String servicesDownloadFileService = 'lib/core/services/download_file_service.dart';
+  static const String servicesFcmService = 'lib/core/services/fcm_service.dart';
   static const String servicesFileUploadedServices = 'lib/core/services/file_uploaded_services.dart';
   static const String servicesMessageValidationService = 'lib/core/services/message_validation_service.dart';
   static const String servicesPickImageFromCamera = 'lib/core/services/pick_image_from_camera.dart';

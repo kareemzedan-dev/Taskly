@@ -13,9 +13,9 @@ import '../../../../shared/data/models/order_dm/order_dm.dart';
 
 @Injectable(as: MyJobsRemoteDataSource)
 class MyJobsRemoteDataSourceImpl extends MyJobsRemoteDataSource {
-  final SupabaseService supabaseService ;
-   MyJobsRemoteDataSourceImpl(this.supabaseService);
- 
+  final SupabaseService supabaseService;
+
+  MyJobsRemoteDataSourceImpl(this.supabaseService);
 
   @override
   Future<Either<Failures, List<OfferEntity>>> getOffers(String orderId) async {
@@ -44,13 +44,13 @@ class MyJobsRemoteDataSourceImpl extends MyJobsRemoteDataSource {
     }
   }
 
- @override
-  Stream<int> subscribeToOrderOffersCount({String orderId= ''}) {
+  @override
+  Stream<int> subscribeToOrderOffersCount({String orderId = ''}) {
     return supabaseService
         .subscribeToTable(
-          table: 'orders',
-          filter: "id=eq.$orderId",
-        )
+      table: 'orders',
+      filter: "id=eq.$orderId",
+    )
         .map((records) {
       if (records.isEmpty) return 0;
       final record = records.first;
@@ -121,6 +121,7 @@ class MyJobsRemoteDataSourceImpl extends MyJobsRemoteDataSource {
           .update({
             "status": "Accepted",
             "budget": acceptedOffer.offerAmount,
+            "offer_id": offerId,
             "freelancer_id": acceptedOffer.freelancerId,
           })
           .eq('id', orderId)
@@ -144,14 +145,11 @@ class MyJobsRemoteDataSourceImpl extends MyJobsRemoteDataSource {
     }
   }
 
- 
   @override
   Stream<(OrderEntity, String)> subscribeToOrders(
       Map<String, dynamic>? filters) {
-    final filterString = filters?.entries
-            .map((e) => "${e.key}=eq.${e.value}")
-            .join(",") ??
-        "";
+    final filterString =
+        filters?.entries.map((e) => "${e.key}=eq.${e.value}").join(",") ?? "";
 
     return supabaseService
         .subscribeToTable(

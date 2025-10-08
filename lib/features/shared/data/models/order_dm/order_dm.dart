@@ -17,6 +17,7 @@ class OrderDm extends OrderEntity {
     required super.createdAt,
     required super.updatedAt,
     required super.offersCount,
+    required super.offerId,
   });
 
   factory OrderDm.fromJson(Map<String, dynamic> json) {
@@ -44,6 +45,7 @@ class OrderDm extends OrderEntity {
       createdAt: DateTime.parse(json['created_at'] as String),
       updatedAt: DateTime.parse(json['updated_at'] as String),
       offersCount: json['offers_count'] as int,
+      offerId: json['offer_id'] as String?,
     );
   }
 
@@ -63,6 +65,7 @@ class OrderDm extends OrderEntity {
       'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
       'offers_count': offersCount,
+      'offer_id': offerId,
     };
   }
 
@@ -123,6 +126,7 @@ class OrderDm extends OrderEntity {
       createdAt: entity.createdAt,
       updatedAt: entity.updatedAt,
       offersCount: entity.offersCount,
+      offerId: entity.offerId,
     );
   }
     OrderEntity toEntity() {
@@ -141,6 +145,7 @@ class OrderDm extends OrderEntity {
       createdAt: createdAt,
       updatedAt: updatedAt,
       offersCount: offersCount,
+      offerId: offerId,
 
     );
   }
