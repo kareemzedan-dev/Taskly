@@ -5,7 +5,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:taskly/core/errors/failures.dart';
 import 'package:taskly/features/client/domain/use_cases/my_jobs/get_offers_for_order_use_case/get_offers_for_order_use_case.dart';
 import 'package:taskly/features/freelancer/domain/entities/offer_entity/offer_entity.dart';
-import '../../../../../../../../freelancer/data/models/offer_dm/offer_dm.dart';
+import '../../../../../../../../freelancer/data/models/offer_model/offer_model.dart';
 import 'get_offers_view_model_states.dart';
 
 @injectable

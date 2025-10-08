@@ -10,7 +10,7 @@ class AddEarningRepoImpl implements AddEarningRepo {
   final AddEarningRemoteDataSource addEarningRemoteDataSource;
  AddEarningRepoImpl({required this.addEarningRemoteDataSource});
  @override
-  Future<Either<Failures, void>> addEarning({required String freelancerId, required double amount}) {
-   return addEarningRemoteDataSource.addEarning(freelancerId: freelancerId, amount: amount);
+  Future<Either<Failures, void>> addEarning({required String freelancerId, required double amount, required String clientId,}) {
+   return addEarningRemoteDataSource.addEarning(freelancerId: freelancerId, amount: amount,clientId: clientId);
  }
 }

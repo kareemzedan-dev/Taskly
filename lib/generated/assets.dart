@@ -294,8 +294,8 @@ class Assets {
   static const String modelsPaymentModel = 'lib/features/payments/data/models/payment_model.dart';
   static const String myJobsMyJobsRepo = 'lib/features/client/domain/repos/my_jobs/my_jobs_repo.dart';
   static const String myJobsMyJobsRepoImpl = 'lib/features/client/data/repos/my_jobs/my_jobs_repo_impl.dart';
-  static const String offerDmOfferDm = 'lib/features/freelancer/data/models/offer_dm/offer_dm.dart';
   static const String offerEntityOfferEntity = 'lib/features/freelancer/domain/entities/offer_entity/offer_entity.dart';
+  static const String offerModelOfferModel = 'lib/features/freelancer/data/models/offer_model/offer_model.dart';
   static const String offerRepositoryImplOfferRepositoryImpl = 'lib/features/freelancer/data/repos/offer_repository_impl/offer_repository_impl.dart';
   static const String offerRepositoryOfferRepository = 'lib/features/freelancer/domain/repos/offer_repository/offer_repository.dart';
   static const String orderDmOrderDm = 'lib/features/shared/data/models/order_dm/order_dm.dart';
@@ -482,6 +482,7 @@ class Assets {
   static const String viewsUserAccountView = 'lib/features/shared/presentation/views/user_account_view.dart';
   static const String viewsWelcomeView = 'lib/features/welcome/presentation/views/welcome_view.dart';
   static const String widgetsAboutJobSection = 'lib/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/about_job_section.dart';
+  static const String widgetsAcceptedOfferCard = 'lib/features/freelancer/presentation/views/tabs/my_jobs/presentation/views/widgets/accepted_offer_card.dart';
   static const String widgetsAccountItemRow = 'lib/features/client/presentation/views/tabs/profile/presentation/views/widgets/account_item_row.dart';
   static const String widgetsActionButton = 'lib/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/action_button.dart';
   static const String widgetsActionRow = 'lib/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/action_row.dart';
@@ -497,6 +498,7 @@ class Assets {
   static const String widgetsBankDetailsCard = 'lib/features/payments/presentation/widgets/bank_details_card.dart';
   static const String widgetsBankDetailsCardList = 'lib/features/payments/presentation/widgets/bank_details_card_list.dart';
   static const String widgetsBankInfoRaw = 'lib/features/payments/presentation/widgets/bank_info_raw.dart';
+  static const String widgetsBaseOfferCard = 'lib/features/freelancer/presentation/views/tabs/my_jobs/presentation/views/widgets/base_offer_card.dart';
   static const String widgetsBuildBackVideo = 'lib/features/welcome/presentation/views/widgets/build_back_video.dart';
   static const String widgetsBuildPrivacyPolicy = 'lib/features/auth/presentation/views/widgets/build_privacy_policy.dart';
   static const String widgetsBuildTextFieldWidget = 'lib/features/client/presentation/views/tabs/home/presentation/views/widgets/build_text_field_widget.dart';
@@ -514,6 +516,7 @@ class Assets {
   static const String widgetsClientHomeTabViewBody = 'lib/features/client/presentation/views/tabs/home/presentation/views/widgets/client_home_tab_view_body.dart';
   static const String widgetsClientPaymentsViewBody = 'lib/features/payments/presentation/widgets/client_payments_view_body.dart';
   static const String widgetsClientProfileViewBody = 'lib/features/client/presentation/views/tabs/profile/presentation/views/widgets/client_profile_view_body.dart';
+  static const String widgetsCompletedOfferCard = 'lib/features/freelancer/presentation/views/tabs/my_jobs/presentation/views/widgets/completed_offer_card.dart';
   static const String widgetsCustomActionContainer = 'lib/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/custom_action_container.dart';
   static const String widgetsCustomAppBar = 'lib/features/messages/presentation/widgets/custom_app_bar.dart';
   static const String widgetsCustomDropDown = 'lib/features/client/presentation/views/tabs/home/presentation/views/widgets/custom_drop_down.dart';
@@ -524,6 +527,7 @@ class Assets {
   static const String widgetsEmojiPickerWidget = 'lib/features/messages/presentation/widgets/emoji_picker_widget.dart';
   static const String widgetsEmptyMessageWidget = 'lib/features/messages/presentation/widgets/empty_message_widget.dart';
   static const String widgetsEmptyStateAnimation = 'lib/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/empty_state_animation.dart';
+  static const String widgetsExpandableText = 'lib/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/expandable_text.dart';
   static const String widgetsFaqCard = 'lib/features/shared/presentation/views/widgets/faq_card.dart';
   static const String widgetsFavouriteOrderList = 'lib/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/favourite_order_list.dart';
   static const String widgetsFavouriteOrdersViewBody = 'lib/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/favourite_orders_view_body.dart';
@@ -569,6 +573,7 @@ class Assets {
   static const String widgetsPaymentNoteCard = 'lib/features/payments/presentation/widgets/payment_note_card.dart';
   static const String widgetsPaymentStatusBottomSheet = 'lib/features/payments/presentation/widgets/payment_status_bottom_sheet.dart';
   static const String widgetsPaymentsContent = 'lib/features/payments/presentation/widgets/payments_content.dart';
+  static const String widgetsPendingOfferCard = 'lib/features/freelancer/presentation/views/tabs/my_jobs/presentation/views/widgets/pending_offer_card.dart';
   static const String widgetsPriceDurationSection = 'lib/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/price_duration_section.dart';
   static const String widgetsPrivacyPolicyViewBody = 'lib/features/shared/presentation/views/widgets/privacy_policy_view_body.dart';
   static const String widgetsPrivateHireSection = 'lib/features/client/presentation/views/tabs/home/presentation/views/widgets/private_hire_section.dart';
@@ -576,6 +581,7 @@ class Assets {
   static const String widgetsRatingBottomSheet = 'lib/features/reviews/presentation/widgets/rating_bottom_sheet.dart';
   static const String widgetsRatingBreakDown = 'lib/features/reviews/presentation/widgets/rating_break_down.dart';
   static const String widgetsRegisterViewBody = 'lib/features/auth/presentation/views/widgets/register_view_body.dart';
+  static const String widgetsRejectedOfferCard = 'lib/features/freelancer/presentation/views/tabs/my_jobs/presentation/views/widgets/rejected_offer_card.dart';
   static const String widgetsRequestWithdrawalViewBody = 'lib/features/freelancer/presentation/views/tabs/profile/presentation/views/widgets/request_withdrawal_view_body.dart';
   static const String widgetsReviewItem = 'lib/features/reviews/presentation/widgets/review_item.dart';
   static const String widgetsReviewsCard = 'lib/features/client/presentation/views/tabs/home/presentation/views/widgets/reviews_card.dart';
@@ -611,7 +617,7 @@ class Assets {
   static const String widgetsWelcomeViewBody = 'lib/features/welcome/presentation/views/widgets/welcome_view_body.dart';
   static const String widgetsWithdrawalHistoryTabContent = 'lib/features/freelancer/presentation/views/tabs/profile/presentation/views/widgets/withdrawal_history_tab_content.dart';
   static const String widgetsWithdrawalRequestTabContent = 'lib/features/freelancer/presentation/views/tabs/profile/presentation/views/widgets/withdrawal_request_tab_content.dart';
-  static const String withdrawOfferRemoteDataSourceImplWithdrawOfferRemoteDataSourceImpl = 'lib/features/freelancer/data/data_sources_impl/remote/freelancer_orders/withdraw_offer_remote_data_source_impl/withdraw_offer_remote_data_source_impl.dart';
+  static const String withdrawOfferRemoteDataSourceImplWithdrawOfferRemoteDataSourceImpl = 'lib/features/freelancer/data/data_sources_impl/remote/freelancers_offers/withdraw_offer_remote_data_source_impl/withdraw_offer_remote_data_source_impl.dart';
   static const String withdrawOfferRemoteDataSourceWithdrawOfferRemoteDataSource = 'lib/features/freelancer/data/data_sources/remote/freelancer_orders/withdraw_offer_remote_data_source/withdraw_offer_remote_data_source.dart';
   static const String withdrawOfferRepoImplWithdrawOfferRepoImpl = 'lib/features/freelancer/data/repos/freelancer_order_repo_impl/withdraw_offer_repo_impl/withdraw_offer_repo_impl.dart';
   static const String withdrawOfferRepoWithdrawOfferRepo = 'lib/features/freelancer/domain/repos/freelancer_order_repo/withdraw_offer_repo/withdraw_offer_repo.dart';

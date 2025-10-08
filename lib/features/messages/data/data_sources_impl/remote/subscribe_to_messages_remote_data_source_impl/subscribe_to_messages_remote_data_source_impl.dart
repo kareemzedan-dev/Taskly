@@ -1,26 +1,33 @@
-
-
+import 'dart:async';
 import 'package:injectable/injectable.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:taskly/core/services/supabase_service.dart';
 import 'package:taskly/features/messages/data/data_sources/remote/subscribe_to_messages_remote_data_source/subscribe_to_messages_remote_data_source.dart';
 import 'package:taskly/features/messages/data/models/message_model.dart';
 import 'package:taskly/features/messages/domain/entities/message_entity.dart';
-@Injectable(as:  SubscribeToMessagesRemoteDataSource)
-class SubscribeToMessagesRemoteDataSourceImpl implements SubscribeToMessagesRemoteDataSource {
+
+@Injectable(as: SubscribeToMessagesRemoteDataSource)
+class SubscribeToMessagesRemoteDataSourceImpl
+    implements SubscribeToMessagesRemoteDataSource {
   final SupabaseService supabaseService;
 
   SubscribeToMessagesRemoteDataSourceImpl({required this.supabaseService});
 
   @override
-  Future<RealtimeChannel> subscribeToMessages(
-      String orderId,
-      void Function(MessageEntity message, String action) onChange,
-      ) async {
-    final channel = supabase.channel(
+  Stream<(MessageEntity, String)> subscribeToMessages(String orderId) {
+    final client = supabaseService.supabaseClient;
+    final controller = StreamController<(MessageEntity, String)>();
+
+    final channel = client.channel(
       'messages:order_$orderId',
       opts: const RealtimeChannelConfig(),
     );
+
+    void handleChange(PostgresChangeEvent eventType, Map<String, dynamic>? record) {
+      if (record == null) return;
+      final message = MessageModel.fromJson(record);
+      controller.add((message, eventType.name.toUpperCase()));
+    }
 
     channel.onPostgresChanges(
       event: PostgresChangeEvent.insert,
@@ -31,13 +38,8 @@ class SubscribeToMessagesRemoteDataSourceImpl implements SubscribeToMessagesRemo
         column: 'order_id',
         value: orderId,
       ),
-      callback: (payload) {
-        final record = payload.newRecord;
-        final message = MessageModel.fromJson(
-          Map<String, dynamic>.from(record),
-        );
-        onChange(message, 'INSERT');
-      },
+      callback: (payload) =>
+          handleChange(PostgresChangeEvent.insert, payload.newRecord),
     );
 
     channel.onPostgresChanges(
@@ -49,13 +51,8 @@ class SubscribeToMessagesRemoteDataSourceImpl implements SubscribeToMessagesRemo
         column: 'order_id',
         value: orderId,
       ),
-      callback: (payload) {
-        final record = payload.newRecord;
-        final message = MessageModel.fromJson(
-          Map<String, dynamic>.from(record),
-        );
-        onChange(message, 'UPDATE');
-      },
+      callback: (payload) =>
+          handleChange(PostgresChangeEvent.update, payload.newRecord),
     );
 
     channel.onPostgresChanges(
@@ -67,16 +64,18 @@ class SubscribeToMessagesRemoteDataSourceImpl implements SubscribeToMessagesRemo
         column: 'order_id',
         value: orderId,
       ),
-      callback: (payload) {
-        final record = payload.oldRecord;
-        final message = MessageModel.fromJson(
-          Map<String, dynamic>.from(record),
-        );
-        onChange(message, 'DELETE');
-      },
+      callback: (payload) =>
+          handleChange(PostgresChangeEvent.delete, payload.oldRecord),
     );
 
+    // ✅ subscribe
     channel.subscribe();
-    return channel;
+
+    // 🧹 close stream properly
+    controller.onCancel = () {
+      channel.unsubscribe();
+    };
+
+    return controller.stream;
   }
 }

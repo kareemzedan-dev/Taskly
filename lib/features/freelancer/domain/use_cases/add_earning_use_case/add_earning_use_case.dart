@@ -8,5 +8,5 @@ import '../../repos/earings_repos/add_earing_repo/add_earing_repo.dart';
 class AddEarningUseCase {
   final AddEarningRepo addEarningRepo;
   AddEarningUseCase({required this.addEarningRepo});
-  Future<Either<Failures, void>> addEarning({required String freelancerId, required double amount}) => addEarningRepo.addEarning(freelancerId: freelancerId, amount: amount);
+  Future<Either<Failures, void>> addEarning({required String freelancerId, required double amount, required String clientId,}) => addEarningRepo.addEarning(freelancerId: freelancerId, amount: amount,clientId: clientId);
 }

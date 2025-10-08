@@ -16,55 +16,53 @@ class OrderStatusCardListView extends StatelessWidget {
 
   final String animationPath;
   final String message;
-  final OrderStatusFilter filter; // enum عشان نعرف التاب
+  final OrderStatusFilter filter;
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: BlocBuilder<GetOrderViewModel, GetOrderViewModelStates>(
-        builder: (context, state) {
-          if (state is GetOrderViewModelStatesLoading) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state is GetOrderViewModelStatesSuccess) {
+    return BlocBuilder<GetOrderViewModel, GetOrderViewModelStates>(
+      builder: (context, state) {
+        if (state is GetOrderViewModelStatesLoading) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (state is GetOrderViewModelStatesSuccess) {
 
-            final filteredOrders = state.orderEntity.where((order) {
-              switch (filter) {
-                case OrderStatusFilter.pending:
-                  return order.status == OrderStatus.Pending ||
-                      order.status == OrderStatus.Accepted ||
-                      order.status == OrderStatus.Paid;
-                case OrderStatusFilter.inProgress:
-                  return order.status == OrderStatus.InProgress;
-                case OrderStatusFilter.completed:
-                  return order.status == OrderStatus.Completed;
-                case OrderStatusFilter.cancelled:
-                  return order.status == OrderStatus.Cancelled;
-              }
-            }).toList();
-
-            if (filteredOrders.isEmpty) {
-              return Center(
-                child: EmptyStateAnimation(
-                  animationPath: animationPath,
-                  message: message,
-                ),
-              );
+          final filteredOrders = state.orderEntity.where((order) {
+            switch (filter) {
+              case OrderStatusFilter.pending:
+                return order.status == OrderStatus.Pending ||
+                    order.status == OrderStatus.Accepted ||
+                    order.status == OrderStatus.Paid;
+              case OrderStatusFilter.inProgress:
+                return order.status == OrderStatus.InProgress;
+              case OrderStatusFilter.completed:
+                return order.status == OrderStatus.Completed;
+              case OrderStatusFilter.cancelled:
+                return order.status == OrderStatus.Cancelled;
             }
+          }).toList();
 
-            return ListView.separated(
-              itemCount: filteredOrders.length,
-              separatorBuilder: (_, __) => const Divider(),
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: OrderStatesCard(order: filteredOrders[index]),
-                );
-              },
+          if (filteredOrders.isEmpty) {
+            return Center(
+              child: EmptyStateAnimation(
+                animationPath: animationPath,
+                message: message,
+              ),
             );
           }
-          return Container();
-        },
-      ),
+
+          return ListView.separated(
+            itemCount: filteredOrders.length,
+            separatorBuilder: (_, __) => const Divider(),
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: OrderStatesCard(order: filteredOrders[index]),
+              );
+            },
+          );
+        }
+        return Container();
+      },
     );
   }
 }

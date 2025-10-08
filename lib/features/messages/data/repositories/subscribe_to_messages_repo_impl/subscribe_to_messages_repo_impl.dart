@@ -9,8 +9,8 @@ class SubscribeToMessagesRepoImpl implements SubscribeToMessagesRepo {
   SubscribeToMessagesRemoteDataSource remoteDataSource;
   SubscribeToMessagesRepoImpl({required this.remoteDataSource});
   @override
-  Future<RealtimeChannel> subscribeToMessages(String orderId,
-      void Function(MessageEntity message, String action) onChange) {
-    return remoteDataSource.subscribeToMessages(orderId, onChange);
+  Stream<(MessageEntity, String)> subscribeToMessages(String orderId,
+      ) {
+    return remoteDataSource.subscribeToMessages(orderId);
   }
 }

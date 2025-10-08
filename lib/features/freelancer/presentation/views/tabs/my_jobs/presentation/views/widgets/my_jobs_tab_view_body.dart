@@ -70,7 +70,7 @@ class _MyJobsTabViewBodyState extends State<MyJobsTabViewBody> {
               }
               if (state is GetFreelancerOffersSuccessState) {
                 final pendingOffers = state.offers
-                    .where((o) => o.offerStatus == "pending")
+                    .where((o) => o.offerStatus.toLowerCase() == "pending")
                     .toList();
 
                 if (pendingOffers.isEmpty) {
@@ -104,7 +104,7 @@ class _MyJobsTabViewBodyState extends State<MyJobsTabViewBody> {
               }
               if (state is GetFreelancerOffersSuccessState) {
                 final acceptedOffers = state.offers
-                    .where((o) => o.offerStatus == "accepted")
+                    .where((o) => o.offerStatus.toLowerCase() == "accepted")
                     .toList();
 
                 if (acceptedOffers.isEmpty) {
@@ -135,7 +135,7 @@ class _MyJobsTabViewBodyState extends State<MyJobsTabViewBody> {
               }
               if (state is GetFreelancerOffersSuccessState) {
                 final completedOffers = state.offers
-                    .where((o) => o.offerStatus == "Completed")
+                    .where((o) => o.offerStatus.toLowerCase() == "completed")
 
                     .toList();
 
@@ -167,7 +167,7 @@ class _MyJobsTabViewBodyState extends State<MyJobsTabViewBody> {
               }
               if (state is GetFreelancerOffersSuccessState) {
                 final rejectedOffers = state.offers
-                    .where((o) => o.offerStatus == "Rejected")
+                    .where((o) => o.offerStatus.toLowerCase() == "rejected")
                     .toList();
 
                 if (rejectedOffers.isEmpty) {

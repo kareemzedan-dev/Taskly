@@ -1,36 +1,53 @@
+import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:taskly/core/errors/failures.dart';
 import 'package:taskly/features/messages/domain/entities/message_entity.dart';
 import 'package:taskly/features/messages/domain/use_cases/subscribe_to_messages_use_case/subscribe_to_messages_use_case.dart';
-import 'package:taskly/features/messages/presentation/manager/subscribe_to_messages_view_model/subscribe_to_messages_states.dart';
+import 'subscribe_to_messages_states.dart';
+
 @injectable
-class SubscribeToMessagesViewModel extends Cubit<SubscribeToMessagesStates>{
-  SubscribeToMessagesViewModel(this.subscribeToMessagesUseCase) : super(SubscribeToMessagesStatesInitial());
-  SubscribeToMessagesUseCase subscribeToMessagesUseCase ;
-  RealtimeChannel? _messagesChannel;
+class SubscribeToMessagesViewModel extends Cubit<SubscribeToMessagesStates> {
+  final SubscribeToMessagesUseCase subscribeToMessagesUseCase;
+
+  SubscribeToMessagesViewModel(this.subscribeToMessagesUseCase)
+      : super(SubscribeToMessagesStatesInitial());
+
+  StreamSubscription<(MessageEntity, String)>? _subscription;
+
   Future<void> subscribeToMessages(String orderId) async {
     try {
-      _messagesChannel = await subscribeToMessagesUseCase.call(orderId,
-          (message, action) {
-        final currentMessages = state is SubscribeToMessagesStatesSuccess
-            ? List<MessageEntity>.from(
-                (state as SubscribeToMessagesStatesSuccess).messages)
-            : <MessageEntity>[];
-        if (action == 'INSERT') {
-          currentMessages.add(message);
-        } else if (action == 'UPDATE') {
-          final index = currentMessages.indexWhere((m) => m.id == message.id);
-          if (index != -1) currentMessages[index] = message;
-        } else if (action == 'DELETE') {
-          currentMessages.removeWhere((m) => m.id == message.id);
-        }
+      emit(SubscribeToMessagesStatesLoading());
 
-        currentMessages.sort((a, b) => a.createdAt.compareTo(b.createdAt));
+      // Start listening to the stream
+      _subscription = subscribeToMessagesUseCase.call(orderId).listen(
+            (event) {
+          final (message, action) = event;
 
-        emit(SubscribeToMessagesStatesSuccess(messages: currentMessages));
-      });
+          final currentMessages = state is SubscribeToMessagesStatesSuccess
+              ? List<MessageEntity>.from(
+              (state as SubscribeToMessagesStatesSuccess).messages)
+              : <MessageEntity>[];
+
+          if (action == 'INSERT') {
+            currentMessages.add(message);
+          } else if (action == 'UPDATE') {
+            final index = currentMessages.indexWhere((m) => m.id == message.id);
+            if (index != -1) currentMessages[index] = message;
+          } else if (action == 'DELETE') {
+            currentMessages.removeWhere((m) => m.id == message.id);
+          }
+
+          // ترتيب حسب الوقت
+          currentMessages.sort((a, b) => a.createdAt.compareTo(b.createdAt));
+
+          emit(SubscribeToMessagesStatesSuccess(messages: currentMessages));
+        },
+        onError: (error) {
+          emit(SubscribeToMessagesStatesError(
+              failure: ServerFailure(error.toString())));
+        },
+      );
     } catch (e) {
       emit(SubscribeToMessagesStatesError(
           failure: ServerFailure(e.toString())));
@@ -38,10 +55,13 @@ class SubscribeToMessagesViewModel extends Cubit<SubscribeToMessagesStates>{
   }
 
   void unsubscribe() {
-    if (_messagesChannel != null) {
-      _messagesChannel!.unsubscribe();
-      _messagesChannel = null;
-    }
+    _subscription?.cancel();
+    _subscription = null;
   }
 
+  @override
+  Future<void> close() {
+    unsubscribe();
+    return super.close();
+  }
 }

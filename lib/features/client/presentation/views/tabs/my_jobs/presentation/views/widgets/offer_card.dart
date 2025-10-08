@@ -16,6 +16,7 @@ import 'package:taskly/features/profile/presentation/manager/profile_view_model/
 
 import '../../../../../../../../../core/utils/strings_manager.dart';
 import '../../../../../../../../shared/domain/entities/order_entity/order_entity.dart';
+import 'expandable_text.dart';
 import 'order_action_button.dart';
 
 class OfferCard extends StatelessWidget {
@@ -114,17 +115,15 @@ class OfferCard extends StatelessWidget {
                       SizedBox(height: 20.h),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Text(
-                          offer.offerDescription ?? "No description provided",
+                        child: ExpandableText(
+                          text: offer.offerDescription ?? "No description provided",
                           style: Theme.of(context)
                               .textTheme
                               .bodyLarge
                               ?.copyWith(color: ColorsManager.black),
-                          maxLines: 2,
-                          softWrap: true,
-                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
+
                       SizedBox(height: 10.h),
                       Divider(
                         color: Colors.grey.shade300,

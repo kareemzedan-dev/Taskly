@@ -161,8 +161,8 @@ import '../../features/freelancer/data/data_sources_impl/remote/freelancer_order
     as _i1004;
 import '../../features/freelancer/data/data_sources_impl/remote/freelancer_orders/update_order_status_remote_data_source_impl/update_order_status_remote_data_source_impl.dart'
     as _i1028;
-import '../../features/freelancer/data/data_sources_impl/remote/freelancer_orders/withdraw_offer_remote_data_source_impl/withdraw_offer_remote_data_source_impl.dart'
-    as _i996;
+import '../../features/freelancer/data/data_sources_impl/remote/freelancers_offers/withdraw_offer_remote_data_source_impl/withdraw_offer_remote_data_source_impl.dart'
+    as _i148;
 import '../../features/freelancer/data/data_sources_impl/remote/get_commission_remote_data_source_impl/get_commission_remote_data_source_impl.dart'
     as _i22;
 import '../../features/freelancer/data/data_sources_impl/remote/offer_remote_data_source_impl.dart'
@@ -606,6 +606,8 @@ extension GetItInjectableX on _i174.GetIt {
         remoteDataSource: gh<_i114.ReviewsRemoteDataSource>()));
     gh.factory<_i432.AuthRemoteDataSource>(
         () => _i420.AuthRemoteDataSourceImpl(gh<_i374.SupabaseService>()));
+    gh.factory<_i735.WithdrawOfferRemoteDataSource>(() =>
+        _i148.WithdrawOfferRemoteDataSourceImpl(gh<_i374.SupabaseService>()));
     gh.factory<_i504.GetFavouriteOrderDetailsRemoteDataSource>(() =>
         _i835.GetFavouriteOrderDetailsRemoteDataSourceImpl(
             gh<_i374.SupabaseService>()));
@@ -647,8 +649,6 @@ extension GetItInjectableX on _i174.GetIt {
         _i301.UserStatusRemoteDataSourceImpl(gh<_i374.SupabaseService>()));
     gh.factory<_i1012.ProfileRemoteDataSource>(
         () => _i226.ProfileRemoteDataSourceImpl(gh<_i374.SupabaseService>()));
-    gh.factory<_i735.WithdrawOfferRemoteDataSource>(() =>
-        _i996.WithdrawOfferRemoteDataSourceImpl(gh<_i374.SupabaseService>()));
     gh.factory<_i748.UpdateUserProfileRemoteDataSource>(() =>
         _i965.UpdateUserProfileRemoteDataSourceImpl(
             gh<_i374.SupabaseService>()));
@@ -695,7 +695,7 @@ extension GetItInjectableX on _i174.GetIt {
               gh<_i361.Dio>(),
               gh<_i374.SupabaseService>(),
               gh<_i454.SupabaseClient>(),
-            ));
+             ));
     gh.factory<_i706.GetEarningRemoteDataSource>(() =>
         _i874.GetEarningRemoteDataSourceImpl(
             supabaseService: gh<_i374.SupabaseService>()));

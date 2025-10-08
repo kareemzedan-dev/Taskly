@@ -11,6 +11,7 @@ class OfferModel extends OfferEntity {
     required super.offerDeliveryTime, 
     required super.createdAt,
     required super.updatedAt,
+    required super.orderName,
   });
 
   factory OfferModel.fromJson(Map<String, dynamic> json) {
@@ -25,6 +26,7 @@ class OfferModel extends OfferEntity {
       offerDeliveryTime: json['delivery_time'] as int,  // ✅ int
       createdAt: DateTime.parse(json['created_at'] as String),
       updatedAt: DateTime.parse(json['updated_at'] as String),
+      orderName: json['order_name'] as String,
     );
   }
 
@@ -40,6 +42,7 @@ class OfferModel extends OfferEntity {
       'delivery_time': offerDeliveryTime,  
       'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
+      'order_name': orderName,
     };
   }
 
@@ -55,6 +58,7 @@ class OfferModel extends OfferEntity {
       offerDeliveryTime: offerDeliveryTime,
       createdAt: createdAt,
       updatedAt: updatedAt,
+      orderName: orderName,
     );
   }
 }

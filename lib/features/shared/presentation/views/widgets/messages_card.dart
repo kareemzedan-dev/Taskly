@@ -7,6 +7,7 @@ import 'package:taskly/core/utils/colors_manger.dart';
 import 'package:taskly/features/client/presentation/views/tabs/profile/presentation/views/widgets/user_info_section_shimmer.dart';
 import 'package:taskly/features/profile/presentation/manager/profile_view_model/profile_view_model.dart';
 import 'package:taskly/features/profile/presentation/manager/profile_view_model/profile_view_model_states.dart';
+import 'package:taskly/features/reviews/presentation/widgets/user_avatar.dart';
 import '../../../../../core/di/di.dart';
 import '../../../../welcome/presentation/cubit/welcome_states.dart';
 import '../../../domain/entities/order_entity/order_entity.dart';
@@ -63,13 +64,7 @@ class MessagesCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Avatar
-                    CircleAvatar(
-                      backgroundColor: Colors.grey.shade300,
-                      radius: 30.r,
-                      backgroundImage: const AssetImage(
-                        Assets.assetsImagesPortraitHappySmileyMan,
-                      ),
-                    ),
+                   UserAvatar( imagePath:state.userInfoEntity.profileImage    , radius:  30.r,),
                     SizedBox(width: 12.w),
                     Expanded(
                       child: Column(
@@ -91,14 +86,14 @@ class MessagesCard extends StatelessWidget {
                           Row(
                             children: [
                               Icon(
-                                Icons.message_outlined,
+                                Icons.star,
                                 color: Colors.grey.shade400,
                                 size: 16.sp,
                               ),
                               SizedBox(width: 4.w),
                               Expanded(
                                 child: Text(
-                                  "No messages yet",
+                                  state.userInfoEntity.rating.toString() ,
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyLarge

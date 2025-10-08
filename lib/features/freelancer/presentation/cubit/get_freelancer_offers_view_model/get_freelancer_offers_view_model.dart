@@ -13,24 +13,36 @@ class GetFreelancerOffersViewModel extends Cubit<GetFreelancerOffersStates> {
 
   GetFreelancerOffersViewModel(this.getFreelancerOffersUseCase)
       : super(GetFreelancerOffersLoadingState());
-
   Future<Either<Failures, List<OfferEntity>>> getFreelancerOffers(
       String freelancerId,
       [String? status]) async {
     try {
       emit(GetFreelancerOffersLoadingState());
+      print("📡 Calling use case with freelancerId: $freelancerId and status: ${status ?? "all"}");
+
       final result = await getFreelancerOffersUseCase.call(freelancerId, status ?? "all");
 
+      print("✅ Result from use case: $result");
+
       result.fold(
-            (failure) => emit(GetFreelancerOffersErrorState(failure.message)),
-            (offers) {
-          // ترتيب حسب الأحدث أولاً
-          offers.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-          emit(GetFreelancerOffersSuccessState(offers));
+            (failure) {
+          print("❌ Failure: ${failure.message}");
+          emit(GetFreelancerOffersErrorState(failure.message));
         },
+            (offers) {
+          print("📦 Offers count: ${offers.length}");
+
+          final modifiableOffers = List<OfferEntity>.from(offers);
+          modifiableOffers.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+
+          emit(GetFreelancerOffersSuccessState(modifiableOffers));
+        },
+
       );
       return result;
-    } catch (e) {
+    } catch (e, st) {
+      print("🔥 Exception in getFreelancerOffers: $e\n$st");
+      emit(GetFreelancerOffersErrorState(e.toString()));
       return Left(ServerFailure(e.toString()));
     }
   }

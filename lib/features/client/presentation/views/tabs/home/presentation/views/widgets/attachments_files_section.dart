@@ -84,6 +84,11 @@ class _AttachmentsFilesSectionState extends State<AttachmentsFilesSection> {
                                 ? "No files uploaded yet"
                                 : "${widget.uploadAttachmentsViewModel.uploadedFileHashes.length} files uploaded",
                             textAlign: TextAlign.center,
+                            style:  Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: Colors.black,
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w500
+                            ),
                           ),
                         ),
                       ),
@@ -119,6 +124,11 @@ class _AttachmentsFilesSectionState extends State<AttachmentsFilesSection> {
                               child: Text(
                                 file.path.split('/').last,
                                 overflow: TextOverflow.ellipsis,
+                                style:  Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: Colors.black,
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w500
+                                ),
                               ),
                             ),
                           ],

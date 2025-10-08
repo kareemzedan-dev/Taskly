@@ -11,6 +11,7 @@ class OfferEntity {
   final DateTime createdAt;
   final DateTime updatedAt;
   final double? freelancerRating;
+  final String?orderName ;
 
   OfferEntity({
     required this.id,
@@ -24,5 +25,6 @@ class OfferEntity {
     required this.createdAt,
     required this.updatedAt,
     this.freelancerRating,
+    required this.orderName
   });
 }

@@ -27,6 +27,7 @@ class TrackingOfferCard extends StatelessWidget {
     this.isAccepted = false,
     this.isRejected = false,
     this.isCompleted = false,
+
   });
 
   OfferEntity offerEntity;
@@ -53,8 +54,9 @@ class TrackingOfferCard extends StatelessWidget {
             children: [
               if (isAccepted)
                 const AdminMessageCard(
-                    message:
-                        "Please wait until the payment is confirmed. Once confirmed, you can start the work."),
+                  message: "Please check the order status in the Messages section and contact the client if needed.",
+                ),
+
               SizedBox(height: 5.h),
               BlocBuilder<ProfileViewModel, ProfileViewModelStates>(
                 bloc: getIt<ProfileViewModel>()
@@ -85,7 +87,7 @@ class TrackingOfferCard extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      "Mind Map",
+                      offerEntity.orderName!,
                       style: Theme.of(context)
                           .textTheme
                           .bodyLarge

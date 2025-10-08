@@ -51,7 +51,7 @@ class DismissibleMessageCard extends StatelessWidget {
             Expanded(
               child: Text(
                 message,
-                style: TextStyle(color: color, fontWeight: FontWeight.w500),
+                style: TextStyle(color: color, fontWeight: FontWeight.w500,fontSize: 14.sp),
               ),
             ),
             GestureDetector(

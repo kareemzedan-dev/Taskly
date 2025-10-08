@@ -50,6 +50,8 @@ dependencies:
   record: ^6.1.2
   flutter_rating_bar: ^4.0.1
   provider: ^6.1.5+1
+  photo_view: ^0.15.0
+  just_audio: ^0.10.5
 
 
 dev_dependencies:

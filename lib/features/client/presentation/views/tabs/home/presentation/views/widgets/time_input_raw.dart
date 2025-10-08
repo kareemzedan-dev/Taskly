@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/view_model/place_order_view_model/place_order_view_model.dart';
 
 class TimeInputRaw extends StatefulWidget {
-  const TimeInputRaw({super.key,});
+  const TimeInputRaw({super.key});
 
   @override
   State<TimeInputRaw> createState() => _TimeInputRawState();
 }
 
 class _TimeInputRawState extends State<TimeInputRaw> {
-    
+  late final PlaceOrderViewModel placeOrderViewModel;
+
+  @override
+  void initState() {
+    super.initState();
+    placeOrderViewModel = context.read<PlaceOrderViewModel>();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -22,34 +29,34 @@ class _TimeInputRawState extends State<TimeInputRaw> {
         borderRadius: BorderRadius.circular(10.r),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
         child: Row(
           children: [
             Expanded(
               child: TextField(
+                controller: placeOrderViewModel.timeController,
                 keyboardType: TextInputType.number,
                 inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly, // ✅ يسمح بالأرقام فقط
+                  FilteringTextInputFormatter.digitsOnly,
                 ],
-                decoration: const InputDecoration(
+                style: TextStyle(color: Colors.black, fontSize: 14.sp),
+                decoration: InputDecoration(
                   hintText: "Enter time",
+                  hintStyle: TextStyle(color: Colors.grey, fontSize: 14.sp),
                   border: InputBorder.none,
-                  focusedBorder: InputBorder.none,
-                  enabledBorder: InputBorder.none,
+                  contentPadding: EdgeInsets.symmetric(vertical: 12.h),
                 ),
-                onChanged: (val) => context.read<PlaceOrderViewModel>().timeController.text = val,
               ),
             ),
             const SizedBox(width: 8),
             DropdownButton<String>(
-              value: context.read<PlaceOrderViewModel>().selectedTimeUnit,
-              items:
-                  context.read<PlaceOrderViewModel>().timeUnits
-                      .map((e) => DropdownMenuItem(value: e, child: Text(e)))
-                      .toList(),
-              onChanged:
-                  (val) =>
-                      setState(() => context.read<PlaceOrderViewModel>().selectedTimeUnit = val!),
+              value: placeOrderViewModel.selectedTimeUnit,
+              items: placeOrderViewModel.timeUnits
+                  .map((e) => DropdownMenuItem(value: e, child: Text(e)))
+                  .toList(),
+              onChanged: (val) => setState(() {
+                if (val != null) placeOrderViewModel.selectedTimeUnit = val;
+              }),
             ),
           ],
         ),

@@ -5,10 +5,10 @@ import 'package:taskly/core/services/supabase_service.dart';
 import 'package:taskly/core/utils/network_utils.dart';
 import 'package:taskly/core/utils/strings_manager.dart';
 import 'package:taskly/features/client/data/data_sources/remote/my_jobs_remote_data_source.dart';
-import 'package:taskly/features/freelancer/data/models/offer_dm/offer_dm.dart';
 import 'package:taskly/features/freelancer/domain/entities/offer_entity/offer_entity.dart';
 import 'package:taskly/features/shared/domain/entities/order_entity/order_entity.dart';
 
+import '../../../../freelancer/data/models/offer_model/offer_model.dart';
 import '../../../../shared/data/models/order_dm/order_dm.dart';
 
 @Injectable(as: MyJobsRemoteDataSource)

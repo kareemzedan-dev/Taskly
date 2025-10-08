@@ -9,11 +9,12 @@ class AddEarningsViewModel extends Cubit<AddEarningsStates> {
 
   AddEarningsViewModel(this.addEarningsUseCase) : super(AddEarningsInitial());
 
-  Future<void> addEarnings(String freelancerId, double amount) async {
+  Future<void> addEarnings(String freelancerId, double amount,   String clientId,) async {
     try {
       emit(AddEarningsLoadingState());
       final result = await addEarningsUseCase.addEarning(
-          freelancerId: freelancerId, amount: amount);
+
+          freelancerId: freelancerId, amount: amount,clientId: clientId, );
       result.fold(
           (failure) => emit(AddEarningsErrorState(message: failure.message)),
           (unit) => emit(AddEarningsSuccessState()));

@@ -4,11 +4,11 @@ import 'package:taskly/core/errors/failures.dart';
 import 'package:taskly/core/services/supabase_service.dart';
 import 'package:taskly/core/utils/network_utils.dart';
 import 'package:taskly/features/freelancer/data/data_sources/remote/offer_data_source.dart';
-import 'package:taskly/features/freelancer/data/models/offer_dm/offer_dm.dart';
 import 'package:taskly/features/freelancer/domain/entities/offer_entity/offer_entity.dart';
 import 'package:taskly/features/shared/domain/entities/order_entity/order_entity.dart';
 
 import '../../../../shared/data/models/order_dm/order_dm.dart';
+import '../../models/offer_model/offer_model.dart';
 
 
 @Injectable(as: OfferRemoteDataSource)
@@ -36,6 +36,7 @@ class OfferRemoteDataSourceImpl implements OfferRemoteDataSource {
         offerDeliveryTime: offerEntity.offerDeliveryTime,
         createdAt: offerEntity.createdAt,
         updatedAt: offerEntity.updatedAt,
+        orderName: offerEntity.orderName,
       );
 
       final response = await supabaseService.sendDataToSupabase(

@@ -33,24 +33,25 @@ class OrderHeader extends StatelessWidget {
               icon: Icons.pending_actions_outlined,
             ),
             SizedBox(width: 5.w),
-            if(orderStatus != "Paid" && orderStatus != "In Progress" && orderStatus != "Waiting")
-            GestureDetector(
-              onTap: () {
-                showConfirmationDialog(
-                  context: context,
-                  title: "Confirm Delete",
-                  message: "Are you sure you want to delete this order?",
-                  onConfirm: () {
-                    context.read<DeleteOrderViewModel>().deleteOrder(orderId);
-                  },
-                );
-              },
-              child:const StatusBadge(
-                text: "Delete",
-                color: Colors.red,
-                icon: Icons.delete,
+            if(orderStatus != "Paid" && orderStatus != "InProgress" &&
+                orderStatus != "Waiting")
+              GestureDetector(
+                onTap: () {
+                  showConfirmationDialog(
+                    context: context,
+                    title: "Confirm Delete",
+                    message: "Are you sure you want to delete this order?",
+                    onConfirm: () {
+                      context.read<DeleteOrderViewModel>().deleteOrder(orderId);
+                    },
+                  );
+                },
+                child: const StatusBadge(
+                  text: "Delete",
+                  color: Colors.red,
+                  icon: Icons.delete,
+                ),
               ),
-            ),
           ],
         ),
         Text(

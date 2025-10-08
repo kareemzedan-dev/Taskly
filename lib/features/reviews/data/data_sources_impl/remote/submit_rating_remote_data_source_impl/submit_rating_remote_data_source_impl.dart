@@ -28,12 +28,13 @@ class SubmitRatingRemoteDataSourceImpl implements SubmitRatingRemoteDataSource {
           .from('reviews')
           .select()
           .eq('order_id', reviews.orderId)
-          .eq('role', reviews.role)
+          .eq('role', reviews.role)  // يتحقق من نفس الدور
           .eq(
         reviews.role == 'client' ? 'client_id' : 'freelancer_id',
         reviews.role == 'client' ? reviews.clientId : reviews.freelancerId,
       )
           .maybeSingle();
+
 
       if (existing != null) {
         print('SubmitRatingRemoteDataSource: Existing review found -> $existing');

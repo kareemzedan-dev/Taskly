@@ -267,6 +267,7 @@ class _SendOfferViewBodyState extends State<SendOfferViewBody> {
                               offerDeliveryTime: deliveryTimeInDays,
                               createdAt: now,
                               updatedAt: now,
+                              orderName: widget.orderEntity.title,
                             ),
                           );
                         }

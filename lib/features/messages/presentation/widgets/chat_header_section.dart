@@ -97,8 +97,12 @@ class ChatHeaderSection extends StatelessWidget {
                           .updateOrderStatus(orderData.id, "Completed");
                       context
                           .read<AddEarningsViewModel>()
-                          .addEarnings(orderData.freelancerId!,
-                          orderData.budget!);
+                          .addEarnings(
+
+                        orderData.freelancerId!,
+                          orderData.budget!,
+                      orderData.clientId
+                      );
                       _showRatingBottomSheet(context, orderData);
                     },
                   );
