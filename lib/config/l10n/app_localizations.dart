@@ -1654,6 +1654,138 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No services found'**
   String get noServicesFound;
+
+  /// No description provided for @forgotPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot Password?'**
+  String get forgotPassword;
+
+  /// No description provided for @continuewithface.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue with Facebook'**
+  String get continuewithface;
+
+  /// No description provided for @continuewithapple.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue with Apple'**
+  String get continuewithapple;
+
+  /// No description provided for @welcome_to_taskly.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome To Taskly'**
+  String get welcome_to_taskly;
+
+  /// No description provided for @search_for_services.
+  ///
+  /// In en, this message translates to:
+  /// **'Search for services'**
+  String get search_for_services;
+
+  /// No description provided for @order_created_success.
+  ///
+  /// In en, this message translates to:
+  /// **'Order created successfully'**
+  String get order_created_success;
+
+  /// No description provided for @something_went_wrong.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong, try again later'**
+  String get something_went_wrong;
+
+  /// No description provided for @title_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get title_label;
+
+  /// No description provided for @category_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get category_label;
+
+  /// No description provided for @description_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get description_label;
+
+  /// No description provided for @deadline_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Deadline'**
+  String get deadline_label;
+
+  /// No description provided for @attachments_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Attachments'**
+  String get attachments_label;
+
+  /// No description provided for @hiring_method_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Hiring Method'**
+  String get hiring_method_label;
+
+  /// No description provided for @submit_button.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit'**
+  String get submit_button;
+
+  /// No description provided for @error_enter_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter title'**
+  String get error_enter_title;
+
+  /// No description provided for @error_choose_category.
+  ///
+  /// In en, this message translates to:
+  /// **'Please choose category'**
+  String get error_choose_category;
+
+  /// No description provided for @error_enter_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter description'**
+  String get error_enter_description;
+
+  /// No description provided for @error_enter_deadline.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter deadline'**
+  String get error_enter_deadline;
+
+  /// No description provided for @error_add_attachments.
+  ///
+  /// In en, this message translates to:
+  /// **'Please add attachments'**
+  String get error_add_attachments;
+
+  /// No description provided for @error_select_hiring_method.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select hiring method'**
+  String get error_select_hiring_method;
+
+  /// No description provided for @error_wait_attachments.
+  ///
+  /// In en, this message translates to:
+  /// **'Please wait until all attachments are uploaded'**
+  String get error_wait_attachments;
+
+  /// No description provided for @error_select_freelancer.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select freelancer'**
+  String get error_select_freelancer;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

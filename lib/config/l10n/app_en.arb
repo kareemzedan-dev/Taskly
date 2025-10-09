@@ -286,8 +286,27 @@
   "service15": "Engineering services",
   "service16": "Financial and accounting services" ,
   "orderNow": "Order Now",
-  "noServicesFound": "No services found"
-
-
-
+  "noServicesFound": "No services found",
+  "forgotPassword": "Forgot Password?",
+  "continuewithface":  "Continue with Facebook",
+  "continuewithapple": "Continue with Apple",
+  "welcome_to_taskly": "Welcome To Taskly",
+  "search_for_services": "Search for services",
+  "order_created_success": "Order created successfully",
+  "something_went_wrong": "Something went wrong, try again later",
+  "title_label": "Title",
+  "category_label": "Category",
+  "description_label": "Description",
+  "deadline_label": "Deadline",
+  "attachments_label": "Attachments",
+  "hiring_method_label": "Hiring Method",
+  "submit_button": "Submit",
+  "error_enter_title": "Please enter title",
+  "error_choose_category": "Please choose category",
+  "error_enter_description": "Please enter description",
+  "error_enter_deadline": "Please enter deadline",
+  "error_add_attachments": "Please add attachments",
+  "error_select_hiring_method": "Please select hiring method",
+  "error_wait_attachments": "Please wait until all attachments are uploaded",
+  "error_select_freelancer": "Please select freelancer"
 }

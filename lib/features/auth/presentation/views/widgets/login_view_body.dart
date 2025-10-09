@@ -137,6 +137,25 @@ if (state is AuthLoginErrorState || state is AuthGoogleErrorState) {
                     authViewModel.passwordController.text = p0!;
                   },
                 ),
+                SizedBox(height: 10.h),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    GestureDetector(
+                      onTap:   () {
+                        Navigator.pushNamed(context, RoutesManager.forgetPasswordView);
+                      },
+                      child: Text(
+                        AppLocalizations.of(context)!.forgotPassword,
+                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                         color: ColorsManager.primary,
+                         fontWeight: FontWeight.w600,
+                         fontSize: 14.sp,
+                       ), ),
+                    ),
+                  ],
+                ),
+
 
                 SizedBox(height: 20.h),
                 const OrDivider(),

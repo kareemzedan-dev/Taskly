@@ -268,8 +268,30 @@
   "service15": "الخدمات الهندسية",
   "service16": "الخدمات المالية والمحاسبية" ,
   "orderNow": "اطلب الان" ,
-  "noServicesFound": "لا يوجد خدمات"
+  "noServicesFound": "لا يوجد خدمات",
+  "forgotPassword": "نسيت كلمه المرور؟",
+  "continuewithface": "المتابعة باستخدام فيسبوك",
+  "continuewithapple": "المتابعة باستخدام أبل",
 
+  "welcome_to_taskly": "مرحبًا بك في Taskly",
+  "search_for_services": "ابحث عن الخدمات",
+  "order_created_success": "تم إنشاء الطلب بنجاح",
+  "something_went_wrong": "حدث خطأ ما، حاول مرة أخرى لاحقًا",
+  "title_label": "العنوان",
+  "category_label": "الفئة",
+  "description_label": "الوصف",
+  "deadline_label": "الموعد النهائي",
+  "attachments_label": "المرفقات",
+  "hiring_method_label": "طريقة التوظيف",
+  "submit_button": "إرسال",
+  "error_enter_title": "الرجاء إدخال العنوان",
+  "error_choose_category": "الرجاء اختيار الفئة",
+  "error_enter_description": "الرجاء إدخال الوصف",
+  "error_enter_deadline": "الرجاء إدخال الموعد النهائي",
+  "error_add_attachments": "الرجاء إضافة المرفقات",
+  "error_select_hiring_method": "الرجاء اختيار طريقة التوظيف",
+  "error_wait_attachments": "يرجى الانتظار حتى يتم تحميل جميع المرفقات",
+  "error_select_freelancer": "الرجاء اختيار المستقل"
 
 
 

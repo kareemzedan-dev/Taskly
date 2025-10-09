@@ -795,4 +795,70 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get noServicesFound => 'لا يوجد خدمات';
+
+  @override
+  String get forgotPassword => 'نسيت كلمه المرور؟';
+
+  @override
+  String get continuewithface => 'المتابعة باستخدام فيسبوك';
+
+  @override
+  String get continuewithapple => 'المتابعة باستخدام أبل';
+
+  @override
+  String get welcome_to_taskly => 'مرحبًا بك في Taskly';
+
+  @override
+  String get search_for_services => 'ابحث عن الخدمات';
+
+  @override
+  String get order_created_success => 'تم إنشاء الطلب بنجاح';
+
+  @override
+  String get something_went_wrong => 'حدث خطأ ما، حاول مرة أخرى لاحقًا';
+
+  @override
+  String get title_label => 'العنوان';
+
+  @override
+  String get category_label => 'الفئة';
+
+  @override
+  String get description_label => 'الوصف';
+
+  @override
+  String get deadline_label => 'الموعد النهائي';
+
+  @override
+  String get attachments_label => 'المرفقات';
+
+  @override
+  String get hiring_method_label => 'طريقة التوظيف';
+
+  @override
+  String get submit_button => 'إرسال';
+
+  @override
+  String get error_enter_title => 'الرجاء إدخال العنوان';
+
+  @override
+  String get error_choose_category => 'الرجاء اختيار الفئة';
+
+  @override
+  String get error_enter_description => 'الرجاء إدخال الوصف';
+
+  @override
+  String get error_enter_deadline => 'الرجاء إدخال الموعد النهائي';
+
+  @override
+  String get error_add_attachments => 'الرجاء إضافة المرفقات';
+
+  @override
+  String get error_select_hiring_method => 'الرجاء اختيار طريقة التوظيف';
+
+  @override
+  String get error_wait_attachments => 'يرجى الانتظار حتى يتم تحميل جميع المرفقات';
+
+  @override
+  String get error_select_freelancer => 'الرجاء اختيار المستقل';
 }

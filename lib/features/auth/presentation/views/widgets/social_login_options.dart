@@ -25,21 +25,22 @@ class SocialLoginOptions extends StatelessWidget {
       children: [
         SocialLoginButton(
           label: local.continueWithGoogle,
-          iconPath: Assets.assetsImagesIcGoogle,
+          iconPath: Assets.assetsGoogle,
           onPressed:onGoogleLogin
         ),
         const SizedBox(height: 16),
         SocialLoginButton(
-          label: "Login with Apple",
-          iconPath: Assets.assetsImagesIcApple,
-          onPressed:onAppleLogin
+            label: local.continuewithface,
+            iconPath: Assets.assetsFace,
+            onPressed: onFacebookLogin
         ),
         const SizedBox(height: 16),
         SocialLoginButton(
-          label:  "Login with Facebook",
-          iconPath: Assets.assetsImagesIcFacebook,
-          onPressed: onFacebookLogin
+          label: local.continuewithapple,
+          iconPath: Assets.assetsApple,
+          onPressed:onAppleLogin
         ),
+
       ],
     );
   }

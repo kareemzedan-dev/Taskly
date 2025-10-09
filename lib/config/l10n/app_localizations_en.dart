@@ -795,4 +795,70 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noServicesFound => 'No services found';
+
+  @override
+  String get forgotPassword => 'Forgot Password?';
+
+  @override
+  String get continuewithface => 'Continue with Facebook';
+
+  @override
+  String get continuewithapple => 'Continue with Apple';
+
+  @override
+  String get welcome_to_taskly => 'Welcome To Taskly';
+
+  @override
+  String get search_for_services => 'Search for services';
+
+  @override
+  String get order_created_success => 'Order created successfully';
+
+  @override
+  String get something_went_wrong => 'Something went wrong, try again later';
+
+  @override
+  String get title_label => 'Title';
+
+  @override
+  String get category_label => 'Category';
+
+  @override
+  String get description_label => 'Description';
+
+  @override
+  String get deadline_label => 'Deadline';
+
+  @override
+  String get attachments_label => 'Attachments';
+
+  @override
+  String get hiring_method_label => 'Hiring Method';
+
+  @override
+  String get submit_button => 'Submit';
+
+  @override
+  String get error_enter_title => 'Please enter title';
+
+  @override
+  String get error_choose_category => 'Please choose category';
+
+  @override
+  String get error_enter_description => 'Please enter description';
+
+  @override
+  String get error_enter_deadline => 'Please enter deadline';
+
+  @override
+  String get error_add_attachments => 'Please add attachments';
+
+  @override
+  String get error_select_hiring_method => 'Please select hiring method';
+
+  @override
+  String get error_wait_attachments => 'Please wait until all attachments are uploaded';
+
+  @override
+  String get error_select_freelancer => 'Please select freelancer';
 }

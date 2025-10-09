@@ -10,6 +10,8 @@ import 'package:taskly/features/messages/data/models/message_model.dart';
 import 'package:taskly/features/messages/domain/entities/message_entity.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../../../../core/services/notification_service.dart';
+
 @Injectable(as: SendMessagesRemoteDataSource)
 class SendMessagesRemoteDataSourceImpl extends SendMessagesRemoteDataSource {
   final SupabaseService supabaseService;
@@ -85,8 +87,42 @@ class SendMessagesRemoteDataSourceImpl extends SendMessagesRemoteDataSource {
       await supabase.from('messages').insert(insertData).select().single();
 
       debugPrint("✅ Message inserted successfully: ${response['id']}");
+      // بعد ما الرسالة اتسجلت بنجاح
       final messageModel = MessageModel.fromJson(response);
+
+/// افتراضي
+      String senderName = "مستخدم";
+
+      try {
+        final userResponse = await supabase
+            .from('users')
+            .select('full_name')
+            .eq('id', message.senderId)
+            .limit(1) // نضمن يرجع صف واحد
+            .maybeSingle();
+
+        if (userResponse != null && userResponse['full_name'] != null) {
+          senderName = userResponse['full_name'] as String; // تعديل القيمة مباشرة
+        }
+      } catch (e) {
+        debugPrint("❌ Failed to fetch sender name: $e");
+      }
+
+
+      try {
+        await NotificationService().sendNotification(
+            receiverId: message.receiverId!,
+            title: "رسالة جديدة من $senderName",
+            body: message.content ?? "لديك رسالة جديدة"
+        );
+        debugPrint("🔔 Notification sent successfully!");
+      } catch (e) {
+        debugPrint("❌ Failed to send notification: $e");
+      }
+
+
       return Right(messageModel);
+
     } on PostgrestException catch (e) {
       debugPrint("❌ PostgrestException: ${e.message}");
       return Left(ServerFailure(e.message));

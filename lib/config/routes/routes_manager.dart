@@ -19,6 +19,8 @@ import 'package:taskly/features/shared/presentation/views/user_account_view.dart
 import 'package:taskly/features/splash/presentation/views/splash_view.dart';
 import 'package:taskly/features/welcome/presentation/views/welcome_view.dart';
 
+import '../../features/auth/presentation/views/forget_password_view.dart';
+import '../../features/auth/presentation/views/reset_password_view.dart';
 import '../../features/freelancer/presentation/views/tabs/my_jobs/presentation/views/offer_details_view.dart';
 import '../../features/messages/presentation/pages/admin_chat_view.dart';
 import '../../features/payments/presentation/pages/client_payments_view.dart';
@@ -46,6 +48,8 @@ class RoutesManager {
   static const String clientPaymentsView = "clientPaymentsView";
   static const String reviewsView = "reviewsView";
   static const String adminChatView = "adminChatView";
+  static const String forgetPasswordView = "forgetPasswordView";
+   static const String resetPasswordView = "resetPasswordView";
 
   static Route onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -121,9 +125,12 @@ class RoutesManager {
       case changePasswordView:
         return MaterialPageRoute(builder: (_) => const ChangePasswordView());
 
+      case forgetPasswordView:
+        return MaterialPageRoute(builder: (_) => const ForgetPasswordView());
       case freelancerEarningView:
         return MaterialPageRoute(builder: (_) => const FreelancerEarningView());
-
+      case resetPasswordView :
+        return MaterialPageRoute(builder: (_) => const ResetPasswordView());
       case requestWithdrawalView:
         return MaterialPageRoute(builder: (_) => const RequestWithdrawalView());
 
@@ -183,6 +190,7 @@ class RoutesManager {
           final currentUserId = args['currentUserId'] as String;
           return MaterialPageRoute(builder:(context) =>  AdminChatView(currentUserId: currentUserId)
           );
+
       default:
         return MaterialPageRoute(builder: (_) => const Placeholder());
     }

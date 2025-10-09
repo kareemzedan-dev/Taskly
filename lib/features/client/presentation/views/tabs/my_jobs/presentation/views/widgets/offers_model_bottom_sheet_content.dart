@@ -65,12 +65,14 @@ class OffersBottomSheetContent extends StatelessWidget {
                       count: offers.length,
                       filters: const ["Price", "Delivery", "Rating"],
                     ),
+
                     Expanded(
                       child: offers.isNotEmpty
                           ? ListView.builder(
                         itemCount: offers.length,
                         itemBuilder: (context, index) {
                           final offer = offers[index];
+
                           return OfferCard(
                             order: order,
                             offer: offer,
@@ -79,8 +81,8 @@ class OffersBottomSheetContent extends StatelessWidget {
                               context
                                   .read<UpdateOfferStatusViewModel>()
                                   .acceptOfferAndRejectOthers(
-                                offer.orderId,
-                                offer.id,
+                                offer.offer.orderId,
+                                offer.offer.id,
                               );
                             },
 

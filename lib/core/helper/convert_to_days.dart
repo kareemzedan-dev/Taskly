@@ -12,23 +12,39 @@ int convertToMinutes(int value, String unit) {
 }
 extension FormatMinutesExtension on int {
   String formatMinutes() {
-    if (this >= 7 * 24 * 60) {
-      double weeks = this / (7 * 24 * 60);
-      return weeks % 1 == 0
-          ? "${weeks.toInt()} ${weeks.toInt() == 1 ? 'Week' : 'Weeks'}"
-          : "${weeks.toStringAsFixed(1)} Weeks";
-    } else if (this >= 24 * 60) {
-      double days = this / (24 * 60);
-      return days % 1 == 0
-          ? "${days.toInt()} ${days.toInt() == 1 ? 'Day' : 'Days'}"
-          : "${days.toStringAsFixed(1)} Days";
-    } else if (this >= 60) {
-      double hours = this / 60;
-      return hours % 1 == 0
-          ? "${hours.toInt()} ${hours.toInt() == 1 ? 'Hour' : 'Hours'}"
-          : "${hours.toStringAsFixed(1)} Hours";
+    int minutes = this;
+
+    if (minutes >= 7 * 24 * 60) {
+      int weeks = minutes ~/ (7 * 24 * 60);
+      int remainingMinutes = minutes % (7 * 24 * 60);
+      int days = remainingMinutes ~/ (24 * 60);
+
+      if (days > 0) {
+        return "$weeks ${weeks == 1 ? 'Week' : 'Weeks'} $days ${days == 1 ? 'Day' : 'Days'}";
+      } else {
+        return "$weeks ${weeks == 1 ? 'Week' : 'Weeks'}";
+      }
+    } else if (minutes >= 24 * 60) {
+      int days = minutes ~/ (24 * 60);
+      int remainingMinutes = minutes % (24 * 60);
+      int hours = remainingMinutes ~/ 60;
+
+      if (hours > 0) {
+        return "$days ${days == 1 ? 'Day' : 'Days'} $hours ${hours == 1 ? 'Hour' : 'Hours'}";
+      } else {
+        return "$days ${days == 1 ? 'Day' : 'Days'}";
+      }
+    } else if (minutes >= 60) {
+      int hours = minutes ~/ 60;
+      int remainingMinutes = minutes % 60;
+
+      if (remainingMinutes > 0) {
+        return "$hours ${hours == 1 ? 'Hour' : 'Hours'} $remainingMinutes ${remainingMinutes == 1 ? 'Minute' : 'Minutes'}";
+      } else {
+        return "$hours ${hours == 1 ? 'Hour' : 'Hours'}";
+      }
     } else {
-      return "$this ${this == 1 ? 'Minute' : 'Minutes'}";
+      return "$minutes ${minutes == 1 ? 'Minute' : 'Minutes'}";
     }
   }
 }

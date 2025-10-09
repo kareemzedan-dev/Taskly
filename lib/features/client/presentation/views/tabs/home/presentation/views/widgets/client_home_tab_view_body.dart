@@ -41,6 +41,7 @@ class _ClientHomeTabViewBodyState extends State<ClientHomeTabViewBody> {
     final local = AppLocalizations.of(context)!;
 
     return SingleChildScrollView(
+
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -48,7 +49,7 @@ class _ClientHomeTabViewBodyState extends State<ClientHomeTabViewBody> {
               UserInfoHomeHeader(),
             SizedBox(height: 30.h),
             CustomSearchTextField(
-              hintTexts: const ["Search for services"],
+              hintTexts:   [local.search_for_services],
               controller: _searchController,
               onChanged: viewModel.onSearchChanged,
             ),

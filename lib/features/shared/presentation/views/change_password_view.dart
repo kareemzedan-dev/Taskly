@@ -1,7 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/features/shared/presentation/views/widgets/change_password_view_body.dart';
+
+import '../../../../core/di/di.dart';
+import '../../../auth/presentation/cubit/change_password_view_model/change_password_view_model.dart';
 
 class ChangePasswordView extends StatelessWidget {
   const ChangePasswordView({super.key});
@@ -9,7 +13,10 @@ class ChangePasswordView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-      body: const SafeArea(child: ChangePasswordViewBody()),
+
+      body: BlocProvider(
+           create: (context) =>  getIt<ChangePasswordViewModel>(),
+          child: const SafeArea(child: ChangePasswordViewBody())),
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
         backgroundColor: Colors.white,

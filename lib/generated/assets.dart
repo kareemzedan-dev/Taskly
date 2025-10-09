@@ -35,6 +35,15 @@ class Assets {
   static const String bankAccountsEntityBankAccountsEntity = 'lib/features/payments/domain/entities/bank_accounts_entity/bank_accounts_entity.dart';
   static const String bankAccountsModelBankAccountsModel = 'lib/features/payments/data/models/bank_accounts_model/bank_accounts_model.dart';
   static const String cacheSharedPreferences = 'lib/core/cache/shared_preferences.dart';
+  static const String changePasswordEntityChangePasswordEntity = 'lib/features/auth/domain/entities/change_password_entity/change_password_entity.dart';
+  static const String changePasswordModelChangePasswordModel = 'lib/features/auth/data/models/change_password_model/change_password_model.dart';
+  static const String changePasswordRemoteDataSourceChangePasswordRemoteDataSource = 'lib/features/auth/data/data_sources/remote/change_password_remote_data_source/change_password_remote_data_source.dart';
+  static const String changePasswordRemoteDataSourceImplChangePasswordRemoteDataSourceImpl = 'lib/features/auth/data/data_sources_impl/remote/change_password_remote_data_source_impl/change_password_remote_data_source_impl.dart';
+  static const String changePasswordRepoChangePasswordRepo = 'lib/features/auth/domain/repos/auth/change_password_repo/change_password_repo.dart';
+  static const String changePasswordRepoImplChangePasswordRepoImpl = 'lib/features/auth/data/repos_impl/auth/change_password_repo_impl/change_password_repo_impl.dart';
+  static const String changePasswordUseCaseChangePasswordUseCase = 'lib/features/auth/domain/use_cases/auth/change_password_use_case/change_password_use_case.dart';
+  static const String changePasswordViewModelChangePasswordViewModel = 'lib/features/auth/presentation/cubit/change_password_view_model/change_password_view_model.dart';
+  static const String changePasswordViewModelChangePasswordViewModelStates = 'lib/features/auth/presentation/cubit/change_password_view_model/change_password_view_model_states.dart';
   static const String chatAvatarsViewModelChatAvatarsState = 'lib/features/messages/presentation/manager/chat_avatars_view_model/chat_avatars_state.dart';
   static const String chatAvatarsViewModelChatAvatarsViewModel = 'lib/features/messages/presentation/manager/chat_avatars_view_model/chat_avatars_view_model.dart';
   static const String chatInputViewModelChatInputViewModel = 'lib/features/messages/presentation/manager/chat_input_view_model/chat_input_view_model.dart';
@@ -119,6 +128,13 @@ class Assets {
   static const String fontsDMSansMedium = 'assets/fonts/DMSans-Medium.ttf';
   static const String fontsDMSansRegular = 'assets/fonts/DMSans-Regular.ttf';
   static const String fontsDMSansSemiBold = 'assets/fonts/DMSans-SemiBold.ttf';
+  static const String forgetPasswordRemoteDataSourceForgetPasswordRemoteDataSource = 'lib/features/auth/data/data_sources/remote/forget_password_remote_data_source/forget_password_remote_data_source.dart';
+  static const String forgetPasswordRemoteDataSourceImplForgetPasswordRemoteDataSourceImpl = 'lib/features/auth/data/data_sources_impl/remote/forget_password_remote_data_source_impl/forget_password_remote_data_source_impl.dart';
+  static const String forgetPasswordRepoForgetPasswordRepo = 'lib/features/auth/domain/repos/auth/forget_password_repo/forget_password_repo.dart';
+  static const String forgetPasswordRepoImplForgetPasswordRepoImpl = 'lib/features/auth/data/repos_impl/auth/forget_password_repo_impl/forget_password_repo_impl.dart';
+  static const String forgetPasswordUseCaseForgetPasswordUseCase = 'lib/features/auth/domain/use_cases/auth/forget_password_use_case/forget_password_use_case.dart';
+  static const String forgetPasswordViewModelForgetPasswordViewModel = 'lib/features/auth/presentation/cubit/forget_password_view_model/forget_password_view_model.dart';
+  static const String forgetPasswordViewModelForgetPasswordViewModelStates = 'lib/features/auth/presentation/cubit/forget_password_view_model/forget_password_view_model_states.dart';
   static const String freelancerInfoViewModelFreelancerInfoViewModel = 'lib/features/freelancer/presentation/cubit/freelancer_info_view_model/freelancer_info_view_model.dart';
   static const String freelancerInfoViewModelFreelancerInfoViewModelStates = 'lib/features/freelancer/presentation/cubit/freelancer_info_view_model/freelancer_info_view_model_states.dart';
   static const String freelancerPrivateOrdersViewModelFreelancerPrivateOrdersViewModel = 'lib/features/freelancer/presentation/views/tabs/find_work/presentation/view_model/freelancer_private_orders_view_model/freelancer_private_orders_view_model.dart';
@@ -231,6 +247,7 @@ class Assets {
   static const String imagesAccountName = 'assets/images/account_name.png';
   static const String imagesAccountNumber = 'assets/images/account_number.png';
   static const String imagesAdminAvatar = 'assets/images/admin_avatar.jpg';
+  static const String imagesApple = 'assets/images/apple.png';
   static const String imagesArabicFlag = 'assets/images/arabic_flag.png';
   static const String imagesBankAccount = 'assets/images/bank_account.png';
   static const String imagesBrushes3450037 = 'assets/images/brushes_3450037.png';
@@ -242,8 +259,10 @@ class Assets {
   static const String imagesDocument10103871 = 'assets/images/document_10103871.png';
   static const String imagesEmpty = 'assets/images/empty.jpg';
   static const String imagesEnglishFlag = 'assets/images/english_flag.png';
+  static const String imagesFace = 'assets/images/face.png';
   static const String imagesFaq6736884 = 'assets/images/faq_6736884.png';
   static const String imagesFreelancer = 'assets/images/freelancer.png';
+  static const String imagesGoogle = 'assets/images/google.png';
   static const String imagesHome4561540 = 'assets/images/home_4561540.png';
   static const String imagesIcGoogle = 'assets/images/ic_google.svg';
   static const String imagesInternet2889312 = 'assets/images/internet_2889312.png';
@@ -351,6 +370,10 @@ class Assets {
   static const String removeFavoriteOrderUseCaseRemoveFavoriteOrderRepo = 'lib/features/freelancer/domain/use_cases/remove_favorite_order_use_case/remove_favorite_order_repo.dart';
   static const String removeFavoriteOrderViewModelRemoveFavoriteOrderStates = 'lib/features/freelancer/presentation/views/tabs/find_work/presentation/view_model/remove_favorite_order_view_model/remove_favorite_order_states.dart';
   static const String removeFavoriteOrderViewModelRemoveFavoriteOrderViewModel = 'lib/features/freelancer/presentation/views/tabs/find_work/presentation/view_model/remove_favorite_order_view_model/remove_favorite_order_view_model.dart';
+  static const String resetPasswordRemoteDataSourceImplResetPasswordRemoteDataSourceImpl = 'lib/features/auth/data/data_sources_impl/remote/reset_password_remote_data_source_impl/reset_password_remote_data_source_impl.dart';
+  static const String resetPasswordRemoteDataSourceResetPasswordRemoteDataSource = 'lib/features/auth/data/data_sources/remote/reset_password_remote_data_source/reset_password_remote_data_source.dart';
+  static const String resetPasswordRepoResetPasswordRepo = 'lib/features/auth/domain/repos/auth/reset_password_repo/reset_password_repo.dart';
+  static const String resetPasswordUseCaseResetPasswordUseCase = 'lib/features/auth/domain/use_cases/auth/reset_password_use_case/reset_password_use_case.dart';
   static const String reviewsEntityReviewsEntity = 'lib/features/reviews/domain/entities/reviews_entity/reviews_entity.dart';
   static const String reviewsModelReviewsModel = 'lib/features/reviews/data/models/reviews_model/reviews_model.dart';
   static const String reviewsRemoteDataSourceImplReviewsRemoteDataSourceImpl = 'lib/features/reviews/data/data_sources_impl/remote/reviews_remote_data_source_impl/reviews_remote_data_source_impl.dart';
@@ -365,7 +388,6 @@ class Assets {
   static const String sendMessagesRemoteDataSourceSendMessagesRemoteDataSource = 'lib/features/messages/data/data_sources/remote/send_messages_remote_data_source/send_messages_remote_data_source.dart';
   static const String sendMessagesRepoImplSendMessagesRepoImpl = 'lib/features/messages/data/repositories/send_messages_repo_impl/send_messages_repo_impl.dart';
   static const String sendMessagesRepoSendMessagesRepo = 'lib/features/messages/domain/repositories/messages_repos/send_messages_repo/send_messages_repo.dart';
-  static const String sendNotificationIndex = 'lib/core/supabase/send-notification/index.ts';
   static const String sendOfferUseCaseSendOfferUseCase = 'lib/features/freelancer/domain/use_cases/send_offer_use_case/send_offer_use_case.dart';
   static const String sendOfferViewModelSendOfferViewModel = 'lib/features/freelancer/presentation/views/tabs/find_work/presentation/view_model/send_offer_view_model/send_offer_view_model.dart';
   static const String sendOfferViewModelSendOfferViewModelStates = 'lib/features/freelancer/presentation/views/tabs/find_work/presentation/view_model/send_offer_view_model/send_offer_view_model_states.dart';
@@ -373,7 +395,9 @@ class Assets {
   static const String servicesDownloadFileService = 'lib/core/services/download_file_service.dart';
   static const String servicesFcmService = 'lib/core/services/fcm_service.dart';
   static const String servicesFileUploadedServices = 'lib/core/services/file_uploaded_services.dart';
+  static const String servicesFirebaseNotificationService = 'lib/core/services/firebase_notification_service.dart';
   static const String servicesMessageValidationService = 'lib/core/services/message_validation_service.dart';
+  static const String servicesNotificationService = 'lib/core/services/notification_service.dart';
   static const String servicesPickImageFromCamera = 'lib/core/services/pick_image_from_camera.dart';
   static const String servicesSupabaseService = 'lib/core/services/supabase_service.dart';
   static const String servicesUploadProfileImage = 'lib/core/services/upload_profile_image.dart';
@@ -466,6 +490,7 @@ class Assets {
   static const String viewsClientHomeView = 'lib/features/client/presentation/views/client_home_view.dart';
   static const String viewsFavouriteOrdersView = 'lib/features/freelancer/presentation/views/tabs/find_work/presentation/views/favourite_orders_view.dart';
   static const String viewsFindWorkTabView = 'lib/features/freelancer/presentation/views/tabs/find_work/presentation/views/find_work_tab_view.dart';
+  static const String viewsForgetPasswordView = 'lib/features/auth/presentation/views/forget_password_view.dart';
   static const String viewsFreelancerEarningView = 'lib/features/freelancer/presentation/views/tabs/profile/presentation/views/freelancer_earning_view.dart';
   static const String viewsFreelancerHomeView = 'lib/features/freelancer/presentation/views/freelancer_home_view.dart';
   static const String viewsHomeTabView = 'lib/features/client/presentation/views/tabs/home/presentation/views/home_tab_view.dart';
@@ -479,6 +504,7 @@ class Assets {
   static const String viewsProfileView = 'lib/features/client/presentation/views/tabs/profile/presentation/views/profile_view.dart';
   static const String viewsRegisterView = 'lib/features/auth/presentation/views/register_view.dart';
   static const String viewsRequestWithdrawalView = 'lib/features/freelancer/presentation/views/tabs/profile/presentation/views/request_withdrawal_view.dart';
+  static const String viewsResetPasswordView = 'lib/features/auth/presentation/views/reset_password_view.dart';
   static const String viewsSendOfferView = 'lib/features/freelancer/presentation/views/tabs/find_work/presentation/views/send_offer_view.dart';
   static const String viewsSplashView = 'lib/features/splash/presentation/views/splash_view.dart';
   static const String viewsTechnicalSupportView = 'lib/features/shared/presentation/views/technical_support_view.dart';
@@ -534,6 +560,7 @@ class Assets {
   static const String widgetsFaqCard = 'lib/features/shared/presentation/views/widgets/faq_card.dart';
   static const String widgetsFavouriteOrderList = 'lib/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/favourite_order_list.dart';
   static const String widgetsFavouriteOrdersViewBody = 'lib/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/favourite_orders_view_body.dart';
+  static const String widgetsForgetPasswordViewBody = 'lib/features/auth/presentation/views/widgets/forget_password_view_body.dart';
   static const String widgetsFreelancerEarningViewBody = 'lib/features/freelancer/presentation/views/tabs/profile/presentation/views/widgets/freelancer_earning_view_body.dart';
   static const String widgetsFreelancerFindWorkTabViewBody = 'lib/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/freelancer_find_work_tab_view_body.dart';
   static const String widgetsFreelancerInfoCardForHire = 'lib/features/client/presentation/views/tabs/home/presentation/views/widgets/freelancer_info_card_for_hire.dart';
@@ -586,6 +613,7 @@ class Assets {
   static const String widgetsRegisterViewBody = 'lib/features/auth/presentation/views/widgets/register_view_body.dart';
   static const String widgetsRejectedOfferCard = 'lib/features/freelancer/presentation/views/tabs/my_jobs/presentation/views/widgets/rejected_offer_card.dart';
   static const String widgetsRequestWithdrawalViewBody = 'lib/features/freelancer/presentation/views/tabs/profile/presentation/views/widgets/request_withdrawal_view_body.dart';
+  static const String widgetsResetPasswordViewBody = 'lib/features/auth/presentation/views/widgets/reset_password_view_body.dart';
   static const String widgetsReviewItem = 'lib/features/reviews/presentation/widgets/review_item.dart';
   static const String widgetsReviewsCard = 'lib/features/client/presentation/views/tabs/home/presentation/views/widgets/reviews_card.dart';
   static const String widgetsReviewsPageBody = 'lib/features/reviews/presentation/widgets/reviews_page_body.dart';

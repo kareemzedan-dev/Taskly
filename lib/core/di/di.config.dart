@@ -36,12 +36,44 @@ import '../../features/attachments/presentation/manager/upload_attachments_view_
     as _i11;
 import '../../features/auth/data/data_sources/remote/auth_remote_data_source.dart'
     as _i432;
+import '../../features/auth/data/data_sources/remote/change_password_remote_data_source/change_password_remote_data_source.dart'
+    as _i610;
+import '../../features/auth/data/data_sources/remote/forget_password_remote_data_source/forget_password_remote_data_source.dart'
+    as _i246;
+import '../../features/auth/data/data_sources/remote/reset_password_remote_data_source/reset_password_remote_data_source.dart'
+    as _i869;
 import '../../features/auth/data/data_sources_impl/remote/auth_remote_data_source_impl.dart'
     as _i420;
+import '../../features/auth/data/data_sources_impl/remote/change_password_remote_data_source_impl/change_password_remote_data_source_impl.dart'
+    as _i443;
+import '../../features/auth/data/data_sources_impl/remote/forget_password_remote_data_source_impl/forget_password_remote_data_source_impl.dart'
+    as _i176;
+import '../../features/auth/data/data_sources_impl/remote/reset_password_remote_data_source_impl/reset_password_remote_data_source_impl.dart'
+    as _i253;
 import '../../features/auth/data/repos_impl/auth/auth_repo_impl.dart' as _i529;
+import '../../features/auth/data/repos_impl/auth/change_password_repo_impl/change_password_repo_impl.dart'
+    as _i475;
+import '../../features/auth/data/repos_impl/auth/forget_password_repo_impl/forget_password_repo_impl.dart'
+    as _i303;
 import '../../features/auth/domain/repos/auth/auth_repo.dart' as _i746;
+import '../../features/auth/domain/repos/auth/change_password_repo/change_password_repo.dart'
+    as _i131;
+import '../../features/auth/domain/repos/auth/forget_password_repo/forget_password_repo.dart'
+    as _i562;
+import '../../features/auth/domain/repos/auth/reset_password_repo/reset_password_repo.dart'
+    as _i391;
 import '../../features/auth/domain/use_cases/auth/auth_use_case.dart' as _i630;
+import '../../features/auth/domain/use_cases/auth/change_password_use_case/change_password_use_case.dart'
+    as _i647;
+import '../../features/auth/domain/use_cases/auth/forget_password_use_case/forget_password_use_case.dart'
+    as _i1013;
+import '../../features/auth/domain/use_cases/auth/reset_password_use_case/reset_password_use_case.dart'
+    as _i667;
 import '../../features/auth/presentation/cubit/auth_view_model.dart' as _i745;
+import '../../features/auth/presentation/cubit/change_password_view_model/change_password_view_model.dart'
+    as _i205;
+import '../../features/auth/presentation/cubit/forget_password_view_model/forget_password_view_model.dart'
+    as _i1025;
 import '../../features/client/data/data_sources/remote/delete_order_data_source/delete_order_data_source.dart'
     as _i673;
 import '../../features/client/data/data_sources/remote/home_remote_data_source.dart'
@@ -551,6 +583,8 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i224.AddEarningRemoteDataSource>(() =>
         _i806.AddEarningRemoteDataSourceImpl(
             supabaseService: gh<_i374.SupabaseService>()));
+    gh.factory<_i610.ChangePasswordRemoteDataSource>(() =>
+        _i443.ChangePasswordRemoteDataSourceImpl(gh<_i454.SupabaseClient>()));
     gh.factory<_i458.MarkMessagesAsReadRemoteDataSource>(() =>
         _i1015.MarkMessagesAsReadRemoteDataSourceImpl(
             supabaseService: gh<_i374.SupabaseService>()));
@@ -575,9 +609,15 @@ extension GetItInjectableX on _i174.GetIt {
         _i788.PlaceWithdrawalBalanceUseCase(
             placeWithdrawalBalanceRepo:
                 gh<_i199.PlaceWithdrawalBalanceRepo>()));
+    gh.factory<_i246.ForgetPasswordRemoteDataSource>(() =>
+        _i176.ForgetPasswordRemoteDataSourceImpl(gh<_i454.SupabaseClient>()));
+    gh.factory<_i869.ResetPasswordRemoteDataSource>(
+        () => _i253.ResetPasswordRemoteDataSourceImpl());
     gh.factory<_i566.GetCommissionRepo>(() => _i948.GetCommissionRepoImpl(
         getCommissionRemoteDataSource:
             gh<_i884.GetCommissionRemoteDataSource>()));
+    gh.factory<_i131.ChangePasswordRepo>(() => _i475.ChangePasswordRepoImpl(
+        gh<_i610.ChangePasswordRemoteDataSource>()));
     gh.factory<_i968.CreatePaymentRemoteDataSource>(() =>
         _i795.CreatePaymentRemoteDataSourceImpl(gh<_i454.SupabaseClient>()));
     gh.factory<_i13.FetchPublicOrdersRemoteDataSource>(() =>
@@ -630,6 +670,8 @@ extension GetItInjectableX on _i174.GetIt {
               gh<_i374.SupabaseService>(),
               gh<_i765.FetchPrivateOrdersRemoteDataSource>(),
             ));
+    gh.factory<_i562.ForgetPasswordRepo>(() => _i303.ForgetPasswordRepoImpl(
+        gh<_i246.ForgetPasswordRemoteDataSource>()));
     gh.factory<_i191.DeleteMessageRemoteDataSource>(() =>
         _i65.DeleteMessageRemoteDataSourceImpl(gh<_i374.SupabaseService>()));
     gh.factory<_i572.GetConversationsRemoteDataSource>(() =>
@@ -649,6 +691,8 @@ extension GetItInjectableX on _i174.GetIt {
         _i301.UserStatusRemoteDataSourceImpl(gh<_i374.SupabaseService>()));
     gh.factory<_i1012.ProfileRemoteDataSource>(
         () => _i226.ProfileRemoteDataSourceImpl(gh<_i374.SupabaseService>()));
+    gh.factory<_i647.ChangePasswordUseCase>(
+        () => _i647.ChangePasswordUseCase(gh<_i131.ChangePasswordRepo>()));
     gh.factory<_i748.UpdateUserProfileRemoteDataSource>(() =>
         _i965.UpdateUserProfileRemoteDataSourceImpl(
             gh<_i374.SupabaseService>()));
@@ -662,6 +706,10 @@ extension GetItInjectableX on _i174.GetIt {
               gh<_i374.SupabaseService>(),
               gh<_i13.FetchPublicOrdersRemoteDataSource>(),
             ));
+    gh.factory<_i667.ResetPasswordUseCase>(
+        () => _i667.ResetPasswordUseCase(gh<_i391.ResetPasswordRepo>()));
+    gh.factory<_i1013.ForgetPasswordUseCase>(
+        () => _i1013.ForgetPasswordUseCase(gh<_i562.ForgetPasswordRepo>()));
     gh.factory<_i798.SubscribeToAdminMessagesRemoteDataSource>(() =>
         _i579.SubscribeToAdminMessagesRemoteDataSourceImpl(
             gh<_i374.SupabaseService>()));
@@ -695,7 +743,7 @@ extension GetItInjectableX on _i174.GetIt {
               gh<_i361.Dio>(),
               gh<_i374.SupabaseService>(),
               gh<_i454.SupabaseClient>(),
-             ));
+            ));
     gh.factory<_i706.GetEarningRemoteDataSource>(() =>
         _i874.GetEarningRemoteDataSourceImpl(
             supabaseService: gh<_i374.SupabaseService>()));
@@ -733,6 +781,8 @@ extension GetItInjectableX on _i174.GetIt {
             gh<_i13.FetchPublicOrdersRemoteDataSource>()));
     gh.factory<_i61.GetConversationsUseCase>(
         () => _i61.GetConversationsUseCase(gh<_i257.GetConversationRepo>()));
+    gh.factory<_i205.ChangePasswordViewModel>(
+        () => _i205.ChangePasswordViewModel(gh<_i647.ChangePasswordUseCase>()));
     gh.factory<_i337.DeleteOrderRepo>(() =>
         _i402.DeleteOrderRepoImpl(gh<_i673.DeleteOrderRemoteDataSource>()));
     gh.factory<_i679.AddFavoriteOrderRepo>(() => _i961.AddFavoriteOrderRepoImpl(
@@ -740,6 +790,8 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i686.GetAdminMessagesRepo>(() =>
         _i1006.GetAdminMessagesRepoImpl(
             gh<_i815.GetAdminMessagesRemoteDataSource>()));
+    gh.factory<_i1025.ForgetPasswordViewModel>(() =>
+        _i1025.ForgetPasswordViewModel(gh<_i1013.ForgetPasswordUseCase>()));
     gh.factory<_i618.CreatePaymentUseCase>(
         () => _i618.CreatePaymentUseCase(gh<_i815.PaymentRepos>()));
     gh.factory<_i946.GetCommissionViewModel>(

@@ -14,6 +14,7 @@ import 'package:taskly/config/routes/routes_manager.dart';
 import 'package:taskly/core/utils/strings_manager.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/view_model/services_view_model/services_view_model.dart';
 import 'package:taskly/config/l10n/app_localizations.dart';
+import 'core/services/firebase_notification_service.dart';
 import 'core/services/supabase_service.dart';
 import 'core/services/user_status_service.dart';
 import 'core/utils/constants_manager.dart';
@@ -25,17 +26,16 @@ late final UserStatusService? userStatusService;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // 👇 1. تهيئة Firebase
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // 👇 2. تهيئة Supabase
   await Supabase.initialize(
     url: ConstantsManager.supabaseUrl,
     anonKey: ConstantsManager.supabaseAnonKey,
   );
-
+  await FirebaseNotificationService.initializeLocalNotifications();
+  await FirebaseNotificationService.initializeFCM();
   await SharedPrefHelper.init();
   configureDependencies();
 
@@ -51,11 +51,10 @@ Future<void> main() async {
 
   Bloc.observer = MyBlocObserver();
 
-  // 👇 3. تفعيل Firebase Messaging (اختياري)
   FirebaseMessaging messaging = FirebaseMessaging.instance;
   await messaging.requestPermission();
   final fcmToken = await messaging.getToken();
-  print("FCM Token: $fcmToken"); // 👈 تقدر تبعته للسيرفر (Supabase مثلًا)
+  print("FCM Token: $fcmToken");
 
   runApp(
     MultiBlocProvider(
@@ -93,7 +92,7 @@ class Taskly extends StatelessWidget {
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
           ],
-          supportedLocales: const [Locale('en'), Locale('ar')],
+          supportedLocales: const [  Locale('ar')],
           builder: (context, child) {
             return Overlay(
               initialEntries: [OverlayEntry(builder: (context) => child!)],
@@ -101,7 +100,7 @@ class Taskly extends StatelessWidget {
           },
           theme: AppTheme.lightTheme,
           onGenerateRoute: (settings) => RoutesManager.onGenerateRoute(settings),
-          initialRoute: RoutesManager.welcome,
+          initialRoute: RoutesManager.splash,
         );
       },
     );

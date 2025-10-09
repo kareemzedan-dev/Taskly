@@ -8,6 +8,7 @@ import 'package:taskly/features/client/data/data_sources/remote/my_jobs_remote_d
 import 'package:taskly/features/freelancer/domain/entities/offer_entity/offer_entity.dart';
 import 'package:taskly/features/shared/domain/entities/order_entity/order_entity.dart';
 
+import '../../../../../core/services/notification_service.dart';
 import '../../../../freelancer/data/models/offer_model/offer_model.dart';
 import '../../../../shared/data/models/order_dm/order_dm.dart';
 
@@ -119,11 +120,11 @@ class MyJobsRemoteDataSourceImpl extends MyJobsRemoteDataSource {
       final updateOrderResponse = await supabaseService.supabaseClient
           .from('orders')
           .update({
-            "status": "Accepted",
-            "budget": acceptedOffer.offerAmount,
-            "offer_id": offerId,
-            "freelancer_id": acceptedOffer.freelancerId,
-          })
+        "status": "Accepted",
+        "budget": acceptedOffer.offerAmount,
+        "offer_id": offerId,
+        "freelancer_id": acceptedOffer.freelancerId,
+      })
           .eq('id', orderId)
           .select()
           .maybeSingle();
@@ -139,6 +140,27 @@ class MyJobsRemoteDataSourceImpl extends MyJobsRemoteDataSource {
           .neq('id', offerId);
 
       final updatedOrder = OrderDm.fromJson(updateOrderResponse).toEntity();
+
+      // Notification
+      final offersResponse = await supabaseService.supabaseClient
+          .from('offers')
+          .select()
+          .eq('order_id', orderId);
+
+      if (offersResponse != null) {
+        for (var offerJson in offersResponse) {
+          final offer = OfferModel.fromJson(offerJson);
+          NotificationService().sendNotification(
+            receiverId: offer.freelancerId,
+            title: "Offer Status",
+            body: offer.id == offerId
+                ? "Your offer for order '${acceptedOffer.orderName}' has been accepted!"
+                : "Your offer for order '${acceptedOffer.orderName}' has been rejected.",
+          );
+        }
+      }
+
+
       return Right(updatedOrder);
     } catch (e) {
       return Left(ServerFailure(e.toString()));

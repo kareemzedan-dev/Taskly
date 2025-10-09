@@ -49,3 +49,8 @@ class OtherFailure extends Failures {
   const OtherFailure(String message, {Map<String, String>? params})
       : super(message, params);
 }
+
+class AuthFailure extends Failures {
+  const AuthFailure(String message, {Map<String, String>? params})
+      : super(message, params);
+}

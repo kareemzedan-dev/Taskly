@@ -51,6 +51,9 @@ class _CustomSearchTextFieldState extends State<CustomSearchTextField> {
           ),
           child: TextField(
             controller: _controller,
+            textAlign: Directionality.of(context) == TextDirection.rtl
+                ? TextAlign.right
+                : TextAlign.left,
             decoration: const InputDecoration(
               border: InputBorder.none,
               prefixIcon: Icon(Icons.search, color: Colors.grey),
@@ -59,13 +62,17 @@ class _CustomSearchTextFieldState extends State<CustomSearchTextField> {
             style: const TextStyle(color: Colors.black, fontSize: 16),
             onChanged: widget.onChanged,
           ),
+
         ),
 
         if (!_isTyping)
           Positioned.fill(
-            left: 48,
+            left: Directionality.of(context) == TextDirection.ltr ? 48 : 0,
+            right: Directionality.of(context) == TextDirection.rtl ? 48 : 0,
             child: Align(
-              alignment: Alignment.centerLeft,
+              alignment: Directionality.of(context) == TextDirection.rtl
+                  ? Alignment.centerRight
+                  : Alignment.centerLeft,
               child: IgnorePointer(
                 ignoring: true,
                 child: AnimatedTextKit(
@@ -74,19 +81,21 @@ class _CustomSearchTextFieldState extends State<CustomSearchTextField> {
                   animatedTexts: widget.hintTexts
                       .map(
                         (text) => TypewriterAnimatedText(
-                          text,
-                          textStyle: const TextStyle(
-                            color: Colors.grey,
-                            fontSize: 16,
-                          ),
-                          speed: const Duration(milliseconds: 100),
-                        ),
-                      )
+                      text,
+                      textStyle: const TextStyle(
+                        color: Colors.grey,
+                        fontSize: 16,
+                      ),
+                      speed: const Duration(milliseconds: 100),
+                    ),
+                  )
                       .toList(),
                 ),
               ),
             ),
           ),
+
+
       ],
     );
   }
