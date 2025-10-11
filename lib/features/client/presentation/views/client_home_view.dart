@@ -37,7 +37,7 @@ class _ClientHomeViewState extends State<ClientHomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+
       body: SafeArea(child: items[currentIndex]),
       bottomNavigationBar: CustomBottomNavigationBar(
         currentIndex: currentIndex,

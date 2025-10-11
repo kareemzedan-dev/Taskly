@@ -18,10 +18,9 @@ class OrderView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.white,
-        backgroundColor: Colors.white,
         leading: GestureDetector(
           onTap: () => Navigator.pop(context),
-          child: const Icon(CupertinoIcons.back, color: Colors.black),
+          child: const Icon(CupertinoIcons.back, ),
         ),
         title: Text(
           local.service_order,
@@ -37,7 +36,7 @@ class OrderView extends StatelessWidget {
         ),
       ),
 
-      backgroundColor: Colors.white,
+
       body: BlocProvider(
         create: (context) => getIt<PlaceOrderViewModel>(),
         child: OrderViewBody(title:title!,selectedCategory:selectedCategory! ),

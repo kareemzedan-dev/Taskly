@@ -251,45 +251,43 @@ class _ChatWithAdminViewBodyState extends State<ChatWithAdminViewBody> {
 
     return widgets;
   }
-
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ChatWithAdminViewModel, ChatWithAdminStates>(
-      listener: (context, state) {
-        final vm = context.read<ChatWithAdminViewModel>();
-        final messageCount = vm.messages.length;
+    final vm = context.read<ChatWithAdminViewModel>();
 
-        if (messageCount != _lastMessageCount) {
-          _lastMessageCount = messageCount;
-          _scrollToBottom();
-        }
-      },
-      builder: (context, state) {
-        final vm = context.read<ChatWithAdminViewModel>();
+    return Column(
+      children: [
+        Expanded(
+          child: BlocConsumer<ChatWithAdminViewModel, ChatWithAdminStates>(
+            listener: (context, state) {
+              final messageCount = vm.messages.length;
 
-        if (state is ChatWithAdminLoading) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (state is ChatWithAdminError) {
-          return Center(child: Text(state.message));
-        }
+              if (messageCount != _lastMessageCount) {
+                _lastMessageCount = messageCount;
+                _scrollToBottom();
+              }
+            },
+            builder: (context, state) {
+              if (state is ChatWithAdminLoading) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (state is ChatWithAdminError) {
+                return Center(child: Text(state.message));
+              }
 
-        final messages = vm.messages;
-        if (messages.isEmpty) {
-          return const Center(
-            child: Text(
-              "No messages yet",
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey,
-              ),
-            ),
-          );
-        }
+              final messages = vm.messages;
+              if (messages.isEmpty) {
+                return const Center(
+                  child: Text(
+                    "No messages yet",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey,
+                    ),
+                  ),
+                );
+              }
 
-        return Column(
-          children: [
-            Expanded(
-              child: ListView.builder(
+              return ListView.builder(
                 controller: _scrollController,
                 padding: const EdgeInsets.all(16),
                 itemCount: messages.length,
@@ -307,16 +305,16 @@ class _ChatWithAdminViewBodyState extends State<ChatWithAdminViewBody> {
                     ),
                   );
                 },
-              ),
-            ),
-            AdminChatInputField(
-              currentUserId: widget.currentUserId,
-              onMessageSent: _scrollToBottom, // إضافة callback للتحديث
-            ),
-            SizedBox(height: 16.h),
-          ],
-        );
-      },
+              );
+            },
+          ),
+        ),
+        AdminChatInputField(
+          currentUserId: widget.currentUserId,
+          onMessageSent: _scrollToBottom,
+        ),
+        SizedBox(height: 16.h),
+      ],
     );
   }
 }

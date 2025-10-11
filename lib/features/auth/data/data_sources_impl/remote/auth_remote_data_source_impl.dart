@@ -23,20 +23,21 @@ import '../../models/register_response_dm/register_response_dm.dart';
 @Injectable(as: AuthRemoteDataSource)
 class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   final FcmService _fcmService = FcmService();
+  final SupabaseService supabaseService;
 
-  final SupabaseService supabaseService  ;
   final GoogleSignIn _googleSignIn = GoogleSignIn(
     serverClientId: ConstantsManager.supabaseServerClientId,
     scopes: ['email', 'profile'],
   );
-AuthRemoteDataSourceImpl(this.supabaseService);
+
+  AuthRemoteDataSourceImpl(this.supabaseService);
+
   Future<void> _saveUserLocally({
     required String token,
     required String id,
     required String fullName,
     required String email,
     required String role,
-
   }) async {
     await SharedPrefHelper.setString(StringsManager.tokenKey, token);
     await SharedPrefHelper.setString(StringsManager.idKey, id);
@@ -47,86 +48,77 @@ AuthRemoteDataSourceImpl(this.supabaseService);
     await SharedPrefHelper.setString(StringsManager.phoneNumberKey, "");
     await SharedPrefHelper.setString(StringsManager.profileImageKey, "");
   }
-Future<void> _saveUserToSupabase({
-  required String id,
-  required String fullName,
-  required String email,
-  required String role,
-  String? avatarUrl,
-}) async {
-  final existingUser = await supabase
-      .from('users')
-      .select()
-      .eq('id', id)
-      .maybeSingle();
 
-  if (existingUser == null) {
-    await supabaseService.sendDataToSupabase(
-      tableName: 'users',
-      data: {
-        'id': id,
-        'full_name': fullName,
-        'email': email,
-        'role': role,
-        'profile_image': avatarUrl,
-        'rating': 0.0,
-        'jobs_count': 0,
-        'reviews_count': 0,
-        'total_earnings': 0.0,
-      },
-      conflictColumn: 'email',
-    );
-  }
-}
+  Future<void> _saveUserToSupabase({
+    required String id,
+    required String fullName,
+    required String email,
+    required String role,
+    String? avatarUrl,
+  }) async {
+    final existingUser =
+        await supabase.from('users').select().eq('id', id).maybeSingle();
 
-
-Future<void> _insertRoleData(String id, String role) async {
-  final now = DateTime.now().toIso8601String();
-
-  if (role == StringsManager.clientRole) {
- 
-    final existingClient = await supabase
-        .from('clients')
-        .select()
-        .eq('id', id)
-        .maybeSingle();
-
-    if (existingClient == null) {
+    if (existingUser == null) {
       await supabaseService.sendDataToSupabase(
-        tableName: 'clients',
+        tableName: 'users',
         data: {
           'id': id,
-          'billing_info': '',
-          'balance': 0,
-          'created_at': now,
+          'full_name': fullName,
+          'email': email,
+          'role': role,
+          'profile_image': avatarUrl,
+          'rating': 0.0,
+          'jobs_count': 0,
+          'reviews_count': 0,
+          'total_earnings': 0.0,
         },
-        conflictColumn: 'id',
-      );
-    }
-  } else if (role == StringsManager.freelancerRole) {
- 
-    final existingFreelancer = await supabase
-        .from('freelancers')
-        .select()
-        .eq('id', id)
-        .maybeSingle();
-
-    if (existingFreelancer == null) {
-      await supabaseService.sendDataToSupabase(
-        tableName: 'freelancers',
-        data: {
-          'id': id,
-          'is_verified': false,
-          'freelancer_status': 'Active',
-          'freelancer_balance': 0.0,
-          'created_at': now,
-        },
-        conflictColumn: 'id',
+        conflictColumn: 'email',
       );
     }
   }
-}
 
+  Future<void> _insertRoleData(String id, String role) async {
+    final now = DateTime.now().toIso8601String();
+
+    if (role == StringsManager.clientRole) {
+      final existingClient =
+          await supabase.from('clients').select().eq('id', id).maybeSingle();
+
+      if (existingClient == null) {
+        await supabaseService.sendDataToSupabase(
+          tableName: 'clients',
+          data: {
+            'id': id,
+            'billing_info': '',
+            'balance': 0,
+            'created_at': now,
+          },
+          conflictColumn: 'id',
+        );
+      }
+    } else if (role == StringsManager.freelancerRole) {
+      final existingFreelancer = await supabase
+          .from('freelancers')
+          .select()
+          .eq('id', id)
+          .maybeSingle();
+
+      if (existingFreelancer == null) {
+        await supabaseService.sendDataToSupabase(
+          tableName: 'freelancers',
+          data: {
+            'id': id,
+            'is_verified': false,
+            'freelancer_status': 'Active',
+            'freelancer_balance': 0.0,
+            'created_at': now,
+          },
+          conflictColumn: 'id',
+        );
+      }
+    }
+  }
 
   Future<void> _handleUserAfterAuth({
     required String id,
@@ -153,6 +145,7 @@ Future<void> _insertRoleData(String id, String role) async {
     await _insertRoleData(id, role);
   }
 
+  // ========================= Email/Password Register =========================
   @override
   Future<Either<Failures, RegisterResponseDm>> register(
     String firstName,
@@ -179,6 +172,16 @@ Future<void> _insertRoleData(String id, String role) async {
       final user = response.user!;
       final token = response.session?.accessToken ?? '';
 
+      await _handleUserAfterAuth(
+        id: user.id,
+        fullName: "$firstName $lastName",
+        email: user.email!,
+        token: token,
+        role: role,
+      );
+
+      await _fcmService.registerDeviceToken(user.id);
+
       final userDm = UserDm(
         firstName: firstName,
         lastName: lastName,
@@ -187,14 +190,6 @@ Future<void> _insertRoleData(String id, String role) async {
         role: role,
       );
 
-      await _handleUserAfterAuth(
-        id: user.id,
-        fullName: "$firstName $lastName",
-        email: user.email!,
-        token: token,
-        role: role,
-      );
-      await _fcmService.registerDeviceToken(user.id);
       final registerResponse = RegisterResponseDm(
         user: userDm,
         message: StringsManager.userRegisteredSuccessfully,
@@ -205,11 +200,12 @@ Future<void> _insertRoleData(String id, String role) async {
     } on AuthException catch (e) {
       return Left(ServerFailure(e.message));
     } catch (e, stackTrace) {
-      debugPrint("Error: $e\n$stackTrace");
+      debugPrint("Register Error: $e\n$stackTrace");
       return const Left(ServerFailure(StringsManager.somethingWentWrong));
     }
   }
 
+  // ========================= Email/Password Login =========================
   @override
   Future<Either<Failures, LoginResponseDm>> login(
     String email,
@@ -254,11 +250,13 @@ Future<void> _insertRoleData(String id, String role) async {
         email: user.email ?? '',
         token: token ?? '',
         role: role,
+
       );
+
       await _fcmService.registerDeviceToken(user.id);
-      final userDm = LoginUserDm(email: user.email, password: password);
+
       final loginResponse = LoginResponseDm(
-        user: userDm,
+        user: LoginUserDm(email: user.email, password: password),
         message: StringsManager.userLoginSuccessfully,
         token: token,
       );
@@ -267,27 +265,26 @@ Future<void> _insertRoleData(String id, String role) async {
     } on AuthException catch (e) {
       return Left(ServerFailure(e.message));
     } catch (e, stackTrace) {
-      debugPrint("Error: $e\n$stackTrace");
+      debugPrint("Login Error: $e\n$stackTrace");
       return const Left(ServerFailure(StringsManager.somethingWentWrong));
     }
   }
 
+  // ========================= Google Login =========================
   @override
   Future<Either<Failures, SocialAuthResponseEntity>> googleLogin(
-    String role,
-  ) async {
+      String role) async {
     try {
       if (!await NetworkUtils.hasInternet()) {
         return const Left(NetworkFailure(StringsManager.noInternetConnection));
       }
 
-      final GoogleSignInAccount? account = await _googleSignIn.signIn();
+      final account = await _googleSignIn.signIn();
       if (account == null) {
         return const Left(ServerFailure(StringsManager.googleLoginCancelled));
       }
 
-      final GoogleSignInAuthentication googleAuth =
-          await account.authentication;
+      final googleAuth = await account.authentication;
 
       final res = await Supabase.instance.client.auth.signInWithIdToken(
         provider: OAuthProvider.google,
@@ -306,12 +303,12 @@ Future<void> _insertRoleData(String id, String role) async {
       final fullName = account.displayName ?? '';
       final avatarUrl = account.photoUrl;
 
-      final existingUser =
-          await supabase
-              .from('users')
-              .select()
-              .eq('email', email)
-              .maybeSingle();
+      final existingUser = await supabase
+          .from('users')
+          .select()
+          .eq('email', email)
+          .maybeSingle();
+
       if (existingUser != null && existingUser['role'] != role) {
         return Left(
           ServerFailure(
@@ -332,7 +329,9 @@ Future<void> _insertRoleData(String id, String role) async {
         role: role,
         avatarUrl: avatarUrl,
       );
+
       await _fcmService.registerDeviceToken(userId);
+
       final googleUser = GoogleUserDm(
         id: userId,
         name: fullName,
@@ -341,27 +340,31 @@ Future<void> _insertRoleData(String id, String role) async {
         avatarUrl: avatarUrl,
       );
 
-      final googleResponse = GoogleAuthResponseDm(
+      return Right(GoogleAuthResponseDm(
         token: supabaseToken,
         user: googleUser,
         message: StringsManager.googleLoginSuccessful,
-      );
-
-      return Right(googleResponse);
+      ));
     } catch (e, stackTrace) {
-      debugPrint("Error: $e\n$stackTrace");
+      debugPrint("Google login error: $e\n$stackTrace");
       return const Left(ServerFailure(StringsManager.somethingWentWrong));
     }
   }
 
+  // ========================= Apple Login =========================
   @override
-  Future<Either<Failures, SocialAuthResponseEntity>> appleLogin(String role) async {
+  Future<Either<Failures, SocialAuthResponseEntity>> appleLogin(
+      String role) async {
     try {
       if (!await NetworkUtils.hasInternet()) {
         return const Left(NetworkFailure(StringsManager.noInternetConnection));
       }
+
       final credential = await SignInWithApple.getAppleIDCredential(
-        scopes: [AppleIDAuthorizationScopes.email, AppleIDAuthorizationScopes.fullName],
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName
+        ],
       );
 
       final res = await Supabase.instance.client.auth.signInWithIdToken(
@@ -379,7 +382,7 @@ Future<void> _insertRoleData(String id, String role) async {
 
       final email = credential.email ?? '';
       final fullName =
-      "${credential.givenName ?? ''} ${credential.familyName ?? ''}".trim();
+          "${credential.givenName ?? ''} ${credential.familyName ?? ''}".trim();
 
       final existingUser = await supabase
           .from('users')
@@ -388,13 +391,16 @@ Future<void> _insertRoleData(String id, String role) async {
           .maybeSingle();
 
       if (existingUser != null && existingUser['role'] != role) {
-        return Left(ServerFailure(
-          StringsManager.accountAlreadyRegistered,
-          params: {"existingRole": existingUser['role'], "role": role},
-        ));
+        return Left(
+          ServerFailure(
+            StringsManager.accountAlreadyRegistered,
+            params: {"existingRole": existingUser['role'], "role": role},
+          ),
+        );
       }
 
-      final userId = existingUser != null ? existingUser['id'] : supabaseUser.id;
+      final userId =
+          existingUser != null ? existingUser['id'] : supabaseUser.id;
 
       await _handleUserAfterAuth(
         id: userId,
@@ -404,7 +410,9 @@ Future<void> _insertRoleData(String id, String role) async {
         role: role,
         avatarUrl: null,
       );
+
       await _fcmService.registerDeviceToken(userId);
+
       final appleUser = GoogleUserDm(
         id: userId,
         name: fullName,
@@ -413,27 +421,27 @@ Future<void> _insertRoleData(String id, String role) async {
         avatarUrl: null,
       );
 
-      final appleResponse = GoogleAuthResponseDm(
+      return Right(GoogleAuthResponseDm(
         token: supabaseToken,
         user: appleUser,
         message: StringsManager.appleLoginSuccessful,
-      );
-
-      return Right(appleResponse);
+      ));
     } catch (e, stackTrace) {
-      debugPrint("Error: $e\n$stackTrace");
+      debugPrint("Apple login error: $e\n$stackTrace");
       return const Left(ServerFailure(StringsManager.somethingWentWrong));
     }
   }
+
+  // ========================= Facebook Login =========================
   @override
-  Future<Either<Failures, SocialAuthResponseEntity>> facebookLogin(String role) async {
+  Future<Either<Failures, SocialAuthResponseEntity>> facebookLogin(
+      String role) async {
     try {
       if (!await NetworkUtils.hasInternet()) {
         return const Left(NetworkFailure(StringsManager.noInternetConnection));
       }
 
-      // تسجيل الدخول عبر Facebook
-      final LoginResult result = await FacebookAuth.instance.login(
+      final result = await FacebookAuth.instance.login(
         permissions: ['email', 'public_profile'],
       );
 
@@ -443,7 +451,6 @@ Future<void> _insertRoleData(String id, String role) async {
 
       final accessToken = result.accessToken!.tokenString;
 
-      // جلب بيانات المستخدم
       final userData = await FacebookAuth.instance.getUserData(
         fields: "email,name,picture.width(200)",
       );
@@ -458,6 +465,7 @@ Future<void> _insertRoleData(String id, String role) async {
           .select()
           .eq('email', email)
           .maybeSingle();
+
       if (existingUser != null && existingUser['role'] != role) {
         return Left(
           ServerFailure(
@@ -481,10 +489,23 @@ Future<void> _insertRoleData(String id, String role) async {
           'profile_image': avatarUrl,
           'created_at': DateTime.now().toIso8601String(),
           'total_earnings': 0.0,
-
         });
       }
+
+      // إدراج بيانات الـ role
+      await _insertRoleData(userId, role);
+
+      // تسجيل FCM token
       await _fcmService.registerDeviceToken(userId);
+      await _handleUserAfterAuth(
+        id: userId,
+        fullName: fullName,
+        email: email,
+        token: accessToken ,
+        role: role,
+        avatarUrl: avatarUrl,
+      );
+      // إنشاء نموذج المستخدم لإرجاعه
       final facebookUser = GoogleUserDm(
         id: userId,
         name: fullName,
@@ -505,6 +526,4 @@ Future<void> _insertRoleData(String id, String role) async {
       return const Left(ServerFailure(StringsManager.somethingWentWrong));
     }
   }
-
-
 }

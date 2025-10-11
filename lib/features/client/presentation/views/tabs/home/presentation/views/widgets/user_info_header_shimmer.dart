@@ -20,13 +20,11 @@ class UserInfoHomeHeaderShimmer extends StatelessWidget {
               Container(
                 width: 120.w,
                 height: 16.h,
-                color: Colors.white,
               ),
               SizedBox(height: 8.h),
               Container(
                 width: 180.w,
                 height: 20.h,
-                color: Colors.white,
               ),
             ],
           ),
@@ -34,7 +32,6 @@ class UserInfoHomeHeaderShimmer extends StatelessWidget {
             width: 60.r,
             height: 60.r,
             decoration: const BoxDecoration(
-              color: Colors.white,
               shape: BoxShape.circle,
             ),
           ),

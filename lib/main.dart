@@ -128,7 +128,7 @@ class _TasklyState extends State<Taskly> with WidgetsBindingObserver {
             Locale('ar'),
             Locale('en'),
           ],
-          theme: AppTheme.lightTheme,
+          theme: AppTheme.darkTheme,
           onGenerateRoute: RoutesManager.onGenerateRoute,
           initialRoute: RoutesManager.splash,
         );
