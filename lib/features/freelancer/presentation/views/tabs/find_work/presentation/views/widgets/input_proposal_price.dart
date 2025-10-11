@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
 
+import '../../../../../../../../../config/l10n/app_localizations.dart';
+
 class InputProposalPrice extends StatelessWidget {
   final String hint;
   final String selectedValue;
@@ -21,6 +23,7 @@ class InputProposalPrice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
       decoration: BoxDecoration(
@@ -55,7 +58,7 @@ class InputProposalPrice extends StatelessWidget {
               color: ColorsManager.white,
             ),
             child: Text(
-              "SAR",
+              local.sar  ,
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     fontWeight: FontWeight.w600,
                     fontSize: 14.sp,

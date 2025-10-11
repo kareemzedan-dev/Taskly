@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../../config/l10n/app_localizations.dart';
+
 class DescriptionSection extends StatelessWidget {
   const DescriptionSection({super.key,  this.description});
   final String ? description ;
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(height: 16.h),
         Text(
-          "Description",
+          local.description,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 fontWeight: FontWeight.w600,
                 fontSize: 16.sp,
@@ -30,7 +33,7 @@ class DescriptionSection extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-             description ?? 'No Description',
+             description ?? local.noDescription,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     fontSize: 14.sp,
                     height: 1.5,

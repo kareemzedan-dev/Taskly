@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/hire_method_card.dart';
+import '../../../../../../../../../config/l10n/app_localizations.dart';
 
 class HiringMethodsOptions extends StatefulWidget {
   final int selectedIndex;
@@ -20,6 +21,8 @@ class HiringMethodsOptions extends StatefulWidget {
 class _HiringMethodsOptionsState extends State<HiringMethodsOptions> {
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
+
     return IntrinsicHeight(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -27,9 +30,8 @@ class _HiringMethodsOptionsState extends State<HiringMethodsOptions> {
           Expanded(
             child: HireMethodCard(
               icon: Icons.language,
-              title: "Public Posting",
-              subtitle:
-                  "Post your request publicly and receive multiple proposals",
+              title: local.public_posting_title,
+              subtitle: local.public_posting_subtitle,
               isSelected: widget.selectedIndex == 0,
               onTap: () {
                 widget.onChanged(0);
@@ -40,14 +42,13 @@ class _HiringMethodsOptionsState extends State<HiringMethodsOptions> {
           Expanded(
             child: HireMethodCard(
               icon: FontAwesomeIcons.bullseye,
-              title: "Hire Specific Freelancer",
-              subtitle:
-                  "Send your request directly to a specific freelancer as a private offer",
+              title: local.hire_specific_freelancer_title,
+              subtitle: local.hire_specific_freelancer_subtitle,
               isSelected: widget.selectedIndex == 1,
               onTap: () {
                 widget.onChanged(1);
               },
-              badge: "Private",
+              badge: local.private_badge,
             ),
           ),
         ],

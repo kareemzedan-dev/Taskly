@@ -6,12 +6,15 @@ import 'package:taskly/core/di/di.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/view_model/place_order_view_model/place_order_view_model.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/order_view_body.dart';
 
+import '../../../../../../../../config/l10n/app_localizations.dart';
+
 class OrderView extends StatelessWidget {
   const OrderView({super.key,required this.title,required this.selectedCategory});
   final String? title ,selectedCategory;
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.white,
@@ -21,7 +24,7 @@ class OrderView extends StatelessWidget {
           child: const Icon(CupertinoIcons.back, color: Colors.black),
         ),
         title: Text(
-          'Service Order',
+          local.service_order,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
             fontWeight: FontWeight.w600,
             fontSize: 18.sp,

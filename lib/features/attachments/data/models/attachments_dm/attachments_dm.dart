@@ -42,7 +42,17 @@ class AttachmentModel extends AttachmentEntity {
       storagePath: entity.storagePath,
     );
   }
+  AttachmentModel copyWith({String? name, String? storagePath, String? url, int? size, String? type,}) {
+    return AttachmentModel(
+      name: name ?? this.name,
+      storagePath: storagePath ?? this.storagePath,
+      id: id,
+      url: url ?? this.url ,
+      size: size ?? this.size,
+      type: type ?? this.type,
 
+    );
+  }
   AttachmentEntity toEntity() {
     return AttachmentEntity(
       id: id,

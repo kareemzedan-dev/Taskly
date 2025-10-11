@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:taskly/config/l10n/app_localizations.dart';
 import 'package:taskly/core/cache/shared_preferences.dart';
 import 'package:taskly/core/components/custom_button.dart';
 import 'package:taskly/core/components/custom_text_field.dart';
@@ -32,13 +33,15 @@ class _WithdrawalRequestTabContentState
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
+
     return BlocConsumer<PlaceWithdrawalBalanceViewModel,
         PlaceWithdrawalBalanceStates>(
       listener: (context, state) {
         if (state is PlaceWithdrawalBalanceSuccessState) {
-       showTemporaryMessage(context,
-           "Withdrawal request placed successfully", MessageType.success);
-       Navigator.pop(context);
+          showTemporaryMessage(context,
+              local.withdrawalRequestPlacedSuccessfully, MessageType.success);
+          Navigator.pop(context);
         } else if (state is PlaceWithdrawalBalanceErrorState) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(state.message)),
@@ -60,8 +63,7 @@ class _WithdrawalRequestTabContentState
                     } else if (state is GetTotalEarningsSuccessState) {
                       return WalletCardSection(earnings: state.earningsEntity);
                     } else if (state is GetTotalEarningsErrorState) {
-                      return const Center(
-                          child: Text("Error fetching earnings"));
+                      return Center(child: Text(local.errorFetchingEarnings));
                     }
                     return const WalletCardSectionIntital();
                   },
@@ -91,7 +93,7 @@ class _WithdrawalRequestTabContentState
                 SubmitButtonSection(
                   onTap: () {
                     final amount =
-                        double.tryParse(amountController.text.trim());
+                    double.tryParse(amountController.text.trim());
                     final phone = phoneController.text.trim();
 
                     final earningsState =
@@ -103,23 +105,24 @@ class _WithdrawalRequestTabContentState
 
                     if (amount == null || amount <= 0) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("Enter a valid amount")),
+                        SnackBar(content: Text(local.enterValidAmount)),
                       );
                       return;
                     }
 
                     if (amount > availableBalance) {
                       showTemporaryMessage(
-                          context,
-                          "You cannot withdraw more than your available balance ($availableBalance SAR)",
-                          MessageType.error);
+                        context,
+                        local.cannotWithdrawMoreThanBalance(availableBalance.toString()),
+                        MessageType.error,
+                      );
+
                       return;
                     }
 
                     if (phone.isEmpty || selectedMethod == null) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content: Text("Select method and enter phone")),
+                        SnackBar(content: Text(local.selectMethodAndEnterPhone)),
                       );
                       return;
                     }
@@ -127,19 +130,18 @@ class _WithdrawalRequestTabContentState
                     context
                         .read<PlaceWithdrawalBalanceViewModel>()
                         .placeWithdrawalBalance(
-                          PaymentEntity.forFreelancer(
-                            id: Uuid().v4(),
-                            freelancerId: SharedPrefHelper.getString(
-                                StringsManager.idKey),
-                            amount: amount,
-                            accountNumber: phone,
-                            paymentMethod: selectedMethod,
-                            status: "pending",
-
-                            createdAt: DateTime.now(),
-                            updatedAt: DateTime.now(),
-                          ),
-                        );
+                      PaymentEntity.forFreelancer(
+                        id: Uuid().v4(),
+                        freelancerId: SharedPrefHelper.getString(
+                            StringsManager.idKey),
+                        amount: amount,
+                        accountNumber: phone,
+                        paymentMethod: selectedMethod,
+                        status: "pending",
+                        createdAt: DateTime.now(),
+                        updatedAt: DateTime.now(),
+                      ),
+                    );
                   },
                 ),
 
@@ -162,10 +164,11 @@ class WalletCardSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     return WalletCard(
-        availableBalance: "${earnings.balance} SAR",
-        totalEarnings: "${earnings.totalEarnings} SAR",
-        withdrawn: "${earnings.totalEarnings - earnings.balance} SAR");
+        availableBalance: "${earnings.balance} ${local.sar}",
+        totalEarnings: "${earnings.totalEarnings} ${local.sar}",
+        withdrawn: "${earnings.totalEarnings - earnings.balance} ${local.sar}");
   }
 }
 
@@ -174,8 +177,11 @@ class WalletCardSectionIntital extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const WalletCard(
-        availableBalance: "0 SAR", totalEarnings: "0 SAR", withdrawn: "0 SAR");
+    final local = AppLocalizations.of(context)!;
+    return WalletCard(
+        availableBalance: "0 ${local.sar}",
+        totalEarnings: "0 ${local.sar}",
+        withdrawn: "0 ${local.sar}");
   }
 }
 
@@ -186,6 +192,7 @@ class AmountInputSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     final textTheme = Theme.of(context).textTheme;
     return Card(
       shape: RoundedRectangleBorder(
@@ -199,7 +206,7 @@ class AmountInputSection extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Withdrawal Amount",
+              local.withdrawalAmount,
               style: textTheme.bodyLarge?.copyWith(
                 fontWeight: FontWeight.bold,
                 fontSize: 16.sp,
@@ -208,7 +215,7 @@ class AmountInputSection extends StatelessWidget {
             SizedBox(height: 8.h),
             CustomTextFormField(
               textEditingController: controller,
-              hintText: "Enter Amount",
+              hintText: local.enterAmount,
               keyboardType: TextInputType.number,
             ),
           ],
@@ -230,6 +237,7 @@ class PaymentMethodSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     final textTheme = Theme.of(context).textTheme;
 
     return Card(
@@ -244,7 +252,7 @@ class PaymentMethodSection extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Select Payment Method",
+              local.selectPaymentMethod,
               style: textTheme.bodyLarge?.copyWith(
                 fontWeight: FontWeight.bold,
                 fontSize: 16.sp,
@@ -256,14 +264,14 @@ class PaymentMethodSection extends StatelessWidget {
               method: "Vodafone Cash",
               icon: Icons.account_balance_wallet_outlined,
               color: Colors.red,
-              title: "Vodafone Cash",
+              title: local.vodafoneCash,
             ),
             _buildMethodOption(
               context,
               method: "InstaPay",
               icon: Icons.account_balance,
               color: Colors.blue,
-              title: "InstaPay",
+              title: local.instapay,
             ),
           ],
         ),
@@ -272,12 +280,12 @@ class PaymentMethodSection extends StatelessWidget {
   }
 
   Widget _buildMethodOption(
-    BuildContext context, {
-    required String method,
-    required IconData icon,
-    required Color color,
-    required String title,
-  }) {
+      BuildContext context, {
+        required String method,
+        required IconData icon,
+        required Color color,
+        required String title,
+      }) {
     return GestureDetector(
       onTap: () => onMethodChanged(method),
       child: Container(
@@ -316,6 +324,7 @@ class MobileNumberSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     final textTheme = Theme.of(context).textTheme;
 
     return Card(
@@ -330,7 +339,7 @@ class MobileNumberSection extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Mobile Number",
+              local.mobileNumber,
               style: textTheme.bodyLarge?.copyWith(
                 fontWeight: FontWeight.bold,
                 fontSize: 16.sp,
@@ -345,7 +354,7 @@ class MobileNumberSection extends StatelessWidget {
                   Icons.phone_android,
                   color: ColorsManager.primary,
                 ),
-                hintText: "Enter mobile number",
+                hintText: local.enterMobileNumber,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12.r),
                 ),
@@ -361,7 +370,7 @@ class MobileNumberSection extends StatelessWidget {
             ),
             SizedBox(height: 6.h),
             Text(
-              "⚠️ Please enter the Vodafone Cash number registered in your name",
+              local.vodafoneCashNote,
               style: textTheme.bodySmall?.copyWith(
                 color: Colors.grey[600],
                 fontSize: 12.sp,
@@ -381,6 +390,7 @@ class SubmitButtonSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomButton(title: "Submit Request", ontap: onTap);
+    final local =AppLocalizations.of(context)!;
+    return CustomButton(title: local.submitRequest, ontap: onTap);
   }
 }

@@ -10,6 +10,7 @@ import '../../../../../../../core/services/supabase_service.dart';
 import '../../../../../../../core/utils/network_utils.dart';
 import '../../../../../../shared/data/models/order_dm/order_dm.dart';
 import '../../../../data_sources/remote/freelancer_orders/fetch_public_orders_remote_data_source/fetch_public_orders_remote_data_source.dart';
+
 @Injectable(as: FetchPublicOrdersRemoteDataSource)
 class FetchPublicOrdersRemoteDataSourceImpl implements FetchPublicOrdersRemoteDataSource{
   final SupabaseService _supabaseService;

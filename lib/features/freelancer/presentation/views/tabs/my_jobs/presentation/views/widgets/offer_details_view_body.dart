@@ -40,7 +40,7 @@ class OfferDetailsViewBody extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children:   [
-                          JobHeader(title: state.orderEntity.title ,category:  state.orderEntity.category!,date:  state.orderEntity.createdAt.toTimeAgo(),),
+                          JobHeader(title: state.orderEntity.title ,category:  state.orderEntity.category!,date:  state.orderEntity.createdAt.toTimeAgo(context),),
                           const Divider(thickness: 1, color: Colors.grey),
                           DescriptionSection(description: state.orderEntity.description ,),
                           const Divider(thickness: 1, color: Colors.grey),

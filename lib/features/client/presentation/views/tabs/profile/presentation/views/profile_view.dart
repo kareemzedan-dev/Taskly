@@ -4,17 +4,20 @@ import 'package:taskly/core/utils/assets_manager.dart';
 import 'package:taskly/core/components/circle_icon_button.dart';
 import 'package:taskly/features/client/presentation/views/tabs/profile/presentation/views/widgets/client_profile_view_body.dart';
 
+import '../../../../../../../../config/l10n/app_localizations.dart';
+
 class ClientProfileViewTab extends StatelessWidget {
   const ClientProfileViewTab({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
         backgroundColor: Colors.white,
         title: Text(
-          'Profile',
+         local.profile,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
             fontWeight: FontWeight.w700,
             fontSize: 20.sp,

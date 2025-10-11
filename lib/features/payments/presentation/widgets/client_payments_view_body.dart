@@ -16,8 +16,8 @@ import 'package:taskly/features/payments/presentation/widgets/payments_content.d
 import 'package:taskly/features/payments/presentation/widgets/upload_payment_proof_button.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../../config/l10n/app_localizations.dart';
 import '../../../shared/domain/entities/order_entity/order_entity.dart';
-
 
 class ClientPaymentsViewBody extends StatelessWidget {
   final OrderEntity order;
@@ -26,6 +26,7 @@ class ClientPaymentsViewBody extends StatelessWidget {
   final Uuid uuid = Uuid();
 
   Future<bool> _onWillPop(BuildContext context) async {
+    final local = AppLocalizations.of(context)!;
     final uploadVM = context.read<UploadAttachmentsViewModel>();
 
     if (uploadVM.uploadedAttachments.isNotEmpty) {
@@ -33,16 +34,12 @@ class ClientPaymentsViewBody extends StatelessWidget {
 
       await showConfirmationDialog(
         context: context,
-        title: "Warning",
-        message: "You have uploaded payment proof but haven't pressed Make Payment. Are you sure you want to leave?",
-        confirmText: "Leave",
-        cancelText: "Stay",
-        onConfirm: () {
-          shouldLeave = true;
-        },
-        onCancel: () {
-          shouldLeave = false;
-        },
+        title: local.warning,
+        message: local.leave_warning_message,
+        confirmText: local.leave,
+        cancelText: local.stay,
+        onConfirm: () => shouldLeave = true,
+        onCancel: () => shouldLeave = false,
       );
 
       return shouldLeave;
@@ -51,9 +48,9 @@ class ClientPaymentsViewBody extends StatelessWidget {
     return true;
   }
 
-
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     final uploadVM = context.read<UploadAttachmentsViewModel>();
 
     return WillPopScope(
@@ -65,7 +62,7 @@ class ClientPaymentsViewBody extends StatelessWidget {
           surfaceTintColor: Colors.white,
           elevation: 0,
           title: Text(
-            'Payments',
+            local.payments,
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
               fontWeight: FontWeight.w600,
               fontSize: 18.sp,
@@ -94,42 +91,39 @@ class ClientPaymentsViewBody extends StatelessWidget {
                 const Expanded(child: PaymentsContent()),
                 const UploadAttachmentsSection(),
                 SizedBox(height: 16.h),
-                BlocListener<CreatePaymentViewModel, CreatePaymentViewModelStates>(
+                BlocListener<CreatePaymentViewModel,
+                    CreatePaymentViewModelStates>(
                   listener: (context, state) {
                     if (state is CreatePaymentViewModelStatesLoading) {
-                      showTemporaryMessage(context, "Creating payment...", MessageType.waiting);
-                    } else if (state is CreatePaymentViewModelStatesError) {
-                      showTemporaryMessage(context, state.message, MessageType.error);
-                    } else if (state is CreatePaymentViewModelStatesSuccess) {
                       showTemporaryMessage(
-                        context,
-                        "Payment created successfully, please wait for admin approval",
-                        MessageType.success,
-                      );
+                          context, local.creating_payment, MessageType.waiting);
+                    } else if (state is CreatePaymentViewModelStatesError) {
+                      showTemporaryMessage(
+                          context, state.message, MessageType.error);
+                    } else if (state is CreatePaymentViewModelStatesSuccess) {
+                      showTemporaryMessage(context,
+                          local.payment_created_success, MessageType.success);
                       Navigator.pushAndRemoveUntil(
                         context,
-                        MaterialPageRoute(builder: (_) => const ClientHomeView(initialIndex: 1)),
+                        MaterialPageRoute(
+                            builder: (_) =>
+                            const ClientHomeView(initialIndex: 1)),
                             (route) => false,
                       );
                     }
                   },
                   child: CustomButton(
-                    title: "Make Payment",
+                    title: local.make_payment,
                     ontap: () {
                       if (uploadVM.files.isNotEmpty &&
-                          uploadVM.files.length != uploadVM.uploadedFileHashes.length) {
-                        return showTemporaryMessage(
-                          context,
-                          "Please wait until all attachments are uploaded",
-                          MessageType.error,
-                        );
+                          uploadVM.files.length !=
+                              uploadVM.uploadedFileHashes.length) {
+                        return showTemporaryMessage(context, local.wait_uploads,
+                            MessageType.error);
                       }
                       if (uploadVM.uploadedAttachments.isEmpty) {
-                        return showTemporaryMessage(
-                          context,
-                          "Please upload payment proof",
-                          MessageType.error,
-                        );
+                        return showTemporaryMessage(context,
+                            local.upload_payment_proof_first, MessageType.error);
                       }
 
                       final paymentId = uuid.v4();
@@ -166,7 +160,10 @@ class UploadAttachmentsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UploadAttachmentsViewModel, UploadAttachmentsViewModelStates>(
+    final local = AppLocalizations.of(context)!;
+
+    return BlocBuilder<UploadAttachmentsViewModel,
+        UploadAttachmentsViewModelStates>(
       builder: (context, state) {
         if (state is UploadAttachmentsViewModelStatesLoading) {
           return const Center(child: CupertinoActivityIndicator());
@@ -178,11 +175,8 @@ class UploadAttachmentsSection extends StatelessWidget {
         }
         if (state is UploadAttachmentsViewModelStatesSuccess) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            showTemporaryMessage(
-              context,
-              "Payment proof uploaded successfully",
-              MessageType.success,
-            );
+            showTemporaryMessage(context, local.payment_proof_uploaded_success,
+                MessageType.success);
           });
         }
         return UploadPaymentProofButton(

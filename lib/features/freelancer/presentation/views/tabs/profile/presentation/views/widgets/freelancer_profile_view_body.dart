@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:taskly/config/l10n/app_localizations.dart';
 import 'package:taskly/config/routes/routes_manager.dart';
 import 'package:taskly/core/utils/assets_manager.dart';
 import 'package:taskly/features/client/presentation/views/tabs/profile/presentation/views/widgets/account_item_row.dart';
@@ -8,7 +9,6 @@ import 'package:taskly/features/profile/presentation/widgets/user_info_section.d
 import 'package:taskly/features/shared/presentation/views/widgets/language_bottom_sheet_content.dart';
 import 'package:taskly/features/shared/presentation/views/widgets/profile_section.dart';
 import 'package:taskly/features/shared/presentation/views/widgets/theme_bottom_sheet_content.dart';
-
 import '../../../../../../../../../core/cache/shared_preferences.dart';
 import '../../../../../../../../../core/di/di.dart';
 import '../../../../../../../../../core/utils/strings_manager.dart';
@@ -26,11 +26,12 @@ class FreelancerProfileViewBody extends StatefulWidget {
 
 class _FreelancerProfileViewBodyState extends State<FreelancerProfileViewBody> {
   String _currentLanguage = "English";
-
   String _currentTheme = "Light";
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
+
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(30.0),
@@ -39,11 +40,10 @@ class _FreelancerProfileViewBodyState extends State<FreelancerProfileViewBody> {
           children: [
             const SizedBox(height: 20),
             BlocProvider(
-              create:
-                  (context) =>
+              create: (context) =>
               getIt<ProfileViewModel>()..getUserInfo(
                 SharedPrefHelper.getString(StringsManager.idKey)!,
-                 SharedPrefHelper.getString(StringsManager.roleKey)!,
+                SharedPrefHelper.getString(StringsManager.roleKey)!,
               ),
               child: BlocBuilder<ProfileViewModel, ProfileViewModelStates>(
                 builder: (context, state) {
@@ -51,7 +51,6 @@ class _FreelancerProfileViewBodyState extends State<FreelancerProfileViewBody> {
                     return const UserInfoSectionShimmer();
                   } else if (state is ProfileViewModelStatesSuccess) {
                     return UserInfoSection(
-
                       onTap: () {
                         Navigator.pushNamed(
                           context,
@@ -60,7 +59,6 @@ class _FreelancerProfileViewBodyState extends State<FreelancerProfileViewBody> {
                         );
                       },
                       rating:  state.userInfoEntity.rating!,
-
                     );
                   } else if (state is ProfileViewModelStatesError) {
                     return Text(state.message);
@@ -72,11 +70,11 @@ class _FreelancerProfileViewBodyState extends State<FreelancerProfileViewBody> {
 
             SizedBox(height: 40.h),
             ProfileSection(
-              title: "Dashboard",
+              title: local.dashboardSection,
               children: [
                 AccountItemRow(
                   image: Assets.assetsImagesWallet2527857,
-                  text: "Earnings",
+                  text: local.earnings,
                   onTap: () {
                     Navigator.pushNamed(
                       context,
@@ -87,39 +85,41 @@ class _FreelancerProfileViewBodyState extends State<FreelancerProfileViewBody> {
                 SizedBox(height: 10.h),
                 AccountItemRow(
                   image: Assets.assetsImagesWithdrawal8211181,
-                  text: "Withdraw Balance",
+                  text: local.withdrawBalance,
                   onTap: () {
-                          Navigator.pushNamed(
-                context,
-                RoutesManager.requestWithdrawalView,
-              );
+                    Navigator.pushNamed(
+                      context,
+                      RoutesManager.requestWithdrawalView,
+                    );
                   },
                 ),
-                SizedBox(height: 10.h),
-                const AccountItemRow(
-                  image: Assets.assetsImagesDocument10103871,
-                  text: "My Orders",
-                ),
+
               ],
             ),
 
             ProfileSection(
-              title: "Work",
+              title: local.workSection,
               children: [
                 SizedBox(height: 10.h),
-                const AccountItemRow(
-                  image: Assets.assetsImagesStar967444,
-                  text: "Reviews & Ratings",
+                GestureDetector(
+                  onTap: () {
+
+
+                  },
+                  child: AccountItemRow(
+                    image: Assets.assetsImagesStar967444,
+                    text: local.reviewsRatings,
+                  ),
                 ),
               ],
             ),
 
             ProfileSection(
-              title: "Support",
+              title: local.supportSection,
               children: [
                 AccountItemRow(
                   image: Assets.assetsImagesTechSupport5109502,
-                  text: "Technical Support",
+                  text: local.technicalSupport,
                   onTap: () {
                     Navigator.pushNamed(
                       context,
@@ -131,11 +131,11 @@ class _FreelancerProfileViewBodyState extends State<FreelancerProfileViewBody> {
             ),
 
             ProfileSection(
-              title: "Account",
+              title: local.accountSection,
               children: [
                 AccountItemRow(
                   image: Assets.assetsImagesInternet2889312,
-                  text: "Language",
+                  text: local.language,
                   onTap: () async {
                     final selected = await showModalBottomSheet<String>(
                       context: context,
@@ -161,7 +161,7 @@ class _FreelancerProfileViewBodyState extends State<FreelancerProfileViewBody> {
                 ),
                 AccountItemRow(
                   image: Assets.assetsImagesBrushes3450037,
-                  text: "Theme",
+                  text: local.theme,
                   onTap: () async {
                     final selectedTheme = await showModalBottomSheet<String>(
                       context: context,
@@ -189,7 +189,7 @@ class _FreelancerProfileViewBodyState extends State<FreelancerProfileViewBody> {
 
                 AccountItemRow(
                   image: Assets.assetsImagesCahngePassword,
-                  text: "Change Password",
+                  text: local.changePassword,
                   onTap: () {
                     Navigator.pushNamed(
                       context,
@@ -200,12 +200,12 @@ class _FreelancerProfileViewBodyState extends State<FreelancerProfileViewBody> {
               ],
             ),
             ProfileSection(
-              title: "Settings",
+              title: local.settingsSection,
               children: [
                 SizedBox(height: 10.h),
                 AccountItemRow(
                   image: Assets.assetsImagesAccount3166234,
-                  text: "Privacy Policy",
+                  text: local.privacyPolicy,
                   onTap: () {
                     Navigator.pushNamed(
                       context,
@@ -214,9 +214,9 @@ class _FreelancerProfileViewBodyState extends State<FreelancerProfileViewBody> {
                   },
                 ),
                 SizedBox(height: 10.h),
-                const AccountItemRow(
+                AccountItemRow(
                   image: Assets.assetsImagesDocument10103871,
-                  text: "Terms & Conditions",
+                  text: local.termsConditions,
                 ),
               ],
             ),
@@ -238,7 +238,7 @@ class _FreelancerProfileViewBodyState extends State<FreelancerProfileViewBody> {
                     const Icon(Icons.logout, color: Colors.red),
                     const SizedBox(width: 12),
                     Text(
-                      "Logout",
+                      local.logout,
                       style: TextStyle(
                         color: Colors.red,
                         fontWeight: FontWeight.bold,

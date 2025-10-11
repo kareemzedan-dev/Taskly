@@ -4,6 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/utils/app_text_styles.dart';
 import 'package:taskly/features/reviews/presentation/widgets/user_avatar.dart';
 
+import '../../../../../../../../../config/l10n/app_localizations.dart';
+
 class UserInfoDisplay extends StatelessWidget {
   final String name;
   final String email;
@@ -26,6 +28,7 @@ class UserInfoDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     return GestureDetector(
       onTap: onTap,
       child: Row(
@@ -89,7 +92,7 @@ class UserInfoDisplay extends StatelessWidget {
                     ),
                     SizedBox(width: 5.w),
                     Text(
-                      isFreelancer ? 'Verified Freelancer' : 'Unverified Freelancer',
+                      isFreelancer ? local.verifiedFreelancer :local.unverified_freelancer,
                       style: AppTextStyles.bold14.copyWith(
                         color: isFreelancer ? Colors.grey : Colors.red,
                       ),

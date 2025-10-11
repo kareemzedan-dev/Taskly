@@ -3,18 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/features/shared/presentation/views/widgets/technical_support_view_body.dart';
 
+import '../../../../config/l10n/app_localizations.dart';
+
 class TechnicalSupportView extends StatelessWidget {
   const TechnicalSupportView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
         backgroundColor: Colors.white,
         title: Text(
-          'Support',
+          local.support,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
             fontWeight: FontWeight.w600,
             fontSize: 18.sp,

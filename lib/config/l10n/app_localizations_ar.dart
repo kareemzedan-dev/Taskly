@@ -18,6 +18,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get freelancer => 'مستقل';
 
   @override
+  String get sar => 'ريال سعودي';
+
+  @override
   String get welcomeMessage => 'رتب شغلك، تواصل،\n  وحقق النجاح!';
 
   @override
@@ -149,9 +152,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get orders => 'الطلبات';
-
-  @override
-  String get messages => 'الرسائل';
 
   @override
   String get payments => 'المدفوعات';
@@ -638,7 +638,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get offersReceived => 'العروض المستلمة';
 
   @override
-  String get posted => 'نشر في';
+  String get posted => 'نشر منذ';
 
   @override
   String get description => 'الوصف';
@@ -861,4 +861,923 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get error_select_freelancer => 'الرجاء اختيار المستقل';
+
+  @override
+  String get description_hint => 'اكتب وصفك هنا';
+
+  @override
+  String get enter_time => 'أدخل الوقت';
+
+  @override
+  String get uploading => 'جاري التحميل...';
+
+  @override
+  String get uploaded_successfully => 'تم التحميل بنجاح ✅';
+
+  @override
+  String get no_files_uploaded_yet => 'لم يتم رفع أي ملفات بعد';
+
+  @override
+  String files_uploaded_count(Object count) {
+    return '$count ملفات تم رفعها';
+  }
+
+  @override
+  String get file_not_found_for_deletion => 'الملف غير موجود للحذف';
+
+  @override
+  String get failed_to_delete_file => 'فشل حذف الملف';
+
+  @override
+  String get file_deleted_successfully => 'تم حذف الملف بنجاح';
+
+  @override
+  String error(Object error) {
+    return 'خطأ';
+  }
+
+  @override
+  String get public_posting_title => 'نشر عام';
+
+  @override
+  String get public_posting_subtitle => 'انشر طلبك بشكل عام واستقبل عروض متعددة';
+
+  @override
+  String get hire_specific_freelancer_title => 'توظيف مستقل محدد';
+
+  @override
+  String get hire_specific_freelancer_subtitle => 'أرسل طلبك مباشرة إلى مستقل معين كعرض خاص';
+
+  @override
+  String get private_badge => 'خاص';
+
+  @override
+  String get search_freelancers_hint => 'ابحث عن المستقلين بالاسم...';
+
+  @override
+  String get choose_best_match_hint => 'اختر الأنسب لمشروعك';
+
+  @override
+  String get service_order => 'طلب خدمة';
+
+  @override
+  String get statistical_analysis => 'تحليل إحصائي';
+
+  @override
+  String get resume => 'سيرة ذاتية';
+
+  @override
+  String get tutorials => 'دروس تعليمية';
+
+  @override
+  String get consultations => 'استشارات';
+
+  @override
+  String get graphic_design => 'تصميم جرافيكي';
+
+  @override
+  String get engineering_services => 'خدمات هندسية';
+
+  @override
+  String get financial_services => 'خدمات مالية';
+
+  @override
+  String get other => 'أخرى';
+
+  @override
+  String get no_pending_orders_yet => 'لا توجد طلبات معلقة بعد';
+
+  @override
+  String get no_orders_in_progress => 'لا توجد طلبات قيد التنفيذ';
+
+  @override
+  String get no_completed_orders => 'لا توجد طلبات مكتملة';
+
+  @override
+  String get no_cancelled_orders => 'لا توجد طلبات ملغاة';
+
+  @override
+  String get unverified_freelancer => 'مستقل غير موثق';
+
+  @override
+  String get payment_under_review => 'الدفع قيد المراجعة';
+
+  @override
+  String paid_now(Object amount) {
+    return ' ادفع الآن $amount ريال سعودي';
+  }
+
+  @override
+  String get confirm_delete => 'تأكيد الحذف';
+
+  @override
+  String get delete_confirmation_message => 'هل أنت متأكد أنك تريد حذف هذا الطلب؟';
+
+  @override
+  String get delete => 'حذف';
+
+  @override
+  String get no_offers_yet => 'لا توجد عروض بعد';
+
+  @override
+  String get offer_accepted_successfully => 'تم قبول العرض بنجاح';
+
+  @override
+  String get offer_rejected_successfully => 'تم رفض العرض بنجاح';
+
+  @override
+  String get error_temp => 'خطأ';
+
+  @override
+  String get loading => 'جاري التحميل';
+
+  @override
+  String get decline_offer => 'رفض العرض';
+
+  @override
+  String get accept_offer => 'قبول العرض';
+
+  @override
+  String get start_chat => 'بدء المحادثة';
+
+  @override
+  String get view_less => 'عرض أقل';
+
+  @override
+  String get view_more => 'عرض المزيد';
+
+  @override
+  String get waiting => 'انتظار';
+
+  @override
+  String get file_viewer => 'عارض الملفات';
+
+  @override
+  String get warning => 'تحذير';
+
+  @override
+  String get upload_warning_message => 'لقد قمت برفع إثبات الدفع ولكن لم تضغط على زر تنفيذ الدفع. هل أنت متأكد أنك تريد المغادرة؟';
+
+  @override
+  String get stay => 'البقاء';
+
+  @override
+  String get leave => 'المغادرة';
+
+  @override
+  String get upload_payment_proof => 'رفع إثبات الدفع';
+
+  @override
+  String get secure_payment_note => '🔒 دفع آمن. لن يتم الإفراج عن المبلغ حتى يكتمل العمل.';
+
+  @override
+  String get payment_under_review_message => '📢 لا تقلق، طلب الدفع الخاص بك قيد المراجعة.\nعادة لا يستغرق الأمر وقتًا طويلاً.';
+
+  @override
+  String get payment_status => 'حالة الدفع';
+
+  @override
+  String get awaiting_approval => 'في انتظار الموافقة';
+
+  @override
+  String amount_sar(Object amount) {
+    return 'المبلغ: $amount ريال';
+  }
+
+  @override
+  String get contact_us_note => '📣 إذا كان لديك أي استفسار، لا تتردد في التواصل معنا. نحن هنا لمساعدتك!';
+
+  @override
+  String get chat_with_admin => 'تحدث مع الإدارة الآن';
+
+  @override
+  String get upload_note => 'ملاحظة: بعد إتمام التحويل، يرجى رفع صورة الإيصال أو لقطة شاشة من تطبيق البنك كدليل على الدفع.';
+
+  @override
+  String get leave_warning_message => 'لقد قمت برفع إثبات الدفع ولكن لم تضغط على زر تأكيد الدفع. هل أنت متأكد أنك تريد المغادرة؟';
+
+  @override
+  String get creating_payment => 'جاري إنشاء الدفع...';
+
+  @override
+  String get payment_created_success => 'تم إنشاء الدفع بنجاح، يرجى انتظار موافقة الإدارة';
+
+  @override
+  String get make_payment => 'إتمام الدفع';
+
+  @override
+  String get please_upload_proof => 'يرجى رفع إثبات الدفع';
+
+  @override
+  String get please_wait_uploads => 'يرجى الانتظار حتى يتم رفع جميع المرفقات';
+
+  @override
+  String get iban_number => 'رقم الآيبان';
+
+  @override
+  String get account_number => 'رقم الحساب';
+
+  @override
+  String get account_name => 'اسم الحساب';
+
+  @override
+  String get swift_code => 'رمز السويفت';
+
+  @override
+  String get wait_uploads => 'يرجى الانتظار حتى يتم رفع جميع المرفقات';
+
+  @override
+  String get upload_payment_proof_first => 'يرجى رفع إثبات الدفع أولاً';
+
+  @override
+  String get payment_proof_uploaded_success => 'تم رفع إثبات الدفع بنجاح';
+
+  @override
+  String get home => 'الرئيسية';
+
+  @override
+  String get find_work => 'ابحث عن عمل';
+
+  @override
+  String get my_jobs => 'وظائفي';
+
+  @override
+  String get messages => 'الرسائل';
+
+  @override
+  String get profile => 'الملف الشخصي';
+
+  @override
+  String get search_for_orders => 'ابحث عن الطلبات...';
+
+  @override
+  String get search_for_private_orders => 'ابحث عن الطلبات الخاصة...';
+
+  @override
+  String get search_for_public_orders => 'ابحث عن الطلبات العامة...';
+
+  @override
+  String get search_for_favorite_orders => 'ابحث عن الطلبات المفضلة...';
+
+  @override
+  String get public_requests => 'الطلبات العامة';
+
+  @override
+  String get private_requests => 'الطلبات الخاصة';
+
+  @override
+  String get account_under_verification => 'حسابك قيد المراجعة.\nيرجى الانتظار حتى يتم الموافقة على طلبك.';
+
+  @override
+  String get send_offers => 'إرسال العروض';
+
+  @override
+  String get send_offer => 'إرسال العرض';
+
+  @override
+  String get week => 'أسبوع';
+
+  @override
+  String get weeks => 'أسابيع';
+
+  @override
+  String get day => 'يوم';
+
+  @override
+  String get days => 'أيام';
+
+  @override
+  String get hour => 'ساعة';
+
+  @override
+  String get hours => 'ساعات';
+
+  @override
+  String get minute => 'دقيقة';
+
+  @override
+  String get minutes => 'دقائق';
+
+  @override
+  String get just_now => 'الآن';
+
+  @override
+  String minutes_ago(Object minutes) {
+    return 'منذ $minutes دقائق';
+  }
+
+  @override
+  String get minute_ago => 'منذ دقيقة واحدة';
+
+  @override
+  String hours_ago(Object hours) {
+    return 'منذ $hours ساعات';
+  }
+
+  @override
+  String get hour_ago => 'منذ ساعة واحدة';
+
+  @override
+  String days_ago(Object days) {
+    return 'منذ $days أيام';
+  }
+
+  @override
+  String get day_ago => 'منذ يوم واحد';
+
+  @override
+  String get online => 'متصل الآن';
+
+  @override
+  String get last_seen_unknown => 'آخر ظهور: غير معروف';
+
+  @override
+  String last_seen_today(Object time) {
+    return 'آخر ظهور اليوم في $time';
+  }
+
+  @override
+  String last_seen_yesterday(Object time) {
+    return 'آخر ظهور أمس في $time';
+  }
+
+  @override
+  String last_seen_days_ago(Object days) {
+    return 'آخر ظهور منذ $days أيام';
+  }
+
+  @override
+  String last_seen_on_date(Object date) {
+    return 'آخر ظهور في $date';
+  }
+
+  @override
+  String get time_suffix_ago => ' مضت';
+
+  @override
+  String get time_suffix_left => ' متبقية';
+
+  @override
+  String get time_day => 'يوم';
+
+  @override
+  String get time_days => 'أيام';
+
+  @override
+  String get time_hour => 'ساعة';
+
+  @override
+  String get time_hours => 'ساعات';
+
+  @override
+  String get time_minute => 'دقيقة';
+
+  @override
+  String get time_minutes => 'دقائق';
+
+  @override
+  String get unknown_client => 'عميل غير معروف';
+
+  @override
+  String jobs_posted(Object count) {
+    return 'نُشرت $count وظيفة';
+  }
+
+  @override
+  String get no_public_orders_available => 'لا توجد طلبات عامة متاحة';
+
+  @override
+  String get no_private_orders_available => 'لا توجد طلبات خاصه متاحه';
+
+  @override
+  String get job_details => 'تفاصيل الوظيفة';
+
+  @override
+  String get about_this_job => 'حول هذه الوظيفة';
+
+  @override
+  String get project_duration => 'مدة المشروع';
+
+  @override
+  String get unknown => 'غير معروف';
+
+  @override
+  String get withdraw_offer => 'سحب العرض';
+
+  @override
+  String get withdrawing => 'جارٍ السحب...';
+
+  @override
+  String get proposal_description => 'وصف العرض';
+
+  @override
+  String get delete_this_offer => 'حذف هذا العرض';
+
+  @override
+  String get no_rejected_offers => 'لا توجد عروض مرفوضة';
+
+  @override
+  String get no_completed_projects_yet => 'لا توجد مشاريع مكتملة بعد';
+
+  @override
+  String get no_accepted_offers => 'لا توجد عروض مقبولة';
+
+  @override
+  String get no_pending_offers => 'لا توجد عروض قيد الانتظار';
+
+  @override
+  String get send_offer_title => 'إرسال العرض';
+
+  @override
+  String get project_details => 'تفاصيل المشروع :';
+
+  @override
+  String get proposal_price => 'سعر العرض :';
+
+  @override
+  String get enter_price_hint => 'أدخل السعر';
+
+  @override
+  String get price_after_commission => 'السعر بعد العمولة:';
+
+  @override
+  String get delivery_time => 'مدة التسليم :';
+
+  @override
+  String get enter_time_hint => 'أدخل الوقت';
+
+  @override
+  String get offer_description_hint => 'اشرح كيف ستنفذ هذا المشروع، بما في ذلك الأساليب أو أي شروط محددة....';
+
+  @override
+  String get description_error => 'يرجى إدخال الوصف';
+
+  @override
+  String get price_error => 'يرجى إدخال السعر';
+
+  @override
+  String get delivery_time_error => 'يرجى إدخال مدة التسليم';
+
+  @override
+  String get offer_sent_success => 'تم إرسال العرض بنجاح';
+
+  @override
+  String get exportOrdersCSVTitle => 'تصدير CSV الطلبات';
+
+  @override
+  String get noConversationsFound => 'لا توجد محادثات';
+
+  @override
+  String get orderId => 'رقم الطلب';
+
+  @override
+  String get totalPrice => 'السعر الكلي';
+
+  @override
+  String get bankAccountManagement => 'إدارة الحساب البنكي';
+
+  @override
+  String get managePayments => 'إدارة المدفوعات';
+
+  @override
+  String get editBankAccount => 'تعديل الحساب البنكي';
+
+  @override
+  String get clientPayments => 'مدفوعات العميل';
+
+  @override
+  String get freelancerWithdrawals => 'سحوبات المستقل';
+
+  @override
+  String get paymentDetails => 'تفاصيل الدفع';
+
+  @override
+  String get paymentID => 'معرّف الدفع';
+
+  @override
+  String get freelancerID => 'معرّف المستقل';
+
+  @override
+  String get paymentMethod => 'طريقة الدفع';
+
+  @override
+  String get accountNumber => 'رقم الحساب';
+
+  @override
+  String get freelancerInfo => 'معلومات المستقل';
+
+  @override
+  String get balance => 'الرصيد';
+
+  @override
+  String get requestedWithdraw => 'السحب المطلوب';
+
+  @override
+  String get clientID => 'معرّف العميل';
+
+  @override
+  String get addBankAccount => 'إضافة حساب بنكي';
+
+  @override
+  String get bankTransferReceipt => 'إيصال التحويل البنكي';
+
+  @override
+  String get basicInformation => 'المعلومات الأساسية';
+
+  @override
+  String get accountDetails => 'تفاصيل الحساب';
+
+  @override
+  String get additionalDetails => 'تفاصيل إضافية';
+
+  @override
+  String get accountSettings => 'إعدادات الحساب';
+
+  @override
+  String get bankName => 'اسم البنك';
+
+  @override
+  String get accountName => 'اسم الحساب';
+
+  @override
+  String get iban => 'IBAN';
+
+  @override
+  String get swiftCode => 'رمز SWIFT';
+
+  @override
+  String get notesOptional => 'ملاحظات (اختياري)';
+
+  @override
+  String get activeAccount => 'الحساب نشط';
+
+  @override
+  String get enableOrDisableBankAccount => 'تمكين أو تعطيل هذا الحساب البنكي';
+
+  @override
+  String get update => 'تحديث';
+
+  @override
+  String get deleteAccount => 'حذف الحساب';
+
+  @override
+  String get bankAccountSavedSuccessfully => 'تم حفظ الحساب البنكي بنجاح ✅';
+
+  @override
+  String get bankAccountUpdatedSuccessfully => 'تم تحديث الحساب البنكي بنجاح ✅';
+
+  @override
+  String get bankAccountDeletedSuccessfully => 'تم حذف الحساب البنكي بنجاح ✅';
+
+  @override
+  String get noAccountsFound => 'لا يوجد حسابات';
+
+  @override
+  String get deactivateAccount => 'تعطيل الحساب';
+
+  @override
+  String get activateAccount => 'تفعيل الحساب';
+
+  @override
+  String get edit => 'تعديل';
+
+  @override
+  String get notes => 'ملاحظات';
+
+  @override
+  String get searchPayments => 'بحث في المدفوعات';
+
+  @override
+  String get searchWithdrawals => 'بحث في السحوبات';
+
+  @override
+  String get searchBankAccount => 'بحث في الحسابات البنكية';
+
+  @override
+  String get welcomeAdmin => 'مرحبًا بك يا مسؤول\nادير لوحة التحكم الخاصة بك الآن';
+
+  @override
+  String get support => 'الدعم';
+
+  @override
+  String get technical_support => 'الدعم الفني';
+
+  @override
+  String get account => 'الحساب';
+
+  @override
+  String get change_password => 'تغيير كلمة المرور';
+
+  @override
+  String get settings => 'الإعدادات';
+
+  @override
+  String get privacy_policy => 'سياسة الخصوصية';
+
+  @override
+  String get terms_conditions => 'الشروط والأحكام';
+
+  @override
+  String get logout => 'تسجيل الخروج';
+
+  @override
+  String get cancel => 'إلغاء';
+
+  @override
+  String get success => 'نجح';
+
+  @override
+  String get userName => 'اسم المستخدم';
+
+  @override
+  String get enterUserName => 'أدخل اسم المستخدم';
+
+  @override
+  String get emailAddress => 'البريد الإلكتروني';
+
+  @override
+  String get enterEmailAddress => 'أدخل البريد الإلكتروني';
+
+  @override
+  String get phoneNumber => 'رقم الهاتف';
+
+  @override
+  String get enterPhoneNumber => 'أدخل رقم الهاتف';
+
+  @override
+  String get profileImage => 'صورة الملف الشخصي';
+
+  @override
+  String get updateProfile => 'تحديث الملف الشخصي';
+
+  @override
+  String get profileUpdateSuccess => 'تم تحديث الملف الشخصي بنجاح';
+
+  @override
+  String get profileUpdateFailed => 'فشل تحديث الملف الشخصي، حاول مرة أخرى لاحقاً';
+
+  @override
+  String get fillRequiredFields => 'يرجى ملء حقلي البريد الإلكتروني واسم المستخدم';
+
+  @override
+  String get lightTheme => 'فاتح';
+
+  @override
+  String get darkTheme => 'داكن';
+
+  @override
+  String get systemDefault => 'افتراضي النظام';
+
+  @override
+  String get arabic => 'العربية';
+
+  @override
+  String get english => 'English';
+
+  @override
+  String get privacyPolicyWelcome => 'مرحباً بكم في Taskly! خصوصيتك مهمة جداً لنا. تشرح سياسة الخصوصية هذه كيف نجمع ونستخدم ونحمي معلوماتك الشخصية عند استخدامك لتطبيقنا، سواء كنت عميلاً أو مستقلاً.';
+
+  @override
+  String get informationWeCollect => '1. المعلومات التي نجمعها';
+
+  @override
+  String get informationWeCollectDesc => '- معلومات الحساب: الاسم، البريد الإلكتروني، رقم الهاتف، تفاصيل الملف الشخصي.\n- تفاصيل الخدمة والطلب: المهام المنشورة والمقبولة والمكتملة.\n- معلومات الدفع: تفاصيل الفواتير وسجل المعاملات.\n- معلومات الجهاز: نوع الجهاز، نظام التشغيل، وعنوان IP.';
+
+  @override
+  String get howWeUseInfo => '2. كيف نستخدم معلوماتك';
+
+  @override
+  String get howWeUseInfoDesc => 'نستخدم معلوماتك لإنشاء وإدارة الحسابات، ومطابقة العملاء مع المستقلين، وتسهيل التواصل، ومعالجة المدفوعات، وتحسين أداء التطبيق، وضمان الأمان.';
+
+  @override
+  String get sharingData => '3. مشاركة بياناتك';
+
+  @override
+  String get sharingDataDesc => 'لا نبيع بياناتك الشخصية. قد نشارك المعلومات فقط مع:\n- المستخدمين الآخرين (تفاصيل محدودة من الملف الشخصي لإكمال المهام).\n- خدمات الطرف الثالث (Firebase، Supabase، معالجات الدفع).\n- السلطات القانونية إذا تطلب القانون.';
+
+  @override
+  String get dataSecurity => '4. أمان البيانات';
+
+  @override
+  String get dataSecurityDesc => 'ننفذ إجراءات قياسية في الصناعة لحماية بياناتك، ولكن لا توجد طريقة نقل أو تخزين آمنة بنسبة 100%.';
+
+  @override
+  String get yourRights => '5. حقوقك';
+
+  @override
+  String get yourRightsDesc => 'لديك الحق في الوصول إلى بياناتك الشخصية وتحديثها أو حذفها، والتواصل معنا بشأن أي مخاوف تتعلق بالخصوصية.';
+
+  @override
+  String get cookiesTracking => '6. ملفات تعريف الارتباط والتتبع';
+
+  @override
+  String get cookiesTrackingDesc => 'قد يستخدم Taskly ملفات تعريف الارتباط وتقنيات مماثلة لتخصيص تجربتك وتحليل استخدام التطبيق.';
+
+  @override
+  String get policyUpdates => '7. تحديثات السياسة';
+
+  @override
+  String get policyUpdatesDesc => 'قد نقوم بتحديث سياسة الخصوصية هذه من وقت لآخر. الاستمرار في استخدام Taskly يعني موافقتك على الشروط المحدثة.';
+
+  @override
+  String get changePassword => 'تغيير كلمة المرور';
+
+  @override
+  String get changePasswordDesc => 'أدخل كلمة المرور القديمة ثم أدخل كلمة المرور الجديدة لتغيير كلمة المرور.';
+
+  @override
+  String get oldPassword => 'كلمة المرور القديمة';
+
+  @override
+  String get newPassword => 'كلمة المرور الجديدة';
+
+  @override
+  String get confirmNewPassword => 'تأكيد كلمة المرور الجديدة';
+
+  @override
+  String get enterOldPassword => 'أدخل كلمة المرور القديمة';
+
+  @override
+  String get enterNewPassword => 'أدخل كلمة المرور الجديدة';
+
+  @override
+  String get enterConfirmPassword => 'أدخل تأكيد كلمة المرور الجديدة';
+
+  @override
+  String get passwordChangedSuccess => 'تم تغيير كلمة المرور بنجاح';
+
+  @override
+  String get passwordValidation => 'يجب أن تكون كلمة المرور 6 أحرف على الأقل';
+
+  @override
+  String get passwordsNotMatch => 'كلمات المرور غير متطابقة';
+
+  @override
+  String get contactUs => 'اتصل بنا';
+
+  @override
+  String get contactUsOn => 'اتصل بنا على:';
+
+  @override
+  String get sendMessageOn => 'أو أرسل لنا رسالة على:';
+
+  @override
+  String get faq => 'الأسئلة الشائعة';
+
+  @override
+  String get howToRequestService => 'كيفية طلب خدمة؟';
+
+  @override
+  String get howToDeleteService => 'كيفية حذف طلب خدمة؟';
+
+  @override
+  String get howToContactSupport => 'كيفية التواصل مع الدعم؟';
+
+  @override
+  String get howToChatWithAdmin => 'كيفية الدردشة مباشرة مع المسؤول؟';
+
+  @override
+  String get howToUpdateProfile => 'كيفية تحديث ملفي الشخصي؟';
+
+  @override
+  String get howToChangePassword => 'كيفية تغيير كلمة المرور؟';
+
+  @override
+  String get howToChangeName => 'كيفية تغيير اسمي؟';
+
+  @override
+  String get requestServiceAnswer => 'لطلب خدمة، انتقل إلى صفحة الخدمات، اختر الخدمة التي تحتاجها، املأ التفاصيل، وأرسل طلبك.';
+
+  @override
+  String get deleteServiceAnswer => 'لحذف طلب خدمة، انتقل إلى علامة تبويب \'وظائفي\'، ابحث عن طلبك تحت \'قيد الانتظار\'، افتحه، وانقر على زر الحذف. قم بالتأكيد لإزالته.';
+
+  @override
+  String get contactSupportAnswer => 'يمكنك التواصل معنا عبر الهاتف أو البريد الإلكتروني أو إرسال رسالة عبر قسم اتصل بنا أعلاه.';
+
+  @override
+  String get chatWithAdminAnswer => 'للدردشة مباشرة مع المسؤول، انتقل إلى علامة تبويب \'الرسائل\'. ستجد محادثة مثبتة حيث يمكنك إرسال رسائلك والحصول على رد من المسؤول.';
+
+  @override
+  String get updateProfileAnswer => 'انتقل إلى صفحة ملفك الشخصي، انقر على تعديل، وقم بتحديث اسمك أو بريدك الإلكتروني أو كلمة المرور حسب الحاجة.';
+
+  @override
+  String get changePasswordAnswer => 'انتقل إلى صفحة ملفك الشخصي، انقر على تعديل، وقم بتحديث كلمة المرور حسب الحاجة.';
+
+  @override
+  String get changeNameAnswer => 'انتقل إلى صفحة ملفك الشخصي، انقر على تعديل، وقم بتعديل اسمك حسب الحاجة.';
+
+  @override
+  String get withdrawalRequest => 'طلب سحب';
+
+  @override
+  String get withdrawalHistory => 'سجل السحوبات';
+
+  @override
+  String get freelancerWallet => 'محفظة المستقل';
+
+  @override
+  String get availableBalance => 'الرصيد المتاح';
+
+  @override
+  String get totalEarnings => 'إجمالي الأرباح';
+
+  @override
+  String get withdrawn => 'المسحوب';
+
+  @override
+  String get withdrawalAmount => 'مبلغ السحب';
+
+  @override
+  String get enterAmount => 'أدخل المبلغ';
+
+  @override
+  String get selectPaymentMethod => 'اختر طريقة الدفع';
+
+  @override
+  String get vodafoneCash => 'فودافون كاش';
+
+  @override
+  String get instapay => 'إنستا باي';
+
+  @override
+  String get mobileNumber => 'رقم الجوال';
+
+  @override
+  String get enterMobileNumber => 'أدخل رقم الجوال';
+
+  @override
+  String get submitRequest => 'إرسال الطلب';
+
+  @override
+  String get withdrawalRequestPlacedSuccessfully => 'تم تقديم طلب السحب بنجاح';
+
+  @override
+  String get enterValidAmount => 'أدخل مبلغًا صالحًا';
+
+  @override
+  String get selectMethodAndEnterPhone => 'اختر الطريقة وأدخل الرقم';
+
+  @override
+  String get vodafoneCashNote => '⚠️ يرجى إدخال رقم فودافون كاش المسجل باسمك';
+
+  @override
+  String get analytics => 'التحليلات';
+
+  @override
+  String get availableForWithdrawal => 'متاح للسحب';
+
+  @override
+  String get completedOrders => 'الطلبات المكتملة';
+
+  @override
+  String get requestWithdrawal => 'طلب سحب';
+
+  @override
+  String get dashboardSection => 'لوحة التحكم';
+
+  @override
+  String get withdrawBalance => 'سحب الرصيد';
+
+  @override
+  String get myOrders => 'طلباتي';
+
+  @override
+  String get workSection => 'العمل';
+
+  @override
+  String get reviewsRatings => 'التقييمات والمراجعات';
+
+  @override
+  String get supportSection => 'الدعم';
+
+  @override
+  String get technicalSupport => 'الدعم الفني';
+
+  @override
+  String get accountSection => 'الحساب';
+
+  @override
+  String get settingsSection => 'الإعدادات';
+
+  @override
+  String get termsConditions => 'الشروط والأحكام';
+
+  @override
+  String get somethingWentWrongTryAgain => 'حدث خطأ، يرجى المحاولة لاحقًا';
+
+  @override
+  String get errorFetchingEarnings => 'حدث خطأ أثناء جلب الأرباح';
+
+  @override
+  String get withdrawalHistoryEmpty => 'لم يتم العثور على سجل السحوبات';
+
+  @override
+  String cannotWithdrawMoreThanBalance(Object balance) {
+    return 'لا يمكنك سحب أكثر من رصيدك المتاح $balance ريال';
+  }
+
+  @override
+  String cannotWithdrawMoreThanBalance_placeholder(Object balance) {
+    return '$balance';
+  }
 }

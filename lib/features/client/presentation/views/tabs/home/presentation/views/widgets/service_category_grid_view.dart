@@ -15,6 +15,7 @@ class ServiceCategoryGridView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 8.w),
       child: services.isEmpty
@@ -28,7 +29,7 @@ class ServiceCategoryGridView extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              "No services found",
+              local.noServicesFound,
               style: TextStyle(
                 fontSize: 16.sp,
                 fontWeight: FontWeight.w700,

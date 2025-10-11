@@ -1,10 +1,9 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/utils/assets_manager.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
 import 'package:taskly/features/payments/presentation/widgets/bank_info_raw.dart';
-
+import '../../../../config/l10n/app_localizations.dart';
 import '../../../../core/services/copy_to_clipboard.dart';
 import '../../domain/entities/bank_accounts_entity/bank_accounts_entity.dart';
 
@@ -14,6 +13,8 @@ class BankDetailsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
+
     return Card(
       elevation: 6,
       child: Container(
@@ -26,11 +27,11 @@ class BankDetailsCard extends StatelessWidget {
         child: Column(
           children: [
             BankInfoRow(
-              label: 'IBAN Number',
-              number: bankAccountsEntity.iban??"",
+              label: local.iban_number,
+              number: bankAccountsEntity.iban ?? "",
               assetPath: Assets.assetsImagesBankAccount,
-              onCopy: () => copyToClipboard(context, bankAccountsEntity.iban??""),
-
+              onCopy: () =>
+                  copyToClipboard(context, bankAccountsEntity.iban ?? ""),
             ),
             SizedBox(height: 16.h),
             Divider(
@@ -39,11 +40,11 @@ class BankDetailsCard extends StatelessWidget {
             ),
             SizedBox(height: 16.h),
             BankInfoRow(
-              label: 'Account Number',
+              label: local.account_number,
               number: bankAccountsEntity.accountNumber ?? "",
               assetPath: Assets.assetsImagesAccountNumber,
-              onCopy: () => copyToClipboard(context, bankAccountsEntity.accountNumber ?? ""),
-
+              onCopy: () => copyToClipboard(
+                  context, bankAccountsEntity.accountNumber ?? ""),
             ),
             SizedBox(height: 16.h),
             Divider(
@@ -52,11 +53,11 @@ class BankDetailsCard extends StatelessWidget {
             ),
             SizedBox(height: 16.h),
             BankInfoRow(
-              label: 'Account Name',
-              number:  bankAccountsEntity.accountName??"",
+              label: local.account_name,
+              number: bankAccountsEntity.accountName ?? "",
               assetPath: Assets.assetsImagesUser12366536,
-              onCopy: () => copyToClipboard(context, bankAccountsEntity.accountName??""),
-
+              onCopy: () =>
+                  copyToClipboard(context, bankAccountsEntity.accountName ?? ""),
             ),
             SizedBox(height: 16.h),
             Divider(
@@ -65,10 +66,11 @@ class BankDetailsCard extends StatelessWidget {
             ),
             SizedBox(height: 16.h),
             BankInfoRow(
-              label: 'SWIFT Code',
-              number: bankAccountsEntity.swiftCode??"",
+              label: local.swift_code,
+              number: bankAccountsEntity.swiftCode ?? "",
               assetPath: Assets.assetsImagesSwiftCode,
-              onCopy: () => copyToClipboard(context, bankAccountsEntity.swiftCode??""),
+              onCopy: () =>
+                  copyToClipboard(context, bankAccountsEntity.swiftCode ?? ""),
             ),
           ],
         ),

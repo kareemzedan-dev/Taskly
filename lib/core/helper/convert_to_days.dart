@@ -1,17 +1,23 @@
+import 'package:flutter/material.dart';
+
+import '../../config/l10n/app_localizations.dart';
+
 int convertToMinutes(int value, String unit) {
   switch (unit) {
     case "Hours":
-      return value * 60; 
+      return value * 60;
     case "Days":
-      return value * 24 * 60;  
+      return value * 24 * 60;
     case "Weeks":
-      return value * 7 * 24 * 60;  
+      return value * 7 * 24 * 60;
     default:
       return value;
   }
 }
+
 extension FormatMinutesExtension on int {
-  String formatMinutes() {
+  String formatMinutes(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
     int minutes = this;
 
     if (minutes >= 7 * 24 * 60) {
@@ -20,9 +26,10 @@ extension FormatMinutesExtension on int {
       int days = remainingMinutes ~/ (24 * 60);
 
       if (days > 0) {
-        return "$weeks ${weeks == 1 ? 'Week' : 'Weeks'} $days ${days == 1 ? 'Day' : 'Days'}";
+        return "$weeks ${weeks == 1 ? loc.week : loc.weeks} "
+            "$days ${days == 1 ? loc.day : loc.days}";
       } else {
-        return "$weeks ${weeks == 1 ? 'Week' : 'Weeks'}";
+        return "$weeks ${weeks == 1 ? loc.week : loc.weeks}";
       }
     } else if (minutes >= 24 * 60) {
       int days = minutes ~/ (24 * 60);
@@ -30,21 +37,23 @@ extension FormatMinutesExtension on int {
       int hours = remainingMinutes ~/ 60;
 
       if (hours > 0) {
-        return "$days ${days == 1 ? 'Day' : 'Days'} $hours ${hours == 1 ? 'Hour' : 'Hours'}";
+        return "$days ${days == 1 ? loc.day : loc.days} "
+            "$hours ${hours == 1 ? loc.hour : loc.hours}";
       } else {
-        return "$days ${days == 1 ? 'Day' : 'Days'}";
+        return "$days ${days == 1 ? loc.day : loc.days}";
       }
     } else if (minutes >= 60) {
       int hours = minutes ~/ 60;
       int remainingMinutes = minutes % 60;
 
       if (remainingMinutes > 0) {
-        return "$hours ${hours == 1 ? 'Hour' : 'Hours'} $remainingMinutes ${remainingMinutes == 1 ? 'Minute' : 'Minutes'}";
+        return "$hours ${hours == 1 ? loc.hour : loc.hours} "
+            "$remainingMinutes ${remainingMinutes == 1 ? loc.minute : loc.minutes}";
       } else {
-        return "$hours ${hours == 1 ? 'Hour' : 'Hours'}";
+        return "$hours ${hours == 1 ? loc.hour : loc.hours}";
       }
     } else {
-      return "$minutes ${minutes == 1 ? 'Minute' : 'Minutes'}";
+      return "$minutes ${minutes == 1 ? loc.minute : loc.minutes}";
     }
   }
 }

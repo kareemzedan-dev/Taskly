@@ -5,12 +5,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/di/di.dart';
 import 'package:taskly/features/attachments/presentation/manager/upload_attachments_view_model/upload_attachments_view_model_states.dart';
-
- 
 import '../../../../../../../../attachments/presentation/manager/delete_attachments_view_model/delete_attachments_view_model.dart';
 import '../../../../../../../../attachments/presentation/manager/delete_attachments_view_model/delete_attachments_view_model_states.dart';
 import '../../../../../../../../attachments/presentation/manager/upload_attachments_view_model/upload_attachments_view_model.dart';
 import '../../../../../../../../../core/components/dismissible_error_card.dart';
+import '../../../../../../../../../config/l10n/app_localizations.dart';
 
 class AttachmentsFilesSection extends StatefulWidget {
   final UploadAttachmentsViewModel uploadAttachmentsViewModel;
@@ -25,7 +24,8 @@ class AttachmentsFilesSection extends StatefulWidget {
   });
 
   @override
-  State<AttachmentsFilesSection> createState() => _AttachmentsFilesSectionState();
+  State<AttachmentsFilesSection> createState() =>
+      _AttachmentsFilesSectionState();
 }
 
 class _AttachmentsFilesSectionState extends State<AttachmentsFilesSection> {
@@ -39,33 +39,40 @@ class _AttachmentsFilesSectionState extends State<AttachmentsFilesSection> {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
+
     return MultiBlocProvider(
       providers: [
         BlocProvider.value(value: widget.uploadAttachmentsViewModel),
         BlocProvider.value(value: deleteAttachmentsViewModel),
       ],
-      child: BlocConsumer<UploadAttachmentsViewModel, UploadAttachmentsViewModelStates>(
+      child: BlocConsumer<UploadAttachmentsViewModel,
+          UploadAttachmentsViewModelStates>(
         listener: (context, state) {
           if (state is UploadAttachmentsViewModelStatesLoading) {
-            _showTemporaryMessage("Uploading...", MessageType.success);
+            _showTemporaryMessage(local.uploading, MessageType.success);
           } else if (state is UploadAttachmentsViewModelStatesError) {
-            _showTemporaryMessage(state.message, MessageType.error);
+            _showTemporaryMessage(local.error(state.message), MessageType.error);
+
           } else if (state is UploadAttachmentsViewModelStatesSuccess) {
-            _showTemporaryMessage("Uploaded Successfully ✅", MessageType.success);
+            _showTemporaryMessage(local.uploaded_successfully, MessageType.success);
           }
         },
         builder: (context, state) {
           final files = widget.uploadAttachmentsViewModel.files;
-          final uploadedHashes = widget.uploadAttachmentsViewModel.uploadedFileHashes;
+          final uploadedHashes =
+              widget.uploadAttachmentsViewModel.uploadedFileHashes;
 
           return Column(
             children: [
               Row(
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.attach_file, color: Colors.grey),
+                    icon:
+                    const Icon(Icons.attach_file, color: Colors.grey),
                     onPressed: () async {
-                      await widget.uploadAttachmentsViewModel.pickFilesFromDevice();
+                      await widget.uploadAttachmentsViewModel
+                          .pickFilesFromDevice();
                     },
                   ),
                   SizedBox(width: 2.w),
@@ -81,13 +88,17 @@ class _AttachmentsFilesSectionState extends State<AttachmentsFilesSection> {
                         child: Center(
                           child: Text(
                             widget.uploadAttachmentsViewModel.uploadedFileHashes.isEmpty
-                                ? "No files uploaded yet"
-                                : "${widget.uploadAttachmentsViewModel.uploadedFileHashes.length} files uploaded",
+                                ? local.no_files_uploaded_yet
+                                : local.files_uploaded_count(uploadedHashes.length),
+
                             textAlign: TextAlign.center,
-                            style:  Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
                               color: Colors.black,
                               fontSize: 14.sp,
-                              fontWeight: FontWeight.w500
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                         ),
@@ -102,7 +113,8 @@ class _AttachmentsFilesSectionState extends State<AttachmentsFilesSection> {
 
                 return FutureBuilder<String>(
                   key: uniqueKey,
-                  future: widget.uploadAttachmentsViewModel.generateFileHash(file),
+                  future:
+                  widget.uploadAttachmentsViewModel.generateFileHash(file),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Container(
@@ -117,18 +129,21 @@ class _AttachmentsFilesSectionState extends State<AttachmentsFilesSection> {
                             const SizedBox(
                               height: 20,
                               width: 20,
-                              child: CircularProgressIndicator(strokeWidth: 2),
+                              child:
+                              CircularProgressIndicator(strokeWidth: 2),
                             ),
                             SizedBox(width: 8.w),
                             Expanded(
                               child: Text(
                                 file.path.split('/').last,
                                 overflow: TextOverflow.ellipsis,
-                                style:  Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(
                                     color: Colors.black,
                                     fontSize: 14.sp,
-                                    fontWeight: FontWeight.w500
-                                ),
+                                    fontWeight: FontWeight.w500),
                               ),
                             ),
                           ],
@@ -144,19 +159,30 @@ class _AttachmentsFilesSectionState extends State<AttachmentsFilesSection> {
                           border: Border.all(color: Colors.red),
                           borderRadius: BorderRadius.circular(8.r),
                         ),
-                        child: Text('Error: ${snapshot.error}'),
+                        child: Text(
+                          local.error(snapshot.error.toString()),
+                        ),
+
                       );
                     }
 
                     final fileHash = snapshot.data;
-                    final isUploaded = fileHash != null && uploadedHashes.contains(fileHash);
+                    final isUploaded =
+                        fileHash != null && uploadedHashes.contains(fileHash);
 
-                    return BlocConsumer<DeleteAttachmentsViewModel, DeleteAttachmentsViewModelStates>(
+                    return BlocConsumer<DeleteAttachmentsViewModel,
+                        DeleteAttachmentsViewModelStates>(
                       listener: (context, state) {
-                        if (state is DeleteAttachmentsViewModelStatesError && mounted) {
-                          _showTemporaryMessage(state.message, MessageType.error);
-                        } else if (state is DeleteAttachmentsViewModelStatesSuccess && mounted) {
-                          _showTemporaryMessage(state.message, MessageType.success);
+                        if (state is DeleteAttachmentsViewModelStatesError &&
+                            mounted) {
+                          _showTemporaryMessage(local.error(state.message), MessageType.error);
+
+                        } else if (state
+                        is DeleteAttachmentsViewModelStatesSuccess &&
+                            mounted) {
+                          _showTemporaryMessage(
+                              local.file_deleted_successfully,
+                              MessageType.success);
                         }
                       },
                       builder: (context, _) => Container(
@@ -164,10 +190,13 @@ class _AttachmentsFilesSectionState extends State<AttachmentsFilesSection> {
                         padding: EdgeInsets.all(8.w),
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: isUploaded ? Colors.green : Colors.grey.shade300,
+                            color: isUploaded
+                                ? Colors.green
+                                : Colors.grey.shade300,
                           ),
                           borderRadius: BorderRadius.circular(8.r),
-                          color: isUploaded ? Colors.green.withOpacity(0.1) : null,
+                          color:
+                          isUploaded ? Colors.green.withOpacity(0.1) : null,
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -175,15 +204,20 @@ class _AttachmentsFilesSectionState extends State<AttachmentsFilesSection> {
                             Expanded(
                               child: Text(
                                 file.path.split('/').last,
-                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(
                                   color: isUploaded ? Colors.green : null,
-                                  fontWeight: isUploaded ? FontWeight.bold : null,
+                                  fontWeight:
+                                  isUploaded ? FontWeight.bold : null,
                                 ),
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
                             if (isUploaded)
-                              const Icon(Icons.check_circle, color: Colors.green, size: 20)
+                              const Icon(Icons.check_circle,
+                                  color: Colors.green, size: 20)
                             else if (state is UploadAttachmentsViewModelStatesLoading)
                               const SizedBox(
                                 height: 20,
@@ -191,11 +225,12 @@ class _AttachmentsFilesSectionState extends State<AttachmentsFilesSection> {
                                 child: CircularProgressIndicator(strokeWidth: 2),
                               )
                             else
-                              const Icon(Icons.pending, color: Colors.orange, size: 20),
+                              const Icon(Icons.pending,
+                                  color: Colors.orange, size: 20),
                             SizedBox(width: 8.w),
                             IconButton(
                               icon: const Icon(Icons.close, size: 18),
-                              onPressed: () => _onDeleteFile(file),
+                              onPressed: () => _onDeleteFile(file, local),
                             )
                           ],
                         ),
@@ -211,8 +246,7 @@ class _AttachmentsFilesSectionState extends State<AttachmentsFilesSection> {
     );
   }
 
-  void _onDeleteFile(File file) async {
-    // Remove from local files list
+  void _onDeleteFile(File file, AppLocalizations local) async {
     widget.uploadAttachmentsViewModel.removeFileFromQueue(file);
 
     final attachments = widget.uploadAttachmentsViewModel.uploadedAttachments
@@ -221,24 +255,23 @@ class _AttachmentsFilesSectionState extends State<AttachmentsFilesSection> {
 
     if (attachments.isEmpty) {
       if (mounted) {
-        _showTemporaryMessage("File not found for deletion", MessageType.error);
+        _showTemporaryMessage(local.file_not_found_for_deletion, MessageType.error);
       }
       return;
     }
 
     final attachment = attachments.first;
-    print('Deleting from Storage Path: ${attachment.storagePath}');
-
-    final result = await deleteAttachmentsViewModel.deleteAttachment(attachment.storagePath);
+    final result =
+    await deleteAttachmentsViewModel.deleteAttachment(attachment.storagePath);
 
     if (!mounted) return;
 
     result.fold(
           (failure) {
-        _showTemporaryMessage("Failed to delete file", MessageType.error);
+        _showTemporaryMessage(local.failed_to_delete_file, MessageType.error);
       },
           (_) {
-        _showTemporaryMessage("File deleted successfully", MessageType.success);
+        _showTemporaryMessage(local.file_deleted_successfully, MessageType.success);
         widget.uploadAttachmentsViewModel.uploadedAttachments.remove(attachment);
       },
     );

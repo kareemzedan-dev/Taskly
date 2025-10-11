@@ -15,6 +15,8 @@ import 'package:taskly/features/shared/presentation/views/widgets/language_botto
 import 'package:taskly/features/shared/presentation/views/widgets/profile_section.dart';
 import 'package:taskly/features/shared/presentation/views/widgets/theme_bottom_sheet_content.dart';
 
+import '../../../../../../../../../config/l10n/app_localizations.dart';
+
 class ClientProfileViewBody extends StatefulWidget {
   const ClientProfileViewBody({super.key});
 
@@ -28,6 +30,8 @@ class _ClientProfileViewBodyState extends State<ClientProfileViewBody> {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
+
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(30.0),
@@ -36,19 +40,17 @@ class _ClientProfileViewBodyState extends State<ClientProfileViewBody> {
           children: [
             const SizedBox(height: 20),
             BlocProvider(
-              create:
-                  (context) =>
-                      getIt<ProfileViewModel>()..getUserInfo(
-                        SharedPrefHelper.getString(StringsManager.idKey)!,
-                      SharedPrefHelper.getString(StringsManager.roleKey)!,
-                      ),
+              create: (context) => getIt<ProfileViewModel>()
+                ..getUserInfo(
+                  SharedPrefHelper.getString(StringsManager.idKey)!,
+                  SharedPrefHelper.getString(StringsManager.roleKey)!,
+                ),
               child: BlocBuilder<ProfileViewModel, ProfileViewModelStates>(
                 builder: (context, state) {
                   if (state is ProfileViewModelStatesLoading) {
                     return const UserInfoSectionShimmer();
                   } else if (state is ProfileViewModelStatesSuccess) {
                     return UserInfoSection(
-
                       onTap: () {
                         Navigator.pushNamed(
                           context,
@@ -56,8 +58,7 @@ class _ClientProfileViewBodyState extends State<ClientProfileViewBody> {
                           arguments: state.userInfoEntity,
                         );
                       },
-                      rating:  state.userInfoEntity.rating!,
-
+                      rating: state.userInfoEntity.rating!,
                     );
                   } else if (state is ProfileViewModelStatesError) {
                     return Text(state.message);
@@ -68,12 +69,14 @@ class _ClientProfileViewBodyState extends State<ClientProfileViewBody> {
             ),
 
             SizedBox(height: 40.h),
+
+            /// ✅ Support Section
             ProfileSection(
-              title: "Support",
+              title: local.support,
               children: [
                 AccountItemRow(
                   image: Assets.assetsImagesTechSupport5109502,
-                  text: "Technical Support",
+                  text: local.technical_support,
                   onTap: () {
                     Navigator.pushNamed(
                       context,
@@ -84,12 +87,13 @@ class _ClientProfileViewBodyState extends State<ClientProfileViewBody> {
               ],
             ),
 
+            /// ✅ Account Section
             ProfileSection(
-              title: "Account",
+              title: local.account,
               children: [
                 AccountItemRow(
                   image: Assets.assetsImagesInternet2889312,
-                  text: "Language",
+                  text: local.language,
                   onTap: () async {
                     final selected = await showModalBottomSheet<String>(
                       context: context,
@@ -115,7 +119,7 @@ class _ClientProfileViewBodyState extends State<ClientProfileViewBody> {
                 ),
                 AccountItemRow(
                   image: Assets.assetsImagesBrushes3450037,
-                  text: "Theme",
+                  text: local.theme,
                   onTap: () async {
                     final selectedTheme = await showModalBottomSheet<String>(
                       context: context,
@@ -140,10 +144,9 @@ class _ClientProfileViewBodyState extends State<ClientProfileViewBody> {
                   },
                 ),
                 SizedBox(height: 10.h),
-
                 AccountItemRow(
                   image: Assets.assetsImagesCahngePassword,
-                  text: "Change Password",
+                  text: local.change_password,
                   onTap: () {
                     Navigator.pushNamed(
                       context,
@@ -154,12 +157,13 @@ class _ClientProfileViewBodyState extends State<ClientProfileViewBody> {
               ],
             ),
 
+            /// ✅ Settings Section
             ProfileSection(
-              title: "Settings",
+              title: local.settings,
               children: [
                 AccountItemRow(
                   image: Assets.assetsImagesAccount3166234,
-                  text: "Privacy Policy",
+                  text: local.privacy_policy,
                   onTap: () {
                     Navigator.pushNamed(
                       context,
@@ -167,15 +171,15 @@ class _ClientProfileViewBodyState extends State<ClientProfileViewBody> {
                     );
                   },
                 ),
-
                 SizedBox(height: 10.h),
-                const AccountItemRow(
+                AccountItemRow(
                   image: Assets.assetsImagesDocument10103871,
-                  text: "Terms & Conditions",
+                  text: local.terms_conditions,
                 ),
               ],
             ),
 
+            /// ✅ Logout Button
             Container(
               width: double.infinity,
               padding: EdgeInsets.symmetric(vertical: 14.h, horizontal: 16.w),
@@ -186,14 +190,18 @@ class _ClientProfileViewBodyState extends State<ClientProfileViewBody> {
               child: InkWell(
                 onTap: () {
                   SharedPrefHelper.clear();
-                  Navigator.pushNamedAndRemoveUntil(context, RoutesManager.splash, (route) => false);
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    RoutesManager.splash,
+                        (route) => false,
+                  );
                 },
                 child: Row(
                   children: [
                     const Icon(Icons.logout, color: Colors.red),
                     const SizedBox(width: 12),
                     Text(
-                      "Logout",
+                      local.logout,
                       style: TextStyle(
                         color: Colors.red,
                         fontWeight: FontWeight.bold,

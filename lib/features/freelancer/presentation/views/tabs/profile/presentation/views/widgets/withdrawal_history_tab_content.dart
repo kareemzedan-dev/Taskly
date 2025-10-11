@@ -4,12 +4,15 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:taskly/features/payments/domain/entities/payment_entity.dart';
 
+import '../../../../../../../../../config/l10n/app_localizations.dart';
+
 class WithdrawalHistoryTabContent extends StatelessWidget {
   const WithdrawalHistoryTabContent({super.key, required this.payment});
   final PaymentEntity payment;
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -30,7 +33,7 @@ class WithdrawalHistoryTabContent extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "${payment.amount.toString()} SAR",
+                          "${payment.amount.toString()} ${local.sar}",
                           style: Theme.of(
                             context,
                           ).textTheme.titleMedium?.copyWith(
@@ -68,7 +71,7 @@ class WithdrawalHistoryTabContent extends StatelessWidget {
                         ),
                         SizedBox(width: 5.w),
                         Text(
-                         payment.paymentMethod??"Loading...",
+                         payment.paymentMethod?? local.loading,
                           style: Theme.of(
                             context,
                           ).textTheme.bodyLarge?.copyWith(
@@ -78,7 +81,7 @@ class WithdrawalHistoryTabContent extends StatelessWidget {
                         ),
                         SizedBox(width: 10.w),
                         Text(
-                           payment.accountNumber??"Loading...",
+                           payment.accountNumber??  local.loading,
                           style: Theme.of(
                             context,
                           ).textTheme.bodyLarge?.copyWith(

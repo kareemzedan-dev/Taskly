@@ -86,34 +86,40 @@ class HomeRemoteDataSourceImpl extends HomeRemoteDataSource {
         }
 
 
-        List<UserInfoEntity> freelancers = [];
-        for (final userData in userResponse) {
-          final freelancerResponse = await supabaseService.getDataFromSupabase(
-            tableName: "freelancers",
-            filters: {"id": userData['id']},
-          );
+      List<UserInfoEntity> freelancers = [];
+      for (final userData in userResponse) {
+        final freelancerResponse = await supabaseService.getDataFromSupabase(
+          tableName: "freelancers",
+          filters: {"id": userData['id']},
+        );
 
-          final freelancerData =
-              freelancerResponse != null && freelancerResponse.isNotEmpty
-                  ? freelancerResponse.first
-                  : null;
+        final freelancerData =
+        freelancerResponse != null && freelancerResponse.isNotEmpty
+            ? freelancerResponse.first
+            : null;
 
-          final freelancer = UserInfoDm.fromJson(userData);
+        final freelancer = UserInfoDm.fromJson(userData);
 
-          final mergedFreelancer = freelancer.copyWith(
-            rating: (freelancerData?['rating'] as num?)?.toDouble() ?? 0.0,
-            hourlyRate: (freelancerData?['hourly_rate'] as num?)?.toDouble(),
-            skills: freelancerData?['skills'] != null
-                ? List<String>.from(freelancerData!['skills'])
-                : [],
+        final mergedFreelancer = freelancer.copyWith(
+          rating: (freelancerData?['rating'] as num?)?.toDouble() ?? 0.0,
+          hourlyRate: (freelancerData?['hourly_rate'] as num?)?.toDouble(),
+          skills: freelancerData?['skills'] != null
+              ? List<String>.from(freelancerData!['skills'])
+              : [],
+        );
 
-          );
+        freelancers.add(mergedFreelancer);
+      }
+// ترتيب حسب الـrating من الأعلى للأقل مع التعامل مع null
+      freelancers.sort((a, b) {
+        final ratingA = a.rating ?? 0.0; // لو null يبقى 0
+        final ratingB = b.rating ?? 0.0; // لو null يبقى 0
+        return ratingB.compareTo(ratingA);
+      });
 
-          freelancers.add(mergedFreelancer);
-        }
+      return Right(freelancers);
 
-        return Right(freelancers);
-  
+
     } catch (e) {
       return Left(ServerFailure(e.toString()));
     }

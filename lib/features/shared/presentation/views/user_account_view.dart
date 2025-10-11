@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/features/shared/presentation/views/widgets/user_account_view_body.dart';
 
+import '../../../../config/l10n/app_localizations.dart';
 import '../../../profile/domain/entities/user_info_entity/user_info_entity.dart';
 
 class UserAccountView extends StatelessWidget {
@@ -11,13 +12,14 @@ class UserAccountView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     return  Scaffold(
       body: SafeArea(child: UserAccountViewBody( userInfoEntity: userInfoEntity)),
       appBar:  AppBar(
         surfaceTintColor: Colors.transparent,
         backgroundColor: Colors.white,
         title: Text(
-          'Account',
+          local.account,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
             fontWeight: FontWeight.w600,
             fontSize: 18.sp,

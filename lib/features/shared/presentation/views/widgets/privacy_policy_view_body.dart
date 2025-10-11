@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../../config/l10n/app_localizations.dart';
+
 class PrivacyPolicyViewBody extends StatelessWidget {
   const PrivacyPolicyViewBody({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!; // استخدام S.of(context)
     final TextStyle titleStyle = Theme.of(context)
         .textTheme
         .titleLarge!
@@ -21,10 +24,10 @@ class PrivacyPolicyViewBody extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(
-         
+
           width: double.infinity,
           decoration: BoxDecoration(
-                    color: Colors.white,
+            color: Colors.white,
             borderRadius: BorderRadius.circular(10.r),
             border: Border.all(color: Colors.grey.shade300, width: 2.w),
           ),
@@ -34,77 +37,71 @@ class PrivacyPolicyViewBody extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Privacy Policy", style: titleStyle),
+                  Text(local.privacyPolicy, style: titleStyle),
                   SizedBox(height: 12.h),
                   Text(
-                    "Welcome to Taskly! Your privacy is very important to us. This Privacy Policy explains how we collect, use, and protect your personal information when you use our application, whether you are a Client or a Freelancer.",
+                    local.privacyPolicyWelcome,
                     style: bodyStyle,
                   ),
                   SizedBox(height: 20.h),
-        
-                  Text("1. Information We Collect", style: titleStyle),
+
+                  Text(local.informationWeCollect, style: titleStyle),
                   SizedBox(height: 8.h),
                   Text(
-                    "- Account Information: name, email, phone number, profile details.\n"
-                    "- Service & Order Details: tasks created, accepted, and completed.\n"
-                    "- Payment Information: billing details and transaction history.\n"
-                    "- Device Information: device type, OS, and IP address.",
+                    local.informationWeCollectDesc,
                     style: bodyStyle,
                   ),
                   SizedBox(height: 20.h),
-        
-                  Text("2. How We Use Your Information", style: titleStyle),
+
+                  Text(local.howWeUseInfo, style: titleStyle),
                   SizedBox(height: 8.h),
                   Text(
-                    "We use your information to create and manage accounts, match Clients with Freelancers, facilitate communication, process payments, improve app performance, and ensure security.",
+                    local.howWeUseInfoDesc,
                     style: bodyStyle,
                   ),
                   SizedBox(height: 20.h),
-        
-                  Text("3. Sharing Your Data", style: titleStyle),
+
+                  Text(local.sharingData, style: titleStyle),
                   SizedBox(height: 8.h),
                   Text(
-                    "We do not sell your personal data. We may share information only with:\n"
-                    "- Other Users (limited profile details to complete tasks).\n"
-                    "- Third-party services (Firebase, Supabase, payment processors).\n"
-                    "- Legal authorities if required by law.",
+                    local.sharingDataDesc,
                     style: bodyStyle,
                   ),
                   SizedBox(height: 20.h),
-        
-                  Text("4. Data Security", style: titleStyle),
+
+                  Text(local.dataSecurity, style: titleStyle),
                   SizedBox(height: 8.h),
                   Text(
-                    "We implement industry-standard measures to protect your data, but no method of transmission or storage is 100% secure.",
+                    local.dataSecurityDesc,
                     style: bodyStyle,
                   ),
                   SizedBox(height: 20.h),
-        
-                  Text("5. Your Rights", style: titleStyle),
+
+                  Text(local.yourRights, style: titleStyle),
                   SizedBox(height: 8.h),
                   Text(
-                    "You have the right to access, update, or delete your personal data and to contact us regarding any privacy concerns.",
+                    local.yourRightsDesc,
                     style: bodyStyle,
                   ),
                   SizedBox(height: 20.h),
-        
-                  Text("6. Cookies & Tracking", style: titleStyle),
+
+                  Text(local.cookiesTracking, style: titleStyle),
                   SizedBox(height: 8.h),
                   Text(
-                    "Taskly may use cookies and similar technologies to personalize your experience and analyze app usage.",
+                    local.cookiesTrackingDesc,
                     style: bodyStyle,
                   ),
                   SizedBox(height: 20.h),
-        
-                  Text("7. Policy Updates", style: titleStyle),
+
+                  Text(local.policyUpdates, style: titleStyle),
                   SizedBox(height: 8.h),
                   Text(
-                    "We may update this Privacy Policy from time to time. Continued use of Taskly means you agree to the updated terms.",
+                    local.policyUpdatesDesc,
                     style: bodyStyle,
                   ),
                   SizedBox(height: 20.h),
-        
-            
+
+
                 ],
               ),
             ),

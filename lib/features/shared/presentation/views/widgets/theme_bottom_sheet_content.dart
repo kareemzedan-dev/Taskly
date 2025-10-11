@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:taskly/config/l10n/app_localizations.dart';
 import 'package:taskly/core/components/custom_button.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
 
@@ -19,14 +20,17 @@ class _ThemeBottomSheetContentState extends State<ThemeBottomSheetContent> {
   @override
   void initState() {
     super.initState();
-    _selectedTheme = widget.initialTheme ?? "System Default";
+    _selectedTheme = widget.initialTheme; // استخدام S.current
   }
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
+
     final themes = [
-      {"title": "Light", "icon": Icons.light_mode},
-      {"title": "Dark", "icon": Icons.dark_mode},
+      {"title": local.lightTheme, "icon": Icons.light_mode},
+      {"title": local.darkTheme, "icon": Icons.dark_mode},
+      {"title": local.systemDefault, "icon": Icons.settings},
     ];
 
     return Container(
@@ -70,16 +74,16 @@ class _ThemeBottomSheetContentState extends State<ThemeBottomSheetContent> {
                     shape: BoxShape.circle,
                     border: Border.all(color: ColorsManager.black, width: 2),
                     color:
-                        isSelected ? ColorsManager.primary : Colors.transparent,
+                    isSelected ? ColorsManager.primary : Colors.transparent,
                   ),
                   child:
-                      isSelected
-                          ? Icon(
-                            Icons.done,
-                            color: ColorsManager.white,
-                            size: 16.sp,
-                          )
-                          : null,
+                  isSelected
+                      ? Icon(
+                    Icons.done,
+                    color: ColorsManager.white,
+                    size: 16.sp,
+                  )
+                      : null,
                 ),
                 onTap: () {
                   setState(() {
@@ -93,7 +97,7 @@ class _ThemeBottomSheetContentState extends State<ThemeBottomSheetContent> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: CustomButton(
-              title: "Save",
+              title: local.save,
               ontap: () {
                 if (_selectedTheme != null) {
                   Navigator.pop(context, _selectedTheme);

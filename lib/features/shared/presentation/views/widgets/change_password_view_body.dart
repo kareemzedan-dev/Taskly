@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:taskly/config/l10n/app_localizations.dart';
 import 'package:taskly/core/components/custom_button.dart';
 import 'package:taskly/core/components/custom_text_field.dart';
 import 'package:taskly/core/components/dismissible_error_card.dart';
@@ -23,11 +24,13 @@ class _ChangePasswordViewBodyState extends State<ChangePasswordViewBody> {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
+
     return BlocConsumer<ChangePasswordViewModel, ChangePasswordViewModelStates>(
       listener: (context, state) {
         if (state is ChangePasswordViewModelSuccessState) {
           Navigator.pop(context);
-          showTemporaryMessage(context, "Password changed successfully", MessageType.success);
+          showTemporaryMessage(context, local.passwordChangedSuccess, MessageType.success);
         } else if (state is ChangePasswordViewModelErrorState) {
           showTemporaryMessage(context, state.message, MessageType.error);
         }
@@ -53,7 +56,7 @@ class _ChangePasswordViewBodyState extends State<ChangePasswordViewBody> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Change Password",
+                          local.changePassword,
                           style: Theme.of(context).textTheme.titleLarge?.copyWith(
                             fontWeight: FontWeight.bold,
                             fontSize: 20.sp,
@@ -61,7 +64,7 @@ class _ChangePasswordViewBodyState extends State<ChangePasswordViewBody> {
                         ),
                         SizedBox(height: 16.h),
                         Text(
-                          "Enter your old password then enter your new password to change your password.",
+                          local.changePasswordDesc,
                           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             fontWeight: FontWeight.w500,
                             fontSize: 14.sp,
@@ -70,12 +73,12 @@ class _ChangePasswordViewBodyState extends State<ChangePasswordViewBody> {
                         SizedBox(height: 30.h),
                         CustomTextFormField(
                           textEditingController: oldPasswordController,
-                          hintText: "Old Password",
+                          hintText: local.enterOldPassword,
                           iconShow: true,
                           keyboardType: TextInputType.visiblePassword,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return "Please enter your current password";
+                              return local.enterOldPassword;
                             }
                             return null;
                           },
@@ -84,14 +87,14 @@ class _ChangePasswordViewBodyState extends State<ChangePasswordViewBody> {
                         SizedBox(height: 20.h),
                         CustomTextFormField(
                           textEditingController: newPasswordController,
-                          hintText: "New Password",
+                          hintText: local.enterNewPassword,
                           iconShow: true,
                           keyboardType: TextInputType.visiblePassword,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return "Please enter a new password";
+                              return local.enterNewPassword;
                             } else if (value.length < 6) {
-                              return "Password must be at least 6 characters";
+                              return local.passwordValidation;
                             }
                             return null;
                           },
@@ -100,14 +103,14 @@ class _ChangePasswordViewBodyState extends State<ChangePasswordViewBody> {
                         SizedBox(height: 20.h),
                         CustomTextFormField(
                           textEditingController: confirmPasswordController,
-                          hintText: "Confirm New Password",
+                          hintText: local.enterConfirmPassword,
                           iconShow: true,
                           keyboardType: TextInputType.visiblePassword,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return "Please confirm your new password";
+                              return local.enterConfirmPassword;
                             } else if (value != newPasswordController.text) {
-                              return "Passwords do not match";
+                              return local.passwordsNotMatch;
                             }
                             return null;
                           },
@@ -115,7 +118,7 @@ class _ChangePasswordViewBodyState extends State<ChangePasswordViewBody> {
                         ),
                         SizedBox(height: 100.h),
                         CustomButton(
-                          title: "Change Password",
+                          title: local.changePassword,
                           ontap: () {
                             if (_formKey.currentState?.validate() ?? false) {
                               context.read<ChangePasswordViewModel>().changePassword(

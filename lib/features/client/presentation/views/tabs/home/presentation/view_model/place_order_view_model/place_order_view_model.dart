@@ -11,31 +11,14 @@ import 'package:taskly/features/shared/domain/entities/order_entity/order_entity
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/view_model/place_order_view_model/place_order_view_model_states.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../../../../../../../config/l10n/app_localizations.dart';
 import '../../../../../../../../attachments/data/models/attachments_dm/attachments_dm.dart';
 
 @injectable
 class PlaceOrderViewModel extends Cubit<PlaceOrderViewModelStates> {
   PlaceOrderUseCase orderUseCase;
   PlaceOrderViewModel(this.orderUseCase ) : super(PlaceOrderViewModelStatesInitial());
-  final Map<String, String> categories = {
-    "academic_sources": "Academic Sources",
-    "scientific_reports": "Scientific Reports",
-    "mind_maps": "Mind Maps",
-    "translation": "Translation",
-    "summaries": "Summaries",
-    "scientific_projects": "Scientific Projects",
-    "presentations": "Presentations",
-    "statistical_analysis": "Statistical Analysis",
-    "proofreading": "Proofreading",
-    "resume": "Resume",
-    "programming": "Programming",
-    "tutorials": "Tutorials",
-    "consultations": "Consultations",
-    "graphic_design": "Graphic Design",
-    "engineering_services": "Engineering Services",
-    "financial_services": "Financial Services",
-    "other": "Other",
-  };
+
 
   TextEditingController titleController = TextEditingController();
   List<File> localAttachments = [];

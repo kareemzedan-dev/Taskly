@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:firebase_core/firebase_core.dart'; // 👈 أضف دي
-import 'package:firebase_messaging/firebase_messaging.dart'; // 👈 لو هتستخدم الإشعارات
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:taskly/core/di/di.dart';
 import 'package:taskly/core/helper/my_bloc_observer.dart';
@@ -34,20 +34,15 @@ Future<void> main() async {
     url: ConstantsManager.supabaseUrl,
     anonKey: ConstantsManager.supabaseAnonKey,
   );
+
   await FirebaseNotificationService.initializeLocalNotifications();
   await FirebaseNotificationService.initializeFCM();
   await SharedPrefHelper.init();
   configureDependencies();
 
+
   final userId = SharedPrefHelper.getString(StringsManager.idKey);
   final role = SharedPrefHelper.getString(StringsManager.roleKey);
-
-  userStatusService = userId != null
-      ? UserStatusService(
-    supabaseService: getIt<SupabaseService>(),
-    userId: userId,
-  )
-      : null;
 
   Bloc.observer = MyBlocObserver();
 
@@ -68,15 +63,41 @@ Future<void> main() async {
             getIt<ProfileViewModel>()..getUserInfo(userId, role),
           ),
       ],
-      child: const Taskly(),
+      child: Taskly(userId: userId),
     ),
   );
 }
 
+class Taskly extends StatefulWidget {
+  final String? userId;
+  const Taskly({super.key, this.userId});
 
-class Taskly extends StatelessWidget {
-  const Taskly({super.key});
+  @override
+  State<Taskly> createState() => _TasklyState();
+}
 
+class _TasklyState extends State<Taskly> with WidgetsBindingObserver {
+  late final UserStatusService userStatusService;
+
+  @override
+  void initState() {
+    super.initState();
+    userStatusService = getIt<UserStatusService>();
+    if (widget.userId != null) {
+      userStatusService.initialize(widget.userId!);
+    }
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    userStatusService.handleAppLifecycle(state);
+  }
+
+  @override
+  void dispose() {
+    userStatusService.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -93,16 +114,12 @@ class Taskly extends StatelessWidget {
             GlobalCupertinoLocalizations.delegate,
           ],
           supportedLocales: const [  Locale('ar')],
-          builder: (context, child) {
-            return Overlay(
-              initialEntries: [OverlayEntry(builder: (context) => child!)],
-            );
-          },
           theme: AppTheme.lightTheme,
-          onGenerateRoute: (settings) => RoutesManager.onGenerateRoute(settings),
+          onGenerateRoute: RoutesManager.onGenerateRoute,
           initialRoute: RoutesManager.splash,
         );
       },
     );
   }
+
 }

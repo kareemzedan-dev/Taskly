@@ -17,6 +17,7 @@ import 'package:taskly/features/auth/presentation/cubit/auth_states.dart';
 import 'package:taskly/features/auth/presentation/cubit/auth_view_model.dart';
 import 'package:taskly/features/auth/presentation/views/widgets/social_login_button.dart';
 import 'package:taskly/config/l10n/app_localizations.dart';
+import 'package:taskly/features/auth/presentation/views/widgets/social_login_options.dart';
 
 class LoginViewBody extends StatefulWidget {
   const LoginViewBody({super.key, required this.role});
@@ -47,7 +48,7 @@ class _LoginViewBodyState extends State<LoginViewBody> {
         }
 
         // Success states
-        if (state is AuthLoginSuccessState || state is AuthGoogleSuccessState) {
+        if (state is AuthLoginSuccessState || state is AuthGoogleSuccessState ||   state is AuthFacebookSuccessState) {
           if (mounted) Navigator.pop(context); // close dialog first
           if (mounted) {
             if (widget.role == StringsManager.freelancerRole) {
@@ -61,23 +62,32 @@ class _LoginViewBodyState extends State<LoginViewBody> {
         }
 
    // Error states
-if (state is AuthLoginErrorState || state is AuthGoogleErrorState) {
-  if (mounted) Navigator.pop(context);
-
-  final failure = state is AuthLoginErrorState
-      ? state.error
-      : (state as AuthGoogleErrorState).error;
-
-  final errorMessage = AppLocalizations.of(context)!.translate(
-    failure.message,
-    params: failure.params,
-  );
-
-  showTemporaryMessage(context, errorMessage, MessageType.error);
-}
 
 
-      },
+
+        if (state is AuthLoginErrorState) {
+          if (mounted) Navigator.pop(context);
+          final errorMessage = AppLocalizations.of(context)!.translate(
+            state.error.message,
+            params: state.error.params,
+          );
+          showTemporaryMessage(context, errorMessage, MessageType.error);
+        } else if (state is AuthGoogleErrorState) {
+          if (mounted) Navigator.pop(context);
+          final errorMessage = AppLocalizations.of(context)!.translate(
+            state.error.message,
+            params: state.error.params,
+          );
+          showTemporaryMessage(context, errorMessage, MessageType.error);
+        } else if (state is AuthFacebookErrorState) {
+          if (mounted) Navigator.pop(context);
+          final errorMessage = AppLocalizations.of(context)!.translate(
+            state.error.message,
+            params: state.error.params,
+          );
+          showTemporaryMessage(context, errorMessage, MessageType.error);
+        }},
+
       child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -137,36 +147,44 @@ if (state is AuthLoginErrorState || state is AuthGoogleErrorState) {
                     authViewModel.passwordController.text = p0!;
                   },
                 ),
-                SizedBox(height: 10.h),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    GestureDetector(
-                      onTap:   () {
-                        Navigator.pushNamed(context, RoutesManager.forgetPasswordView);
-                      },
-                      child: Text(
-                        AppLocalizations.of(context)!.forgotPassword,
-                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                         color: ColorsManager.primary,
-                         fontWeight: FontWeight.w600,
-                         fontSize: 14.sp,
-                       ), ),
-                    ),
-                  ],
-                ),
+                // SizedBox(height: 10.h),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.end,
+                //   children: [
+                //     GestureDetector(
+                //       onTap:   () {
+                //         Navigator.pushNamed(context, RoutesManager.forgetPasswordView);
+                //       },
+                //       child: Text(
+                //         AppLocalizations.of(context)!.forgotPassword,
+                //        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                //          color: ColorsManager.primary,
+                //          fontWeight: FontWeight.w600,
+                //          fontSize: 14.sp,
+                //        ), ),
+                //     ),
+                //   ],
+                // ),
 
 
                 SizedBox(height: 20.h),
                 const OrDivider(),
                 SizedBox(height: 20.h),
 
-                SocialLoginButton(
-                  label: AppLocalizations.of(context)!.continueWithGoogle,
-                  iconPath: Assets.assetsImagesIcGoogle,
-                  onPressed: () {
-                    context.read<AuthViewModel>().googleLogin(role:  widget.role);
-                  },
+                SocialLoginOptions(
+                    onGoogleLogin: () {
+                      context.read<AuthViewModel>().googleLogin(
+                          role: widget.role);
+                    },
+                    onAppleLogin: () {
+                      context.read<AuthViewModel>().appleLogin(role: widget.role);
+                    },
+                    onFacebookLogin: ()
+                    {
+                      context.read<AuthViewModel>().facebookLogin(role: widget.role);
+                    }
+
+
                 ),
 
                 SizedBox(height: 48.h),

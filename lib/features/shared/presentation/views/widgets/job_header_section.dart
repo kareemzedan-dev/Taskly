@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
 
+import '../../../../../config/l10n/app_localizations.dart';
+
 class JobHeader extends StatelessWidget {
   const JobHeader({
     super.key,
@@ -16,6 +18,7 @@ class JobHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -58,7 +61,7 @@ class JobHeader extends StatelessWidget {
         ),
         SizedBox(height: 16.h),
         Text(
-          "Posted $date",
+          "${local.posted} $date",
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
             fontWeight: FontWeight.w500,
             fontSize: 12.sp,

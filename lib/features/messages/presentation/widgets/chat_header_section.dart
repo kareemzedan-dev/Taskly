@@ -74,7 +74,7 @@ class ChatHeaderSection extends StatelessWidget {
                     RoutesManager.clientPaymentsView,
                     arguments: {'orderEntity': orderData},
                   );
-                } else if (buttonText == "submit delivery") {
+                } else if (buttonText.toLowerCase() == "submit delivery") {
                   showConfirmationDialog(
                     context: context,
                     title: "Submit Delivery",
@@ -87,7 +87,7 @@ class ChatHeaderSection extends StatelessWidget {
                     },
                     onCancel: () {},
                   );
-                } else if (buttonText == "work received") {
+                } else if (buttonText == "Work Received") {
                   showConfirmationDialog(
                     context: context,
                     title: "Confirmation",

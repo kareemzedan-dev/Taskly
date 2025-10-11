@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/cache/shared_preferences.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
 import 'package:taskly/core/utils/strings_manager.dart';
+import '../../../../../../../../../config/l10n/app_localizations.dart';
 import '../../../../../../../data/models/favorite_order_model/favorite_order_model.dart';
 import '../../../../../../../domain/entities/favorite_order_entity/favorite_order_entity.dart';
 import '../../view_model/add_favorite_order_view_model/add_favorite_order_states.dart';
@@ -24,6 +25,7 @@ class FreelancerWorkCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     return Card(
       elevation: 10,
       child: Container(
@@ -38,21 +40,21 @@ class FreelancerWorkCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              HeaderRow(date: order.createdAt.toTimeAgo(), orderId: order.id, addFavViewModel: addFavViewModel,),
+              HeaderRow(date: order.createdAt.toTimeAgo(context), orderId: order.id, addFavViewModel: addFavViewModel,),
               const SizedBox(height: 10),
               Title(order.title),
               const SizedBox(height: 5),
-              CategoryChip(order.category ?? "No category"),
+              CategoryChip(order.category ?? local.noCategory),
               const SizedBox(height: 16),
-              Description(order.description ?? "No description"),
+              Description(order.description ??local.noDescription),
               const SizedBox(height: 16),
-              DeliveryInfo(deliveryTime: order.deadline!.toRelative()),
+              DeliveryInfo(deliveryTime: order.deadline!.toRelative(context)),
               const SizedBox(height: 16),
               ActionsRow(
                 order: order,
                 actions: [
                   ActionItem(
-                    title: "View details",
+                    title: local.viewDetails,
                     icon: Icons.remove_red_eye_outlined,
                     onTap: () {
                       Navigator.pushNamed(
@@ -63,7 +65,7 @@ class FreelancerWorkCard extends StatelessWidget {
                     },
                   ),
                   ActionItem(
-                    title: "Send offers",
+                    title: local.send_offers,
                     icon: Icons.send,
                     isOffer: true,
                     onTap: () {
@@ -125,7 +127,7 @@ class _HeaderContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final removeFavViewModel = context.read<RemoveFavoriteOrderViewModel>();
-
+final local = AppLocalizations.of(context)!;
     return BlocBuilder<AddFavoriteOrderViewModel, AddFavoriteOrderStates>(
       bloc: addFavViewModel, // ✅ استخدم النسخة الممررة
       builder: (context, state) {
@@ -135,7 +137,7 @@ class _HeaderContent extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "Posted $date",
+              "${local.posted} $date",
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 fontWeight: FontWeight.w500,
                 fontSize: 12.sp,

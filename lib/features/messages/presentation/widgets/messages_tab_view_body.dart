@@ -81,7 +81,9 @@ class UserMessagesTabViewBody extends StatelessWidget {
                                       RoutesManager.chatView,
                                       arguments: {
                                         "userName": fullName,
-                                        "userImage": avatarUrl,
+                                        "currentUserAvatar": SharedPrefHelper.getString(StringsManager.profileImageKey),
+                                        "receiverAvatar":avatarUrl ,
+
                                         "order": order,
                                         "currentUserId": SharedPrefHelper.getString(StringsManager.idKey)!,
                                         "receiverId": chatUserId,

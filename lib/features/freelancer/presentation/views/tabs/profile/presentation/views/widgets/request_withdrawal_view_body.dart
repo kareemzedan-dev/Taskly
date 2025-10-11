@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:taskly/config/l10n/app_localizations.dart';
 import 'package:taskly/core/cache/shared_preferences.dart';
 import 'package:taskly/core/components/custom_tab_bar.dart';
 import 'package:taskly/core/di/di.dart';
@@ -15,13 +16,15 @@ class RequestWithdrawalViewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
+
     return Padding(
       padding: EdgeInsets.all(16.0),
       child: DefaultTabController(
         length: 2,
         child: Column(
           children: [
-            CustomTabBar(tabs: ['Withdrawal Request', 'Withdrawal History']),
+            CustomTabBar(tabs: [local.withdrawalRequest, local.withdrawalHistory]),
             Expanded(
               child: TabBarView(
                 children: [
@@ -35,22 +38,25 @@ class RequestWithdrawalViewBody extends StatelessWidget {
                           return const Center(child: CircularProgressIndicator());
                         }
                         if (state is GetWithdrawalHistorySuccessState) {
+                          if (state.withdrawalHistoryEntity.isEmpty) {
+                            return Center(child: Text(local.withdrawalHistoryEmpty));
+                          }
                           return ListView.builder(
                             scrollDirection: Axis.vertical,
                             itemCount: state.withdrawalHistoryEntity.length,
                             itemBuilder: (context, index) {
-                              return   Padding(
-                                padding:
-                                    const EdgeInsets.all(  4.0),
-                                child: WithdrawalHistoryTabContent( payment: state. withdrawalHistoryEntity[index],),
+                              return Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: WithdrawalHistoryTabContent(
+                                  payment: state.withdrawalHistoryEntity[index],
+                                ),
                               );
                             },
                           );
                         }
                         if (state is GetWithdrawalHistoryErrorState) {
-                          return const Center(
-                            child: Text(
-                                "Something went wrong, Please try again Later"),
+                          return Center(
+                            child: Text(local.somethingWentWrongTryAgain),
                           );
                         }
                         return const SizedBox();

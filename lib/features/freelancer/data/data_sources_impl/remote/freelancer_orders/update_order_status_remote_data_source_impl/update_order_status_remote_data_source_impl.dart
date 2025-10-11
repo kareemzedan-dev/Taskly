@@ -17,9 +17,12 @@ class UpdateOrderStatusRemoteDataSourceImpl implements UpdateOrderStatusRemoteDa
     try {
       await _supabaseService.supabaseClient
           .from('orders')
-          .update({'status': status}).eq('id', orderId);
+          .update({'status': status})
+          .eq('id', orderId);
       return const Right(null);
-    } catch (e) {
+    } catch (e, st) { // st = stack trace
+      print("❌ Failed to update order status: $e");
+      print(st);
       return Left(ServerFailure('Failed to update order status: $e'));
     }
   }

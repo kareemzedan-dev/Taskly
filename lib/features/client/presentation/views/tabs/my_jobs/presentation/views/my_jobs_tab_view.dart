@@ -7,6 +7,7 @@ import 'package:taskly/core/utils/colors_manger.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/view_model/get_order_view_model.dart/get_order_view_model.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/order_status_card_list_view.dart';
 
+import '../../../../../../../../config/l10n/app_localizations.dart';
 import '../../../../../../../../core/components/dismissible_error_card.dart';
 import '../view_model/delete_order_view_model/delete_order_states.dart';
 import '../view_model/delete_order_view_model/delete_order_view_model.dart';
@@ -17,6 +18,7 @@ class MyJobsTabView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     return MultiBlocProvider(
       providers: [
         BlocProvider<GetOrderViewModel>(
@@ -45,7 +47,7 @@ class MyJobsTabView extends StatelessWidget {
                 bottom: BorderSide(color: Colors.grey.shade300, width: 2),
               ),
               title: Text(
-                'Manage Orders',
+                local.manageOrders,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   fontWeight: FontWeight.w700,
                   fontSize: 20.sp,
@@ -58,35 +60,35 @@ class MyJobsTabView extends StatelessWidget {
                 unselectedLabelStyle: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w400),
                 indicatorColor: ColorsManager.primary,
                 indicatorWeight: 4,
-                tabs: const [
-                  Tab(text: "Pending"),
-                  Tab(text: "In Progress"),
-                  Tab(text: "Completed"),
-                  Tab(text: "Cancelled"),
+                tabs:   [
+                  Tab(text: local.pending),
+                  Tab(text: local.inProgress),
+                  Tab(text: local.completed),
+                  Tab(text: local.cancelled),
                 ],
               ),
             ),
             backgroundColor: Colors.white,
-            body: const TabBarView(
+            body:   TabBarView(
               children: [
                 OrderStatusCardListView(
                   animationPath: "assets/lotties/Loading.json",
-                  message: "No pending orders yet",
+                  message: local.no_pending_orders_yet,
                   filter: OrderStatusFilter.pending,
                 ),
                 OrderStatusCardListView(
                   animationPath: "assets/lotties/Progress.json",
-                  message: "No orders in progress",
+                  message: local.no_orders_in_progress,
                   filter: OrderStatusFilter.inProgress,
                 ),
                 OrderStatusCardListView(
                   animationPath: "assets/lotties/Success.json",
-                  message: "No completed orders",
+                  message: local.no_completed_orders,
                   filter: OrderStatusFilter.completed,
                 ),
                 OrderStatusCardListView(
                   animationPath: "assets/lotties/cancelled.json",
-                  message: "No cancelled orders",
+                  message: local.no_cancelled_orders,
                   filter: OrderStatusFilter.cancelled,
                 ),
               ],

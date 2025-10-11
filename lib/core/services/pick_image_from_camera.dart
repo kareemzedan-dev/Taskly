@@ -1,20 +1,17 @@
 import 'package:image_picker/image_picker.dart';
 
+import 'package:image_picker/image_picker.dart';
+
 class ImagePickerService {
+  static final _picker = ImagePicker();
+
   static Future<String?> pickImageFromCamera() async {
-    final ImagePicker picker = ImagePicker();
+    final pickedFile = await _picker.pickImage(source: ImageSource.camera);
+    return pickedFile?.path;
+  }
 
-    try {
-      final XFile? image = await picker.pickImage(source: ImageSource.camera);
-
-      if (image != null) {
-        print('📸 Image path: ${image.path}');
-        return image.path; // رجع المسار
-      }
-    } catch (e) {
-      print('❌ Error picking image: $e');
-    }
-
-    return null;
+  static Future<String?> pickImageFromGallery() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    return pickedFile?.path;
   }
 }

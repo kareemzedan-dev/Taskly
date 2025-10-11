@@ -21,28 +21,13 @@ class SubscribeToPublicOrdersRemoteDataSourceImpl
 
   @override
   Stream<List<OrderEntity>> subscribeToPublicOrders(String freelancerId) async* {
-    if (!await NetworkUtils.hasInternet()  ) {
-      throw const NetworkFailure('No internet connection');
-    }
-
     final controller = StreamController<List<OrderEntity>>();
     final currentOrders = <OrderEntity>[];
 
-    final initialResult =
-    await _fetchPublicOrdersRemoteDataSource.fetchPublicOrders(freelancerId);
-
-    initialResult.fold(
-          (failure) => controller.addError(failure),
-          (orders) {
-        currentOrders.addAll(orders);
-        controller.add(List.from(currentOrders));
-      },
-    );
-
-    final channel = _supabaseService.supabaseClient.channel('orders-changes');
+    final channel = _supabaseService.supabaseClient.channel('public-orders-changes');
 
     void handleOrderChange(OrderEntity order) {
-      if (order.serviceType.name != 'public') return;
+      if (order.serviceType.name != 'public' || order.status.name != 'Pending') return;
 
       final index = currentOrders.indexWhere((o) => o.id == order.id);
       if (index != -1) {
@@ -50,10 +35,19 @@ class SubscribeToPublicOrdersRemoteDataSourceImpl
       } else {
         currentOrders.insert(0, order);
       }
+
+      currentOrders.sort((a, b) => b.createdAt.compareTo(a.createdAt));
       controller.add(List.from(currentOrders));
     }
 
-    channel.onPostgresChanges(
+    void handleDelete(String id) {
+      currentOrders.removeWhere((o) => o.id == id);
+      controller.add(List.from(currentOrders));
+    }
+
+    // 🧠 1️⃣ جهّز الاشتراك الأول
+    channel
+        .onPostgresChanges(
       event: PostgresChangeEvent.insert,
       schema: 'public',
       table: 'orders',
@@ -61,9 +55,8 @@ class SubscribeToPublicOrdersRemoteDataSourceImpl
         final order = OrderDm.fromJson(payload.newRecord).toEntity();
         handleOrderChange(order);
       },
-    );
-
-    channel.onPostgresChanges(
+    )
+        .onPostgresChanges(
       event: PostgresChangeEvent.update,
       schema: 'public',
       table: 'orders',
@@ -71,22 +64,42 @@ class SubscribeToPublicOrdersRemoteDataSourceImpl
         final order = OrderDm.fromJson(payload.newRecord).toEntity();
         handleOrderChange(order);
       },
-    );
-
-    channel.onPostgresChanges(
+    )
+        .onPostgresChanges(
       event: PostgresChangeEvent.delete,
       schema: 'public',
       table: 'orders',
       callback: (payload) {
         final deletedId = payload.oldRecord['id'] as String;
-        currentOrders.removeWhere((o) => o.id == deletedId);
-        controller.add(List.from(currentOrders));
+        handleDelete(deletedId);
       },
-    ).subscribe();
+    );
+
+    // 🧠 2️⃣ استنى لحد ما الاشتراك يتم فعلاً
+    await channel.subscribe((status, [error]) async {
+      print('🔌 Public Orders channel status: $status');
+      if (status == RealtimeSubscribeStatus.subscribed) {
+        print('✅ Subscribed to public orders');
+
+        // 🧠 3️⃣ بعد التأكد من الاشتراك، اعمل fetch أولي
+        final result =
+        await _fetchPublicOrdersRemoteDataSource.fetchPublicOrders(freelancerId);
+        result.fold(
+              (failure) => controller.addError(failure),
+              (orders) {
+            currentOrders
+              ..clear()
+              ..addAll(orders);
+            controller.add(List.from(currentOrders));
+            print('📦 Initial public orders loaded: ${orders.length}');
+          },
+        );
+      }
+    });
 
     controller.onCancel = () {
+      print('❌ Unsubscribed from public orders');
       channel.unsubscribe();
-      controller.close();
     };
 
     yield* controller.stream;

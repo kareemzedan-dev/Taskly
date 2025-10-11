@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/utils/assets_manager.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
 
+import '../../config/l10n/app_localizations.dart';
+
 class CustomBottomNavigationBar extends StatelessWidget {
   const CustomBottomNavigationBar({
     super.key,
@@ -19,6 +21,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     return BottomNavigationBar(
       backgroundColor: Colors.white,
       type: BottomNavigationBarType.fixed,
@@ -50,7 +53,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
             height: 24.h,
             width: 24.w,
           ),
-          label: firstTabName ?? 'Home',
+          label: firstTabName ??local.home,
         ),
         BottomNavigationBarItem(
           icon: Image.asset(
@@ -65,7 +68,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
             height: 24.h,
             width: 24.w,
           ),
-          label: 'My Jobs',
+          label:local.my_jobs,
         ),
         BottomNavigationBarItem(
           icon: Image.asset(
@@ -80,7 +83,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
             height: 24.h,
             width: 24.w,
           ),
-          label: 'Messages',
+          label: local.messages,
         ),
         BottomNavigationBarItem(
           icon: Image.asset(
@@ -95,7 +98,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
             height: 24.h,
             width: 24.w,
           ),
-          label: 'Profile',
+          label: local.profile,
         ),
       ],
     );

@@ -12,6 +12,7 @@ import 'package:taskly/core/di/di.dart';
 import 'package:taskly/core/components/custom_search_text_field.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/freelancer_info_list_view.dart';
 
+import '../../../../../../../../../config/l10n/app_localizations.dart';
 import '../../view_model/fetch_all_freelancers_view_model/fetch_all_freelancers_view_model.dart';
 class PrivateHireSection extends StatelessWidget {
   PrivateHireSection({super.key, required this.selectedId});
@@ -20,6 +21,7 @@ class PrivateHireSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final viewModel = getIt<FetchAllFreelancersViewModel>()..getAllFreelancer();
+ final local = AppLocalizations.of(context)!;
 
     return Container(
       height: 260.h,
@@ -45,8 +47,8 @@ class PrivateHireSection extends StatelessWidget {
               children: [
                 CustomSearchTextField(
                   hintTexts: [
-                    "Search freelancers by name...",
-                    "choose the best match for your project"
+                    local.search_freelancers_hint,
+                    local.choose_best_match_hint
                   ],
                   onChanged: (query) {
                     viewModel.searchFreelancers(query);

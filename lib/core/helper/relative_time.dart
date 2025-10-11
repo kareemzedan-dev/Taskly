@@ -1,11 +1,13 @@
+import 'package:flutter/material.dart';
+import '../../config/l10n/app_localizations.dart';
 
-extension RelativeTime on DateTime {
-  String toRelative() {
+extension RelativeTimeLocalized on DateTime {
+  String toRelative(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     final now = DateTime.now();
-    final difference = this.difference(now);
+    final difference = now.difference(this); // ✅ تم التعديل هنا
 
-    bool isPast = difference.isNegative;
-
+    bool isPast = difference.inSeconds > 0;
     int totalSeconds = difference.inSeconds.abs();
 
     final days = totalSeconds ~/ (24 * 3600);
@@ -15,28 +17,28 @@ extension RelativeTime on DateTime {
     totalSeconds -= hours * 3600;
 
     final minutes = totalSeconds ~/ 60;
-    totalSeconds -= minutes * 60;
 
-    final seconds = totalSeconds;
-
-    String suffix = isPast ? " ago" : " left";
+    final suffix = isPast ? local.time_suffix_ago : local.time_suffix_left;
 
     if (days > 0) {
-      String result = "$days day${days > 1 ? 's' : ''}";
+      String result =
+          "$days ${days == 1 ? local.time_day : local.time_days}";
       if (hours > 0) {
-        result += " $hours hour${hours > 1 ? 's' : ''}";
+        result += " $hours ${hours == 1 ? local.time_hour : local.time_hours}";
       }
-      return result + suffix;
+      return "$result $suffix";
     } else if (hours > 0) {
-      String result = "$hours hour${hours > 1 ? 's' : ''}";
+      String result =
+          "$hours ${hours == 1 ? local.time_hour : local.time_hours}";
       if (minutes > 0) {
-        result += " $minutes minute${minutes > 1 ? 's' : ''}";
+        result +=
+        " $minutes ${minutes == 1 ? local.time_minute : local.time_minutes}";
       }
-      return result + suffix;
+      return "$result $suffix";
     } else if (minutes > 0) {
-      return "$minutes minute${minutes > 1 ? 's' : ''}$suffix";
+      return "$minutes ${minutes == 1 ? local.time_minute : local.time_minutes} $suffix";
     } else {
-      return "just now";
+      return local.just_now;
     }
   }
 }

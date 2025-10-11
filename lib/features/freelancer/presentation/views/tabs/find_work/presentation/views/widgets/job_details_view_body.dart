@@ -9,6 +9,8 @@ import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/pre
 import 'package:taskly/features/shared/presentation/views/widgets/description_section.dart';
 import 'package:taskly/features/shared/presentation/views/widgets/job_header_section.dart';
 
+import '../../../../../../../../../config/l10n/app_localizations.dart';
+
 class JobDetailsViewBody extends StatelessWidget {
   const JobDetailsViewBody({super.key,required this.orderEntity});
   final OrderEntity orderEntity ;
@@ -16,6 +18,7 @@ class JobDetailsViewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
 
 
     return Padding(
@@ -29,7 +32,7 @@ class JobDetailsViewBody extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children:   [
-                    JobHeader(title: orderEntity.title ,category: orderEntity.category!,date: orderEntity.createdAt.toTimeAgo(),),
+                    JobHeader(title: orderEntity.title ,category: orderEntity.category!,date: orderEntity.createdAt.toTimeAgo(context),),
                     const Divider(thickness: 1, color: Colors.grey),
                     DescriptionSection(description:orderEntity.description ,),
                     const Divider(thickness: 1, color: Colors.grey),
@@ -44,7 +47,7 @@ class JobDetailsViewBody extends StatelessWidget {
               ),
             ),
           ),
-          CustomButton(title: "Send offer", ontap: () {
+          CustomButton(title: local.send_offer , ontap: () {
             Navigator.pushNamed(context, RoutesManager.sendOfferView, arguments:orderEntity);
           }),
           const SizedBox(height: 30),

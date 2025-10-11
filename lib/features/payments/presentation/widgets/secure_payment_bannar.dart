@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
 
+import '../../../../config/l10n/app_localizations.dart';
+
 class SecurePaymentBanner extends StatelessWidget {
   const SecurePaymentBanner({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(12.h),
@@ -24,7 +27,7 @@ class SecurePaymentBanner extends StatelessWidget {
           SizedBox(width: 8.w),
           Expanded(
             child: Text(
-              "🔒 Secure payment. Funds will not be released until the work is completed.",
+           local.secure_payment_note,
               style: Theme.of(context)
                   .textTheme
                   .bodyMedium

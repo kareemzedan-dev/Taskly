@@ -13,6 +13,7 @@ import '../../../shared/domain/entities/order_entity/order_entity.dart';
         required OrderEntity order,
         required bool isOnline,
         required DateTime lastSeen,
+          Function ? onBackButtonPressed,
       }) {
     return AppBar(
       surfaceTintColor: Colors.transparent,
@@ -37,7 +38,7 @@ import '../../../shared/domain/entities/order_entity/order_entity.dart';
             mainAxisSize: MainAxisSize.min,
             children: [
               GestureDetector(
-                onTap: () => Navigator.pop(context),
+                onTap: () =>onBackButtonPressed ?? Navigator.pop(context),
                 child: Icon(
                   Icons.arrow_back_ios_new,
                   color: Colors.grey.shade500,
@@ -81,7 +82,7 @@ import '../../../shared/domain/entities/order_entity/order_entity.dart';
                         // Last seen or online text
                         Expanded(
                           child: Text(
-                            formatLastSeen(isOnline: isOnline, lastSeen: lastSeen),
+                            formatLastSeen(isOnline: isOnline, lastSeen: lastSeen,context: context),
                             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                               fontWeight: FontWeight.w400,
                               fontSize: 12.sp,

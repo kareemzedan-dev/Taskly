@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
 
+import '../../../../config/l10n/app_localizations.dart';
+
 class UploadPaymentProofButton extends StatelessWidget {
   const UploadPaymentProofButton({super.key, required this.onTap});
 
@@ -11,6 +13,7 @@ class UploadPaymentProofButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -31,7 +34,7 @@ class UploadPaymentProofButton extends StatelessWidget {
             ),
             SizedBox(width: 10.w),
             Text(
-              "Upload Payment Proof",
+             local.upload_payment_proof,
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 fontWeight: FontWeight.w600,
                 fontSize: 16.sp,

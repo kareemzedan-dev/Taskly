@@ -7,6 +7,7 @@ import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentat
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/price_duration_section.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/user_info_display.dart';
 import 'package:taskly/features/freelancer/domain/entities/offer_entity/offer_entity.dart';
+import '../../../../../../../../../config/l10n/app_localizations.dart';
 import '../../../../../../../../shared/domain/entities/order_entity/order_entity.dart';
 import '../../view_model/update_offer_status_view_model/update_offer_status_view_model.dart';
 import 'expandable_text.dart';
@@ -44,6 +45,7 @@ class OfferCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 6.h),
       child: Card(
@@ -72,7 +74,7 @@ class OfferCard extends StatelessWidget {
                   // Price & Duration
                   PriceDurationSection(
                     price: "${offer.offer.offerAmount} \$",
-                    duration: offer.offer.offerDeliveryTime.formatMinutes(),
+                    duration: offer.offer.offerDeliveryTime.formatMinutes( context),
                   ),
                 ],
               ),
@@ -103,7 +105,7 @@ class OfferCard extends StatelessWidget {
 
               // Reject button
               OrderActionButton(
-                text: "Decline Offer",
+                text: local.decline_offer,
                 icon: Icons.close,
                 color: Colors.red,
                 onTap: () {

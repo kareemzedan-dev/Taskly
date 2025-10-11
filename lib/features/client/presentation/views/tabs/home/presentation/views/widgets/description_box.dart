@@ -4,12 +4,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/view_model/place_order_view_model/place_order_view_model.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/build_text_field_widget.dart';
 
+import '../../../../../../../../../config/l10n/app_localizations.dart';
+
 class DescriptionBox extends StatelessWidget {
   const DescriptionBox({super.key});
 
   @override
   Widget build(BuildContext context) {
         final orderViewModel = context.read<PlaceOrderViewModel>();
+        final local = AppLocalizations.of(context)!;
     return Container(
       height: 200.h,
       decoration: BoxDecoration(
@@ -25,7 +28,7 @@ class DescriptionBox extends StatelessWidget {
         ],
       ),
       child: buildTextField(
-        "Write your description here",
+    local.description_hint,
         10,
         orderViewModel.descriptionController,
         (p0) {

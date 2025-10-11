@@ -4,6 +4,7 @@ import 'package:taskly/core/utils/assets_manager.dart';
  import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/view_model/freelancer_public_order_view_model/freelancer_public_order_states.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/freelancer_work_card.dart';
 
+import '../../../../../../../../../config/l10n/app_localizations.dart';
 import '../../../../../../../../shared/domain/entities/order_entity/order_entity.dart';
 import '../../view_model/add_favorite_order_view_model/add_favorite_order_view_model.dart';
 import 'freelancer_work_card_shimmer.dart';
@@ -16,6 +17,7 @@ class FreelancerPublicOrdersList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
 
     if (state is FreelancerPendingOrdersLoading) {
       return const FreelancerWorkCardShimmer();
@@ -38,7 +40,7 @@ class FreelancerPublicOrdersList extends StatelessWidget {
                     Image.asset(Assets.assetsImagesNoOrder, width: 240.w, height: 240.h,),
                     SizedBox(height: 10.h),
                     Text(
-                      'No Public orders',
+                      local.no_public_orders_available   ,
                       style: TextStyle(fontSize: 18.sp),
                     ),
                   ],

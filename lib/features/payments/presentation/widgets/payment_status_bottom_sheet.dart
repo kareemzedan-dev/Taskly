@@ -5,6 +5,8 @@ import 'package:taskly/core/utils/colors_manger.dart';
 import 'package:taskly/features/shared/presentation/views/widgets/attachments_section.dart';
 import 'package:taskly/features/payments/domain/entities/payment_entity.dart';
 
+import '../../../../config/l10n/app_localizations.dart';
+
 class PaymentStatusBottomSheet extends StatelessWidget {
   final PaymentEntity payment;
 
@@ -15,6 +17,7 @@ class PaymentStatusBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     return Container(
       width: double.infinity,
       height: MediaQuery.of(context).size.height * 0.9,
@@ -51,7 +54,7 @@ class PaymentStatusBottomSheet extends StatelessWidget {
                   color: ColorsManager.primary.withOpacity(0.2),
                 ),
                 child: Text(
-                  "📢 Don't worry, your payment request is under review.\nIt usually doesn't take long.",
+                  local.payment_under_review_message,
                   style: TextStyle(
                     color: ColorsManager.primary,
                     fontSize: 14.sp,
@@ -68,7 +71,7 @@ class PaymentStatusBottomSheet extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Payment Status",
+                    local.payment_status,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           fontWeight: FontWeight.w600,
                           fontSize: 16.sp,
@@ -82,11 +85,11 @@ class PaymentStatusBottomSheet extends StatelessWidget {
                           color: ColorsManager.primary,
                           borderRadius: BorderRadius.circular(10.r),
                         ),
-                        child: const Padding(
+                        child:   Padding(
                           padding: EdgeInsets.all(8.0),
                           child: Center(
                             child: Text(
-                             "Awaiting approval",  
+                              local.awaiting_approval,
                               style: TextStyle(color: Colors.white),
                             ),
                           ),
@@ -110,13 +113,13 @@ class PaymentStatusBottomSheet extends StatelessWidget {
 
               // Amount
               Text(
-                "Amount: ${payment.amount} SAR",
+                local.amount_sar(payment.amount.toString()),
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16.sp,
-                    ),
-              ),
-
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16.sp,
+                ),
+              )
+,
               SizedBox(height: 20.h),
 
               // Attachments
@@ -136,7 +139,7 @@ class PaymentStatusBottomSheet extends StatelessWidget {
                   color: ColorsManager.primary.withOpacity(0.2),
                 ),
                 child: Text(
-                  "📣 If you have any questions, please contact us. We are here to help!",
+                 local.contact_us_note,
                   style: TextStyle(
                     color: ColorsManager.primary,
                     fontSize: 14.sp,
@@ -149,7 +152,7 @@ class PaymentStatusBottomSheet extends StatelessWidget {
               SizedBox(height: 10.h),
 
               CustomButton(
-                title: "Chat with Admin Now",
+                title: local.chat_with_admin,
                 ontap: () {},
               ),
               SizedBox(height: 30.h),

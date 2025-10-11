@@ -5,6 +5,7 @@ import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentat
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/offer_header.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/view_model/get_offers_view_model/get_offers_view_model.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/view_model/get_offers_view_model/get_offers_view_model_states.dart';
+import '../../../../../../../../../config/l10n/app_localizations.dart';
 import '../../../../../../../../../core/components/dismissible_error_card.dart';
 import '../../../../../../../../../core/utils/assets_manager.dart';
 import '../../../../../../../../freelancer/presentation/cubit/update_order_status_view_model/update_order_status_view_model.dart';
@@ -25,14 +26,15 @@ class OffersBottomSheetContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     final offersViewModel = context.read<GetOffersViewModel>();
 
     return BlocConsumer<UpdateOfferStatusViewModel, UpdateOfferStatusStates>(
       listener: (context, state) {
         if (state is UpdateOfferStatusLoadingState) {
-          showTemporaryMessage(context, "Loading...", MessageType.success);
+          showTemporaryMessage(context, local.loading, MessageType.success);
         } else if (state is UpdateOfferStatusErrorState) {
-          showTemporaryMessage(context, "Error", MessageType.error);
+          showTemporaryMessage(context, local.error_temp, MessageType.error);
         } else if (state is UpdateOfferStatusSuccessState) {
           Navigator.pushAndRemoveUntil(
             context,
@@ -42,8 +44,12 @@ class OffersBottomSheetContent extends StatelessWidget {
                 (route) => false,
           );
           showTemporaryMessage(
-              context, "Offer ${order.status == OrderStatus.Accepted ? "Accepted" : "Rejected"} Successfully", MessageType.success);
-
+            context,
+            order.status == OrderStatus.Accepted
+                ? local.offer_accepted_successfully
+                : local.offer_rejected_successfully,
+            MessageType.success,
+          );
           offersViewModel.getOffers(orderId); // refresh offers
         }
       },
@@ -61,9 +67,9 @@ class OffersBottomSheetContent extends StatelessWidget {
                 return Column(
                   children: [
                     OffersHeader(
-                      title: "Offers Received",
+                      title: local.offersReceived,
                       count: offers.length,
-                      filters: const ["Price", "Delivery", "Rating"],
+                      filters:   [local.price, local.delivery, local.rating],
                     ),
 
                     Expanded(
@@ -100,7 +106,7 @@ class OffersBottomSheetContent extends StatelessWidget {
                           ),
                           SizedBox(height: 20.h),
                           Text(
-                            "No Offers yet",
+                           local.no_offers_yet,
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyLarge
@@ -117,7 +123,7 @@ class OffersBottomSheetContent extends StatelessWidget {
               }
               return Center(
                 child: Text(
-                  "No Offers",
+                  local.no_offers_yet,
                   style: Theme.of(context)
                       .textTheme
                       .bodyLarge

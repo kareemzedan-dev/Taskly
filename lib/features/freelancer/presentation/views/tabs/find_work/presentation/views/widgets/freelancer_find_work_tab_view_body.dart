@@ -16,6 +16,7 @@ import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/pre
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/freelancer_private_list_view.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/search_bar_with_favorite.dart';
 import 'package:taskly/features/profile/presentation/manager/profile_view_model/profile_view_model_states.dart';
+import '../../../../../../../../../config/l10n/app_localizations.dart';
 import '../../../../../../../../profile/presentation/manager/profile_view_model/profile_view_model.dart';
 import '../../../../../../../data/models/favorite_order_model/favorite_order_model.dart';
 import '../../view_model/add_favorite_order_view_model/add_favorite_order_view_model.dart';
@@ -38,12 +39,6 @@ class _FreelancerHomeTabViewBodyState extends State<FreelancerHomeTabViewBody> {
   late final AddFavoriteOrderViewModel _addFavoriteOrderViewModel;
   late final RemoveFavoriteOrderViewModel _removeFavoriteOrderViewModel;
 
-  final List<String> searchHintTexts = [
-    "Search for orders...",
-    "Search for private orders...",
-    "Search for public orders...",
-    "Search for favorite orders...",
-  ];
 
   String userId = SharedPrefHelper.getString("id")!;
 
@@ -74,6 +69,12 @@ class _FreelancerHomeTabViewBodyState extends State<FreelancerHomeTabViewBody> {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
+    final List<String> searchHintTexts = [
+      local.search_for_private_orders,
+     local.search_for_public_orders,
+     local.search_for_favorite_orders,
+    ];
     return MultiBlocProvider(
       providers: [
         BlocProvider.value(value: _freelancerInfoViewModel),
@@ -106,7 +107,7 @@ class _FreelancerHomeTabViewBodyState extends State<FreelancerHomeTabViewBody> {
                 },
               ),
               SizedBox(height: 30.h),
-              const CustomTabBar(tabs: ["Public Requests", "Private Requests"]),
+                CustomTabBar(tabs: [local.public_requests, local.private_requests]),
               SizedBox(height: 6.h),
               Divider(color: Colors.grey.shade300, thickness: 1.w),
               Expanded(
@@ -117,8 +118,8 @@ class _FreelancerHomeTabViewBodyState extends State<FreelancerHomeTabViewBody> {
                     }
 
                     if (state is ProfileViewModelStatesError) {
-                      return const Center(
-                          child: Text("Failed to load user info"));
+                      return   Center(
+                          child: Text(local.somethingWentWrong));
                     }
 
                     if (state is ProfileViewModelStatesSuccess) {
@@ -177,7 +178,7 @@ class _FreelancerHomeTabViewBodyState extends State<FreelancerHomeTabViewBody> {
                             ),
                             SizedBox(height: 20.h),
                             Text(
-                              "Your account is under verification.\nPlease wait until your request is approved.",
+                   local.account_under_verification,
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: 16.sp,

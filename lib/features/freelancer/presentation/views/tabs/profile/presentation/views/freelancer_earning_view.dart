@@ -8,17 +8,20 @@ import 'package:taskly/core/utils/strings_manager.dart';
 import 'package:taskly/features/freelancer/presentation/cubit/get_total_earnings_view_model/get_total_earnings_view_model.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/profile/presentation/views/widgets/freelancer_earning_view_body.dart';
 
+import '../../../../../../../../config/l10n/app_localizations.dart';
+
 class FreelancerEarningView extends StatelessWidget {
   const FreelancerEarningView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     return  Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
         backgroundColor: Colors.white,
         title: Text(
-          'Earning',
+            local.earnings,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
             fontWeight: FontWeight.w700,
             fontSize: 20.sp,

@@ -1,8 +1,8 @@
 
 import 'package:taskly/features/attachments/data/models/attachments_dm/attachments_dm.dart';
 
-class MessageEntity   {
-  final String id;
+class MessageEntity{
+  final String ?id;
   final String? orderId;
   final String? paymentId;
   final String senderId;
@@ -19,7 +19,7 @@ class MessageEntity   {
   final String receiverType;
 
   const MessageEntity({
-    required this.id,
+      this.id,
     this.orderId,
     this.paymentId,
     required this.senderId,

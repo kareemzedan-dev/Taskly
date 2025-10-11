@@ -10,28 +10,28 @@ class GetAdminMessagesRemoteDataSourceImpl implements GetAdminMessagesRemoteData
   final SupabaseService supabaseService;
 
   GetAdminMessagesRemoteDataSourceImpl(this.supabaseService);
-
   @override
   Future<Either<Failures, List<MessageEntity>>> getAdminMessages(String currentUserId) async {
     try {
+      // جلب أول admin فقط
       final adminsResponse = await supabaseService.supabaseClient
           .from('admins')
-          .select('id');
+          .select('id')
+          .limit(1);
 
-      final adminIds = (adminsResponse as List).map((e) => e['id'].toString()).toList();
+      if ((adminsResponse as List).isEmpty) return const Right([]);
 
-      // لو مفيش admins، ارجع قائمة فارغة
-      if (adminIds.isEmpty) return const Right([]);
+      final firstAdminId = adminsResponse.first['id'].toString();
 
-      final orQuery = adminIds.map((id) => 'sender_id.eq.$currentUserId,receiver_id.eq.$id').join(',');
-
+      // جلب الرسائل بين المستخدم الحالي وأول admin
       final response = await supabaseService.supabaseClient
           .from('messages')
           .select()
-          .or(orQuery)
+          .or('and(sender_id.eq.$currentUserId,receiver_id.eq.$firstAdminId),and(sender_id.eq.$firstAdminId,receiver_id.eq.$currentUserId)')
           .order('created_at', ascending: true);
 
-      final List<MessageEntity> messages = (response as List).map((msg) {
+
+      final messages = (response as List).map((msg) {
         final data = Map<String, dynamic>.from(msg as Map);
         return MessageEntity(
           id: data['id'],
@@ -56,14 +56,11 @@ class GetAdminMessagesRemoteDataSourceImpl implements GetAdminMessagesRemoteData
         );
       }).toList();
 
-      final filteredMessages = messages.where((m) =>
-      (m.senderId == currentUserId && adminIds.contains(m.receiverId)) ||
-          (m.receiverId == currentUserId && adminIds.contains(m.senderId))).toList();
-
-      return Right(filteredMessages);
+      return Right(messages);
     } catch (e, st) {
       print('Error in GetAdminMessagesRemoteDataSourceImpl: $e\n$st');
       return const Right([]);
     }
   }
+
 }

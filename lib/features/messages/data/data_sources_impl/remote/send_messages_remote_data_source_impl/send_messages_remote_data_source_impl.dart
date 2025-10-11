@@ -78,8 +78,7 @@ class SendMessagesRemoteDataSourceImpl extends SendMessagesRemoteDataSource {
         'content': message.content,
         'attachment': attachmentJson,
         'status': message.status,
-        'created_at': message.createdAt.toIso8601String(),
-        'updated_at': message.updatedAt.toIso8601String(),
+
       };
 
       debugPrint("🚀 Inserting message into Supabase...");
@@ -88,37 +87,36 @@ class SendMessagesRemoteDataSourceImpl extends SendMessagesRemoteDataSource {
 
       debugPrint("✅ Message inserted successfully: ${response['id']}");
       // بعد ما الرسالة اتسجلت بنجاح
+// بعد ما الرسالة اتحفظت
       final messageModel = MessageModel.fromJson(response);
 
-/// افتراضي
-      String senderName = "مستخدم";
-
+// 👇 تحقق من حالة المستخدم قبل إرسال الإشعار
       try {
-        final userResponse = await supabase
+        final userResponse = await supabaseService.supabaseClient
             .from('users')
-            .select('full_name')
-            .eq('id', message.senderId)
-            .limit(1) // نضمن يرجع صف واحد
+            .select('is_online')
+            .eq('id', message.receiverId)
             .maybeSingle();
 
-        if (userResponse != null && userResponse['full_name'] != null) {
-          senderName = userResponse['full_name'] as String; // تعديل القيمة مباشرة
+        final isOnline = userResponse != null ? userResponse['is_online'] as bool : false;
+
+        if (!isOnline) {
+          await NotificationService().sendNotification(
+            receiverId: message.receiverId!,
+            title: "رسالة جديدة",
+            body: message.content ?? "لديك رسالة جديدة",
+          );
+        } else {
+          debugPrint("📱 المستخدم online، لن يتم إرسال إشعار push.");
         }
       } catch (e) {
-        debugPrint("❌ Failed to fetch sender name: $e");
+        debugPrint("❌ خطأ أثناء إرسال الإشعار: $e");
       }
 
+      return Right(messageModel);
 
-      try {
-        await NotificationService().sendNotification(
-            receiverId: message.receiverId!,
-            title: "رسالة جديدة من $senderName",
-            body: message.content ?? "لديك رسالة جديدة"
-        );
-        debugPrint("🔔 Notification sent successfully!");
-      } catch (e) {
-        debugPrint("❌ Failed to send notification: $e");
-      }
+
+
 
 
       return Right(messageModel);

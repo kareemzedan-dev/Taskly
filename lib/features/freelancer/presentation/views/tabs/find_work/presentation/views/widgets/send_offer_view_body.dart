@@ -20,6 +20,7 @@ import '../../view_model/get_commission_view_model/get_commission_view_model.dar
 import '../../view_model/get_commission_view_model/get_commission_sates.dart';
 import 'input_proposal_price.dart';
 import 'input_with_drop_down.dart';
+import '../../../../../../../../../config/l10n/app_localizations.dart';
 
 class SendOfferViewBody extends StatefulWidget {
   final OrderEntity orderEntity;
@@ -34,7 +35,7 @@ class _SendOfferViewBodyState extends State<SendOfferViewBody> {
   final TextEditingController priceController = TextEditingController();
   final TextEditingController deliveryTimeController = TextEditingController();
 
-  String selectedCurrency = "SAR";
+
   String selectedTimeUnit = "Days";
   final List<String> timeUnits = ["Hours", "Days", "Weeks"];
   final _formKey = GlobalKey<FormState>();
@@ -60,13 +61,14 @@ class _SendOfferViewBodyState extends State<SendOfferViewBody> {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
+    String selectedCurrency =   local.sar;
     return BlocConsumer<SendOfferViewModel, SendOfferViewModelStates>(
-
       listener: (context, state) {
         if (state is SendOfferViewModelSuccess) {
           showTemporaryMessage(
             context,
-            "Offer sent successfully",
+            local.offer_sent_success,
             MessageType.success,
           );
           Navigator.pushAndRemoveUntil(
@@ -98,7 +100,7 @@ class _SendOfferViewBodyState extends State<SendOfferViewBody> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             SizedBox(height: 16.h),
-                            _buildSectionTitle(context, "Project Details :"),
+                            _buildSectionTitle(context, local.project_details),
                             SizedBox(height: 16.h),
 
                             Container(
@@ -134,7 +136,7 @@ class _SendOfferViewBodyState extends State<SendOfferViewBody> {
 
                             _buildSectionTitle(
                               context,
-                              "Proposal Description : ",
+                              local.proposal_description,
                             ),
                             SizedBox(height: 8.h),
                             _buildDescriptionBox(context),
@@ -142,10 +144,10 @@ class _SendOfferViewBodyState extends State<SendOfferViewBody> {
                             const Divider(thickness: 1, color: Colors.grey),
                             SizedBox(height: 16.h),
 
-                            _buildSectionTitle(context, "Proposal Price : "),
+                            _buildSectionTitle(context, local.proposal_price),
                             SizedBox(height: 8.h),
                             InputProposalPrice(
-                              hint: "Enter price",
+                              hint: local.enter_price_hint,
                               controller: priceController,
                               selectedValue: selectedCurrency,
                               errorText: priceError,
@@ -163,7 +165,6 @@ class _SendOfferViewBodyState extends State<SendOfferViewBody> {
                             SizedBox(height: 8.h),
                             BlocBuilder<GetCommissionViewModel,
                                 GetCommissionSates>(
-
                               builder: (context, commissionState) {
                                 if (commissionState
                                 is GetCommissionSatesLoading) {
@@ -180,16 +181,18 @@ class _SendOfferViewBodyState extends State<SendOfferViewBody> {
                                           .withOpacity(0.1),
                                       borderRadius: BorderRadius.circular(8.r),
                                     ),
-                                    child: Text(
-                                      "Price after commission: ${priceAfter.toStringAsFixed(2)} SAR",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(
-                                        fontWeight: FontWeight.w600,
-                                        color: ColorsManager.primary,
-                                      ),
-                                    ),
+                                   child: Text(
+                                  "${local.price_after_commission} ${priceAfter.toStringAsFixed(2)} ${local.sar}",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(
+                                fontWeight: FontWeight.w600,
+                                color: ColorsManager.primary,
+                                ),
+                                ),
+
+
                                   );
                                 }
                                 return const SizedBox();
@@ -200,17 +203,15 @@ class _SendOfferViewBodyState extends State<SendOfferViewBody> {
                             const Divider(thickness: 1, color: Colors.grey),
                             SizedBox(height: 16.h),
 
-                            _buildSectionTitle(context, "Delivery Time : "),
+                            _buildSectionTitle(context, local.delivery_time),
                             SizedBox(height: 8.h),
                             InputWithDropdown(
-                              hint: "Enter time",
+                              hint: local.enter_time_hint,
                               controller: deliveryTimeController,
                               selectedValue: selectedTimeUnit,
                               items: timeUnits,
                               errorText: deliveryTimeError,
-                              onNumberChanged: (val) {
-                                print("Number: $val");
-                              },
+                              onNumberChanged: (val) {},
                               onUnitChanged: (val) {
                                 setState(() {
                                   selectedTimeUnit = val!;
@@ -225,18 +226,18 @@ class _SendOfferViewBodyState extends State<SendOfferViewBody> {
                     ),
 
                     CustomButton(
-                      title: "Send offer",
+                      title: local.send_offer_title,
                       ontap: () {
                         setState(() {
                           descriptionError = descriptionController.text.isEmpty
-                              ? "Please enter a description"
+                              ? local.description_error
                               : null;
                           priceError = priceController.text.isEmpty
-                              ? "Please enter a price"
+                              ? local.price_error
                               : null;
                           deliveryTimeError =
                           deliveryTimeController.text.isEmpty
-                              ? "Please enter a delivery time"
+                              ? local.delivery_time_error
                               : null;
                         });
 
@@ -308,6 +309,7 @@ class _SendOfferViewBodyState extends State<SendOfferViewBody> {
   }
 
   Widget _buildDescriptionBox(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -322,8 +324,7 @@ class _SendOfferViewBodyState extends State<SendOfferViewBody> {
           minLines: 1,
           decoration: InputDecoration(
             border: InputBorder.none,
-            hintText:
-            "Explain how you will execute this project, including methods or any specific conditions....",
+            hintText: local.offer_description_hint,
             errorText: descriptionError,
             hintStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
               fontWeight: FontWeight.w500,

@@ -25,77 +25,13 @@ class SubscribeOrdersRecordViewModel extends Cubit<OrderViewModelState> {
         .listen((order) {
       print("Realtime update received: ${order.id} - ${order.status}");
 
-      // ارسال notification بناءً على الحالة
-      _handleNotifications(order);
+
 
       emit(OrderSuccess(order));
     }, onError: (error) {
       print("Error in subscription: $error");
       emit(OrderError(error.toString()));
     });
-  }
-
-  void _handleNotifications(OrderEntity order) {
-     _sentNotifications.putIfAbsent(order.id, () => {});
-
-    if (_sentNotifications[order.id]!.contains(order.status)) return;
-
-    switch (order.status) {
-      case OrderStatus.InProgress:
-        _sendToBoth(
-          order,
-          "Order Started",
-          "🎉 Your order '${order.title}' has been confirmed. You can start working now!",
-        );
-        break;
-      case OrderStatus.Waiting:
-        _sendToClient(
-          order,
-          "Work Submitted",
-          "✅ Your order '${order.title}' has been submitted by the freelancer. Please review and confirm delivery.",
-        );
-        break;
-      case OrderStatus.Completed:
-        _sendToBoth(
-          order,
-          "Order Completed",
-          "🎉 Your order '${order.title}' has been completed successfully!",
-        );
-        break;
-      case OrderStatus.Cancelled:
-        _sendToBoth(
-          order,
-          "Order Cancelled",
-          "⚠️ Your order '${order.title}' has been cancelled.",
-        );
-        break;
-      default:
-        break; // Pending, Accepted, Paid أو أي حالة غير مهمة لا نرسل لها إشعار
-    }
-
-    // علمنا ان الإشعار للحالة دي اتبعت
-    _sentNotifications[order.id]!.add(order.status);
-  }
-
-  void _sendToBoth(OrderEntity order, String title, String body) {
-    NotificationService().sendNotification(
-      receiverId: order.freelancerId!,
-      title: title,
-      body: body,
-    );
-    NotificationService().sendNotification(
-      receiverId: order.clientId,
-      title: title,
-      body: body,
-    );
-  }
-
-  void _sendToClient(OrderEntity order, String title, String body) {
-    NotificationService().sendNotification(
-      receiverId: order.clientId,
-      title: title,
-      body: body,
-    );
   }
 
   String getAdminMessage(OrderEntity order) {

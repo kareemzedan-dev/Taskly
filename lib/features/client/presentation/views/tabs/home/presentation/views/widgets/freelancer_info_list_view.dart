@@ -40,9 +40,6 @@ class _FreelancerInfoListViewState extends State<FreelancerInfoListView> {
                      "userName":freelancer.fullName,
                      "userImage":freelancer.profileImage,
                      "userRating":freelancer.rating,
-
-
-
                    });
                   },
                   freelancer: freelancer,

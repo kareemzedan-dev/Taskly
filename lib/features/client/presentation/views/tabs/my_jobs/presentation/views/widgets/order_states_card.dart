@@ -16,6 +16,7 @@ import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentat
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/order_header.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/order_progress_time_line.dart';
 
+import '../../../../../../../../../config/l10n/app_localizations.dart';
 import '../../../../../../../../../config/routes/routes_manager.dart';
 import '../../view_model/update_offer_status_view_model/update_offer_status_view_model.dart';
 
@@ -44,6 +45,7 @@ class OrderStatesCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     return BlocProvider<GetOffersViewModel>(
       create: (_) => getIt<GetOffersViewModel>()..init(order.id),
       child: Card(
@@ -74,7 +76,7 @@ class OrderStatesCard extends StatelessWidget {
                 ),
                 SizedBox(height: 20.h),
                 OrderProgressTimeline(
-                  steps: ['Created', 'Paid', 'Executing', order.status.name == OrderStatus.Cancelled.name ? "Cancelled" : "Completed" ],
+                  steps: [local.created,  local.paid, local.inProgress, order.status.name == OrderStatus.Cancelled.name ?   local.cancelled :local.completed ],
                   currentStep: getStep(order.status),
                 ),
                 SizedBox(height: 26.h),
@@ -87,7 +89,7 @@ class OrderStatesCard extends StatelessWidget {
 
                     if (order.status == OrderStatus.Pending) {
                       return OrderActionButton(
-                        text: "Offers You’ve Received",
+                        text: local.offersReceived,
                         icon: Icons.local_offer_outlined,
                         color: ColorsManager.primary,
                         count: count,
@@ -114,7 +116,7 @@ class OrderStatesCard extends StatelessWidget {
                       );
                     } else if (order.status == OrderStatus.Accepted) {
                       return OrderActionButton(
-                        text: "Paid Now ${order.budget} SAR",
+                        text: local.paid_now(order.budget.toString()),
                         icon: Icons.money,
                         color: ColorsManager.primary,
                         onTap: () {
@@ -127,7 +129,7 @@ class OrderStatesCard extends StatelessWidget {
                       );
                     } else if (order.status == OrderStatus.Paid) {
                       return CustomButton(
-                        title: " Payment under review ",
+                        title: local.payment_under_review,
                         ontap: () {
                           showModalBottomSheet(
                             context: context,
@@ -162,7 +164,7 @@ class OrderStatesCard extends StatelessWidget {
                 ),
                 SizedBox(height: 10.h),
                 OrderActionButton(
-                  text: "View details",
+                  text: local.viewDetails,
                   icon: Icons.remove_red_eye_outlined,
                   color: ColorsManager.primary,
                   onTap: () {

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/features/shared/presentation/views/widgets/change_password_view_body.dart';
 
+import '../../../../config/l10n/app_localizations.dart';
 import '../../../../core/di/di.dart';
 import '../../../auth/presentation/cubit/change_password_view_model/change_password_view_model.dart';
 
@@ -12,6 +13,7 @@ class ChangePasswordView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     return  Scaffold(
 
       body: BlocProvider(
@@ -21,7 +23,7 @@ class ChangePasswordView extends StatelessWidget {
         surfaceTintColor: Colors.transparent,
         backgroundColor: Colors.white,
         title: Text(
-          'Change Password',
+          local.change_password,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
             fontWeight: FontWeight.w600,
             fontSize: 18.sp,

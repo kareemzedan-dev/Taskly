@@ -1,28 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:taskly/core/di/di.dart';
-import 'package:taskly/features/shared/domain/entities/order_entity/order_entity.dart';
-import '../manager/chat_avatars_view_model/chat_avatars_state.dart';
-import '../manager/chat_avatars_view_model/chat_avatars_view_model.dart';
-import '../widgets/chat_header_section.dart';
-import '../widgets/chat_messages_list.dart';
-import '../widgets/chat_input_section.dart';
-import 'package:taskly/features/messages/presentation/manager/get_messages_view_model/get_messages_view_model.dart';
-import 'package:taskly/features/messages/presentation/manager/subscribe_to_messages_view_model/subscribe_to_messages_view_model.dart';
-import 'package:taskly/features/shared/presentation/manager/subscribe_to_order_record_view_model/subscribe_to_order_record_view_model.dart';
-import 'package:taskly/features/freelancer/presentation/cubit/update_order_status_view_model/update_order_status_view_model.dart';
-import 'package:taskly/features/reviews/presentation/manager/get_user_reviews_view_model/get_user_reviews_view_model.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'package:injectable/injectable.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../../../../../../../../../core/di/di.dart';
+import '../../../../../../../../../core/utils/colors_manger.dart';
+import '../../../shared/presentation/views/widgets/message_bubble.dart';
+import '../../domain/entities/message_entity.dart';
+import '../../../../../../../../../features/attachments/domain/entities/attachment_entity/attaachments_entity.dart';
+
+import '../manager/messages_view_model/messages_view_model.dart';
+ import '../manager/messages_view_model/messages_view_model_states.dart';
+import '../manager/send_message_view_model/send_message_view_model.dart';
+import '../manager/send_message_view_model/send_message_view_model_states.dart';
+import 'chat_input_field.dart';
 
 class ChatViewBody extends StatefulWidget {
-  final OrderEntity order;
   final String currentUserId;
   final String receiverId;
+  final String orderId;
+  final String currentUserAvatar;
+  final String receiverAvatar;
 
   const ChatViewBody({
     super.key,
-    required this.order,
     required this.currentUserId,
     required this.receiverId,
+    required this.orderId,
+    required this.currentUserAvatar,
+    required this.receiverAvatar,
   });
 
   @override
@@ -31,68 +39,256 @@ class ChatViewBody extends StatefulWidget {
 
 class _ChatViewBodyState extends State<ChatViewBody> {
   final ScrollController _scrollController = ScrollController();
+  final AudioPlayer _audioPlayer = AudioPlayer();
+  String? _currentlyPlayingUrl;
+
+  @override
+  void initState() {
+    super.initState();
+    _audioPlayer.onPlayerComplete.listen((_) {
+      setState(() => _currentlyPlayingUrl = null);
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    _audioPlayer.dispose();
+    super.dispose();
+  }
 
   void _scrollToBottom() {
-    if (_scrollController.hasClients) {
-      _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeOut,
-      );
-    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
+    });
+  }
+
+  Widget _buildAttachmentWidget(AttachmentEntity att, bool isCurrentUser, bool isTemporary) {
+    final isImage = att.type.startsWith("image/");
+    final isPDF = att.type == "application/pdf";
+    final isAudio = att.type.startsWith("audio/") || att.type == "application/octet-stream";
+
+    return Stack(
+      children: [
+        Container(
+          margin: const EdgeInsets.symmetric(vertical: 6),
+          padding: const EdgeInsets.all(12),
+          width: 250,
+          decoration: BoxDecoration(
+            color: isCurrentUser
+                ? Colors.blue.withOpacity(0.05)
+                : Colors.green.withOpacity(0.05),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: isCurrentUser ? Colors.blueAccent : Colors.greenAccent,
+              width: isTemporary ? 0.5 : 1.0,
+            ),
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(
+                  color: isCurrentUser ? Colors.blue : Colors.green,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Icon(
+                  isImage
+                      ? Icons.image
+                      : isPDF
+                      ? Icons.picture_as_pdf
+                      : Icons.audiotrack,
+                  color: Colors.white,
+                  size: 20,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: GestureDetector(
+                  onTap: !isAudio
+                      ? () async {
+                    if (isImage) {
+                      showDialog(
+                        context: context,
+                        builder: (_) => Dialog(
+                          backgroundColor: Colors.transparent,
+                          insetPadding: const EdgeInsets.all(20),
+                          child: Stack(
+                            children: [
+                              InteractiveViewer(
+                                child: Image.network(att.url, fit: BoxFit.contain),
+                              ),
+                              Positioned(
+                                top: 10,
+                                right: 10,
+                                child: IconButton(
+                                  icon: const Icon(Icons.close, color: Colors.white),
+                                  onPressed: () => Navigator.of(context).pop(),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    } else if (isPDF) {
+                      launchUrl(Uri.parse(att.url));
+                    }
+                  }
+                      : null,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        att.name ?? "Attachment",
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        isImage
+                            ? "Image"
+                            : isPDF
+                            ? "PDF Document"
+                            : "Audio File",
+                        style: const TextStyle(fontSize: 12, color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              if (isAudio)
+                IconButton(
+                  icon: Icon(
+                    _currentlyPlayingUrl == att.url ? Icons.pause_circle : Icons.play_circle,
+                    color: Colors.orange,
+                    size: 28,
+                  ),
+                  onPressed: () async {
+                    if (_currentlyPlayingUrl == att.url) {
+                      await _audioPlayer.pause();
+                      setState(() => _currentlyPlayingUrl = null);
+                    } else {
+                      await _audioPlayer.stop();
+                      await _audioPlayer.play(UrlSource(att.url));
+                      setState(() => _currentlyPlayingUrl = att.url);
+                    }
+                  },
+                ),
+            ],
+          ),
+        ),
+        if (isTemporary)
+          const Positioned(
+            top: 4,
+            right: 4,
+            child: SizedBox(
+              width: 18,
+              height: 18,
+              child: CircularProgressIndicator(strokeWidth: 2),
+            ),
+          ),
+      ],
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final currentUserRole = widget.currentUserId == widget.order.clientId ? 'client' : 'freelancer';
-    final receiverUserRole = widget.receiverId == widget.order.clientId ? 'client' : 'freelancer';
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => getIt<MessagesViewModel>()..loadAndSubscribe(widget.orderId),
+        ),
+        BlocProvider(
+          create: (_) => getIt<SendMessageViewModel>(),
+        ),
+      ],
+      child: Column(
+        children: [
+          Expanded(
+            child: BlocConsumer<MessagesViewModel, MessagesStates>(
+              listener: (context, state) {
+                if (state is MessagesSuccess) _scrollToBottom();
+              },
+              builder: (context, state) {
+                if (state is MessagesLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (state is MessagesError) {
+                  return Center(
+                    child: Text(
+                      "Error: ${state.failure.message}",
+                      style: const TextStyle(color: Colors.red),
+                    ),
+                  );
+                } else if (state is MessagesSuccess) {
+                  final messages = state.messages;
 
-    return BlocProvider(
-      create: (_) => ChatAvatarsCubit(getIt())..loadAvatars(widget.currentUserId, widget.receiverId),
-      child: BlocBuilder<ChatAvatarsCubit, ChatAvatarsState>(
-        builder: (context, state) {
-          if (state is ChatAvatarsLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
+                  if (messages.isEmpty) {
+                    return const Center(
+                      child: Text("No messages yet", style: TextStyle(color: Colors.grey)),
+                    );
+                  }
 
-          if (state is ChatAvatarsError) {
-            return Center(child: Text(state.message));
-          }
+                  return ListView.builder(
+                    controller: _scrollController,
+                    padding: const EdgeInsets.all(16),
+                    itemCount: messages.length,
+                    itemBuilder: (context, index) {
+                      final msg = messages[index];
+                      final isCurrentUser = msg.senderId == widget.currentUserId;
 
-          final avatars = state as ChatAvatarsLoaded;
+                      return Column(
+                        crossAxisAlignment:
+                        isCurrentUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+                        children: [
+                          if (msg.messageType == "text" && (msg.content?.isNotEmpty ?? false))
+                            MessageBubble(
+                              avatarUrl: isCurrentUser
+                                  ? widget.currentUserAvatar
+                                  : widget.receiverAvatar,
+                              sender: isCurrentUser
+                                  ? SenderType.freelancer
+                                  : SenderType.client,
+                              message: msg.content ?? "",
+                              chatWithUsers: true,
+                              time:
+                              "${msg.createdAt.hour}:${msg.createdAt.minute.toString().padLeft(2, '0')}",
+                            ),
 
-          return MultiBlocProvider(
-            providers: [
-              BlocProvider(create: (_) => getIt<GetMessagesViewModel>()..getOrderMessages(widget.order.id)),
-              BlocProvider(create: (_) => getIt<SubscribeToMessagesViewModel>()..subscribeToMessages(widget.order.id)),
-              BlocProvider(create: (_) => getIt<SubscribeOrdersRecordViewModel>()..subscribe(widget.order.id)),
-              BlocProvider(create: (_) => getIt<UpdateOrderStatusViewModel>()),
-              BlocProvider(create: (_) => getIt<GetUserReviewsViewModel>()
-                ..getUserReviews(widget.currentUserId, currentUserRole)),
-            ],
-            child: Column(
-              children: [
-                ChatHeaderSection(order: widget.order, currentUserId: widget.currentUserId),
-                Expanded(
-                  child: ChatMessagesList(
-                    currentUserId: widget.currentUserId,
-                    scrollController: _scrollController,
-                    freelancerAvatar: avatars.freelancerAvatar,
-                    clientAvatar: avatars.clientAvatar,
-                  ),
-                ),
-                ChatInputSection(
-                  orderId: widget.order.id,
-                  currentUserId: widget.currentUserId,
-                  receiverId: widget.receiverId,
-                  currentUserRole: currentUserRole,
-                  receiverUserRole: receiverUserRole,
-                  onMessageSent: _scrollToBottom,
-                ),
-              ],
+                          if (msg.attachment != null)
+                            ...msg.attachment!.map(
+                                  (att) => _buildAttachmentWidget(att, isCurrentUser, false),
+                            ),
+                          SizedBox(height: 12.h),
+                        ],
+                      );
+                    },
+                  );
+                }
+
+                return const SizedBox.shrink();
+              },
             ),
-          );
-        },
+          ),
+          ChatInputField(
+            orderId: widget.orderId,
+            currentUserId: widget.currentUserId,
+            receiverId: widget.receiverId,
+            currentUserRole: "client_or_freelancer", // تقدر تحددها حسب الحالة
+            receiverUserRole: "opposite_role",
+          ),
+          SizedBox(height: 16.h),
+        ],
       ),
     );
   }

@@ -7,6 +7,7 @@ import 'package:taskly/features/profile/domain/entities/user_info_entity/user_in
 import 'package:taskly/features/profile/presentation/manager/profile_view_model/profile_view_model.dart';
 import 'package:taskly/features/profile/presentation/manager/profile_view_model/profile_view_model_states.dart';
 
+import '../../../../../../../../../config/l10n/app_localizations.dart';
 import '../../../../../../../../../config/routes/routes_manager.dart';
 import '../../../../../../../../../core/di/di.dart';
 import 'client_details_shimmer.dart';
@@ -18,6 +19,7 @@ class ClientDetailsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     return BlocProvider(
       create: (context) =>
       getIt<ProfileViewModel>()
@@ -39,7 +41,7 @@ class ClientDetailsSection extends StatelessWidget {
               children: [
                 SizedBox(height: 16.h),
                 Text(
-                  "Client Details",
+                  local.clientDetails,
                   style: Theme
                       .of(context)
                       .textTheme
@@ -85,7 +87,7 @@ class ClientDetailsSection extends StatelessWidget {
                     Text(
                       (client.fullName != null && client.fullName!.isNotEmpty)
                           ? client.fullName!
-                          : "Unknown Client",
+                          :local.unknown_client,
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
                         fontSize: 14.sp,
@@ -113,17 +115,14 @@ class ClientDetailsSection extends StatelessWidget {
                         ),
                         SizedBox(width: 16.w),
                         Text(
-                          " ${client.jobsCount} jobs posted",
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.copyWith(
+                          local.jobs_posted(client.jobsCount??""),
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             fontWeight: FontWeight.w500,
                             fontSize: 14.sp,
                             color: Colors.grey.shade800,
                           ),
                         ),
+
                       ],
                     ),
                   ],

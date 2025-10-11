@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
+import '../../../../../../../../../config/l10n/app_localizations.dart';
 import '../../view_model/get_offers_view_model/get_offers_view_model.dart';
 
 class OffersFilters extends StatefulWidget {
@@ -19,11 +20,12 @@ class _OffersFiltersState extends State<OffersFilters> {
   @override
   Widget build(BuildContext context) {
     final offersViewModel = context.read<GetOffersViewModel>();
+    final local = AppLocalizations.of(context)!;
 
     return Row(
       children: [
         Text(
-          "Filter by:",
+          local.filterBy,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
             color: Colors.white,
             fontSize: 16.sp,
@@ -51,7 +53,7 @@ class _OffersFiltersState extends State<OffersFilters> {
                   selectedFilter = selected ? filter : null;
                 });
 
-                // فرز العروض حسب الفلتر المختار
+
                 if (filter == "Price") {
                   offersViewModel.sortOffers(OfferSortBy.price);
                 } else if (filter == "Delivery") {

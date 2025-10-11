@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:either_dart/src/either.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:injectable/injectable.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -49,7 +51,6 @@ class AttachmentsRemoteDataSourceImpl extends AttachmentsRemoteDataSource {
     }
   }
 
-
   @override
   Future<Either<Failures, List<AttachmentEntity>>> uploadAttachments(
       List<File> files, {
@@ -57,19 +58,29 @@ class AttachmentsRemoteDataSourceImpl extends AttachmentsRemoteDataSource {
       }) async {
     try {
       final supabase = supabaseService.supabaseClient;
-      const uuid = Uuid();
       final bucket = bucketName ?? defaultBucket;
 
       List<AttachmentEntity> uploadedAttachments = [];
+
       for (var file in files) {
         final fileName = file.path.split('/').last;
         final sanitizedName = fileName.replaceAll(RegExp(r'[^A-Za-z0-9._-]'), '_');
         final uniqueName = "${const Uuid().v4()}_$sanitizedName";
         final fileBytes = await file.readAsBytes();
 
-        await supabase.storage.from(bucket).uploadBinary(uniqueName, fileBytes);
+        debugPrint("🚀 Uploading file: $fileName (${fileBytes.length} bytes)");
+
+        await supabase.storage
+            .from(bucket)
+            .uploadBinary(
+          uniqueName,
+          fileBytes,
+          fileOptions: const FileOptions(upsert: true),
+        )
+            .timeout(const Duration(minutes:30)); // ⏰ زود الوقت هنا
 
         final safeUrl = supabase.storage.from(bucket).getPublicUrl(uniqueName);
+        debugPrint("✅ File uploaded successfully: $safeUrl");
 
         uploadedAttachments.add(
           AttachmentEntity(
@@ -83,9 +94,15 @@ class AttachmentsRemoteDataSourceImpl extends AttachmentsRemoteDataSource {
         );
       }
 
-
       return Right(uploadedAttachments);
-    } catch (e) {
+    } on TimeoutException {
+      return Left(ServerFailure("⏰ فشل رفع الملف: انتهت المهلة (Timeout)"));
+    } on StorageException catch (e) {
+      debugPrint("❌ Supabase Storage error: ${e.message}");
+      return Left(ServerFailure("فشل رفع الملف: ${e.message}"));
+    } catch (e, stack) {
+      debugPrint("💥 Unknown error: $e");
+      debugPrint("🧩 StackTrace: $stack");
       return Left(ServerFailure("Upload failed: ${e.toString()}"));
     }
   }

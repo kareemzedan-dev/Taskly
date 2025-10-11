@@ -4,6 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/view_model/place_order_view_model/place_order_view_model.dart';
 
+import '../../../../../../../../../config/l10n/app_localizations.dart';
+
 class TimeInputRaw extends StatefulWidget {
   const TimeInputRaw({super.key});
 
@@ -22,6 +24,8 @@ class _TimeInputRawState extends State<TimeInputRaw> {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
+
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -41,7 +45,7 @@ class _TimeInputRawState extends State<TimeInputRaw> {
                 ],
                 style: TextStyle(color: Colors.black, fontSize: 14.sp),
                 decoration: InputDecoration(
-                  hintText: "Enter time",
+                  hintText: local.enter_time,
                   hintStyle: TextStyle(color: Colors.grey, fontSize: 14.sp),
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.symmetric(vertical: 12.h),

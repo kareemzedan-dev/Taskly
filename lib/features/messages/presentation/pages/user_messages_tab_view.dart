@@ -4,6 +4,7 @@ import 'package:taskly/config/routes/routes_manager.dart';
 import 'package:taskly/core/cache/shared_preferences.dart';
 import 'package:taskly/features/messages/presentation/widgets/messages_tab_view_body.dart';
 
+import '../../../../config/l10n/app_localizations.dart';
 import '../../../../core/utils/strings_manager.dart';
 import '../widgets/admin_conversation_card.dart';
 
@@ -12,10 +13,11 @@ class UserMessagesTabView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final local =AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Messages",
+          local.messages,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 fontWeight: FontWeight.w700,
                 fontSize: 20.sp,
@@ -38,7 +40,9 @@ class UserMessagesTabView extends StatelessWidget {
                   Navigator.pushNamed(context, RoutesManager.adminChatView,
                       arguments: {
                         "currentUserId":
-                            SharedPrefHelper.getString(StringsManager.idKey)
+                            SharedPrefHelper.getString(StringsManager.idKey),
+
+
                       });
                 },
                 child: const AdminConversationCard()),

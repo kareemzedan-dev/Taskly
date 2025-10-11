@@ -26,17 +26,16 @@ class SubscribeToAdminMessagesRemoteDataSourceImpl
           .select('id');
       print("🟢 Admins response: $adminsResponse");
 
-      final adminIds = (adminsResponse as List)
+      final firstAdminId = (adminsResponse as List)
           .map((e) => e['id']?.toString())
-          .where((id) => id != null && id.isNotEmpty)
-          .cast<String>()
-          .toList();
-      print("🟢 Parsed admin IDs: $adminIds");
+          .firstWhere((id) => id != null && id.isNotEmpty, orElse: () => null);
 
-      if (adminIds.isEmpty) {
+      if (firstAdminId == null) {
         print("⚠️ No admins available to subscribe to messages.");
         throw Exception("No admins available.");
       }
+
+      final adminIds = [firstAdminId];
 
       final channel = supabaseService.supabaseClient.channel('admin_messages_channel');
       print("🔹 Channel created: ${channel.presence}");

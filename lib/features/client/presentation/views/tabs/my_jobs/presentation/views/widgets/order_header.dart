@@ -6,6 +6,8 @@ import 'package:taskly/core/utils/colors_manger.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/view_model/delete_order_view_model/delete_order_view_model.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/state_bage.dart';
 
+import '../../../../../../../../../config/l10n/app_localizations.dart';
+
 
 class OrderHeader extends StatelessWidget {
   final String orderName;
@@ -21,6 +23,7 @@ class OrderHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -28,10 +31,11 @@ class OrderHeader extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             StatusBadge(
-              text: orderStatus,
+              text: _getLocalizedStatus(local, orderStatus),
               color: ColorsManager.primary,
               icon: Icons.pending_actions_outlined,
             ),
+
             SizedBox(width: 5.w),
             if(orderStatus != "Paid" && orderStatus != "InProgress" &&
                 orderStatus != "Waiting")
@@ -39,15 +43,15 @@ class OrderHeader extends StatelessWidget {
                 onTap: () {
                   showConfirmationDialog(
                     context: context,
-                    title: "Confirm Delete",
-                    message: "Are you sure you want to delete this order?",
+                    title: local.confirm_delete,
+                    message: local.delete_confirmation_message,
                     onConfirm: () {
                       context.read<DeleteOrderViewModel>().deleteOrder(orderId);
                     },
                   );
                 },
-                child: const StatusBadge(
-                  text: "Delete",
+                child:   StatusBadge(
+                  text: local.delete,
                   color: Colors.red,
                   icon: Icons.delete,
                 ),
@@ -68,3 +72,21 @@ class OrderHeader extends StatelessWidget {
   }
 }
 
+String _getLocalizedStatus(AppLocalizations local, String status) {
+  switch (status.toLowerCase()) {
+    case "pending":
+      return local.pending;
+    case "inprogress":
+      return local.inProgress;
+    case "completed":
+      return local.completed;
+    case "cancelled":
+      return local.cancelled;
+    case "paid":
+      return local.paid;
+    case "waiting":
+      return local.waiting;
+    default:
+      return status;
+  }
+}

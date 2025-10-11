@@ -6,6 +6,8 @@ import 'package:taskly/features/freelancer/presentation/views/tabs/my_jobs/prese
 import 'package:taskly/features/freelancer/presentation/views/tabs/profile/presentation/views/profile_view.dart';
 import 'package:taskly/features/messages/presentation/pages/user_messages_tab_view.dart';
 
+import '../../../../config/l10n/app_localizations.dart';
+
 class FreelancerHomeView extends StatefulWidget {
     final int initialIndex;
   const FreelancerHomeView({super.key,  this.initialIndex = 0});
@@ -31,12 +33,13 @@ class _FreelancerHomeView extends State<FreelancerHomeView> {
   }
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(child: items[currentIndex]),
       bottomNavigationBar: CustomBottomNavigationBar(
-        firstTabName: "Find Work",
+        firstTabName: local.find_work,
         firstTabicon: Assets.assetsImagesWork,
         currentIndex: currentIndex,
         onTap: (index) {

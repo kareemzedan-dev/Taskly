@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/action_button.dart';
 import 'package:taskly/features/shared/domain/entities/order_entity/order_entity.dart';
 
+import '../../../../../../../../../config/l10n/app_localizations.dart';
 import '../../../../../../../../../config/routes/routes_manager.dart';
 
 class OfferActions extends StatelessWidget {
@@ -27,11 +28,12 @@ class OfferActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     return Row(
       children: [
         Expanded(
           child: ActionButton(
-            text: "Start Chat",
+            text:local.start_chat,
             icon: Icons.chat,
             color: Colors.blue,
             filled: false,
@@ -49,7 +51,7 @@ class OfferActions extends StatelessWidget {
         const SizedBox(width: 8),
         Expanded(
           child: ActionButton(
-            text: "Accept Offer",
+            text: local.accept_offer,
             icon: Icons.check,
             color: Colors.green,
             filled: true,

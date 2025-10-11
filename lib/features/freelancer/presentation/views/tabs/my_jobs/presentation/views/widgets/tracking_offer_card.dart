@@ -10,6 +10,7 @@ import 'package:taskly/features/freelancer/domain/entities/offer_entity/offer_en
 import 'package:taskly/features/freelancer/presentation/cubit/withdraw_offer_view_model/withdraw_offer_states.dart';
 import 'package:taskly/features/freelancer/presentation/cubit/withdraw_offer_view_model/withdraw_offer_view_model.dart';
 
+import '../../../../../../../../../config/l10n/app_localizations.dart';
 import '../../../../../../../../../core/di/di.dart';
 import '../../../../../../../../../core/helper/convert_to_days.dart';
 import '../../../../../../../../../core/utils/colors_manger.dart';
@@ -38,6 +39,7 @@ class TrackingOfferCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     return Card(
       elevation: 10,
       child: Container(
@@ -77,7 +79,7 @@ class TrackingOfferCard extends StatelessWidget {
                       userInfo: state.userInfoEntity,
                     );
                   }
-                  return const Center(child: Text("Loading"));
+                  return   Center(child: Text(local.loading));
                 },
               ),
               SizedBox(height: 16.h),
@@ -118,7 +120,7 @@ class TrackingOfferCard extends StatelessWidget {
               ),
               SizedBox(height: 8.h),
               Text(
-                "Proposal description:${offerEntity.offerDescription} ",
+                "${local.proposal_description}:${offerEntity.offerDescription} ",
                 style: Theme.of(
                   context,
                 ).textTheme.bodyMedium?.copyWith(color: Colors.grey),
@@ -129,7 +131,7 @@ class TrackingOfferCard extends StatelessWidget {
               SizedBox(height: 8.h),
               if (!isRejected && !isCompleted)
                 DeliveryInfo(
-                  deliveryTime: offerEntity.offerDeliveryTime.formatMinutes(),
+                  deliveryTime: offerEntity.offerDeliveryTime.formatMinutes(context),
                 ),
               SizedBox(height: 8.h),
               Row(
@@ -156,7 +158,7 @@ class TrackingOfferCard extends StatelessWidget {
                       color: Colors.white,
                       border: Border.all(color: Colors.red, width: 2.w),
                     ),
-                    child: const Center(
+                    child:   Center(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -166,7 +168,7 @@ class TrackingOfferCard extends StatelessWidget {
                           ),
                           SizedBox(width: 6),
                           Text(
-                            'Delete this offer',
+                            local.delete_this_offer,
                             style: TextStyle(
                               fontWeight: FontWeight.w700,
                               fontSize: 16,
@@ -184,7 +186,7 @@ class TrackingOfferCard extends StatelessWidget {
                     actions: [
                       if (!isRejected)
                         ActionItem(
-                          title: "View details",
+                          title: local.viewDetails,
                           icon: Icons.remove_red_eye_outlined,
                           onTap: () {
                             Navigator.pushNamed(
@@ -199,8 +201,8 @@ class TrackingOfferCard extends StatelessWidget {
                       if (isPending)
                         ActionItem(
                           title: state is WithdrawOfferStatesLoading
-                              ? "Withdrawing..."
-                              : "Withdraw offer",
+                              ?  local.withdrawing
+                              : local.withdraw_offer,
                           icon: Icons.remove_circle_outline,
                           isOffer: true,
                           onTap: state is WithdrawOfferStatesLoading

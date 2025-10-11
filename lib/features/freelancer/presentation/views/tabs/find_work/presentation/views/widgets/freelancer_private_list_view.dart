@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/freelancer_work_card.dart';
 
+import '../../../../../../../../../config/l10n/app_localizations.dart';
 import '../../../../../../../../../core/utils/assets_manager.dart';
 import '../../view_model/add_favorite_order_view_model/add_favorite_order_view_model.dart';
 import '../../view_model/freelancer_private_orders_view_model/freelancer_private_orders_view_model_states.dart';
@@ -15,6 +16,7 @@ class FreelancerPrivateOrdersList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
 
     if (state is FreelancerPrivateOrdersViewModelStatesLoading) {
       return const FreelancerWorkCardShimmer(
@@ -39,7 +41,7 @@ class FreelancerPrivateOrdersList extends StatelessWidget {
                     Image.asset(Assets.assetsImagesNoOrder, width: 240.w, height: 240.h,),
                     SizedBox(height: 10.h),
                     Text(
-                      'No private orders',
+                      local.no_private_orders_available,
                       style: TextStyle(fontSize: 18.sp),
                     ),
                   ],

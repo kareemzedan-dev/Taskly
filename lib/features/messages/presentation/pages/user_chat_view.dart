@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 import 'package:taskly/features/attachments/presentation/manager/upload_attachments_view_model/upload_attachments_view_model.dart';
 
 import 'package:taskly/features/messages/presentation/widgets/chat_view_body.dart';
@@ -13,6 +14,7 @@ import '../../../freelancer/presentation/cubit/add_earnings_view_model/add_earni
 import '../../../freelancer/presentation/views/tabs/find_work/presentation/view_model/get_commission_view_model/get_commission_view_model.dart';
 import '../../../shared/domain/entities/order_entity/order_entity.dart';
 import '../../../shared/presentation/manager/subscribe_to_order_record_view_model/subscribe_to_order_record_view_model.dart';
+import '../manager/pending_messages_view_model/pending_messages_view_model.dart';
 import '../manager/user_status_view_model/user_status_states.dart';
 import '../manager/user_status_view_model/user_status_view_model.dart';
 
@@ -20,15 +22,19 @@ class UserChatView extends StatelessWidget {
   const UserChatView({
     super.key,
     required this.userName,
-    required this.userImage,
+
+    required this.currentUserAvatar,
+    required this.receiverAvatar,
     required this.order,
     required this.currentUserId,
     required this.receiverId,
   });
 
   final String userName;
-  final String userImage;
+
   final OrderEntity order;
+  final String currentUserAvatar;
+  final String receiverAvatar;
   final String currentUserId;
   final String receiverId;
 
@@ -48,7 +54,10 @@ class UserChatView extends StatelessWidget {
         BlocProvider(
           create: (context) => getIt<AddEarningsViewModel>(),
         ),
-        BlocProvider(create:  (context) => getIt<UpdateOfferStatusViewModel>(),)
+        BlocProvider(create:  (context) => getIt<UpdateOfferStatusViewModel>(),),
+        ChangeNotifierProvider(create: (_) => PendingMessagesViewModel()),
+  BlocProvider(create:  (context) => getIt<UploadAttachmentsViewModel>(),),
+
 
       ],
       child: BlocBuilder<UserStatusViewModel, UserStatusStates>(
@@ -65,7 +74,7 @@ class UserChatView extends StatelessWidget {
             appBar: customAppBar(
               context,
               userName: userName,
-              userImage: userImage,
+              userImage:  receiverAvatar,
               order: order,
               isOnline: isOnline,
               lastSeen: lastSeen,
@@ -73,7 +82,10 @@ class UserChatView extends StatelessWidget {
             backgroundColor: Colors.white,
             body: SafeArea(
               child: ChatViewBody(
-                order: order,
+                currentUserAvatar:  currentUserAvatar,
+                receiverAvatar:  receiverAvatar,
+                orderId: order.id,
+
                 currentUserId: currentUserId,
                 receiverId: receiverId,
               ),

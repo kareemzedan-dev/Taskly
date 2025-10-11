@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:taskly/config/l10n/app_localizations.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
 
 class WalletCard extends StatelessWidget {
@@ -17,6 +17,7 @@ class WalletCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     final textTheme = Theme.of(context).textTheme;
 
     return Container(
@@ -44,7 +45,7 @@ class WalletCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Freelancer Wallet",
+            local.freelancerWallet,
             style: textTheme.titleMedium?.copyWith(
               color: Colors.white,
               fontWeight: FontWeight.bold,
@@ -54,7 +55,7 @@ class WalletCard extends StatelessWidget {
           SizedBox(height: 20.h),
 
           Text(
-            "Available Balance",
+            local.availableBalance,
             style: textTheme.bodyMedium?.copyWith(
               color: Colors.white70,
               fontSize: 14.sp,
@@ -75,12 +76,12 @@ class WalletCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _buildStat(
-                label: "Total Earnings",
+                label: local.totalEarnings,
                 value: totalEarnings,
                 textTheme: textTheme,
               ),
               _buildStat(
-                label: "Withdrawn",
+                label: local.withdrawn,
                 value: withdrawn,
                 textTheme: textTheme,
               ),
@@ -89,7 +90,9 @@ class WalletCard extends StatelessWidget {
         ],
       ),
     );
-  }Widget _buildStat({
+  }
+
+  Widget _buildStat({
     required String label,
     required String value,
     required TextTheme textTheme,

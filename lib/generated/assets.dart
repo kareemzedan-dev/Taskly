@@ -310,6 +310,8 @@ class Assets {
   static const String markMessagesAsReadRemoteDataSourceMarkMessagesAsReadRemoteDataSource = 'lib/features/messages/data/data_sources/remote/mark_messages_as_read_remote_data_source/mark_messages_as_read_remote_data_source.dart';
   static const String markMessagesAsReadRepoImplMarkMessagesAsReadRepoImpl = 'lib/features/messages/data/repositories/mark_messages_as_read_repo_impl/mark_messages_as_read_repo_impl.dart';
   static const String markMessagesAsReadRepoMarkMessagesAsReadRepo = 'lib/features/messages/domain/repositories/messages_repos/mark_messages_as_read_repo/mark_messages_as_read_repo.dart';
+  static const String messagesViewModelMessagesViewModel = 'lib/features/messages/presentation/manager/messages_view_model/messages_view_model.dart';
+  static const String messagesViewModelMessagesViewModelStates = 'lib/features/messages/presentation/manager/messages_view_model/messages_view_model_states.dart';
   static const String modelsMessageModel = 'lib/features/messages/data/models/message_model.dart';
   static const String modelsPaymentModel = 'lib/features/payments/data/models/payment_model.dart';
   static const String myJobsMyJobsRepo = 'lib/features/client/domain/repos/my_jobs/my_jobs_repo.dart';
@@ -330,6 +332,8 @@ class Assets {
   static const String pagesUserMessagesTabView = 'lib/features/messages/presentation/pages/user_messages_tab_view.dart';
   static const String paymentRepoImplPaymentRepoImpl = 'lib/features/payments/data/repositories/payment_repo_impl/payment_repo_impl.dart';
   static const String paymentReposPaymentRepo = 'lib/features/payments/domain/repositories/payment_repos/payment_repo.dart';
+  static const String pendingMessageModelPendingMessageModel = 'lib/features/messages/data/models/pending_message_model/pending_message_model.dart';
+  static const String pendingMessagesViewModelPendingMessagesViewModel = 'lib/features/messages/presentation/manager/pending_messages_view_model/pending_messages_view_model.dart';
   static const String placeOrderUseCasePlaceOrderUseCase = 'lib/features/client/domain/use_cases/home/place_order_use_case/place_order_use_case.dart';
   static const String placeOrderViewModelPlaceOrderViewModel = 'lib/features/client/presentation/views/tabs/home/presentation/view_model/place_order_view_model/place_order_view_model.dart';
   static const String placeOrderViewModelPlaceOrderViewModelStates = 'lib/features/client/presentation/views/tabs/home/presentation/view_model/place_order_view_model/place_order_view_model_states.dart';
@@ -391,6 +395,13 @@ class Assets {
   static const String sendOfferUseCaseSendOfferUseCase = 'lib/features/freelancer/domain/use_cases/send_offer_use_case/send_offer_use_case.dart';
   static const String sendOfferViewModelSendOfferViewModel = 'lib/features/freelancer/presentation/views/tabs/find_work/presentation/view_model/send_offer_view_model/send_offer_view_model.dart';
   static const String sendOfferViewModelSendOfferViewModelStates = 'lib/features/freelancer/presentation/views/tabs/find_work/presentation/view_model/send_offer_view_model/send_offer_view_model_states.dart';
+  static const String sendToAdminMessagesRemoteDataSourceImplSendToAdminMessagesRemoteDataSourceImpl = 'lib/features/messages/data/data_sources_impl/remote/send_to_admin_messages_remote_data_source_impl/send_to_admin_messages_remote_data_source_impl.dart';
+  static const String sendToAdminMessagesRemoteDataSourceSendToAdminMessagesRemoteDataSource = 'lib/features/messages/data/data_sources/remote/send_to_admin_messages_remote_data_source/send_to_admin_messages_remote_data_source.dart';
+  static const String sendToAdminMessagesRepoImplSendToAdminMessagesRepoImpl = 'lib/features/messages/data/repositories/send_to_admin_messages_repo_impl/send_to_admin_messages_repo_impl.dart';
+  static const String sendToAdminMessagesRepoSendToAdminMessagesRepo = 'lib/features/messages/domain/repositories/messages_repos/send_to_admin_messages_repo/send_to_admin_messages_repo.dart';
+  static const String sendToAdminMessagesUseCaseSendToAdminMessagesUseCase = 'lib/features/messages/domain/use_cases/send_to_admin_messages_use_case/send_to_admin_messages_use_case.dart';
+  static const String sendToAdminMessagesViewModelSendToAdminMessagesStates = 'lib/features/messages/presentation/manager/send_to_admin_messages_view_model/send_to_admin_messages_states.dart';
+  static const String sendToAdminMessagesViewModelSendToAdminMessagesViewModel = 'lib/features/messages/presentation/manager/send_to_admin_messages_view_model/send_to_admin_messages_view_model.dart';
   static const String servicesCopyToClipboard = 'lib/core/services/copy_to_clipboard.dart';
   static const String servicesDownloadFileService = 'lib/core/services/download_file_service.dart';
   static const String servicesFcmService = 'lib/core/services/fcm_service.dart';
@@ -515,6 +526,7 @@ class Assets {
   static const String widgetsAccountItemRow = 'lib/features/client/presentation/views/tabs/profile/presentation/views/widgets/account_item_row.dart';
   static const String widgetsActionButton = 'lib/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/action_button.dart';
   static const String widgetsActionRow = 'lib/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/action_row.dart';
+  static const String widgetsAdminChatInputField = 'lib/features/messages/presentation/widgets/admin_chat_input_field.dart';
   static const String widgetsAdminConversationCard = 'lib/features/messages/presentation/widgets/admin_conversation_card.dart';
   static const String widgetsAdminMessageCard = 'lib/features/messages/presentation/widgets/admin_message_card.dart';
   static const String widgetsAnalyticsRow = 'lib/features/freelancer/presentation/views/tabs/profile/presentation/views/widgets/analytics_row.dart';
@@ -560,6 +572,7 @@ class Assets {
   static const String widgetsFaqCard = 'lib/features/shared/presentation/views/widgets/faq_card.dart';
   static const String widgetsFavouriteOrderList = 'lib/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/favourite_order_list.dart';
   static const String widgetsFavouriteOrdersViewBody = 'lib/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/favourite_orders_view_body.dart';
+  static const String widgetsFileMessageWidget = 'lib/features/messages/presentation/widgets/file_message_widget.dart';
   static const String widgetsForgetPasswordViewBody = 'lib/features/auth/presentation/views/widgets/forget_password_view_body.dart';
   static const String widgetsFreelancerEarningViewBody = 'lib/features/freelancer/presentation/views/tabs/profile/presentation/views/widgets/freelancer_earning_view_body.dart';
   static const String widgetsFreelancerFindWorkTabViewBody = 'lib/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/freelancer_find_work_tab_view_body.dart';
@@ -579,6 +592,7 @@ class Assets {
   static const String widgetsJobHeaderSection = 'lib/features/shared/presentation/views/widgets/job_header_section.dart';
   static const String widgetsLanguageBottomSheetContent = 'lib/features/shared/presentation/views/widgets/language_bottom_sheet_content.dart';
   static const String widgetsLoginViewBody = 'lib/features/auth/presentation/views/widgets/login_view_body.dart';
+  static const String widgetsMediaMessageWidget = 'lib/features/messages/presentation/widgets/media_message_widget.dart';
   static const String widgetsMessageBubble = 'lib/features/shared/presentation/views/widgets/message_bubble.dart';
   static const String widgetsMessageCardShimmer = 'lib/features/messages/presentation/widgets/message_card_shimmer.dart';
   static const String widgetsMessageInputField = 'lib/features/messages/presentation/widgets/message_input_field.dart';
@@ -603,6 +617,7 @@ class Assets {
   static const String widgetsPaymentNoteCard = 'lib/features/payments/presentation/widgets/payment_note_card.dart';
   static const String widgetsPaymentStatusBottomSheet = 'lib/features/payments/presentation/widgets/payment_status_bottom_sheet.dart';
   static const String widgetsPaymentsContent = 'lib/features/payments/presentation/widgets/payments_content.dart';
+  static const String widgetsPendingMessageWidget = 'lib/features/messages/presentation/widgets/pending_message_widget.dart';
   static const String widgetsPendingOfferCard = 'lib/features/freelancer/presentation/views/tabs/my_jobs/presentation/views/widgets/pending_offer_card.dart';
   static const String widgetsPriceDurationSection = 'lib/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/price_duration_section.dart';
   static const String widgetsPrivacyPolicyViewBody = 'lib/features/shared/presentation/views/widgets/privacy_policy_view_body.dart';
@@ -631,6 +646,7 @@ class Assets {
   static const String widgetsSplashViewBody = 'lib/features/splash/presentation/views/widgets/splash_view_body.dart';
   static const String widgetsStateBage = 'lib/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/state_bage.dart';
   static const String widgetsTechnicalSupportViewBody = 'lib/features/shared/presentation/views/widgets/technical_support_view_body.dart';
+  static const String widgetsTextMessageBubble = 'lib/features/messages/presentation/widgets/text_message_bubble.dart';
   static const String widgetsThemeBottomSheetContent = 'lib/features/shared/presentation/views/widgets/theme_bottom_sheet_content.dart';
   static const String widgetsTimeInputRaw = 'lib/features/client/presentation/views/tabs/home/presentation/views/widgets/time_input_raw.dart';
   static const String widgetsTrackingOfferCard = 'lib/features/freelancer/presentation/views/tabs/my_jobs/presentation/views/widgets/tracking_offer_card.dart';
@@ -643,6 +659,7 @@ class Assets {
   static const String widgetsUserInfoHomeHeader = 'lib/features/client/presentation/views/tabs/home/presentation/views/widgets/user_info_home_header.dart';
   static const String widgetsUserInfoSection = 'lib/features/profile/presentation/widgets/user_info_section.dart';
   static const String widgetsUserInfoSectionShimmer = 'lib/features/client/presentation/views/tabs/profile/presentation/views/widgets/user_info_section_shimmer.dart';
+  static const String widgetsVoiceMessageWidget = 'lib/features/messages/presentation/widgets/voice_message_widget.dart';
   static const String widgetsVoiceRecordButton = 'lib/features/messages/presentation/widgets/voice_record_button.dart';
   static const String widgetsWalletCard = 'lib/features/freelancer/presentation/views/tabs/profile/presentation/views/widgets/wallet_card.dart';
   static const String widgetsWelcomeViewBody = 'lib/features/welcome/presentation/views/widgets/welcome_view_body.dart';

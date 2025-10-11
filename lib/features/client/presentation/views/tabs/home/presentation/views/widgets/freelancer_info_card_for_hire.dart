@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
 import 'package:taskly/features/reviews/presentation/widgets/user_avatar.dart';
+import '../../../../../../../../../config/l10n/app_localizations.dart';
 import '../../../../../../../../profile/domain/entities/user_info_entity/user_info_entity.dart';
 
 class FreelancerInfoCardForHire extends StatelessWidget {
@@ -20,6 +21,7 @@ class FreelancerInfoCardForHire extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -49,7 +51,7 @@ class FreelancerInfoCardForHire extends StatelessWidget {
                     maxLines: 1,
                   ),
                   Text(
-                    freelancer.bio ?? "Freelancer",
+                    freelancer.bio ??  local.freelancer,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           fontWeight: FontWeight.w400,
                           fontSize: 14.sp,

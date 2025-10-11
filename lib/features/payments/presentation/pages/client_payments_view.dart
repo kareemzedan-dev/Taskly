@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../config/l10n/app_localizations.dart';
 import '../../../shared/domain/entities/order_entity/order_entity.dart';
 import '../widgets/client_payments_view_body.dart';
 import '../../../attachments/presentation/manager/upload_attachments_view_model/upload_attachments_view_model.dart';
@@ -14,41 +15,42 @@ class ClientPaymentsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
+
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => getIt<UploadAttachmentsViewModel>()),
         BlocProvider(create: (_) => getIt<CreatePaymentViewModel>()),
       ],
       child: WillPopScope(
-        onWillPop: () => _onWillPop(context),
+        onWillPop: () => _onWillPop(context, local),
         child: Scaffold(
           backgroundColor: Colors.white,
-
-          body: ClientPaymentsViewBody(order: order), // AppBar اتحذف من الـ Body
+          body: ClientPaymentsViewBody(order: order),
         ),
       ),
     );
   }
 
-  Future<bool> _onWillPop(BuildContext context) async {
+  Future<bool> _onWillPop(BuildContext context, AppLocalizations local) async {
     final uploadVM = context.read<UploadAttachmentsViewModel>();
 
     if (uploadVM.uploadedAttachments.isNotEmpty) {
       final shouldLeave = await showDialog<bool>(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('Warning'),
-          content: const Text(
-            'You have uploaded payment proof but haven\'t pressed Make Payment. Are you sure you want to leave?',
+          title: Text(local.warning),
+          content: Text(
+            local.upload_warning_message,
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(false),
-              child: const Text('Stay'),
+              child: Text(local.stay),
             ),
             TextButton(
               onPressed: () => Navigator.of(context).pop(true),
-              child: const Text('Leave'),
+              child: Text(local.leave),
             ),
           ],
         ),
