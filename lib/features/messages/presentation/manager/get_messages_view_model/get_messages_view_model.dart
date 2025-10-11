@@ -21,7 +21,7 @@ class GetMessagesViewModel extends Cubit<GetMessagesViewModelStates> {
       if (isClosed) return;
       emit(GetMessagesViewModelStatesLoading());
 
-      final result = await getMessagesUseCase.call(orderId);
+      final result = await getMessagesUseCase.call(orderId );
 
       if (isClosed) return;
       result.fold(
@@ -39,4 +39,16 @@ class GetMessagesViewModel extends Cubit<GetMessagesViewModelStates> {
   }
 
 
+
+
+  void unsubscribe() {
+    _messagesStreamSubscription?.cancel();
+    _messagesStreamSubscription = null;
+  }
+
+  @override
+  Future<void> close() {
+    unsubscribe();
+    return super.close();
+  }
 }

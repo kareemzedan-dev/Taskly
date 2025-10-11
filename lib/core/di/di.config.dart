@@ -457,8 +457,6 @@ import '../../features/messages/domain/use_cases/user_status_use_case/user_statu
     as _i258;
 import '../../features/messages/presentation/manager/chat_avatars_view_model/chat_avatars_view_model.dart'
     as _i44;
-import '../../features/messages/presentation/manager/chat_input_view_model/chat_input_view_model.dart'
-    as _i5;
 import '../../features/messages/presentation/manager/get_accepted_order_message_view_model/get_accepted_order_message_view_model.dart'
     as _i12;
 import '../../features/messages/presentation/manager/get_admin_messages_view_model/get_admin_messages_view_model.dart'
@@ -587,7 +585,6 @@ extension GetItInjectableX on _i174.GetIt {
       environmentFilter,
     );
     gh.singleton<_i383.FilePickerService>(() => _i383.FilePickerService());
-    gh.singleton<_i5.ChatInputViewModel>(() => _i5.ChatInputViewModel());
     gh.factory<_i114.ReviewsRemoteDataSource>(
         () => _i716.ReviewsRemoteDataSourceImpl(gh<_i454.SupabaseClient>()));
     gh.singleton<_i374.SupabaseService>(

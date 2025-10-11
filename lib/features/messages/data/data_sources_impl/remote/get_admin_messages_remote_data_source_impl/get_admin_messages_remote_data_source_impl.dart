@@ -23,7 +23,6 @@ class GetAdminMessagesRemoteDataSourceImpl implements GetAdminMessagesRemoteData
 
       final firstAdminId = adminsResponse.first['id'].toString();
 
-      // جلب الرسائل بين المستخدم الحالي وأول admin
       final response = await supabaseService.supabaseClient
           .from('messages')
           .select()

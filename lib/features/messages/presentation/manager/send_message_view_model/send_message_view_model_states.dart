@@ -12,3 +12,7 @@ class SendMessageViewModelStatesError extends SendMessageViewModelStates {
   final Failures failure;
   SendMessageViewModelStatesError({required this.failure});
 }
+class SendMessageViewModelStatesTemporary extends SendMessageViewModelStates {
+  final List<MessageEntity> messages;
+  SendMessageViewModelStatesTemporary({required this.messages});
+}

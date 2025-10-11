@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:taskly/core/errors/failures.dart';
-import 'package:taskly/features/messages/domain/entities/message_entity.dart';
-import 'package:taskly/features/messages/domain/use_cases/get_order_messages_use_case/get_order_messages_use_case.dart';
-import 'package:taskly/features/messages/domain/use_cases/subscribe_to_messages_use_case/subscribe_to_messages_use_case.dart';
-
+import '../../../../../../../../../core/errors/failures.dart';
+import '../../../domain/entities/message_entity.dart';
+import '../../../domain/use_cases/get_order_messages_use_case/get_order_messages_use_case.dart';
+import '../../../domain/use_cases/subscribe_to_messages_use_case/subscribe_to_messages_use_case.dart';
+import '../get_messages_view_model/get_messages_view_model_states.dart';
 import 'messages_view_model_states.dart';
 
 @injectable
@@ -19,22 +19,22 @@ class MessagesViewModel extends Cubit<MessagesStates> {
   StreamSubscription<(MessageEntity, String)>? _subscription;
   List<MessageEntity> _messages = [];
 
-  /// ✅ تحميل الرسائل القديمة ثم بدء المتابعة اللحظية
-  Future<void> loadAndSubscribe(String orderId) async {
-    emit(MessagesLoading());
-
+  /// جلب الرسائل القديمة + الاشتراك في الجديدة
+  Future<void> loadAndSubscribeMessages(String orderId) async {
     try {
-      // الخطوة 1: تحميل الرسائل القديمة
+      emit(MessagesLoading());
+
+      // 1️⃣ تحميل الرسائل القديمة
       final result = await getMessagesUseCase.call(orderId);
       result.fold(
             (failure) => emit(MessagesError(failure: failure)),
-            (loadedMessages) {
-          _messages = List.from(loadedMessages)
+            (messages) {
+          _messages = List.from(messages)
             ..sort((a, b) => a.createdAt.compareTo(b.createdAt));
           emit(MessagesSuccess(messages: _messages));
 
-          // الخطوة 2: بدء الاشتراك في التحديثات
-          _startSubscription(orderId);
+          // 2️⃣ بعد تحميلها بنبدأ الاشتراك في الجديدة
+          _subscribeToMessages(orderId);
         },
       );
     } catch (e) {
@@ -42,9 +42,9 @@ class MessagesViewModel extends Cubit<MessagesStates> {
     }
   }
 
-  /// ✅ بدء متابعة التغييرات اللحظية
-  void _startSubscription(String orderId) {
-    _subscription?.cancel(); // نلغي أي اشتراك قديم
+  /// الاشتراك في التحديثات اللحظية
+  void _subscribeToMessages(String orderId) {
+    _subscription?.cancel();
 
     _subscription = subscribeToMessagesUseCase.call(orderId).listen(
           (event) {
@@ -59,11 +59,14 @@ class MessagesViewModel extends Cubit<MessagesStates> {
           _messages.removeWhere((m) => m.id == message.id);
         }
 
+        // ترتيب حسب الوقت
         _messages.sort((a, b) => a.createdAt.compareTo(b.createdAt));
+
         emit(MessagesSuccess(messages: List.from(_messages)));
       },
       onError: (error) {
-        emit(MessagesError(failure: ServerFailure(error.toString())));
+        emit(MessagesError(
+            failure: ServerFailure(error.toString())));
       },
     );
   }

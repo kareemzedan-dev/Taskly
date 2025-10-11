@@ -2,35 +2,34 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:injectable/injectable.dart';
+import 'package:taskly/core/utils/strings_manager.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../../../../../../../../../core/di/di.dart';
 import '../../../../../../../../../core/utils/colors_manger.dart';
+import '../../../../core/cache/shared_preferences.dart';
 import '../../../shared/presentation/views/widgets/message_bubble.dart';
 import '../../domain/entities/message_entity.dart';
-import '../../../../../../../../../features/attachments/domain/entities/attachment_entity/attaachments_entity.dart';
-
 import '../manager/messages_view_model/messages_view_model.dart';
- import '../manager/messages_view_model/messages_view_model_states.dart';
+import '../manager/messages_view_model/messages_view_model_states.dart';
 import '../manager/send_message_view_model/send_message_view_model.dart';
 import '../manager/send_message_view_model/send_message_view_model_states.dart';
 import 'chat_input_field.dart';
+import '../../../../../../../../../features/attachments/domain/entities/attachment_entity/attaachments_entity.dart';
 
 class ChatViewBody extends StatefulWidget {
   final String currentUserId;
   final String receiverId;
+  final String currentUserRole;
+  final String receiverUserRole;
   final String orderId;
-  final String currentUserAvatar;
-  final String receiverAvatar;
 
   const ChatViewBody({
     super.key,
     required this.currentUserId,
     required this.receiverId,
+    required this.currentUserRole,
+    required this.receiverUserRole,
     required this.orderId,
-    required this.currentUserAvatar,
-    required this.receiverAvatar,
   });
 
   @override
@@ -46,7 +45,9 @@ class _ChatViewBodyState extends State<ChatViewBody> {
   void initState() {
     super.initState();
     _audioPlayer.onPlayerComplete.listen((_) {
-      setState(() => _currentlyPlayingUrl = null);
+      setState(() {
+        _currentlyPlayingUrl = null;
+      });
     });
   }
 
@@ -69,10 +70,13 @@ class _ChatViewBodyState extends State<ChatViewBody> {
     });
   }
 
-  Widget _buildAttachmentWidget(AttachmentEntity att, bool isCurrentUser, bool isTemporary) {
+  Widget _buildAttachmentWidget(
+      AttachmentEntity att, bool isCurrentUser, String messageId,
+      {bool isTemporary = false}) {
     final isImage = att.type.startsWith("image/");
     final isPDF = att.type == "application/pdf";
-    final isAudio = att.type.startsWith("audio/") || att.type == "application/octet-stream";
+    final isAudio =
+        att.type.startsWith("audio/") || att.type == "application/octet-stream";
 
     return Stack(
       children: [
@@ -82,12 +86,13 @@ class _ChatViewBodyState extends State<ChatViewBody> {
           width: 250,
           decoration: BoxDecoration(
             color: isCurrentUser
-                ? Colors.blue.withOpacity(0.05)
-                : Colors.green.withOpacity(0.05),
+                ? Colors.blue.withOpacity(isTemporary ? 0.03 : 0.05)
+                : Colors.green.withOpacity(isTemporary ? 0.03 : 0.05),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: isCurrentUser ? Colors.blueAccent : Colors.greenAccent,
-              width: isTemporary ? 0.5 : 1.0,
+              color: isCurrentUser
+                  ? Colors.blue.withOpacity(isTemporary ? 0.1 : 0.2)
+                  : Colors.green.withOpacity(isTemporary ? 0.1 : 0.2),
             ),
           ),
           child: Row(
@@ -113,7 +118,7 @@ class _ChatViewBodyState extends State<ChatViewBody> {
               Expanded(
                 child: GestureDetector(
                   onTap: !isAudio
-                      ? () async {
+                      ? () {
                     if (isImage) {
                       showDialog(
                         context: context,
@@ -123,14 +128,19 @@ class _ChatViewBodyState extends State<ChatViewBody> {
                           child: Stack(
                             children: [
                               InteractiveViewer(
-                                child: Image.network(att.url, fit: BoxFit.contain),
+                                child: Image.network(
+                                  att.url,
+                                  fit: BoxFit.contain,
+                                ),
                               ),
                               Positioned(
                                 top: 10,
                                 right: 10,
                                 child: IconButton(
-                                  icon: const Icon(Icons.close, color: Colors.white),
-                                  onPressed: () => Navigator.of(context).pop(),
+                                  icon: const Icon(Icons.close,
+                                      color: Colors.white),
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(),
                                 ),
                               ),
                             ],
@@ -147,9 +157,10 @@ class _ChatViewBodyState extends State<ChatViewBody> {
                     children: [
                       Text(
                         att.name ?? "Attachment",
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
+                          color: Colors.grey[800],
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -161,7 +172,10 @@ class _ChatViewBodyState extends State<ChatViewBody> {
                             : isPDF
                             ? "PDF Document"
                             : "Audio File",
-                        style: const TextStyle(fontSize: 12, color: Colors.grey),
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey[600],
+                        ),
                       ),
                     ],
                   ),
@@ -170,7 +184,9 @@ class _ChatViewBodyState extends State<ChatViewBody> {
               if (isAudio)
                 IconButton(
                   icon: Icon(
-                    _currentlyPlayingUrl == att.url ? Icons.pause_circle : Icons.play_circle,
+                    _currentlyPlayingUrl == att.url
+                        ? Icons.pause_circle
+                        : Icons.play_circle,
                     color: Colors.orange,
                     size: 28,
                   ),
@@ -189,17 +205,117 @@ class _ChatViewBodyState extends State<ChatViewBody> {
           ),
         ),
         if (isTemporary)
-          const Positioned(
+          Positioned(
             top: 4,
             right: 4,
-            child: SizedBox(
-              width: 18,
-              height: 18,
-              child: CircularProgressIndicator(strokeWidth: 2),
+            child: Container(
+              padding: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 4,
+                  ),
+                ],
+              ),
+              child: SizedBox(
+                width: 16,
+                height: 16,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    isCurrentUser ? Colors.blue : Colors.green,
+                  ),
+                ),
+              ),
             ),
           ),
       ],
     );
+  }
+
+  List<Widget> _buildMessageContent(
+      MessageEntity msg, bool isCurrentUser, bool isTemporary) {
+    final widgets = <Widget>[];
+
+    if (isTemporary) {
+      widgets.add(
+        Padding(
+          padding: const EdgeInsets.only(bottom: 4),
+          child: Row(
+            mainAxisAlignment:
+            isCurrentUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+            children: [
+              Container(
+                padding:
+                const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade100,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      width: 12,
+                      height: 12,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 1.5,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          isCurrentUser ? Colors.blue : Colors.green,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      "Sending...",
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: Colors.grey.shade600,
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    if (msg.messageType == "text" && (msg.content?.isNotEmpty ?? false)) {
+      widgets.add(
+        MessageBubble(
+          sender: isCurrentUser ? SenderType.admin : SenderType.client,
+          message: msg.content ?? "",
+          avatarUrl:
+          SharedPrefHelper.getString(StringsManager.profileImageKey)!,
+          chatWithUsers: true,
+          time:
+          "${msg.createdAt.hour}:${msg.createdAt.minute.toString().padLeft(2, '0')}",
+        ),
+      );
+    }
+
+    if (msg.attachment != null && msg.attachment!.isNotEmpty) {
+      final attachments = msg.attachment!
+          .map((att) => _buildAttachmentWidget(att, isCurrentUser, msg.id!,
+          isTemporary: isTemporary))
+          .toList();
+
+      widgets.add(
+        Column(
+          crossAxisAlignment:
+          isCurrentUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+          children: attachments,
+        ),
+      );
+    }
+
+    return widgets;
   }
 
   @override
@@ -207,7 +323,11 @@ class _ChatViewBodyState extends State<ChatViewBody> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (_) => getIt<MessagesViewModel>()..loadAndSubscribe(widget.orderId),
+          create: (_) {
+            final vm = getIt<MessagesViewModel>();
+            vm.loadAndSubscribeMessages(widget.orderId);
+            return vm;
+          },
         ),
         BlocProvider(
           create: (_) => getIt<SendMessageViewModel>(),
@@ -216,76 +336,106 @@ class _ChatViewBodyState extends State<ChatViewBody> {
       child: Column(
         children: [
           Expanded(
-            child: BlocConsumer<MessagesViewModel, MessagesStates>(
-              listener: (context, state) {
-                if (state is MessagesSuccess) _scrollToBottom();
-              },
-              builder: (context, state) {
-                if (state is MessagesLoading) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (state is MessagesError) {
-                  return Center(
-                    child: Text(
-                      "Error: ${state.failure.message}",
-                      style: const TextStyle(color: Colors.red),
-                    ),
-                  );
-                } else if (state is MessagesSuccess) {
-                  final messages = state.messages;
+            child: MultiBlocListener(
+              listeners: [
+                BlocListener<SendMessageViewModel, SendMessageViewModelStates>(
+                  listener: (context, state) {
+                    if (state is SendMessageViewModelStatesError) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content:
+                          Text('Failed to send message: ${state.failure}'),
+                          backgroundColor: Colors.red,
+                          duration: const Duration(seconds: 3),
+                        ),
+                      );
+                    } else if (state is SendMessageViewModelStatesSuccess) {
+                      _scrollToBottom();
+                    }
+                  },
+                ),
+                BlocListener<MessagesViewModel, MessagesStates>(
+                  listener: (context, state) {
+                    if (state is MessagesSuccess) {
+                      _scrollToBottom();
+                    }
+                  },
+                ),
+              ],
+              child: BlocBuilder<MessagesViewModel, MessagesStates>(
+                builder: (context, state) {
+                  if (state is MessagesLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (state is MessagesError) {
+                    return Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text(
+                          "Error loading messages: ${state.failure}",
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(color: Colors.red),
+                        ),
+                      ),
+                    );
+                  } else if (state is MessagesSuccess) {
+                    final messages = state.messages;
 
-                  if (messages.isEmpty) {
-                    return const Center(
-                      child: Text("No messages yet", style: TextStyle(color: Colors.grey)),
+                    final tempMessages = context.select<
+                        SendMessageViewModel, List<MessageEntity>>(
+                          (vm) => vm.temporaryMessages,
+                    );
+
+                    final allMessages = [...messages, ...tempMessages];
+                    allMessages.sort(
+                            (a, b) => a.createdAt.compareTo(b.createdAt));
+
+                    if (allMessages.isEmpty) {
+                      return const Center(
+                        child: Text(
+                          "No messages yet",
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      );
+                    }
+
+                    return ListView.builder(
+                      controller: _scrollController,
+                      padding: const EdgeInsets.all(16),
+                      itemCount: allMessages.length,
+                      itemBuilder: (context, index) {
+                        final msg = allMessages[index];
+                        final isCurrentUser =
+                            msg.senderId == widget.currentUserId;
+                        final isTemporary = tempMessages
+                            .any((m) => m.id == msg.id);
+
+                        return Container(
+                          margin: EdgeInsets.only(bottom: 12.h),
+                          child: Column(
+                            crossAxisAlignment: isCurrentUser
+                                ? CrossAxisAlignment.end
+                                : CrossAxisAlignment.start,
+                            children: _buildMessageContent(
+                                msg, isCurrentUser, isTemporary),
+                          ),
+                        );
+                      },
                     );
                   }
-
-                  return ListView.builder(
-                    controller: _scrollController,
-                    padding: const EdgeInsets.all(16),
-                    itemCount: messages.length,
-                    itemBuilder: (context, index) {
-                      final msg = messages[index];
-                      final isCurrentUser = msg.senderId == widget.currentUserId;
-
-                      return Column(
-                        crossAxisAlignment:
-                        isCurrentUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-                        children: [
-                          if (msg.messageType == "text" && (msg.content?.isNotEmpty ?? false))
-                            MessageBubble(
-                              avatarUrl: isCurrentUser
-                                  ? widget.currentUserAvatar
-                                  : widget.receiverAvatar,
-                              sender: isCurrentUser
-                                  ? SenderType.freelancer
-                                  : SenderType.client,
-                              message: msg.content ?? "",
-                              chatWithUsers: true,
-                              time:
-                              "${msg.createdAt.hour}:${msg.createdAt.minute.toString().padLeft(2, '0')}",
-                            ),
-
-                          if (msg.attachment != null)
-                            ...msg.attachment!.map(
-                                  (att) => _buildAttachmentWidget(att, isCurrentUser, false),
-                            ),
-                          SizedBox(height: 12.h),
-                        ],
-                      );
-                    },
-                  );
-                }
-
-                return const SizedBox.shrink();
-              },
+                  return const SizedBox();
+                },
+              ),
             ),
           ),
           ChatInputField(
             orderId: widget.orderId,
             currentUserId: widget.currentUserId,
             receiverId: widget.receiverId,
-            currentUserRole: "client_or_freelancer", // تقدر تحددها حسب الحالة
-            receiverUserRole: "opposite_role",
+            currentUserRole: widget.currentUserRole,
+            receiverUserRole: widget.receiverUserRole,
           ),
           SizedBox(height: 16.h),
         ],

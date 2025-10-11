@@ -29,6 +29,8 @@ class ChatMessagesList extends StatelessWidget {
     required this.freelancerAvatar,
     required this.clientAvatar,
   });
+
+  // في chat_messages_list.dart
   @override
   Widget build(BuildContext context) {
     return Consumer<PendingMessagesViewModel>(
@@ -42,6 +44,7 @@ class ChatMessagesList extends StatelessWidget {
             // إضافة الرسائل العادية
             if (oldState is GetMessagesViewModelStatesSuccess) {
               allMessages.addAll(oldState.messages);
+              print('📨 الرسائل العادية: ${oldState.messages.length}');
             }
 
             // إضافة الرسائل الجديدة من الاشتراك
@@ -53,11 +56,13 @@ class ChatMessagesList extends StatelessWidget {
                       allMessages.add(msg);
                     }
                   }
+                  print('🆕 الرسائل الجديدة: ${newState.messages.length}');
                 }
 
                 // إضافة الرسائل أثناء الإرسال (المؤقتة)
                 final pendingMessages = pendingMessagesVM.pendingMessages;
                 allMessages.addAll(pendingMessages);
+                print('⏳ الرسائل المؤقتة: ${pendingMessages.length}');
 
                 // ترتيب الرسائل حسب الوقت
                 allMessages.sort((a, b) {
@@ -65,6 +70,8 @@ class ChatMessagesList extends StatelessWidget {
                   final bTime = b is PendingMessage ? b.createdAt : b.createdAt;
                   return aTime.compareTo(bTime);
                 });
+
+                print('📋 إجمالي الرسائل المعروضة: ${allMessages.length}');
 
                 return ListView.builder(
                   controller: scrollController,
@@ -74,6 +81,7 @@ class ChatMessagesList extends StatelessWidget {
                     final message = allMessages[index];
 
                     if (message is PendingMessage) {
+                      print('👻 عرض رسالة مؤقتة: ${message.id} - ${message.type}');
                       return PendingMessageWidget(
                         pendingMessage: message,
                         avatarUrl: message.isCurrentUser
@@ -82,12 +90,11 @@ class ChatMessagesList extends StatelessWidget {
                       );
                     }
 
-                    // الرسائل العادية
+                    // معالجة الرسائل العادية...
                     final msg = message;
                     final isCurrentUser = msg.senderId == currentUserId;
                     final messageType = _getMessageType(msg.messageType);
-                    final hasAttachment = msg.attachment != null &&
-                        msg.attachment!.isNotEmpty;
+                    final hasAttachment = msg.attachment != null && msg.attachment!.isNotEmpty;
                     final fileUrl = hasAttachment ? msg.attachment!.first.url : null;
 
                     return _buildMessageWidget(
@@ -105,6 +112,7 @@ class ChatMessagesList extends StatelessWidget {
         );
       },
     );
+
   }
 
   // ... باقي الدوال كما هي بدون تغيير
@@ -173,16 +181,17 @@ class ChatMessagesList extends StatelessWidget {
         url.endsWith('.gif');
   }
 
-  MessagesType _getMessageType(String type) {
-    switch (type) {
-      case 'audio':
-        return MessagesType.audio;
-      case 'file':
-        return MessagesType.file;
-      default:
-        return MessagesType.text;
+  MessagesType _getMessageType(String type, {String? url}) {
+    if (type == 'audio') return MessagesType.audio;
+    if (type == 'file') return MessagesType.file;
+    if (type == 'image') return MessagesType.image;
+    if (url != null &&
+        (url.endsWith('.jpg') || url.endsWith('.jpeg') || url.endsWith('.png') || url.endsWith('.gif'))) {
+      return MessagesType.image;
     }
+    return MessagesType.text;
   }
+
 }
 enum MessagesType {
   text,   // رسالة نصية

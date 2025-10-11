@@ -2,54 +2,61 @@
 import 'package:flutter/foundation.dart';
 
 import '../../../data/models/pending_message_model/pending_message_model.dart';
-
+// في pending_messages_view_model.dart
 class PendingMessagesViewModel extends ChangeNotifier {
   final List<PendingMessage> _pendingMessages = [];
 
-  List<PendingMessage> get pendingMessages => List.unmodifiable(_pendingMessages);
+  List<PendingMessage> get pendingMessages => _pendingMessages;
 
   void addPendingMessage(PendingMessage message) {
+    print('➕ إضافة رسالة مؤقتة: ${message.id}');
     _pendingMessages.add(message);
     notifyListeners();
-    print('✅ تم إضافة رسالة مؤقتة: ${message.id} - إجمالي الرسائل: ${_pendingMessages.length}');
+  }
+
+  void removePendingMessage(String messageId) {
+    print('➖ إزالة رسالة مؤقتة: $messageId');
+    _pendingMessages.removeWhere((msg) => msg.id == messageId);
+    notifyListeners();
   }
 
   void updateUploadProgress(String messageId, double progress) {
     final index = _pendingMessages.indexWhere((msg) => msg.id == messageId);
     if (index != -1) {
-      _pendingMessages[index] = _pendingMessages[index].copyWith(
+      final updatedMessage = PendingMessage(
+        id: _pendingMessages[index].id,
+        content: _pendingMessages[index].content,
+        filePath: _pendingMessages[index].filePath,
+        type: _pendingMessages[index].type,
+        createdAt: _pendingMessages[index].createdAt,
+        isCurrentUser: _pendingMessages[index].isCurrentUser,
+        caption: _pendingMessages[index].caption,
         uploadProgress: progress,
       );
+
+      _pendingMessages[index] = updatedMessage;
       notifyListeners();
-      print('📈 تحديث تقدم الرسالة: $messageId - ${(progress * 100).toInt()}%');
-    } else {
-      print('❌ لم يتم العثور على الرسالة: $messageId');
+      print('📊 تحديث تقدم الرسالة: $messageId - $progress');
     }
   }
 
   void updateMessageWithFileUrl(String messageId, String fileUrl) {
     final index = _pendingMessages.indexWhere((msg) => msg.id == messageId);
     if (index != -1) {
-      _pendingMessages[index] = _pendingMessages[index].copyWith(
-        fileUrl: fileUrl,
+      final updatedMessage = PendingMessage(
+        id: _pendingMessages[index].id,
+        content: _pendingMessages[index].content,
+        filePath: _pendingMessages[index].filePath,
+        type: _pendingMessages[index].type,
+        createdAt: _pendingMessages[index].createdAt,
+        isCurrentUser: _pendingMessages[index].isCurrentUser,
+        caption: _pendingMessages[index].caption,
         uploadProgress: 1.0,
       );
-      notifyListeners();
-      print('🔗 تحديث رابط الملف: $messageId');
-    }
-  }
-  void removePendingMessage(String messageId) {
-    final oldLength = _pendingMessages.length;
-    _pendingMessages.removeWhere((msg) => msg.id == messageId);
-    if (_pendingMessages.length < oldLength) {
-      notifyListeners();
-      print('🗑️ تم إزالة الرسالة: $messageId - الرسائل المتبقية: ${_pendingMessages.length}');
-    }
-  }
 
-
-  void clearAll() {
-    _pendingMessages.clear();
-    notifyListeners();
+      _pendingMessages[index] = updatedMessage;
+      notifyListeners();
+      print('🔗 تحديث رابط الملف للرسالة: $messageId');
+    }
   }
 }

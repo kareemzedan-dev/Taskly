@@ -123,21 +123,21 @@ class _ChatWithAdminViewBodyState extends State<ChatWithAdminViewBody> {
                 ),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom),
-              child: AdminChatInputField(
-
-                currentUserId: widget.currentUserId,
-                currentUserRole:
-                SharedPrefHelper.getString(StringsManager.roleKey) ??
-                    "client",
-                receiverUserRole: "admin",
-                onMessageSent: _scrollToBottom,
-                receiverAdminId: receiverAdminId ??
-                    "97ea47d8-d66b-4d44-97fe-112fc59251b0",
-              ),
-            ),
+            // Padding(
+            //   padding: EdgeInsets.only(
+            //       bottom: MediaQuery.of(context).viewInsets.bottom),
+            //   child: AdminChatInputField(
+            //
+            //     currentUserId: widget.currentUserId,
+            //     currentUserRole:
+            //     SharedPrefHelper.getString(StringsManager.roleKey) ??
+            //         "client",
+            //     receiverUserRole: "admin",
+            //     onMessageSent: _scrollToBottom,
+            //     receiverAdminId: receiverAdminId ??
+            //         "97ea47d8-d66b-4d44-97fe-112fc59251b0",
+            //   ),
+            // ),
             SizedBox(height: 16.h),
           ],
         ),

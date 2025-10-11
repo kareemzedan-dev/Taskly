@@ -1,7 +1,7 @@
 import 'package:taskly/core/errors/failures.dart';
 import 'package:taskly/features/messages/domain/entities/message_entity.dart';
 
-abstract class MessagesStates {}
+  class MessagesStates {}
 
 class MessagesInitial extends MessagesStates {}
 

@@ -1,39 +1,32 @@
+import 'dart:io';
 
- 
-import 'package:taskly/features/attachments/domain/entities/attachment_entity/attaachments_entity.dart';
+import '../../../domain/entities/attachment_entity/attaachments_entity.dart';
 
-// upload_attachments_view_model_states.dart
-sealed class UploadAttachmentsViewModelStates {
-  const UploadAttachmentsViewModelStates();
+class UploadAttachmentsViewModelStates {}
+
+class UploadAttachmentsViewModelStatesInitial extends UploadAttachmentsViewModelStates {}
+
+class UploadAttachmentsViewModelStatesLoading extends UploadAttachmentsViewModelStates {}
+
+class UploadAttachmentsViewModelStatesUploading extends UploadAttachmentsViewModelStates {
+  final File file;
+  final double progress;
+  UploadAttachmentsViewModelStatesUploading({required this.file, required this.progress});
 }
 
-class UploadAttachmentsViewModelStatesInitial
-    extends UploadAttachmentsViewModelStates {}
-
-class UploadAttachmentsViewModelStatesLoading
-    extends UploadAttachmentsViewModelStates {}
-
-class UploadAttachmentsViewModelStatesUploading
-    extends UploadAttachmentsViewModelStates {
-  final double progress; // من 0.0 إلى 1.0
-  final String? currentFileName;
-
-  const UploadAttachmentsViewModelStatesUploading(
-      this.progress,
-      {this.currentFileName}
-      );
-}
-
-class UploadAttachmentsViewModelStatesSuccess
-    extends UploadAttachmentsViewModelStates {
+class UploadAttachmentsViewModelStatesSuccess extends UploadAttachmentsViewModelStates {
   final List<AttachmentEntity> attachments;
-
-  const UploadAttachmentsViewModelStatesSuccess({required this.attachments});
+  final File file; // غير إلى required
+  UploadAttachmentsViewModelStatesSuccess({required this.attachments, required this.file});
 }
 
-class UploadAttachmentsViewModelStatesError
-    extends UploadAttachmentsViewModelStates {
+class UploadAttachmentsViewModelStatesError extends UploadAttachmentsViewModelStates {
   final String message;
+  final File? file; // أبقها optional
+  UploadAttachmentsViewModelStatesError({required this.message, this.file});
+}
 
-  const UploadAttachmentsViewModelStatesError({required this.message});
+class UploadAttachmentsViewModelStatesDuplicateWarning extends UploadAttachmentsViewModelStates {
+  final String message;
+  UploadAttachmentsViewModelStatesDuplicateWarning({required this.message});
 }

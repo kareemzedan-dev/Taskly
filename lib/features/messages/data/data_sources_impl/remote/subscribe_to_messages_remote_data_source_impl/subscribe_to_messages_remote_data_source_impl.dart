@@ -23,10 +23,22 @@ class SubscribeToMessagesRemoteDataSourceImpl
       opts: const RealtimeChannelConfig(),
     );
 
-    void handleChange(PostgresChangeEvent eventType, Map<String, dynamic>? record) {
+    void handleInsert(Map<String, dynamic>? record) {
       if (record == null) return;
       final message = MessageModel.fromJson(record);
-      controller.add((message, eventType.name.toUpperCase()));
+      controller.add((message, 'INSERT'));
+    }
+
+    void handleUpdate(Map<String, dynamic>? record) {
+      if (record == null) return;
+      final message = MessageModel.fromJson(record);
+      controller.add((message, 'UPDATE'));
+    }
+
+    void handleDelete(Map<String, dynamic>? record) {
+      if (record == null) return;
+      final message = MessageModel.fromJson(record);
+      controller.add((message, 'DELETE'));
     }
 
     channel.onPostgresChanges(
@@ -38,8 +50,7 @@ class SubscribeToMessagesRemoteDataSourceImpl
         column: 'order_id',
         value: orderId,
       ),
-      callback: (payload) =>
-          handleChange(PostgresChangeEvent.insert, payload.newRecord),
+      callback: (payload) => handleInsert(payload.newRecord),
     );
 
     channel.onPostgresChanges(
@@ -51,8 +62,7 @@ class SubscribeToMessagesRemoteDataSourceImpl
         column: 'order_id',
         value: orderId,
       ),
-      callback: (payload) =>
-          handleChange(PostgresChangeEvent.update, payload.newRecord),
+      callback: (payload) => handleUpdate(payload.newRecord),
     );
 
     channel.onPostgresChanges(
@@ -64,16 +74,15 @@ class SubscribeToMessagesRemoteDataSourceImpl
         column: 'order_id',
         value: orderId,
       ),
-      callback: (payload) =>
-          handleChange(PostgresChangeEvent.delete, payload.oldRecord),
+      callback: (payload) => handleDelete(payload.oldRecord),
     );
 
-    // ✅ subscribe
+    // ✅ اشتراك فعلي
     channel.subscribe();
 
-    // 🧹 close stream properly
-    controller.onCancel = () {
-      channel.unsubscribe();
+    // 🧹 إلغاء الاشتراك عند انتهاء الـ stream
+    controller.onCancel = () async {
+      await channel.unsubscribe();
     };
 
     return controller.stream;

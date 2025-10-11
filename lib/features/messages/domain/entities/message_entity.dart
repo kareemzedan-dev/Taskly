@@ -55,5 +55,41 @@ class MessageEntity{
     receiverType,
   ];
 
+  MessageEntity copyWith({
+    String? id,
+    String? orderId,
+    String? paymentId,
+    String? senderId,
+    String? receiverId,
+    String? messageType,
+    String? content,
+    List<AttachmentModel>? attachment,
+    String? status,
+    DateTime? deliveredAt,
+    DateTime? seenAt,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    String? senderType,
+    String? receiverType,
+  }) {
+    return MessageEntity(
+      id: id ?? this.id,
+      orderId: orderId ?? this.orderId,
+      paymentId: paymentId ?? this.paymentId,
+      senderId: senderId ?? this.senderId,
+      receiverId: receiverId ?? this.receiverId,
+      messageType: messageType ?? this.messageType,
+      content: content ?? this.content,
+      attachment: attachment ?? this.attachment,
+      status: status ?? this.status,
+      deliveredAt: deliveredAt ?? this.deliveredAt,
+      seenAt: seenAt ?? this.seenAt,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      senderType: senderType ?? this.senderType,
+      receiverType: receiverType ?? this.receiverType,
+    );
+  }
+
 
 }
