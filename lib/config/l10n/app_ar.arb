@@ -612,5 +612,6 @@
 
   "cannotWithdrawMoreThanBalance": "لا يمكنك سحب أكثر من رصيدك المتاح {balance} ريال",
   "cannotWithdrawMoreThanBalance_placeholder": "{balance}"
-
+,  "admin_support": "دعم المسؤول",
+  "chat_with_admin_support": "الدردشة مع الدعم"
 }

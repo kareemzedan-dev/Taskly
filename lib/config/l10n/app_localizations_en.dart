@@ -1780,4 +1780,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String cannotWithdrawMoreThanBalance_placeholder(Object balance) {
     return '$balance';
   }
+
+  @override
+  String get admin_support => 'Admin Support';
+
+  @override
+  String get chat_with_admin_support => 'Chat with Admin Support';
 }

@@ -83,6 +83,7 @@ class UserChatView extends StatelessWidget {
             body: SafeArea(
               child: ChatViewBody(
 
+
                 currentUserRole: order.clientId == currentUserId ? 'client' : 'freelancer',
                 receiverUserRole: order.clientId == currentUserId ? 'freelancer' : 'client',
 

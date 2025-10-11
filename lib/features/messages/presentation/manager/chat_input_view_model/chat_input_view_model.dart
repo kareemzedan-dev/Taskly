@@ -25,13 +25,21 @@
 //   final List<AttachmentModel> _pendingAttachments = [];
 //
 //   bool get isTyping => _isTyping;
+//
+//   set isTyping(bool value) {
+//     if (_isTyping != value) {
+//       _isTyping = value;
+//       notifyListeners(); // ده بيخلي الواجهة تتحدث أوتوماتيكي
+//     }
+//   }
 //   bool get isSending => _isSending;
 //   bool get isRecording => _isRecording;
 //   List<AttachmentModel> get pendingAttachments => _pendingAttachments;
 //
-//   void updateTyping(bool typing) {
-//     _isTyping = typing;
-//     notifyListeners();
+//   @override
+//   void dispose() {
+//     textController.dispose();
+//     super.dispose();
 //   }
 //
 //   void updateSending(bool sending) {
@@ -93,7 +101,7 @@
 //       receiverType: receiverType,
 //     );
 //
-//     context.read<SendMessageViewModel>().sendMessage(orderId!, message).then((_) {
+//     context.read<SendMessageViewModel>().sendMessage(message, orderId:  orderId! ).then((_) {
 //       textController.clear();
 //       _isTyping = false;
 //       _isSending = false;
@@ -205,7 +213,7 @@
 //           receiverType: receiverType,
 //         );
 //
-//         await context.read<SendMessageViewModel>().sendMessage(orderId!, message);
+//         await context.read<SendMessageViewModel>().sendMessage(message, orderId:  orderId!);
 //       }
 //
 //       clearPendingAttachments();
@@ -353,7 +361,7 @@
 //           receiverType: receiverType,
 //         );
 //
-//         await context.read<SendMessageViewModel>().sendMessage(orderId!, message);
+//         await context.read<SendMessageViewModel>().sendMessage(message, orderId:  orderId!);
 //         onMessageSent?.call();
 //         onUploadSuccess?.call(messageId);
 //       }

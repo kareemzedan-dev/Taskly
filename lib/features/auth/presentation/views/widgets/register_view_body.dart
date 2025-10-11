@@ -223,9 +223,9 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
                     context.read<AuthViewModel>().googleLogin(
                         role: widget.role);
                   },
-                  onAppleLogin: () {
-                    context.read<AuthViewModel>().appleLogin(role: widget.role);
-                  },
+                  // onAppleLogin: () {
+                  //   context.read<AuthViewModel>().appleLogin(role: widget.role);
+                  // },
                   onFacebookLogin: ()
               {
               context.read<AuthViewModel>().facebookLogin(role: widget.role);

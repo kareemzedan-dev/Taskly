@@ -10,6 +10,7 @@ import '../../../../core/di/di.dart';
 import '../../../attachments/presentation/manager/download_attachments_view_model/download_attachments_view_model.dart';
 import '../../../attachments/presentation/manager/upload_attachments_view_model/upload_attachments_view_model.dart';
 import '../../../client/presentation/views/tabs/my_jobs/presentation/view_model/update_offer_status_view_model/update_offer_status_view_model.dart';
+import '../manager/chat_with_admin_view_model/chat_with_admin_view_model.dart';
 import '../manager/get_admin_messages_view_model/get_admin_messages_view_model.dart';
 import '../manager/pending_messages_view_model/pending_messages_view_model.dart';
 import '../manager/send_to_admin_messages_view_model/send_to_admin_messages_view_model.dart';
@@ -47,6 +48,9 @@ class AdminChatView extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => PendingMessagesViewModel()),
         BlocProvider(create:  (context) => getIt<UploadAttachmentsViewModel>(),),
 
+        BlocProvider(create: (_) => getIt<ChatWithAdminViewModel>()..loadMessagesAndSubscribe(
+          currentUserId
+        ) ),
 
       ],
       child: Scaffold(
@@ -55,7 +59,10 @@ class AdminChatView extends StatelessWidget {
         ) ,
         backgroundColor: Colors.white,
         body: SafeArea(
-          child: ChatWithAdminViewBody(currentUserId: currentUserId)
+          child: ChatWithAdminViewBody(
+            currentUserId: currentUserId,
+
+          )
         ),
       ),
     );

@@ -3568,6 +3568,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{balance}'**
   String cannotWithdrawMoreThanBalance_placeholder(Object balance);
+
+  /// No description provided for @admin_support.
+  ///
+  /// In en, this message translates to:
+  /// **'Admin Support'**
+  String get admin_support;
+
+  /// No description provided for @chat_with_admin_support.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat with Admin Support'**
+  String get chat_with_admin_support;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

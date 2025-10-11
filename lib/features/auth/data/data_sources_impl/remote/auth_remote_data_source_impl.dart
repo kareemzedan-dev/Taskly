@@ -360,8 +360,6 @@ Future<void> _insertRoleData(String id, String role) async {
       if (!await NetworkUtils.hasInternet()) {
         return const Left(NetworkFailure(StringsManager.noInternetConnection));
       }
-
-      // هنا تستخدم مكتبة apple_sign_in أو sign_in_with_apple
       final credential = await SignInWithApple.getAppleIDCredential(
         scopes: [AppleIDAuthorizationScopes.email, AppleIDAuthorizationScopes.fullName],
       );

@@ -457,6 +457,8 @@ import '../../features/messages/domain/use_cases/user_status_use_case/user_statu
     as _i258;
 import '../../features/messages/presentation/manager/chat_avatars_view_model/chat_avatars_view_model.dart'
     as _i44;
+import '../../features/messages/presentation/manager/chat_with_admin_view_model/chat_with_admin_view_model.dart'
+    as _i584;
 import '../../features/messages/presentation/manager/get_accepted_order_message_view_model/get_accepted_order_message_view_model.dart'
     as _i12;
 import '../../features/messages/presentation/manager/get_admin_messages_view_model/get_admin_messages_view_model.dart'
@@ -983,6 +985,10 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i891.AddFavoriteOrderUseCase(gh<_i679.AddFavoriteOrderRepo>()));
     gh.lazySingleton<_i366.SendMessageUseCase>(
         () => _i366.SendMessageUseCase(gh<_i201.SendMessagesRepo>()));
+    gh.factory<_i584.ChatWithAdminViewModel>(() => _i584.ChatWithAdminViewModel(
+          gh<_i841.GetAdminMessagesUseCase>(),
+          gh<_i1022.SubscribeToAdminMessagesUseCase>(),
+        ));
     gh.factory<_i123.IsOrderFavoriteViewModel>(() =>
         _i123.IsOrderFavoriteViewModel(gh<_i451.IsOrderFavoriteUseCase>()));
     gh.factory<_i662.GetAdminMessagesViewModel>(() =>

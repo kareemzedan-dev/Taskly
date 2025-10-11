@@ -176,9 +176,9 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                       context.read<AuthViewModel>().googleLogin(
                           role: widget.role);
                     },
-                    onAppleLogin: () {
-                      context.read<AuthViewModel>().appleLogin(role: widget.role);
-                    },
+                    // onAppleLogin: () {
+                    //   context.read<AuthViewModel>().appleLogin(role: widget.role);
+                    // },
                     onFacebookLogin: ()
                     {
                       context.read<AuthViewModel>().facebookLogin(role: widget.role);

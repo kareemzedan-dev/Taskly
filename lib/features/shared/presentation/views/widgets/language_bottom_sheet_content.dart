@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:taskly/core/components/custom_button.dart';
-import 'package:taskly/core/utils/assets_manager.dart';
-import 'package:taskly/core/utils/colors_manger.dart';
+
+import '../../../../../../../../core/services/language_service.dart';
+import '../../../../../core/components/custom_button.dart';
+import '../../../../../core/helper/language_notifier.dart';
+import '../../../../../core/utils/assets_manager.dart';
+import '../../../../../core/utils/colors_manger.dart';
 
 class LanguageBottomSheetContent extends StatefulWidget {
   final String? initialLanguage;
@@ -13,23 +17,25 @@ class LanguageBottomSheetContent extends StatefulWidget {
   State<LanguageBottomSheetContent> createState() =>
       _LanguageBottomSheetContentState();
 }
-
-class _LanguageBottomSheetContentState
-    extends State<LanguageBottomSheetContent> {
-  String? _selectedLanguage;
+class _LanguageBottomSheetContentState extends State<LanguageBottomSheetContent> {
+  late String _selectedLanguageCode;
 
   @override
   void initState() {
     super.initState();
-    _selectedLanguage = widget.initialLanguage;
+    // نجيب اللغة الحالية من الـ widget أو من الـ notifier لو موجود
+    final languageNotifier = context.read<LanguageNotifier>();
+    _selectedLanguageCode = widget.initialLanguage ?? languageNotifier.currentLanguage;
   }
 
   @override
   Widget build(BuildContext context) {
     final languages = [
-      {"title": "العربية", "icon": Assets.assetsImagesArabicFlag},
-      {"title": "English", "icon": Assets.assetsImagesEnglishFlag},
+      {"title": "العربية", "icon": Assets.assetsImagesArabicFlag, "code": "ar"},
+      {"title": "English", "icon": Assets.assetsImagesEnglishFlag, "code": "en"},
     ];
+
+    final languageNotifier = context.read<LanguageNotifier>();
 
     return Container(
       width: double.infinity,
@@ -48,41 +54,26 @@ class _LanguageBottomSheetContentState
             physics: const NeverScrollableScrollPhysics(),
             padding: EdgeInsets.all(12.w),
             itemCount: languages.length,
-            separatorBuilder:
-                (_, __) => const Divider(color: Colors.grey, thickness: 0.5),
+            separatorBuilder: (_, __) => Divider(color: Colors.grey, thickness: 0.5),
             itemBuilder: (context, index) {
               final lang = languages[index];
-              final isSelected = lang["title"] == _selectedLanguage;
+              final isSelected = lang["code"] == _selectedLanguageCode;
 
               return ListTile(
                 leading: Image.asset(lang["icon"]!, width: 30.w, height: 30.w),
                 title: Text(
                   lang["title"]!,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodyLarge?.copyWith(color: ColorsManager.black,fontSize: 16.sp,),
-                ),
-                trailing: Container(
-                  width: 20.w,
-                  height: 20.w,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: ColorsManager.black, width: 2),
-                    color:
-                        isSelected ? ColorsManager.primary : Colors.transparent,
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    color: ColorsManager.black,
+                    fontSize: 16.sp,
                   ),
-                  child:
-                      isSelected
-                          ? Icon(
-                            Icons.done,
-                            color: ColorsManager.white,
-                            size: 16.sp,
-                          )
-                          : null,
                 ),
+                trailing: isSelected
+                    ? Icon(Icons.done, color: ColorsManager.primary, size: 20.sp)
+                    : null,
                 onTap: () {
                   setState(() {
-                    _selectedLanguage = lang["title"];
+                    _selectedLanguageCode = lang["code"]!;
                   });
                 },
               );
@@ -93,10 +84,9 @@ class _LanguageBottomSheetContentState
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: CustomButton(
               title: "Save",
-              ontap: () {
-                if (_selectedLanguage != null) {
-                  Navigator.pop(context, _selectedLanguage);
-                }
+              ontap: () async {
+                await languageNotifier.changeLanguage(_selectedLanguageCode);
+                Navigator.pop(context);
               },
             ),
           ),

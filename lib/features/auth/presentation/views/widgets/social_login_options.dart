@@ -11,11 +11,11 @@ class SocialLoginOptions extends StatelessWidget {
     super.key,
 
     required this.onGoogleLogin,
-    required this.onAppleLogin,
+   // required this.onAppleLogin,
     required this.onFacebookLogin,
   });
   final Function() onGoogleLogin;
-  final Function() onAppleLogin;
+ // final Function() onAppleLogin;
   final Function() onFacebookLogin;
 
   @override
@@ -34,12 +34,12 @@ class SocialLoginOptions extends StatelessWidget {
             iconPath: Assets.assetsFace,
             onPressed: onFacebookLogin
         ),
-        const SizedBox(height: 16),
-        SocialLoginButton(
-          label: local.continuewithapple,
-          iconPath: Assets.assetsApple,
-          onPressed:onAppleLogin
-        ),
+        // const SizedBox(height: 16),
+        // SocialLoginButton(
+        //   label: local.continuewithapple,
+        //   iconPath: Assets.assetsApple,
+        //   onPressed:onAppleLogin
+        // ),
 
       ],
     );

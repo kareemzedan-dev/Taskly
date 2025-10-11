@@ -47,6 +47,8 @@ class Assets {
   static const String chatAvatarsViewModelChatAvatarsState = 'lib/features/messages/presentation/manager/chat_avatars_view_model/chat_avatars_state.dart';
   static const String chatAvatarsViewModelChatAvatarsViewModel = 'lib/features/messages/presentation/manager/chat_avatars_view_model/chat_avatars_view_model.dart';
   static const String chatInputViewModelChatInputViewModel = 'lib/features/messages/presentation/manager/chat_input_view_model/chat_input_view_model.dart';
+  static const String chatWithAdminViewModelChatWithAdminState = 'lib/features/messages/presentation/manager/chat_with_admin_view_model/chat_with_admin_state.dart';
+  static const String chatWithAdminViewModelChatWithAdminViewModel = 'lib/features/messages/presentation/manager/chat_with_admin_view_model/chat_with_admin_view_model.dart';
   static const String clientHomeViewModelClientHomeViewModel = 'lib/features/client/presentation/views/tabs/home/presentation/view_model/client_home_view_model/client_home_view_model.dart';
   static const String clientOrderStatusViewModelClientOrderStatusStates = 'lib/features/client/presentation/views/tabs/my_jobs/presentation/view_model/client_order_status_view_model/client_order_status_states.dart';
   static const String clientOrderStatusViewModelClientOrderStatusViewModel = 'lib/features/client/presentation/views/tabs/my_jobs/presentation/view_model/client_order_status_view_model/client_order_status_view_model.dart';
@@ -88,6 +90,7 @@ class Assets {
   static const String deleteOrderViewModelDeleteOrderStates = 'lib/features/client/presentation/views/tabs/my_jobs/presentation/view_model/delete_order_view_model/delete_order_states.dart';
   static const String deleteOrderViewModelDeleteOrderViewModel = 'lib/features/client/presentation/views/tabs/my_jobs/presentation/view_model/delete_order_view_model/delete_order_view_model.dart';
   static const String diDi = 'lib/core/di/di.dart';
+  static const String diDi.config = 'lib/core/di/di.config.dart';
   static const String downloadAttachmentsDownloadAttachments = 'lib/features/attachments/domain/use_cases/download_attachments/download_attachments.dart';
   static const String downloadAttachmentsViewModelDownloadAttachmentsStates = 'lib/features/attachments/presentation/manager/download_attachments_view_model/download_attachments_states.dart';
   static const String downloadAttachmentsViewModelDownloadAttachmentsViewModel = 'lib/features/attachments/presentation/manager/download_attachments_view_model/download_attachments_view_model.dart';
@@ -234,6 +237,7 @@ class Assets {
   static const String helperFormatLastSeen = 'lib/core/helper/format_last_seen.dart';
   static const String helperGetLocalServices = 'lib/core/helper/get_local_services.dart';
   static const String helperHexToColor = 'lib/core/helper/hex_to_color.dart';
+  static const String helperLanguageNotifier = 'lib/core/helper/language_notifier.dart';
   static const String helperMyBlocObserver = 'lib/core/helper/my_bloc_observer.dart';
   static const String helperNotificationsHelper = 'lib/core/helper/notifications_helper.dart';
   static const String helperRelativeTime = 'lib/core/helper/relative_time.dart';
@@ -406,6 +410,7 @@ class Assets {
   static const String servicesFcmService = 'lib/core/services/fcm_service.dart';
   static const String servicesFileUploadedServices = 'lib/core/services/file_uploaded_services.dart';
   static const String servicesFirebaseNotificationService = 'lib/core/services/firebase_notification_service.dart';
+  static const String servicesLanguageService = 'lib/core/services/language_service.dart';
   static const String servicesMessageValidationService = 'lib/core/services/message_validation_service.dart';
   static const String servicesNotificationService = 'lib/core/services/notification_service.dart';
   static const String servicesPickImageFromCamera = 'lib/core/services/pick_image_from_camera.dart';

@@ -27,5 +27,5 @@ class StringsManager {
   static const appleLoginCancelled = "appleLoginCancelled";
   static const appleLoginSuccessful = "appleLoginSuccessful";
 
-
+  static const String languageCodeKey = 'language_code';
 }

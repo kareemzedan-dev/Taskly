@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../config/l10n/app_localizations.dart';
 import '../../../../core/utils/assets_manager.dart';
 class AdminConversationCard extends StatelessWidget {
   const AdminConversationCard({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final local =AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Card(
@@ -32,12 +34,12 @@ class AdminConversationCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                Text("Admin Support",
+                Text(local.admin_support,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           fontWeight: FontWeight.w700,
                           fontSize: 14.sp,
                         )),
-                Text("Chat with Admin Support",
+                Text(local.chat_with_admin,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           fontWeight: FontWeight.w500,
                           fontSize: 12.sp,

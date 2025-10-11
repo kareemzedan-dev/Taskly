@@ -22,8 +22,11 @@ Future<void> SendToAdminMessage({required MessageEntity message}) async {
 
 
   }
-  catch (e){
+  catch (e, stackTrace){
+    print("SendToAdmin Error: $e");
+    print(stackTrace);
     emit(SendToAdminMessagesErrorState(e.toString()));
   }
+
 }
 }

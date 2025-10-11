@@ -3,6 +3,7 @@ import 'package:injectable/injectable.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:taskly/core/errors/failures.dart';
 import 'package:taskly/features/messages/domain/entities/message_entity.dart';
+import '../../../../../attachments/data/models/attachments_dm/attachments_dm.dart';
 import '../../../data_sources/remote/send_to_admin_messages_remote_data_source/send_to_admin_messages_remote_data_source.dart';
 import '../../../models/message_model.dart';
 @Injectable(as:  SendToAdminMessagesRemoteDataSource)
@@ -18,10 +19,7 @@ class SendToAdminMessagesRemoteDataSourceImpl
       String adminId = message.receiverId.isNotEmpty ? message.receiverId : '';
 
       if (adminId.isEmpty) {
-        final response = await supabase
-            .from('admins')
-            .select('id')
-            .limit(1);
+        final response = await supabase.from('admins').select('id').limit(1);
         final data = response as List;
         if (data.isEmpty) {
           return Left(ServerFailure("No admin found"));
@@ -29,25 +27,45 @@ class SendToAdminMessagesRemoteDataSourceImpl
         adminId = data.first['id'] as String;
       }
 
-      final adminMessage = await MessageModel.toAdminMessage(
+      final attachments = message.attachment?.map((a) {
+        return AttachmentModel(
+          id: a.id,
+          url: a.url,
+          type: a.type,
+          name: a.name,
+          size: a.size,
+          storagePath: a.storagePath,
+        );
+      }).toList();
 
+
+      // ✅ إنشاء الموديل النهائي
+      final adminMessage = MessageModel(
+        id: message.id,
         senderId: message.senderId,
-        senderType: message.senderType,
+        receiverId: adminId,
+        messageType: message.messageType,
         content: message.content,
-        attachments: message is MessageModel ? message.attachment : null,
+        attachment: attachments,
+        status: message.status,
+        createdAt: message.createdAt,
+        updatedAt: message.updatedAt,
+        senderType: message.senderType,
+        receiverType: message.receiverType,
         orderId: message.orderId,
         paymentId: message.paymentId,
-        adminId: adminId,
       );
 
-      print("Sending admin message: ${adminMessage.toJson()}"); // debug
+      print("🟢 Sending admin message: ${adminMessage.toJson()}");
 
       await supabase.from('messages').insert([adminMessage.toJson()]);
 
       return const Right(null);
     } catch (e) {
+      print("❌ Send message failed: $e");
       return Left(ServerFailure(e.toString()));
     }
   }
+
 
 }

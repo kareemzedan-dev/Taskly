@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:taskly/core/cache/shared_preferences.dart';
-import 'package:taskly/core/utils/assets_manager.dart';
-import 'package:taskly/core/utils/strings_manager.dart';
-import 'package:taskly/features/messages/presentation/widgets/message_shimmer.dart';
-import 'package:taskly/features/messages/presentation/widgets/chat_input_field.dart';
-import 'package:taskly/core/di/di.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'package:url_launcher/url_launcher.dart';
+import '../../../../../../../../../core/di/di.dart';
+import '../../../attachments/domain/entities/attachment_entity/attaachments_entity.dart';
 import '../../../shared/presentation/views/widgets/message_bubble.dart';
-import '../manager/get_admin_messages_view_model/get_admin_messages_states.dart';
-import '../manager/get_admin_messages_view_model/get_admin_messages_view_model.dart';
-import '../manager/subscribe_to_admin_messages_view_model/subscribe_to_admin_messages_states.dart';
-import '../manager/subscribe_to_admin_messages_view_model/subscribe_to_admin_messages_view_model.dart';
-import '../manager/send_to_admin_messages_view_model/send_to_admin_messages_view_model.dart';
+import '../../domain/entities/message_entity.dart';
+import '../manager/chat_with_admin_view_model/chat_with_admin_state.dart';
+import '../manager/chat_with_admin_view_model/chat_with_admin_view_model.dart';
 import 'admin_chat_input_field.dart';
 
 class ChatWithAdminViewBody extends StatefulWidget {
@@ -26,122 +22,301 @@ class ChatWithAdminViewBody extends StatefulWidget {
 
 class _ChatWithAdminViewBodyState extends State<ChatWithAdminViewBody> {
   final ScrollController _scrollController = ScrollController();
-  final String adminAvatar = Assets.assetsUserAvatar;
-  String? receiverAdminId;
-  List messages = [];
+  final AudioPlayer _audioPlayer = AudioPlayer();
+  String? _currentlyPlayingUrl;
+  int _lastMessageCount = 0;
 
-  void _scrollToBottom() {
-    if (_scrollController.hasClients) {
-      _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeOut,
-      );
-    }
+  @override
+  void initState() {
+    super.initState();
+    _audioPlayer.onPlayerComplete.listen((_) {
+      setState(() {
+        _currentlyPlayingUrl = null;
+      });
+    });
   }
 
   @override
   void dispose() {
-    context.read<SubscribeToAdminMessagesViewModel>().unsubscribe();
     _scrollController.dispose();
+    _audioPlayer.dispose();
     super.dispose();
+  }
+
+  void _scrollToBottom() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
+    });
+  }
+
+  Widget _buildAttachmentWidget(AttachmentEntity att, bool isCurrentUser) {
+    final isImage = att.type.startsWith("image/");
+    final isPDF = att.type == "application/pdf";
+    final isAudio = att.type.startsWith("audio/") || att.type == "application/octet-stream";
+
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      padding: const EdgeInsets.all(12),
+      width: 250,
+      decoration: BoxDecoration(
+        color: isCurrentUser
+            ? Colors.blue.withOpacity(0.05)
+            : Colors.green.withOpacity(0.05),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: isCurrentUser
+              ? Colors.blue.withOpacity(0.2)
+              : Colors.green.withOpacity(0.2),
+        ),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 36,
+            height: 36,
+            decoration: BoxDecoration(
+              color: isCurrentUser ? Colors.blue : Colors.green,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(
+              isImage
+                  ? Icons.image
+                  : isPDF
+                  ? Icons.picture_as_pdf
+                  : Icons.audiotrack,
+              color: Colors.white,
+              size: 20,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: GestureDetector(
+              onTap: !isAudio
+                  ? () {
+                if (isImage) {
+                  showDialog(
+                    context: context,
+                    builder: (_) => Dialog(
+                      backgroundColor: Colors.transparent,
+                      insetPadding: const EdgeInsets.all(20),
+                      child: Stack(
+                        children: [
+                          InteractiveViewer(
+                            child: Image.network(
+                              att.url,
+                              fit: BoxFit.contain,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Container(
+                                  padding: const EdgeInsets.all(20),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(Icons.error, color: Colors.red, size: 40),
+                                      SizedBox(height: 8),
+                                      Text(
+                                        'Failed to load image',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                          Positioned(
+                            top: 10,
+                            right: 10,
+                            child: IconButton(
+                              icon: const Icon(Icons.close, color: Colors.white),
+                              onPressed: () => Navigator.of(context).pop(),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                } else if (isPDF) {
+                  launchUrl(Uri.parse(att.url));
+                }
+              }
+                  : null,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    att.name ?? "Attachment",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                      color: Colors.grey[800],
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    isImage
+                        ? "Image"
+                        : isPDF
+                        ? "PDF Document"
+                        : "Audio File",
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                  if (isAudio) ...[
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        IconButton(
+                          icon: Icon(
+                            _currentlyPlayingUrl == att.url
+                                ? Icons.pause_circle
+                                : Icons.play_circle,
+                            color: Colors.orange,
+                            size: 28,
+                          ),
+                          onPressed: () async {
+                            if (_currentlyPlayingUrl == att.url) {
+                              await _audioPlayer.pause();
+                              setState(() => _currentlyPlayingUrl = null);
+                            } else {
+                              await _audioPlayer.stop();
+                              await _audioPlayer.play(UrlSource(att.url));
+                              setState(() => _currentlyPlayingUrl = att.url);
+                            }
+                          },
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            "Tap to play",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey[600],
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  List<Widget> _buildMessageContent(MessageEntity msg, bool isCurrentUser) {
+    final widgets = <Widget>[];
+
+    // عرض الرسالة النصية إذا كانت موجودة
+    if (msg.messageType == "text" && (msg.content?.isNotEmpty ?? false)) {
+      widgets.add(
+        MessageBubble(
+          sender: isCurrentUser ? SenderType.client : SenderType.admin,
+          message: msg.content ?? "",
+          time:
+          "${msg.createdAt.hour}:${msg.createdAt.minute.toString().padLeft(2, '0')}",
+          chatWithUsers: true,
+          avatarUrl: "",
+        ),
+      );
+    }
+
+    // عرض المرفقات إذا كانت موجودة
+    if (msg.attachment != null && msg.attachment!.isNotEmpty) {
+      final attachments = msg.attachment!
+          .map((att) => _buildAttachmentWidget(att, isCurrentUser))
+          .toList();
+
+      widgets.add(
+        Column(
+          crossAxisAlignment:
+          isCurrentUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+          children: attachments,
+        ),
+      );
+    }
+
+    return widgets;
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: MultiBlocProvider(
-        providers: [
-          BlocProvider(
-            create: (_) => getIt<GetAdminMessagesViewModel>()
-              ..getAdminMessages(widget.currentUserId),
-          ),
-          BlocProvider(
-            create: (_) => getIt<SubscribeToAdminMessagesViewModel>()
-              ..subscribeToAdminMessages(widget.currentUserId, (msg, action) {
-                if (!messages.any((m) => m.id == msg.id)) {
-                  setState(() => messages.add(msg));
-                  _scrollToBottom();
-                }
-              }),
-          ),
-          BlocProvider(
-            create: (_) => getIt<SendToAdminMessagesViewModel>(),
-          ),
-        ],
-        child: Column(
-          children: [
-            Expanded(
-              child: BlocListener<GetAdminMessagesViewModel,
-                  GetAdminMessagesStates>(
-                listener: (context, state) {
-                  if (state is GetAdminMessagesSuccessState) {
-                    // دمج الرسائل القديمة مع الجديدة من subscription
-                    final oldMessages = context
-                        .read<SubscribeToAdminMessagesViewModel>()
-                        .messages;
-                    final combined = [...oldMessages, ...state.messages];
-                    setState(() => messages = combined);
+    return BlocConsumer<ChatWithAdminViewModel, ChatWithAdminStates>(
+      listener: (context, state) {
+        final vm = context.read<ChatWithAdminViewModel>();
+        final messageCount = vm.messages.length;
 
-                    if (combined.isNotEmpty && receiverAdminId == null) {
-                      receiverAdminId =
-                      combined.first.senderId != widget.currentUserId
-                          ? combined.first.senderId
-                          : combined.first.receiverId;
-                    }
+        if (messageCount != _lastMessageCount) {
+          _lastMessageCount = messageCount;
+          _scrollToBottom();
+        }
+      },
+      builder: (context, state) {
+        final vm = context.read<ChatWithAdminViewModel>();
 
-                    WidgetsBinding.instance
-                        .addPostFrameCallback((_) => _scrollToBottom());
-                  }
-                },
-                child: BlocBuilder<SubscribeToAdminMessagesViewModel,
-                    SubscribeToAdminMessagesStates>(
-                  builder: (context, state) {
-                    if (messages.isEmpty)
-                      return const Center(child: Text("No messages yet"));
+        if (state is ChatWithAdminLoading) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (state is ChatWithAdminError) {
+          return Center(child: Text(state.message));
+        }
 
-                    return ListView.builder(
-                      controller: _scrollController,
-                      padding: const EdgeInsets.all(16),
-                      itemCount: messages.length,
-                      itemBuilder: (context, index) {
-                        final msg = messages[index];
-                        final isCurrentUser =
-                            msg.senderId == widget.currentUserId;
-                        return MessageBubble(
-                          sender: isCurrentUser
-                              ? SenderType.client
-                              : SenderType.admin,
-                          message: msg.content ?? "",
-                          avatarUrl: isCurrentUser ? "" : adminAvatar,
-                          time:
-                          "${msg.createdAt.hour}:${msg.createdAt.minute.toString().padLeft(2, '0')} ${msg.createdAt.hour < 12 ? "AM" : "PM"}",
-                        );
-                      },
-                    );
-                  },
-                ),
+        final messages = vm.messages;
+        if (messages.isEmpty) {
+          return const Center(
+            child: Text(
+              "No messages yet",
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey,
               ),
             ),
-            // Padding(
-            //   padding: EdgeInsets.only(
-            //       bottom: MediaQuery.of(context).viewInsets.bottom),
-            //   child: AdminChatInputField(
-            //
-            //     currentUserId: widget.currentUserId,
-            //     currentUserRole:
-            //     SharedPrefHelper.getString(StringsManager.roleKey) ??
-            //         "client",
-            //     receiverUserRole: "admin",
-            //     onMessageSent: _scrollToBottom,
-            //     receiverAdminId: receiverAdminId ??
-            //         "97ea47d8-d66b-4d44-97fe-112fc59251b0",
-            //   ),
-            // ),
+          );
+        }
+
+        return Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                controller: _scrollController,
+                padding: const EdgeInsets.all(16),
+                itemCount: messages.length,
+                itemBuilder: (context, index) {
+                  final msg = messages[index];
+                  final isCurrentUser = msg.senderId == widget.currentUserId;
+
+                  return Container(
+                    margin: EdgeInsets.only(bottom: 12.h),
+                    child: Column(
+                      crossAxisAlignment: isCurrentUser
+                          ? CrossAxisAlignment.end
+                          : CrossAxisAlignment.start,
+                      children: _buildMessageContent(msg, isCurrentUser),
+                    ),
+                  );
+                },
+              ),
+            ),
+            AdminChatInputField(
+              currentUserId: widget.currentUserId,
+              onMessageSent: _scrollToBottom, // إضافة callback للتحديث
+            ),
             SizedBox(height: 16.h),
           ],
-        ),
-      ),
+        );
+      },
     );
   }
 }

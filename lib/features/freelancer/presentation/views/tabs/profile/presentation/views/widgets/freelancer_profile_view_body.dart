@@ -11,6 +11,7 @@ import 'package:taskly/features/shared/presentation/views/widgets/profile_sectio
 import 'package:taskly/features/shared/presentation/views/widgets/theme_bottom_sheet_content.dart';
 import '../../../../../../../../../core/cache/shared_preferences.dart';
 import '../../../../../../../../../core/di/di.dart';
+import '../../../../../../../../../core/helper/language_notifier.dart';
 import '../../../../../../../../../core/utils/strings_manager.dart';
 import '../../../../../../../../client/presentation/views/tabs/profile/presentation/views/widgets/user_info_section_shimmer.dart';
 import '../../../../../../../../profile/presentation/manager/profile_view_model/profile_view_model.dart';
@@ -147,7 +148,7 @@ class _FreelancerProfileViewBodyState extends State<FreelancerProfileViewBody> {
                       ),
                       builder: (context) {
                         return LanguageBottomSheetContent(
-                          initialLanguage: _currentLanguage,
+                          initialLanguage: context.read<LanguageNotifier>().currentLanguage,
                         );
                       },
                     );

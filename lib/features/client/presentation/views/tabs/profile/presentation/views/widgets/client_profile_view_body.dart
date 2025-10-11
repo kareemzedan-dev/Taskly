@@ -16,6 +16,7 @@ import 'package:taskly/features/shared/presentation/views/widgets/profile_sectio
 import 'package:taskly/features/shared/presentation/views/widgets/theme_bottom_sheet_content.dart';
 
 import '../../../../../../../../../config/l10n/app_localizations.dart';
+import '../../../../../../../../../core/helper/language_notifier.dart';
 
 class ClientProfileViewBody extends StatefulWidget {
   const ClientProfileViewBody({super.key});
@@ -105,7 +106,7 @@ class _ClientProfileViewBodyState extends State<ClientProfileViewBody> {
                       ),
                       builder: (context) {
                         return LanguageBottomSheetContent(
-                          initialLanguage: _currentLanguage,
+                          initialLanguage: context.read<LanguageNotifier>().currentLanguage,
                         );
                       },
                     );

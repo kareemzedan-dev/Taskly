@@ -632,6 +632,8 @@
   "errorFetchingEarnings": "Error fetching earnings",
   "withdrawalHistoryEmpty": "No withdrawal history found",
   "cannotWithdrawMoreThanBalance": "You cannot withdraw more than your available balance {balance} SAR",
-  "cannotWithdrawMoreThanBalance_placeholder": "{balance}"
+  "cannotWithdrawMoreThanBalance_placeholder": "{balance}" ,
+  "admin_support": "Admin Support",
+  "chat_with_admin_support": "Chat with Admin Support"
 
 }
