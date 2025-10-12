@@ -12,12 +12,12 @@ class PrivacyPolicyViewBody extends StatelessWidget {
     final TextStyle titleStyle = Theme.of(context)
         .textTheme
         .titleLarge!
-        .copyWith(fontWeight: FontWeight.bold, color: Colors.black,fontSize: 16.sp,);
+        .copyWith(fontWeight: FontWeight.bold, fontSize: 16.sp,);
 
     final TextStyle bodyStyle = Theme.of(context)
         .textTheme
         .bodyMedium!
-        .copyWith(color: Colors.black87, height: 1.5,fontSize: 14.sp,);
+        .copyWith(  height: 1.5,fontSize: 14.sp,);
 
     return Card(
       elevation: 6,
@@ -27,9 +27,9 @@ class PrivacyPolicyViewBody extends StatelessWidget {
 
           width: double.infinity,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).scaffoldBackgroundColor,
             borderRadius: BorderRadius.circular(10.r),
-            border: Border.all(color: Colors.grey.shade300, width: 2.w),
+            border: Border.all( width: 2.w),
           ),
           child: SingleChildScrollView(
             child: Padding(

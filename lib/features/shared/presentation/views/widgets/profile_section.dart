@@ -18,9 +18,10 @@ class ProfileSection extends StatelessWidget {
       children: [
         Text(
           title,
-          style: Theme.of(context).textTheme.titleMedium!.copyWith(
+          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                 fontWeight: FontWeight.bold,
                 fontSize: 18.sp,
+
               ),
         ),
         const SizedBox(height: 10),

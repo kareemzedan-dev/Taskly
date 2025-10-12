@@ -7,14 +7,17 @@ import 'package:taskly/features/messages/data/models/message_model.dart';
 import 'package:taskly/features/messages/domain/entities/message_entity.dart';
 
 @Injectable(as: SubscribeToMessagesRemoteDataSource)
-class SubscribeToMessagesRemoteDataSourceImpl
-    implements SubscribeToMessagesRemoteDataSource {
+class SubscribeToMessagesRemoteDataSourceImpl implements SubscribeToMessagesRemoteDataSource {
   final SupabaseService supabaseService;
 
   SubscribeToMessagesRemoteDataSourceImpl({required this.supabaseService});
 
   @override
-  Stream<(MessageEntity, String)> subscribeToMessages(String orderId) {
+  Stream<(MessageEntity, String)> subscribeToMessages(
+      String orderId,
+      String currentUserId,
+      String otherUserId,
+    ) {
     final client = supabaseService.supabaseClient;
     final controller = StreamController<(MessageEntity, String)>();
 
@@ -23,22 +26,17 @@ class SubscribeToMessagesRemoteDataSourceImpl
       opts: const RealtimeChannelConfig(),
     );
 
-    void handleInsert(Map<String, dynamic>? record) {
+    void handleRecord(Map<String, dynamic>? record, String eventType) {
       if (record == null) return;
-      final message = MessageModel.fromJson(record);
-      controller.add((message, 'INSERT'));
-    }
 
-    void handleUpdate(Map<String, dynamic>? record) {
-      if (record == null) return;
-      final message = MessageModel.fromJson(record);
-      controller.add((message, 'UPDATE'));
-    }
+      // فلترة على sender و receiver
+      if (!((record['sender_id'] == currentUserId && record['receiver_id'] == otherUserId) ||
+          (record['sender_id'] == otherUserId && record['receiver_id'] == currentUserId))) {
+        return; // تجاهل الرسائل اللي مش بين الاثنين
+      }
 
-    void handleDelete(Map<String, dynamic>? record) {
-      if (record == null) return;
       final message = MessageModel.fromJson(record);
-      controller.add((message, 'DELETE'));
+      controller.add((message, eventType));
     }
 
     channel.onPostgresChanges(
@@ -50,7 +48,7 @@ class SubscribeToMessagesRemoteDataSourceImpl
         column: 'order_id',
         value: orderId,
       ),
-      callback: (payload) => handleInsert(payload.newRecord),
+      callback: (payload) => handleRecord(payload.newRecord, 'INSERT'),
     );
 
     channel.onPostgresChanges(
@@ -62,7 +60,7 @@ class SubscribeToMessagesRemoteDataSourceImpl
         column: 'order_id',
         value: orderId,
       ),
-      callback: (payload) => handleUpdate(payload.newRecord),
+      callback: (payload) => handleRecord(payload.newRecord, 'UPDATE'),
     );
 
     channel.onPostgresChanges(
@@ -74,13 +72,11 @@ class SubscribeToMessagesRemoteDataSourceImpl
         column: 'order_id',
         value: orderId,
       ),
-      callback: (payload) => handleDelete(payload.oldRecord),
+      callback: (payload) => handleRecord(payload.oldRecord, 'DELETE'),
     );
 
-    // ✅ اشتراك فعلي
     channel.subscribe();
 
-    // 🧹 إلغاء الاشتراك عند انتهاء الـ stream
     controller.onCancel = () async {
       await channel.unsubscribe();
     };

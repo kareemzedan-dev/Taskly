@@ -47,6 +47,7 @@ class FreelancerInfoCardForHire extends StatelessWidget {
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           fontWeight: FontWeight.w600,
                           fontSize: 16.sp,
+                      color: Colors.grey
                         ),
                     maxLines: 1,
                   ),
@@ -55,6 +56,7 @@ class FreelancerInfoCardForHire extends StatelessWidget {
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           fontWeight: FontWeight.w400,
                           fontSize: 14.sp,
+                        color: Colors.grey
                         ),
                     maxLines: 1,
                   ),
@@ -70,6 +72,7 @@ class FreelancerInfoCardForHire extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         fontWeight: FontWeight.w600,
                         fontSize: 14.sp,
+                      color: Colors.grey
                       ),
                 ),
                 const Icon(Icons.star, color: Colors.amber, size: 16),

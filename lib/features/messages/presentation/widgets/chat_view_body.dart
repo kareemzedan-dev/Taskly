@@ -22,6 +22,8 @@ class ChatViewBody extends StatefulWidget {
   final String currentUserRole;
   final String receiverUserRole;
   final String orderId;
+  final String currentUserAvatar;
+  final String receiverAvatar;
 
   const ChatViewBody({
     super.key,
@@ -30,6 +32,8 @@ class ChatViewBody extends StatefulWidget {
     required this.currentUserRole,
     required this.receiverUserRole,
     required this.orderId,
+    required this.currentUserAvatar,
+    required this.receiverAvatar,
   });
 
   @override
@@ -110,7 +114,6 @@ class _ChatViewBodyState extends State<ChatViewBody> {
                       : isPDF
                       ? Icons.picture_as_pdf
                       : Icons.audiotrack,
-                  color: Colors.white,
                   size: 20,
                 ),
               ),
@@ -138,7 +141,7 @@ class _ChatViewBodyState extends State<ChatViewBody> {
                                 right: 10,
                                 child: IconButton(
                                   icon: const Icon(Icons.close,
-                                      color: Colors.white),
+                                     ),
                                   onPressed: () =>
                                       Navigator.of(context).pop(),
                                 ),
@@ -211,7 +214,6 @@ class _ChatViewBodyState extends State<ChatViewBody> {
             child: Container(
               padding: const EdgeInsets.all(4),
               decoration: BoxDecoration(
-                color: Colors.white,
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
@@ -291,8 +293,7 @@ class _ChatViewBodyState extends State<ChatViewBody> {
         MessageBubble(
           sender: isCurrentUser ? SenderType.admin : SenderType.client,
           message: msg.content ?? "",
-          avatarUrl:
-          SharedPrefHelper.getString(StringsManager.profileImageKey)!,
+          avatarUrl: isCurrentUser ? widget.currentUserAvatar : widget.receiverAvatar,
           chatWithUsers: true,
           time:
           "${msg.createdAt.hour}:${msg.createdAt.minute.toString().padLeft(2, '0')}",
@@ -325,7 +326,7 @@ class _ChatViewBodyState extends State<ChatViewBody> {
         BlocProvider(
           create: (_) {
             final vm = getIt<MessagesViewModel>();
-            vm.loadAndSubscribeMessages(widget.orderId);
+            vm.loadAndSubscribeMessages(widget.orderId, widget.currentUserId, widget.receiverId);
             return vm;
           },
         ),

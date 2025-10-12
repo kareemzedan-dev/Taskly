@@ -16,7 +16,6 @@ class JobDetailsView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
          surfaceTintColor: Colors.transparent, 
-        backgroundColor: Colors.white,
         title: Text(
           local.job_details,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
@@ -26,13 +25,12 @@ class JobDetailsView extends StatelessWidget {
         ),
         leading: GestureDetector(
           onTap: () => Navigator.pop(context),
-          child: const Icon(CupertinoIcons.back, color: Colors.black)),
+          child: const Icon(CupertinoIcons.back, )),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1.0),
           child: Container(color: Colors.grey.shade300, height: 1.0),
         ),
       ),
-      backgroundColor: Colors.white,
       body: JobDetailsViewBody(orderEntity:orderEntity ,),
     );
   }

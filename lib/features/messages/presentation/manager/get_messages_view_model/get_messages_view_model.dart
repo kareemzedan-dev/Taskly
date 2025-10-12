@@ -16,12 +16,12 @@ class GetMessagesViewModel extends Cubit<GetMessagesViewModelStates> {
   List<MessageEntity> _currentMessages = [];
 
   /// لجلب الرسائل مرة واحدة عند فتح المحادثة
-  Future<void> getMessages({required String orderId}) async {
+  Future<void> getMessages({required String orderId, required String currentUserId, required String otherUserId}) async {
     try {
       if (isClosed) return;
       emit(GetMessagesViewModelStatesLoading());
 
-      final result = await getMessagesUseCase.call(orderId );
+      final result = await getMessagesUseCase.call(orderId, currentUserId , otherUserId );
 
       if (isClosed) return;
       result.fold(

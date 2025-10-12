@@ -17,7 +17,6 @@ class AdminConversationCard extends StatelessWidget {
             padding:  EdgeInsets.symmetric(vertical: 12.h, horizontal: 12.w),
 
             decoration: BoxDecoration(
-                color: Colors.white,
                 borderRadius: BorderRadius.circular(12.r),
                 border: Border.all(color: Colors.grey.shade300, width: 2.w)),
             child: Row(

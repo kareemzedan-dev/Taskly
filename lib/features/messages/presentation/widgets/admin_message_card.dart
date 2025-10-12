@@ -20,7 +20,6 @@ class AdminMessageCard extends StatelessWidget {
         children: [
           Icon(
             FontAwesomeIcons.circleExclamation,
-            color: ColorsManager.black,
             size: 14.sp,
           ),
           SizedBox(width: 8.w),

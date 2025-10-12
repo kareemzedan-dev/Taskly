@@ -12,10 +12,10 @@ class TechnicalSupportView extends StatelessWidget {
   Widget build(BuildContext context) {
     final local = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: Colors.white,
+
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        backgroundColor: Colors.white,
+
         title: Text(
           local.support,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
@@ -29,7 +29,7 @@ class TechnicalSupportView extends StatelessWidget {
         ),
         leading: GestureDetector(
           onTap: () => Navigator.pop(context),
-          child: const Icon(CupertinoIcons.back, color: Colors.black),
+          child: const Icon(CupertinoIcons.back, ),
         ),
       ),
       body: const SafeArea(child: TechnicalSupportViewBody()),

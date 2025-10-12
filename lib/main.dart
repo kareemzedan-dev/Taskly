@@ -18,6 +18,7 @@ import 'package:taskly/config/l10n/app_localizations.dart';
 import 'core/helper/language_notifier.dart';
 import 'core/services/firebase_notification_service.dart';
 import 'core/services/supabase_service.dart';
+import 'core/services/theme_notifier.dart';
 import 'core/services/user_status_service.dart';
 import 'core/utils/constants_manager.dart';
 import 'features/profile/presentation/manager/profile_view_model/profile_view_model.dart';
@@ -27,7 +28,6 @@ late final UserStatusService? userStatusService;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize Firebase & Supabase
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await Supabase.initialize(
     url: ConstantsManager.supabaseUrl,
@@ -67,6 +67,9 @@ Future<void> main() async {
           ),
         ChangeNotifierProvider(
           create: (_) => LanguageNotifier(Locale(savedLanguageCode)),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ThemeNotifier(),
         ),
 
       ],
@@ -109,7 +112,7 @@ class _TasklyState extends State<Taskly> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     final languageNotifier = context.watch<LanguageNotifier>();
-
+    final themeNotifier = context.watch<ThemeNotifier>();
     return ScreenUtilInit(
       designSize: const Size(393, 851),
       minTextAdapt: true,
@@ -128,7 +131,9 @@ class _TasklyState extends State<Taskly> with WidgetsBindingObserver {
             Locale('ar'),
             Locale('en'),
           ],
-          theme: AppTheme.darkTheme,
+          theme: themeNotifier.currentTheme == "Light" ? AppTheme.lightTheme :
+          themeNotifier.currentTheme == "Dark" ? AppTheme.darkTheme :
+          Theme.of(context), // system default
           onGenerateRoute: RoutesManager.onGenerateRoute,
           initialRoute: RoutesManager.splash,
         );

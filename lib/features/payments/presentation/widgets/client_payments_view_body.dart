@@ -56,10 +56,10 @@ class ClientPaymentsViewBody extends StatelessWidget {
     return WillPopScope(
       onWillPop: () => _onWillPop(context),
       child: Scaffold(
-        backgroundColor: Colors.white,
+
         appBar: AppBar(
-          backgroundColor: Colors.white,
-          surfaceTintColor: Colors.white,
+
+
           elevation: 0,
           title: Text(
             local.payments,
@@ -76,7 +76,7 @@ class ClientPaymentsViewBody extends StatelessWidget {
             ),
           ),
           leading: IconButton(
-            icon: const Icon(CupertinoIcons.arrow_left, color: Colors.black),
+            icon: const Icon(CupertinoIcons.back, ),
             onPressed: () async {
               final canPop = await _onWillPop(context);
               if (canPop) Navigator.pop(context);

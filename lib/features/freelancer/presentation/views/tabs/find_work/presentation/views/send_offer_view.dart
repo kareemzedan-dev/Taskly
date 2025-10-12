@@ -18,7 +18,6 @@ class SendOfferView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        backgroundColor: Colors.white,
         title: Text(
           'Send Offer',
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
@@ -31,7 +30,6 @@ class SendOfferView extends StatelessWidget {
           child: const Icon(CupertinoIcons.back, color: Colors.black),
         ),
       ),
-      backgroundColor: Colors.white,
       body:   MultiBlocProvider(providers: [
         BlocProvider(create:   (context) => getIt<SendOfferViewModel>(),),
         BlocProvider(create:   (context) => getIt<GetCommissionViewModel>(),),

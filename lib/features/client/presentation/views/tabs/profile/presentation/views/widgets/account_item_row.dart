@@ -47,7 +47,7 @@ class AccountItemRow extends StatelessWidget {
             text,
 
             style: AppTextStyles.bold16.copyWith(
-              color: textColor ?? ColorsManager.black.withOpacity(.6),
+              color: Theme.of(context).textTheme.bodyLarge?.color,
               fontSize: 16.sp,
             ),
           ),

@@ -1785,5 +1785,58 @@ class AppLocalizationsAr extends AppLocalizations {
   String get admin_support => 'دعم المسؤول';
 
   @override
+  String get checkOrderStatusMessage => 'يرجى التحقق من حالة الطلب في قسم الرسائل والتواصل مع العميل إذا لزم الأمر.';
+
+  @override
   String get chat_with_admin_support => 'الدردشة مع الدعم';
+
+  @override
+  String get offerCompletedMessage => 'تم إتمام هذا العرض. يمكنك ترك تقييم أو التحقق من تفاصيل الطلب في الرسائل.';
+
+  @override
+  String get orderPending => 'النظام: الطلب مازال قيد الانتظار. لم يتم قبول أي عرض بعد.';
+
+  @override
+  String get orderAccepted => 'النظام: تم قبول العرض. في انتظار الدفع قبل بدء العمل.';
+
+  @override
+  String get orderPaid => 'النظام: تم تقديم الدفع وهو تحت المراجعة. سيبدأ العمل في أقرب وقت ممكن.';
+
+  @override
+  String get orderInProgress => 'النظام: تم تأكيد الدفع، يمكنك البدء في العمل الآن.';
+
+  @override
+  String get orderWaiting => 'النظام: تم تسليم العمل للعميل للمراجعة.';
+
+  @override
+  String get orderCompleted => 'النظام: تم إتمام الطلب بنجاح.';
+
+  @override
+  String get orderCancelled => 'النظام: تم إلغاء هذا الطلب.';
+
+  @override
+  String get orderUnknown => 'حالة الطلب غير معروفة.';
+
+  @override
+  String payNowButton(Object budget) {
+    return 'ادفع الآن $budget ريال';
+  }
+
+  @override
+  String get submitDeliveryButton => 'تسليم العمل';
+
+  @override
+  String get workReceivedButton => 'تم استلام العمل';
+
+  @override
+  String get submitDeliveryConfirmation => 'هل أنت متأكد أنك تريد تسليم العمل؟';
+
+  @override
+  String get workReceivedConfirmation => 'هل أنت متأكد أنك استلمت العمل؟';
+
+  @override
+  String get rateClient => 'تقييم العميل';
+
+  @override
+  String get rateFreelancer => 'تقييم المستقل';
 }

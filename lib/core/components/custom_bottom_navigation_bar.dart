@@ -23,7 +23,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final local = AppLocalizations.of(context)!;
     return BottomNavigationBar(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       type: BottomNavigationBarType.fixed,
       currentIndex: currentIndex,
       onTap: onTap,
@@ -38,12 +38,13 @@ class CustomBottomNavigationBar extends StatelessWidget {
         color: Colors.transparent,
       ),
       selectedItemColor: ColorsManager.primary,
-      unselectedItemColor: Colors.black.withOpacity(0.5),
+      unselectedItemColor: Theme.of(context).textTheme.bodyLarge?.color,
+
       items: [
         BottomNavigationBarItem(
           icon: Image.asset(
             firstTabicon ?? Assets.assetsImagesHome4561540,
-            color: Colors.black.withOpacity(0.5),
+            color: Theme.of(context).textTheme.bodyLarge?.color ,
             height: 24.h,
             width: 24.w,
           ),
@@ -58,7 +59,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
         BottomNavigationBarItem(
           icon: Image.asset(
             Assets.assetsImagesJobBoard18989826,
-            color: Colors.black.withOpacity(0.5),
+            color: Theme.of(context).textTheme.bodyLarge?.color ,
             height: 24.h,
             width: 24.w,
           ),
@@ -73,13 +74,13 @@ class CustomBottomNavigationBar extends StatelessWidget {
         BottomNavigationBarItem(
           icon: Image.asset(
             Assets.assetsImagesChat6431892,
-            color: Colors.black.withOpacity(0.5),
+            color: Theme.of(context).textTheme.bodyLarge?.color ,
             height: 24.h,
             width: 24.w,
           ),
           activeIcon: Image.asset(
             Assets.assetsImagesChat6431892,
-            color: ColorsManager.primary,
+            color: Theme.of(context).textTheme.bodyLarge?.color ,
             height: 24.h,
             width: 24.w,
           ),
@@ -88,7 +89,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
         BottomNavigationBarItem(
           icon: Image.asset(
             Assets.assetsImagesUser12366536,
-            color: Colors.black.withOpacity(0.5),
+            color: Theme.of(context).textTheme.bodyLarge?.color,
             height: 24.h,
             width: 24.w,
           ),

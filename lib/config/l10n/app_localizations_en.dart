@@ -1785,5 +1785,58 @@ class AppLocalizationsEn extends AppLocalizations {
   String get admin_support => 'Admin Support';
 
   @override
+  String get checkOrderStatusMessage => 'Please check the order status in the Messages section and contact the client if needed.';
+
+  @override
   String get chat_with_admin_support => 'Chat with Admin Support';
+
+  @override
+  String get offerCompletedMessage => 'This offer has been completed. You can leave a review or check the order details in Messages.';
+
+  @override
+  String get orderPending => 'System: The order is still pending. No offer has been accepted yet.';
+
+  @override
+  String get orderAccepted => 'System: The offer has been accepted. Waiting for payment before work can start.';
+
+  @override
+  String get orderPaid => 'System: Payment has been submitted and is under review. Work will begin as soon as possible.';
+
+  @override
+  String get orderInProgress => 'System: Order payment has been confirmed, you can start working on it now.';
+
+  @override
+  String get orderWaiting => 'System: Work has been submitted to the client for review.';
+
+  @override
+  String get orderCompleted => 'System: The order has been completed successfully.';
+
+  @override
+  String get orderCancelled => 'System: This order has been cancelled.';
+
+  @override
+  String get orderUnknown => 'Order status unknown.';
+
+  @override
+  String payNowButton(Object budget) {
+    return 'Pay Now ${budget}SAR';
+  }
+
+  @override
+  String get submitDeliveryButton => 'Submit Delivery';
+
+  @override
+  String get workReceivedButton => 'Work Received';
+
+  @override
+  String get submitDeliveryConfirmation => 'Are you sure you want to submit the delivery?';
+
+  @override
+  String get workReceivedConfirmation => 'Are you sure you have received the work?';
+
+  @override
+  String get rateClient => 'Rate Client';
+
+  @override
+  String get rateFreelancer => 'Rate Freelancer';
 }

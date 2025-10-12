@@ -11,7 +11,7 @@ import 'package:injectable/injectable.dart';
    GetOrderMessagesRepoImpl({required this.remoteDataSource});
 
   @override
-  Future<Either<Failures, List<MessageEntity>>> getOrderMessages(String orderId) {
-    return remoteDataSource.getOrderMessages(orderId);
+  Future<Either<Failures, List<MessageEntity>>> getOrderMessages(String orderId, String currentUserId, String otherUserId) {
+    return remoteDataSource.getOrderMessages(orderId, currentUserId, otherUserId);
   }
 }

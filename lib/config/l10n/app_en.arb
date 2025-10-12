@@ -634,6 +634,22 @@
   "cannotWithdrawMoreThanBalance": "You cannot withdraw more than your available balance {balance} SAR",
   "cannotWithdrawMoreThanBalance_placeholder": "{balance}" ,
   "admin_support": "Admin Support",
+  "checkOrderStatusMessage": "Please check the order status in the Messages section and contact the client if needed.",
   "chat_with_admin_support": "Chat with Admin Support"
-
+, "offerCompletedMessage": "This offer has been completed. You can leave a review or check the order details in Messages."
+  ,  "orderPending": "System: The order is still pending. No offer has been accepted yet.",
+  "orderAccepted": "System: The offer has been accepted. Waiting for payment before work can start.",
+  "orderPaid": "System: Payment has been submitted and is under review. Work will begin as soon as possible.",
+  "orderInProgress": "System: Order payment has been confirmed, you can start working on it now.",
+  "orderWaiting": "System: Work has been submitted to the client for review.",
+  "orderCompleted": "System: The order has been completed successfully.",
+  "orderCancelled": "System: This order has been cancelled.",
+  "orderUnknown": "Order status unknown.",
+  "payNowButton": "Pay Now {budget}SAR",
+  "submitDeliveryButton": "Submit Delivery",
+  "workReceivedButton": "Work Received",
+  "submitDeliveryConfirmation": "Are you sure you want to submit the delivery?",
+  "workReceivedConfirmation": "Are you sure you have received the work?",
+  "rateClient": "Rate Client",
+  "rateFreelancer": "Rate Freelancer"
 }

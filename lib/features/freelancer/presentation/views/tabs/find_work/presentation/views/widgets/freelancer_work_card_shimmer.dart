@@ -15,7 +15,7 @@ class FreelancerWorkCardShimmer extends StatelessWidget {
             child: Container(
               width: double.infinity,
               decoration: BoxDecoration(
-                color: Colors.white,
+
                 border: Border.all(color: Colors.grey.shade300, width: 2.w),
                 borderRadius: BorderRadius.circular(10.r),
               ),
@@ -31,29 +31,29 @@ class FreelancerWorkCardShimmer extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Container(width: 100.w, height: 14.h, color: Colors.white),
-                          Container(width: 24.w, height: 24.h, color: Colors.white),
+                          Container(width: 100.w, height: 14.h, color: Theme.of(context).scaffoldBackgroundColor),
+                          Container(width: 24.w, height: 24.h, color: Theme.of(context).scaffoldBackgroundColor),
                         ],
                       ),
                       SizedBox(height: 10.h),
                       // Title
-                      Container(width: 180.w, height: 18.h, color: Colors.white),
+                      Container(width: 180.w, height: 18.h, color: Theme.of(context).scaffoldBackgroundColor),
                       SizedBox(height: 5.h),
                       // Category chip
-                      Container(width: 100.w, height: 28.h, color: Colors.white),
+                      Container(width: 100.w, height: 28.h, color: Theme.of(context).scaffoldBackgroundColor),
                       SizedBox(height: 16.h),
                       // Description
-                      Container(width: double.infinity, height: 40.h, color: Colors.white),
+                      Container(width: double.infinity, height: 40.h, color: Theme.of(context).scaffoldBackgroundColor),
                       SizedBox(height: 16.h),
                       // Delivery Info
-                      Container(width: 120.w, height: 14.h, color: Colors.white),
+                      Container(width: 120.w, height: 14.h, color: Theme.of(context).scaffoldBackgroundColor),
                       SizedBox(height: 16.h),
                       // Actions buttons
                       Row(
                         children: [
-                          Container(width: 100.w, height: 32.h, color: Colors.white),
+                          Container(width: 100.w, height: 32.h, color:Theme.of(context).scaffoldBackgroundColor),
                            const Spacer(),
-                          Container(width: 100.w, height: 32.h, color: Colors.white),
+                          Container(width: 100.w, height: 32.h, color: Theme.of(context).scaffoldBackgroundColor),
                         ],
                       ),
                     ],

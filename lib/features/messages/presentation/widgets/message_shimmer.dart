@@ -33,7 +33,7 @@ class MessageShimmer extends StatelessWidget {
                   width: (index % 3 == 0 ? 180 : 120).w,
                   height: (index % 3 == 0 ? 50 : 35).h,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+
                     borderRadius: BorderRadius.circular(12.r),
                   ),
                 ),

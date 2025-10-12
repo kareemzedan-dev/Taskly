@@ -10,7 +10,8 @@ class SubscribeToMessagesRepoImpl implements SubscribeToMessagesRepo {
   SubscribeToMessagesRepoImpl({required this.remoteDataSource});
   @override
   Stream<(MessageEntity, String)> subscribeToMessages(String orderId,
+      String currentUserId, String otherUserId,
       ) {
-    return remoteDataSource.subscribeToMessages(orderId);
+    return remoteDataSource.subscribeToMessages(orderId, currentUserId, otherUserId);
   }
 }

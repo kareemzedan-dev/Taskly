@@ -28,13 +28,12 @@ class SubmitRatingRemoteDataSourceImpl implements SubmitRatingRemoteDataSource {
           .from('reviews')
           .select()
           .eq('order_id', reviews.orderId)
-          .eq('role', reviews.role)  // يتحقق من نفس الدور
+          .eq('role', reviews.role)
           .eq(
         reviews.role == 'client' ? 'client_id' : 'freelancer_id',
         reviews.role == 'client' ? reviews.clientId : reviews.freelancerId,
       )
           .maybeSingle();
-
 
       if (existing != null) {
         print('SubmitRatingRemoteDataSource: Existing review found -> $existing');
@@ -46,11 +45,34 @@ class SubmitRatingRemoteDataSourceImpl implements SubmitRatingRemoteDataSource {
       final reviewData = _createReviewData(reviews);
 
       print('SubmitRatingRemoteDataSource: Inserting into Supabase - $reviewData');
-      final response = await supabaseService.supabaseClient
+      await supabaseService.supabaseClient
           .from('reviews')
           .insert(reviewData);
 
-      print('SubmitRatingRemoteDataSource: Insert successful - $response');
+      // 🔹 حساب المتوسط الجديد للتقييم وتحديث جدول users
+      final targetId = reviews.role == 'client' ? reviews.freelancerId : reviews.clientId;
+      final allRatings = await supabaseService.supabaseClient
+          .from('reviews')
+          .select('rating')
+          .eq(
+        reviews.role == 'client' ? 'freelancer_id' : 'client_id',
+        targetId,
+      );
+
+      double avgRating = 0;
+      if (allRatings != null && allRatings.isNotEmpty) {
+        final sum = allRatings.fold<double>(
+            0, (prev, element) => prev + (element['rating'] as int));
+        avgRating = sum / allRatings.length;
+      }
+
+      print('SubmitRatingRemoteDataSource: Updating user rating to $avgRating');
+
+      await supabaseService.supabaseClient
+          .from('users')
+          .update({'rating': avgRating})
+          .eq('id', targetId);
+
       return const Right(null);
 
     } catch (e) {

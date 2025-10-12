@@ -8,7 +8,7 @@ class SubscribeToMessagesUseCase {
 
   SubscribeToMessagesUseCase(this.repos);
 
-  Stream<(MessageEntity, String)> call(String orderId) {
-    return repos.subscribeToMessages(orderId);
+  Stream<(MessageEntity, String)> call(String orderId, String currentUserId, String otherUserId) {
+    return repos.subscribeToMessages(orderId, currentUserId, otherUserId);
   }
 }

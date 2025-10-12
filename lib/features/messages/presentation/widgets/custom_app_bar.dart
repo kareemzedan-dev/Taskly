@@ -17,7 +17,6 @@ import '../../../shared/domain/entities/order_entity/order_entity.dart';
       }) {
     return AppBar(
       surfaceTintColor: Colors.transparent,
-      backgroundColor: Colors.white,
       toolbarHeight: 70.h,
       elevation: 0,
       shape: Border(

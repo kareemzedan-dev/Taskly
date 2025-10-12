@@ -7,6 +7,7 @@ import 'package:taskly/features/messages/presentation/widgets/chat_with_admin_vi
 
 import '../../../../config/l10n/app_localizations.dart';
 import '../../../../core/di/di.dart';
+import '../../../../core/utils/colors_manger.dart';
 import '../../../attachments/presentation/manager/download_attachments_view_model/download_attachments_view_model.dart';
 import '../../../attachments/presentation/manager/upload_attachments_view_model/upload_attachments_view_model.dart';
 import '../../../client/presentation/views/tabs/my_jobs/presentation/view_model/update_offer_status_view_model/update_offer_status_view_model.dart';
@@ -55,9 +56,9 @@ class AdminChatView extends StatelessWidget {
       ],
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: ColorsManager.primary,
           title:   Text(local.chat_with_admin),
         ) ,
-        backgroundColor: Colors.white,
         body: SafeArea(
           child: ChatWithAdminViewBody(
             currentUserId: currentUserId,

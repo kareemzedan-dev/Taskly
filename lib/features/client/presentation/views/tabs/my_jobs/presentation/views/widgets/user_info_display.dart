@@ -47,7 +47,6 @@ class UserInfoDisplay extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w600,
-                    color: Colors.black,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,

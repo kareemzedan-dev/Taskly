@@ -24,7 +24,7 @@ class AboutJobSection extends StatelessWidget {
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
             fontWeight: FontWeight.w600,
             fontSize: 16.sp,
-            color: Colors.black,
+
           ),
         ),
         SizedBox(height: 16.h),

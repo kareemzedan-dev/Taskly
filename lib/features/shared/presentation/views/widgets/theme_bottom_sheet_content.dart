@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taskly/config/l10n/app_localizations.dart';
 import 'package:taskly/core/components/custom_button.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
+
+import '../../../../../core/services/theme_notifier.dart';
 
 class ThemeBottomSheetContent extends StatefulWidget {
   final String? initialTheme;
@@ -30,13 +34,15 @@ class _ThemeBottomSheetContentState extends State<ThemeBottomSheetContent> {
     final themes = [
       {"title": local.lightTheme, "icon": Icons.light_mode},
       {"title": local.darkTheme, "icon": Icons.dark_mode},
-      {"title": local.systemDefault, "icon": Icons.settings},
+
+   //   {"title": local.systemDefault, "icon": Icons.settings},
     ];
 
     return Container(
       width: double.infinity,
+
       decoration: BoxDecoration(
-        color: ColorsManager.white,
+        color: Theme.of(context).scaffoldBackgroundColor,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(10.r),
           topRight: Radius.circular(10.r),
@@ -65,14 +71,14 @@ class _ThemeBottomSheetContentState extends State<ThemeBottomSheetContent> {
                   theme["title"] as String,
                   style: Theme.of(
                     context,
-                  ).textTheme.bodyLarge?.copyWith(color: ColorsManager.black,fontSize: 16.sp,),
+                  ).textTheme.bodyLarge?.copyWith( fontSize: 16.sp,),
                 ),
                 trailing: Container(
                   width: 20.w,
                   height: 20.w,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    border: Border.all(color: ColorsManager.black, width: 2),
+                    border: Border.all(  width: 2),
                     color:
                     isSelected ? ColorsManager.primary : Colors.transparent,
                   ),
@@ -80,7 +86,7 @@ class _ThemeBottomSheetContentState extends State<ThemeBottomSheetContent> {
                   isSelected
                       ? Icon(
                     Icons.done,
-                    color: ColorsManager.white,
+
                     size: 16.sp,
                   )
                       : null,
@@ -98,12 +104,21 @@ class _ThemeBottomSheetContentState extends State<ThemeBottomSheetContent> {
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: CustomButton(
               title: local.save,
-              ontap: () {
+              ontap: () async {
                 if (_selectedTheme != null) {
+                  // حفظ الثيم
+                  final prefs = await SharedPreferences.getInstance();
+                  await prefs.setString('app_theme', _selectedTheme!);
+
+                  // تغيير الثيم وقت الاختيار
+                  final themeNotifier = context.read<ThemeNotifier>();
+                  themeNotifier.setTheme(_selectedTheme!);
+
                   Navigator.pop(context, _selectedTheme);
                 }
               },
             ),
+
           ),
           SizedBox(height: 20.h),
         ],

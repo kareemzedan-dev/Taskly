@@ -41,7 +41,6 @@ class MyJobsTabView extends StatelessWidget {
           length: 4,
           child: Scaffold(
             appBar: AppBar(
-              backgroundColor: Colors.white,
               elevation: 0,
               shape: Border(
                 bottom: BorderSide(color: Colors.grey.shade300, width: 2),
@@ -68,8 +67,7 @@ class MyJobsTabView extends StatelessWidget {
                 ],
               ),
             ),
-            backgroundColor: Colors.white,
-            body:   TabBarView(
+             body:   TabBarView(
               children: [
                 OrderStatusCardListView(
                   animationPath: "assets/lotties/Loading.json",

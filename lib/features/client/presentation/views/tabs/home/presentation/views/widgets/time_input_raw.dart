@@ -43,7 +43,7 @@ class _TimeInputRawState extends State<TimeInputRaw> {
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly,
                 ],
-                style: TextStyle(color: Colors.black, fontSize: 14.sp),
+                style: TextStyle(  fontSize: 14.sp),
                 decoration: InputDecoration(
                   hintText: local.enter_time,
                   hintStyle: TextStyle(color: Colors.grey, fontSize: 14.sp),
@@ -54,11 +54,13 @@ class _TimeInputRawState extends State<TimeInputRaw> {
             ),
             const SizedBox(width: 8),
             DropdownButton<String>(
+              style:  TextStyle( fontSize: 14.sp ,color: Colors.grey),
               value: placeOrderViewModel.selectedTimeUnit,
               items: placeOrderViewModel.timeUnits
                   .map((e) => DropdownMenuItem(value: e, child: Text(e)))
                   .toList(),
               onChanged: (val) => setState(() {
+
                 if (val != null) placeOrderViewModel.selectedTimeUnit = val;
               }),
             ),

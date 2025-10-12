@@ -14,7 +14,7 @@ class PrivacyPolicyView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        backgroundColor: Colors.white,
+
         title: Text(
           local.privacyPolicy,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
@@ -28,7 +28,7 @@ class PrivacyPolicyView extends StatelessWidget {
         ),
         leading: GestureDetector(
           onTap: () => Navigator.pop(context),
-          child: const Icon(CupertinoIcons.back, color: Colors.black),
+          child: const Icon(CupertinoIcons.back, ),
         ),
       ),
       body: const SafeArea(child: PrivacyPolicyViewBody()),

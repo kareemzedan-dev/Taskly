@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:taskly/core/services/notification_service.dart';
-import 'package:taskly/features/shared/domain/use_cases/orders/orders_use_case.dart';
+ import 'package:taskly/features/shared/domain/use_cases/orders/orders_use_case.dart';
 import 'package:taskly/features/shared/presentation/manager/subscribe_to_order_record_view_model/subscribe_to_order_record_states.dart';
+import '../../../../../config/l10n/app_localizations.dart';
 import '../../../domain/entities/order_entity/order_entity.dart';
 
 @injectable
@@ -25,8 +25,6 @@ class SubscribeOrdersRecordViewModel extends Cubit<OrderViewModelState> {
         .listen((order) {
       print("Realtime update received: ${order.id} - ${order.status}");
 
-
-
       emit(OrderSuccess(order));
     }, onError: (error) {
       print("Error in subscription: $error");
@@ -34,47 +32,50 @@ class SubscribeOrdersRecordViewModel extends Cubit<OrderViewModelState> {
     });
   }
 
-  String getAdminMessage(OrderEntity order) {
+  String getAdminMessage(OrderEntity order, AppLocalizations local) {
     switch (order.status) {
       case OrderStatus.Pending:
-        return "System: The order is still pending. No offer has been accepted yet.";
+        return local.orderPending;
       case OrderStatus.Accepted:
-        return "System: The offer has been accepted. Waiting for payment before work can start.";
+        return local.orderAccepted;
       case OrderStatus.Paid:
-        return "System: Payment has been submitted and is under review. Work will begin as soon as possible.";
+        return local.orderPaid;
       case OrderStatus.InProgress:
-        return "System: Order payment has been confirmed, you can start working on it now.";
+        return local.orderInProgress;
       case OrderStatus.Waiting:
-        return "System: Work has been submitted to the client for review.";
+        return local.orderWaiting;
       case OrderStatus.Completed:
-        return "System: The order has been completed successfully.";
+        return local.orderCompleted;
       case OrderStatus.Cancelled:
-        return "System: This order has been cancelled.";
+        return local.orderCancelled;
       default:
-        return "Order status unknown.";
+        return local.orderUnknown;
     }
   }
 
-  String? getActionButtonText(OrderEntity order, String currentUserId) {
+  String? getActionButtonText(OrderEntity order, String currentUserId, AppLocalizations local) {
     switch (order.status) {
       case OrderStatus.Pending:
         return null;
       case OrderStatus.Accepted:
-        if (currentUserId == order.clientId) return "Pay Now ${order.budget}SAR";
+        if (currentUserId == order.clientId) {
+          return local.payNowButton(order.budget.toString());
+
+        }
         return null;
       case OrderStatus.InProgress:
-        if (currentUserId == order.freelancerId) return "Submit Delivery";
+        if (currentUserId == order.freelancerId) return local.submitDeliveryButton;
         return null;
       case OrderStatus.Waiting:
-        if (currentUserId == order.clientId) return "Work Received";
+        if (currentUserId == order.clientId) return local.workReceivedButton;
         return null;
       default:
         return null;
     }
   }
 
-  bool shouldShowButton(OrderEntity order, String currentUserId) {
-    return getActionButtonText(order, currentUserId) != null;
+  bool shouldShowButton(OrderEntity order, String currentUserId, AppLocalizations local) {
+    return getActionButtonText(order, currentUserId, local) != null;
   }
 
   @override

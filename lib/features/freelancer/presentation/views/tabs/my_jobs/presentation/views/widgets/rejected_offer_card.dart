@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../../../../../../config/l10n/app_localizations.dart';
 import '../../../../../../../../../features/freelancer/domain/entities/offer_entity/offer_entity.dart';
 import 'base_offer_card.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -14,6 +15,7 @@ class RejectedOfferCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     return BaseOfferCard(
       offerEntity: offerEntity,
       bottomWidget: GestureDetector(
@@ -25,17 +27,17 @@ class RejectedOfferCard extends StatelessWidget {
           height: 50.h,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12.r),
-            color: Colors.white,
+            color: Theme.of(context).scaffoldBackgroundColor ,
             border: Border.all(color: Colors.red, width: 2.w),
           ),
-          child: const Center(
+          child:   Center(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(FontAwesomeIcons.close, color: Colors.red),
                 SizedBox(width: 6),
                 Text(
-                  'Delete this offer',
+                  local.delete_this_offer,
                   style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16, color: Colors.red),
                 ),
               ],

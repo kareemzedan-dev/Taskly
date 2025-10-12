@@ -21,12 +21,13 @@ class ChangePasswordView extends StatelessWidget {
           child: const SafeArea(child: ChangePasswordViewBody())),
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        backgroundColor: Colors.white,
+
         title: Text(
           local.change_password,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
             fontWeight: FontWeight.w600,
             fontSize: 18.sp,
+
           ),
         ),
         bottom:  PreferredSize(
@@ -35,7 +36,7 @@ class ChangePasswordView extends StatelessWidget {
         ),
         leading: GestureDetector(
           onTap: () => Navigator.pop(context),
-          child: const Icon(CupertinoIcons.back, color: Colors.black),
+          child: const Icon(CupertinoIcons.back, ),
         ),
       ),
     );

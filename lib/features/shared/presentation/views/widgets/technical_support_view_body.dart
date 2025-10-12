@@ -60,7 +60,8 @@ class TechnicalSupportViewBody extends StatelessWidget {
                 width: double.infinity,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.r),
-                  color: Colors.white,
+                  color: Theme.of(context).scaffoldBackgroundColor,
+
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),

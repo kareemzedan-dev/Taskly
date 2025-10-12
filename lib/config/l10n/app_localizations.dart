@@ -3575,11 +3575,113 @@ abstract class AppLocalizations {
   /// **'Admin Support'**
   String get admin_support;
 
+  /// No description provided for @checkOrderStatusMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Please check the order status in the Messages section and contact the client if needed.'**
+  String get checkOrderStatusMessage;
+
   /// No description provided for @chat_with_admin_support.
   ///
   /// In en, this message translates to:
   /// **'Chat with Admin Support'**
   String get chat_with_admin_support;
+
+  /// No description provided for @offerCompletedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This offer has been completed. You can leave a review or check the order details in Messages.'**
+  String get offerCompletedMessage;
+
+  /// No description provided for @orderPending.
+  ///
+  /// In en, this message translates to:
+  /// **'System: The order is still pending. No offer has been accepted yet.'**
+  String get orderPending;
+
+  /// No description provided for @orderAccepted.
+  ///
+  /// In en, this message translates to:
+  /// **'System: The offer has been accepted. Waiting for payment before work can start.'**
+  String get orderAccepted;
+
+  /// No description provided for @orderPaid.
+  ///
+  /// In en, this message translates to:
+  /// **'System: Payment has been submitted and is under review. Work will begin as soon as possible.'**
+  String get orderPaid;
+
+  /// No description provided for @orderInProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'System: Order payment has been confirmed, you can start working on it now.'**
+  String get orderInProgress;
+
+  /// No description provided for @orderWaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'System: Work has been submitted to the client for review.'**
+  String get orderWaiting;
+
+  /// No description provided for @orderCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'System: The order has been completed successfully.'**
+  String get orderCompleted;
+
+  /// No description provided for @orderCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'System: This order has been cancelled.'**
+  String get orderCancelled;
+
+  /// No description provided for @orderUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Order status unknown.'**
+  String get orderUnknown;
+
+  /// No description provided for @payNowButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay Now {budget}SAR'**
+  String payNowButton(Object budget);
+
+  /// No description provided for @submitDeliveryButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit Delivery'**
+  String get submitDeliveryButton;
+
+  /// No description provided for @workReceivedButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Work Received'**
+  String get workReceivedButton;
+
+  /// No description provided for @submitDeliveryConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to submit the delivery?'**
+  String get submitDeliveryConfirmation;
+
+  /// No description provided for @workReceivedConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you have received the work?'**
+  String get workReceivedConfirmation;
+
+  /// No description provided for @rateClient.
+  ///
+  /// In en, this message translates to:
+  /// **'Rate Client'**
+  String get rateClient;
+
+  /// No description provided for @rateFreelancer.
+  ///
+  /// In en, this message translates to:
+  /// **'Rate Freelancer'**
+  String get rateFreelancer;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

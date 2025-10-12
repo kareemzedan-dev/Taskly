@@ -21,8 +21,8 @@ class PaymentStatusBottomSheet extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: MediaQuery.of(context).size.height * 0.9,
-      decoration: const BoxDecoration(
-        color: Colors.white,
+      decoration:   BoxDecoration(
+        color: Theme.of(context).textTheme.bodyLarge?.color ,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(20),
           topRight: Radius.circular(20),

@@ -3,7 +3,7 @@ import 'package:taskly/core/errors/failures.dart';
 import 'package:taskly/features/messages/domain/entities/message_entity.dart';
 
 abstract class GetOrderMessagesRepo {
-    Future<Either<Failures, List<MessageEntity>>> getOrderMessages(String orderId);
+    Future<Either<Failures, List<MessageEntity>>> getOrderMessages(String orderId, String currentUserId, String otherUserId);
 
 
 }

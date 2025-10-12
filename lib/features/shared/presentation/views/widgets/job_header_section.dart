@@ -32,7 +32,6 @@ class JobHeader extends StatelessWidget {
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   fontWeight: FontWeight.w600,
                   fontSize: 18.sp,
-                  color: Colors.black,
                 ),
                 softWrap: true,
               ),
@@ -51,7 +50,6 @@ class JobHeader extends StatelessWidget {
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       fontWeight: FontWeight.w500,
                       fontSize: 12.sp,
-                      color: Colors.white,
                     ),
                   ),
                 ),

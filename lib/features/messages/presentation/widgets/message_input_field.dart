@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../config/l10n/app_localizations.dart';
+
 
 class MessageInputField extends StatelessWidget {
   final TextEditingController controller;
@@ -17,20 +19,23 @@ class MessageInputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     return Container(
       decoration: BoxDecoration(
-        color: Colors.grey.shade100,
+
         borderRadius: BorderRadius.circular(30.r),
-        border: Border.all(color: Colors.grey.shade300),
+        border: Border.all( ),
       ),
       child: TextField(
+        style:  Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 16.sp ),
+
         controller: controller,
         onChanged: onChanged,
         minLines: 1,
         maxLines: 5,
         decoration: InputDecoration(
-          hintText: "Type a message",
-          hintStyle: TextStyle(color: Colors.grey.shade500),
+          hintText: "اكتب رسالتك",
+          hintStyle:Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 16.sp, ),
           border: InputBorder.none,
           contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
         ),

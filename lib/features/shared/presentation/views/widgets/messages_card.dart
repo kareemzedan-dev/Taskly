@@ -119,7 +119,7 @@ class MessagesCard extends StatelessWidget {
                             padding: EdgeInsets.symmetric(
                                 horizontal: 6.w, vertical: 4.h),
                             decoration: BoxDecoration(
-                              color: Colors.white,
+
                               border: Border.all(color: ColorsManager.primary),
                               borderRadius: BorderRadius.circular(12.r),
                             ),

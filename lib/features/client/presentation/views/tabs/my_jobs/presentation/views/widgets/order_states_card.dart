@@ -50,14 +50,14 @@ class OrderStatesCard extends StatelessWidget {
       create: (_) => getIt<GetOffersViewModel>()..init(order.id),
       child: Card(
         elevation: 10,
+
         child: Container(
           width: double.infinity,
           decoration: BoxDecoration(
-            color: Colors.white,
             borderRadius: BorderRadius.circular(10.r),
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
+                color: Theme.of(context).scaffoldBackgroundColor,
                 spreadRadius: 2,
                 blurRadius: 5,
                 offset: const Offset(0, 3),
@@ -96,6 +96,7 @@ class OrderStatesCard extends StatelessWidget {
                         onTap: () {
                           final viewModel = context.read<GetOffersViewModel>();
                           showModalBottomSheet(
+
                               context: context,
                               isScrollControlled: true,
                               shape: const RoundedRectangleBorder(
@@ -171,6 +172,7 @@ class OrderStatesCard extends StatelessWidget {
                     showModalBottomSheet(
                       context: context,
                       isScrollControlled: true,
+                      backgroundColor:  Theme.of(context).scaffoldBackgroundColor,
                       shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.vertical(
                           top: Radius.circular(20),

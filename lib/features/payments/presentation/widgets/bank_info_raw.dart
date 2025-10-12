@@ -68,7 +68,7 @@ class BankInfoRow extends StatelessWidget {
             ),
             child: Icon(
               Icons.copy,
-              color: Colors.white,
+
               size: 20.sp,
             ),
           ),

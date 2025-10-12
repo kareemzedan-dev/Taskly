@@ -26,7 +26,7 @@ class AttachmentsSection extends StatelessWidget {
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
             fontWeight: FontWeight.w600,
             fontSize: 16.sp,
-            color: Colors.black,
+
           ),
         ),
         SizedBox(height: 8.h),
@@ -34,7 +34,7 @@ class AttachmentsSection extends StatelessWidget {
           width: double.infinity,
           height: 200.h,
           decoration: BoxDecoration(
-            color: Colors.grey.shade300,
+            color: Colors.grey.shade500,
             borderRadius: BorderRadius.circular(10.r),
           ),
           child: AttachmentCardViewerListView(

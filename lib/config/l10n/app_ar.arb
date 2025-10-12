@@ -613,5 +613,22 @@
   "cannotWithdrawMoreThanBalance": "لا يمكنك سحب أكثر من رصيدك المتاح {balance} ريال",
   "cannotWithdrawMoreThanBalance_placeholder": "{balance}"
 ,  "admin_support": "دعم المسؤول",
-  "chat_with_admin_support": "الدردشة مع الدعم"
+  "chat_with_admin_support": "الدردشة مع الدعم",
+  "checkOrderStatusMessage": "يرجى التحقق من حالة الطلب في قسم الرسائل والتواصل مع العميل إذا لزم الأمر.",
+  "offerCompletedMessage": "تم إتمام هذا العرض. يمكنك ترك تقييم أو التحقق من تفاصيل الطلب في الرسائل."
+  ,  "orderPending": "النظام: الطلب مازال قيد الانتظار. لم يتم قبول أي عرض بعد.",
+  "orderAccepted": "النظام: تم قبول العرض. في انتظار الدفع قبل بدء العمل.",
+  "orderPaid": "النظام: تم تقديم الدفع وهو تحت المراجعة. سيبدأ العمل في أقرب وقت ممكن.",
+  "orderInProgress": "النظام: تم تأكيد الدفع، يمكنك البدء في العمل الآن.",
+  "orderWaiting": "النظام: تم تسليم العمل للعميل للمراجعة.",
+  "orderCompleted": "النظام: تم إتمام الطلب بنجاح.",
+  "orderCancelled": "النظام: تم إلغاء هذا الطلب.",
+  "orderUnknown": "حالة الطلب غير معروفة.",
+  "payNowButton": "ادفع الآن {budget} ريال",
+  "submitDeliveryButton": "تسليم العمل",
+  "workReceivedButton": "تم استلام العمل",
+  "submitDeliveryConfirmation": "هل أنت متأكد أنك تريد تسليم العمل؟",
+  "workReceivedConfirmation": "هل أنت متأكد أنك استلمت العمل؟",
+  "rateClient": "تقييم العميل",
+  "rateFreelancer": "تقييم المستقل"
 }

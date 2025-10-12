@@ -20,12 +20,12 @@ class MessagesViewModel extends Cubit<MessagesStates> {
   List<MessageEntity> _messages = [];
 
   /// جلب الرسائل القديمة + الاشتراك في الجديدة
-  Future<void> loadAndSubscribeMessages(String orderId) async {
+  Future<void> loadAndSubscribeMessages(String orderId, String currentUserId, String otherUserId) async {
     try {
       emit(MessagesLoading());
 
       // 1️⃣ تحميل الرسائل القديمة
-      final result = await getMessagesUseCase.call(orderId);
+      final result = await getMessagesUseCase.call(orderId, currentUserId, otherUserId);
       result.fold(
             (failure) => emit(MessagesError(failure: failure)),
             (messages) {
@@ -34,7 +34,7 @@ class MessagesViewModel extends Cubit<MessagesStates> {
           emit(MessagesSuccess(messages: _messages));
 
           // 2️⃣ بعد تحميلها بنبدأ الاشتراك في الجديدة
-          _subscribeToMessages(orderId);
+          _subscribeToMessages(orderId, currentUserId , otherUserId);
         },
       );
     } catch (e) {
@@ -43,10 +43,10 @@ class MessagesViewModel extends Cubit<MessagesStates> {
   }
 
   /// الاشتراك في التحديثات اللحظية
-  void _subscribeToMessages(String orderId) {
+  void _subscribeToMessages(String orderId, String currentUserId, String otherUserId) {
     _subscription?.cancel();
 
-    _subscription = subscribeToMessagesUseCase.call(orderId).listen(
+    _subscription = subscribeToMessagesUseCase.call(orderId, currentUserId, otherUserId).listen(
           (event) {
         final (message, action) = event;
 

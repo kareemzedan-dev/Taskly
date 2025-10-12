@@ -100,22 +100,7 @@ class _ChangePasswordViewBodyState extends State<ChangePasswordViewBody> {
                           },
                           isEnable: state is! ChangePasswordViewModelLoadingState,
                         ),
-                        SizedBox(height: 20.h),
-                        CustomTextFormField(
-                          textEditingController: confirmPasswordController,
-                          hintText: local.enterConfirmPassword,
-                          iconShow: true,
-                          keyboardType: TextInputType.visiblePassword,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return local.enterConfirmPassword;
-                            } else if (value != newPasswordController.text) {
-                              return local.passwordsNotMatch;
-                            }
-                            return null;
-                          },
-                          isEnable: state is! ChangePasswordViewModelLoadingState,
-                        ),
+
                         SizedBox(height: 100.h),
                         CustomButton(
                           title: local.changePassword,

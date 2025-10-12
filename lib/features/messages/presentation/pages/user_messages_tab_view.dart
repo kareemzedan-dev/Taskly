@@ -28,9 +28,7 @@ class UserMessagesTabView extends StatelessWidget {
           bottom: BorderSide(color: Colors.grey.shade300, width: 2),
         ),
         centerTitle: true,
-        backgroundColor: Colors.white,
       ),
-      backgroundColor: Colors.white,
       body: SafeArea(
           child: SingleChildScrollView(
         child: Column(

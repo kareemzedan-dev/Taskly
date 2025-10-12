@@ -15,12 +15,12 @@ class SubscribeToMessagesViewModel extends Cubit<SubscribeToMessagesStates> {
 
   StreamSubscription<(MessageEntity, String)>? _subscription;
 
-  Future<void> subscribeToMessages(String orderId) async {
+  Future<void> subscribeToMessages(String orderId, String currentUserId, String otherUserId) async {
     try {
       emit(SubscribeToMessagesStatesLoading());
 
       // Start listening to the stream
-      _subscription = subscribeToMessagesUseCase.call(orderId).listen(
+      _subscription = subscribeToMessagesUseCase.call(orderId, currentUserId, otherUserId ).listen(
             (event) {
           final (message, action) = event;
 

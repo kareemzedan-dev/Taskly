@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:taskly/features/freelancer/domain/entities/offer_entity/offer_entity.dart';
+import '../../../../../../../../../config/l10n/app_localizations.dart';
 import '../../../../../../../../../core/di/di.dart';
 import '../../../../../../../../../core/utils/colors_manger.dart';
 import '../../../../../../../../client/presentation/views/tabs/my_jobs/presentation/views/widgets/expandable_text.dart';
@@ -29,7 +30,7 @@ class BaseOfferCard extends StatelessWidget {
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).scaffoldBackgroundColor ,
           border: Border.all(color: Colors.grey.shade300, width: 2.w),
           borderRadius: BorderRadius.circular(10.r),
         ),
@@ -114,11 +115,13 @@ class BaseOfferCard extends StatelessWidget {
   }
 
   Widget _buildAmountRow(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
+
     return Row(
       children: [
         Icon(Icons.attach_money_outlined, size: 15.sp),
         Text(
-          "${offerEntity.offerAmount} SAR",
+          "${offerEntity.offerAmount} ${local.sar}",
           style: Theme.of(context).textTheme.bodyLarge,
         ),
       ],

@@ -15,7 +15,7 @@ class FreelancerProfileViewTab extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        backgroundColor: Colors.white,
+
         title: Text(
           local.profile,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
@@ -34,7 +34,7 @@ class FreelancerProfileViewTab extends StatelessWidget {
           ),
         ],
       ),
-      backgroundColor: Colors.white,
+
       body: const FreelancerProfileViewBody(),
     );
   }

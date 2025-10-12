@@ -45,7 +45,7 @@ class TrackingOfferCard extends StatelessWidget {
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).scaffoldBackgroundColor ,
           border: Border.all(color: Colors.grey.shade300, width: 2.w),
           borderRadius: BorderRadius.circular(10.r),
         ),
@@ -55,8 +55,8 @@ class TrackingOfferCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (isAccepted)
-                const AdminMessageCard(
-                  message: "Please check the order status in the Messages section and contact the client if needed.",
+                  AdminMessageCard(
+                  message: local.checkOrderStatusMessage,
                 ),
 
               SizedBox(height: 5.h),
@@ -138,7 +138,7 @@ class TrackingOfferCard extends StatelessWidget {
                 children: [
                   Icon(Icons.attach_money_outlined, size: 15.sp),
                   Text(
-                    "${offerEntity.offerAmount} SAR",
+                    "${offerEntity.offerAmount} ${local.sar}",
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(),
                   ),
                 ],
@@ -155,7 +155,7 @@ class TrackingOfferCard extends StatelessWidget {
                     height: 50.h,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12.r),
-                      color: Colors.white,
+                      color: Theme.of(context).scaffoldBackgroundColor ,
                       border: Border.all(color: Colors.red, width: 2.w),
                     ),
                     child:   Center(

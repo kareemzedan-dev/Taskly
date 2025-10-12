@@ -17,10 +17,12 @@ class OrderView extends StatelessWidget {
     final local = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        surfaceTintColor: Colors.white,
+        surfaceTintColor: Colors.transparent,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+
         leading: GestureDetector(
           onTap: () => Navigator.pop(context),
-          child: const Icon(CupertinoIcons.back, ),
+          child:   Icon(CupertinoIcons.back, ),
         ),
         title: Text(
           local.service_order,

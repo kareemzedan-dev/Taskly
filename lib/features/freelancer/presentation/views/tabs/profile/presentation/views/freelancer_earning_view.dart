@@ -19,7 +19,7 @@ class FreelancerEarningView extends StatelessWidget {
     return  Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        backgroundColor: Colors.white,
+
         title: Text(
             local.earnings,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
@@ -29,7 +29,7 @@ class FreelancerEarningView extends StatelessWidget {
         ),
    leading: GestureDetector(
           onTap: () => Navigator.pop(context),
-          child: const Icon(CupertinoIcons.back, color: Colors.black),
+          child: const Icon(CupertinoIcons.back ),
         ),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1.0),
@@ -40,7 +40,7 @@ class FreelancerEarningView extends StatelessWidget {
           bottom: BorderSide(color: Colors.grey.shade300, width: 2),
         ),
       ),
-      backgroundColor: Colors.white,
+
       body:   SafeArea(child: BlocProvider(
           create:  (context) => getIt<GetTotalEarningsViewModel>()..getTotalEarnings(SharedPrefHelper.getString(StringsManager.idKey)!),
           child: FreelancerEarningViewBody())),

@@ -4,11 +4,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/config/routes/routes_manager.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/favourite_orders_view_body.dart';
 
+import '../../../../../../../../config/l10n/app_localizations.dart';
+
 class FavouriteOrdersView extends StatelessWidget {
   const FavouriteOrdersView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     return WillPopScope(
       onWillPop: () async {
 
@@ -18,9 +21,9 @@ class FavouriteOrdersView extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           surfaceTintColor: Colors.transparent,
-          backgroundColor: Colors.white,
+
           title: Text(
-            'Favourite Orders',
+            "الطلبات المفضله",
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
               fontWeight: FontWeight.w600,
               fontSize: 18.sp,
@@ -33,10 +36,10 @@ class FavouriteOrdersView extends StatelessWidget {
           leading: GestureDetector(
             onTap: () => Navigator.pushReplacementNamed(
                 context, RoutesManager.freelancerHome),
-            child: const Icon(CupertinoIcons.back, color: Colors.black),
+            child: const Icon(CupertinoIcons.back ),
           ),
         ),
-        backgroundColor: Colors.white,
+
         body: const SafeArea(child: FavouriteOrdersViewBody()),
       ),
     );

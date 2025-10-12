@@ -96,7 +96,7 @@ class _AttachmentsFilesSectionState extends State<AttachmentsFilesSection> {
                                 .textTheme
                                 .bodyMedium
                                 ?.copyWith(
-                              color: Colors.black,
+
                               fontSize: 14.sp,
                               fontWeight: FontWeight.w500,
                             ),
@@ -141,7 +141,7 @@ class _AttachmentsFilesSectionState extends State<AttachmentsFilesSection> {
                                     .textTheme
                                     .bodyMedium
                                     ?.copyWith(
-                                    color: Colors.black,
+
                                     fontSize: 14.sp,
                                     fontWeight: FontWeight.w500),
                               ),
@@ -229,7 +229,7 @@ class _AttachmentsFilesSectionState extends State<AttachmentsFilesSection> {
                                   color: Colors.orange, size: 20),
                             SizedBox(width: 8.w),
                             IconButton(
-                              icon: const Icon(Icons.close, size: 18),
+                              icon: const Icon(Icons.close, size: 18,color: Colors.grey,),
                               onPressed: () => _onDeleteFile(file, local),
                             )
                           ],

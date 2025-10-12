@@ -27,15 +27,13 @@ class FileViewerView extends StatelessWidget {
   Widget build(BuildContext context) {
     final local = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
         elevation: 0,
         shape: Border(
           bottom: BorderSide(color: Colors.grey.shade300, width: 2),
         ),
         leading: IconButton(
-          icon: const Icon(CupertinoIcons.arrow_left, color: Colors.black),
+          icon: const Icon(CupertinoIcons.arrow_left ),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(

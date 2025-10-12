@@ -320,7 +320,8 @@ class _ChatInputFieldState extends State<ChatInputField> {
         minLines: 1,
         maxLines: 5,
         decoration: InputDecoration(
-          hintText: "Type a message",
+          hintText: "اكتب رسالتك...",
+
           hintStyle: TextStyle(color: Colors.grey.shade500),
           border: InputBorder.none,
           contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
@@ -485,10 +486,10 @@ class _ChatInputFieldState extends State<ChatInputField> {
                 top: 8.h,
               ),
               decoration: BoxDecoration(
-                color: Colors.white,
+
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+
                     blurRadius: 8,
                     offset: const Offset(0, -2),
                   ),

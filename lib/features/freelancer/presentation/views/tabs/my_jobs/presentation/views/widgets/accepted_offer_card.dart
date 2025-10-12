@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../../../../../../config/l10n/app_localizations.dart';
 import '../../../../../../../../../config/routes/routes_manager.dart';
 import '../../../../../../../../../features/freelancer/domain/entities/offer_entity/offer_entity.dart';
 import '../../../../find_work/presentation/views/widgets/action_row.dart';
@@ -12,12 +13,13 @@ class AcceptedOfferCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     return BaseOfferCard(
       offerEntity: offerEntity,
       bottomWidget: ActionsRow(
         actions: [
           ActionItem(
-            title: "View details",
+            title: local.viewDetails,
             icon: Icons.remove_red_eye_outlined,
             onTap: () {
               Navigator.pushNamed(
@@ -31,9 +33,9 @@ class AcceptedOfferCard extends StatelessWidget {
           ),
         ],
       ),
-      topWidget: const AdminMessageCard(
+      topWidget:   AdminMessageCard(
         message:
-            "Please check the order status in the Messages section and contact the client if needed.",
+          local.checkOrderStatusMessage,
       ),
     );
   }

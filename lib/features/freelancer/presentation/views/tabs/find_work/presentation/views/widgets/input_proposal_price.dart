@@ -55,7 +55,7 @@ class InputProposalPrice extends StatelessWidget {
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10.r),
-              color: ColorsManager.white,
+              color: Theme.of(context).scaffoldBackgroundColor,
             ),
             child: Text(
               local.sar  ,

@@ -165,7 +165,7 @@ class _UserAccountViewBodyState extends State<UserAccountViewBody> {
                             onTap: _pickImage,
                             child: Container(
                               decoration: const BoxDecoration(
-                                color: Colors.white,
+
                                 shape: BoxShape.circle,
                               ),
                               padding: const EdgeInsets.all(4),

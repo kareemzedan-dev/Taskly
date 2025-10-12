@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:taskly/features/freelancer/domain/entities/offer_entity/offer_entity.dart';
+import '../../../../../../../../../config/l10n/app_localizations.dart';
 import '../../../../../../../../client/presentation/views/tabs/my_jobs/presentation/view_model/update_offer_status_view_model/update_offer_status_view_model.dart';
 import 'base_offer_card.dart';
 
@@ -13,6 +14,7 @@ class CompletedOfferCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     return BaseOfferCard(
       offerEntity: offerEntity,
       topWidget: Padding(
@@ -25,8 +27,8 @@ class CompletedOfferCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
             border: Border.all(color: Colors.green, width: 1),
           ),
-          child: const Text(
-            "This offer has been completed. You can leave a review or check the order details in Messages.",
+          child:   Text(
+           local.offerCompletedMessage,
             style: TextStyle(
               color: Colors.green,
               fontWeight: FontWeight.w600,
@@ -44,17 +46,17 @@ class CompletedOfferCard extends StatelessWidget {
           height: 50.h,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12.r),
-            color: Colors.white,
+            color: Theme.of(context).scaffoldBackgroundColor ,
             border: Border.all(color: Colors.red, width: 2.w),
           ),
-          child: const Center(
+          child:   Center(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(FontAwesomeIcons.close, color: Colors.red),
                 SizedBox(width: 6),
                 Text(
-                  'Delete this offer',
+                 local.delete_this_offer,
                   style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16, color: Colors.red),
                 ),
               ],

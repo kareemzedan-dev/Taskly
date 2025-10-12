@@ -20,7 +20,6 @@ class RequestWithdrawalView extends StatelessWidget {
     return  Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        backgroundColor: Colors.white,
         title: Text(
           local.requestedWithdraw,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
@@ -34,10 +33,9 @@ class RequestWithdrawalView extends StatelessWidget {
         ),
         leading: GestureDetector(
           onTap: () => Navigator.pop(context),
-          child: const Icon(CupertinoIcons.back, color: Colors.black),
+          child: const Icon(CupertinoIcons.back, ),
         ),
       ),
-      backgroundColor: Colors.white,
       body: MultiBlocProvider(providers:
     [
       BlocProvider(create: (context) => getIt<GetTotalEarningsViewModel>()..getTotalEarnings(SharedPrefHelper.getString(StringsManager.idKey)!),),

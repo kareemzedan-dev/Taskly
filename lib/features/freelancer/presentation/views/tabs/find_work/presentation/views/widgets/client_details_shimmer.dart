@@ -26,9 +26,9 @@ class ClientDetailsShimmer extends StatelessWidget {
               Container(
                 width: 60.w,
                 height: 60.w,
-                decoration: const BoxDecoration(
+                decoration:   BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.white,
+                  color:Theme.of(context).scaffoldBackgroundColor,
                 ),
               ),
               SizedBox(width: 16.w),
@@ -38,14 +38,13 @@ class ClientDetailsShimmer extends StatelessWidget {
                   Container(
                     height: 14.h,
                     width: 100.w,
-                    color: Colors.white,
+                    color: Theme.of(context).scaffoldBackgroundColor
                   ),
                   SizedBox(height: 8.h),
                   Container(
                     height: 12.h,
                     width: 150.w,
-                    color: Colors.white,
-                  ),
+                    color: Theme.of(context).scaffoldBackgroundColor),
                 ],
               ),
             ],

@@ -15,7 +15,7 @@ class FreelancerMyJobsTabView extends StatelessWidget {
       length: 4,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
+
           elevation: 0,
           shape: Border(
             bottom: BorderSide(color: Colors.grey.shade300, width: 2),
@@ -31,7 +31,7 @@ class FreelancerMyJobsTabView extends StatelessWidget {
             tabs: [local.pending, local.accepted, local.completed, local.rejected],
           ),
         ),
-        backgroundColor: Colors.white,
+
         body: const MyJobsTabViewBody(),
       ),
     );

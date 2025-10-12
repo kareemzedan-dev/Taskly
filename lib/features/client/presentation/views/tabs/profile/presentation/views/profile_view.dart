@@ -15,12 +15,13 @@ class ClientProfileViewTab extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        backgroundColor: Colors.white,
+
         title: Text(
          local.profile,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
             fontWeight: FontWeight.w700,
             fontSize: 20.sp,
+
           ),
         ),
         elevation: 0,
@@ -34,7 +35,7 @@ class ClientProfileViewTab extends StatelessWidget {
           ),
         ],
       ),
-      backgroundColor: Colors.white,
+
       body: const ClientProfileViewBody(),
     );
   }

@@ -4,6 +4,8 @@ import 'package:taskly/features/shared/domain/entities/order_entity/order_entity
 
 import '../../../../../../../../../config/l10n/app_localizations.dart';
 import '../../../../../../../../../config/routes/routes_manager.dart';
+import '../../../../../../../../../core/cache/shared_preferences.dart';
+import '../../../../../../../../../core/utils/strings_manager.dart';
 
 class OfferActions extends StatelessWidget {
  const OfferActions({
@@ -40,7 +42,10 @@ class OfferActions extends StatelessWidget {
             onTap: () {
               Navigator.pushNamed(context, RoutesManager.chatView, arguments: {
                 "userName": userName,
-                "userImage": userImage,
+                "currentUserAvatar": SharedPrefHelper.getString(StringsManager.profileImageKey),
+                "receiverAvatar": userImage,
+
+
                 "order": order,
                 "currentUserId": currentUserId,
                 "receiverId": receiverId,

@@ -415,6 +415,7 @@ class Assets {
   static const String servicesNotificationService = 'lib/core/services/notification_service.dart';
   static const String servicesPickImageFromCamera = 'lib/core/services/pick_image_from_camera.dart';
   static const String servicesSupabaseService = 'lib/core/services/supabase_service.dart';
+  static const String servicesThemeNotifier = 'lib/core/services/theme_notifier.dart';
   static const String servicesUploadProfileImage = 'lib/core/services/upload_profile_image.dart';
   static const String servicesUserStatusService = 'lib/core/services/user_status_service.dart';
   static const String servicesViewModelServicesViewModel = 'lib/features/client/presentation/views/tabs/home/presentation/view_model/services_view_model/services_view_model.dart';

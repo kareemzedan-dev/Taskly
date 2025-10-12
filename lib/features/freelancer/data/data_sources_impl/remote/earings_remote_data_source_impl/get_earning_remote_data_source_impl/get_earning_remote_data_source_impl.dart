@@ -19,7 +19,7 @@ class GetEarningRemoteDataSourceImpl implements GetEarningRemoteDataSource {
       }
       final freelancerData = await supabaseService.supabaseClient
           .from('freelancers')
-          .select('freelancer_balance ')
+          .select('freelancer_balance')
           .eq('id', freelancerId)
           .single();
 

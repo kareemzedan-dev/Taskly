@@ -19,7 +19,6 @@ class DescriptionSection extends StatelessWidget {
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 fontWeight: FontWeight.w600,
                 fontSize: 16.sp,
-                color: Colors.black,
               ),
         ),
         SizedBox(height: 8.h),
@@ -37,7 +36,7 @@ class DescriptionSection extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     fontSize: 14.sp,
                     height: 1.5,
-                    color: Colors.grey.shade800,
+
                   ),
               softWrap: true,
               textAlign: TextAlign.justify,

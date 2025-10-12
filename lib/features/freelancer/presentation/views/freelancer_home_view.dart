@@ -36,7 +36,7 @@ class _FreelancerHomeView extends State<FreelancerHomeView> {
     final local = AppLocalizations.of(context)!;
     
     return Scaffold(
-      backgroundColor: Colors.white,
+
       body: SafeArea(child: items[currentIndex]),
       bottomNavigationBar: CustomBottomNavigationBar(
         firstTabName: local.find_work,

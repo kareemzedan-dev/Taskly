@@ -82,7 +82,7 @@ class UserMessagesTabViewBody extends StatelessWidget {
                                       arguments: {
                                         "userName": fullName,
                                         "currentUserAvatar": SharedPrefHelper.getString(StringsManager.profileImageKey),
-                                        "receiverAvatar":avatarUrl ,
+                                        "receiverAvatar":avatarUrl,
 
                                         "order": order,
                                         "currentUserId": SharedPrefHelper.getString(StringsManager.idKey)!,
@@ -133,6 +133,9 @@ class UserMessagesTabViewBody extends StatelessWidget {
                                         "order": conversation.order,
                                         "currentUserId": SharedPrefHelper.getString(StringsManager.idKey)!,
                                         "receiverId": user.id,
+                                        "currentUserAvatar": SharedPrefHelper.getString(StringsManager.profileImageKey),
+                                        "receiverAvatar": avatarUrl,
+
                                       },
                                     );
                                   },

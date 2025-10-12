@@ -17,7 +17,7 @@ class UserInfoSectionShimmer extends StatelessWidget {
             width: 80.r,
             height: 80.r,
             decoration: const BoxDecoration(
-              color: Colors.white,
+
               shape: BoxShape.circle,
             ),
           ),
@@ -28,25 +28,25 @@ class UserInfoSectionShimmer extends StatelessWidget {
               Container(
                 width: 120.w,
                 height: 16.h,
-                color: Colors.white,
+
               ),
               SizedBox(height: 8.h),
               Container(
                 width: 180.w,
                 height: 14.h,
-                color: Colors.white,
+
               ),
               SizedBox(height: 8.h),
               Container(
                 width: 100.w,
                 height: 14.h,
-                color: Colors.white,
+
               ),
               SizedBox(height: 8.h),
               Container(
                 width: 140.w,
                 height: 14.h,
-                color: Colors.white,
+
               ),
             ],
           )

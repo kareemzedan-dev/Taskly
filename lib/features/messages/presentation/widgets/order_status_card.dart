@@ -62,7 +62,7 @@ class OrderStatusCard extends StatelessWidget {
                   child: Text(
                     buttonText!,
                     style: TextStyle(
-                      color: Colors.white,
+
                       fontSize: 16.sp,
                       fontWeight: FontWeight.bold,
                     ),

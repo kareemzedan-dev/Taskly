@@ -40,7 +40,7 @@ class _LanguageBottomSheetContentState extends State<LanguageBottomSheetContent>
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: ColorsManager.white,
+        color: Theme.of(context).scaffoldBackgroundColor,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(10.r),
           topRight: Radius.circular(10.r),
@@ -64,7 +64,7 @@ class _LanguageBottomSheetContentState extends State<LanguageBottomSheetContent>
                 title: Text(
                   lang["title"]!,
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color: ColorsManager.black,
+
                     fontSize: 16.sp,
                   ),
                 ),

@@ -10,8 +10,8 @@ class GetOrderMessagesUseCase {
 
   GetOrderMessagesUseCase(this.repository);
 
-  Future<Either<Failures, List<MessageEntity>>> call(String orderId) {
-    return repository.getOrderMessages(orderId);
+  Future<Either<Failures, List<MessageEntity>>> call(String orderId, String currentUserId, String otherUserId) {
+    return repository.getOrderMessages(orderId, currentUserId, otherUserId);
   }
  
 }

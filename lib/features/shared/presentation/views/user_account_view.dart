@@ -17,7 +17,7 @@ class UserAccountView extends StatelessWidget {
       body: SafeArea(child: UserAccountViewBody( userInfoEntity: userInfoEntity)),
       appBar:  AppBar(
         surfaceTintColor: Colors.transparent,
-        backgroundColor: Colors.white,
+
         title: Text(
           local.account,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
@@ -31,7 +31,7 @@ class UserAccountView extends StatelessWidget {
         ),
         leading: GestureDetector(
           onTap: () => Navigator.pop(context),
-          child: const Icon(CupertinoIcons.back, color: Colors.black),
+          child: const Icon(CupertinoIcons.back, ),
         ),
       ),
     );

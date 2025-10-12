@@ -14,10 +14,10 @@ import 'package:taskly/features/shared/domain/entities/order_entity/order_entity
 import 'package:taskly/features/shared/presentation/manager/subscribe_to_order_record_view_model/subscribe_to_order_record_view_model.dart';
 import 'package:taskly/features/messages/presentation/widgets/admin_message_card.dart';
 import 'package:taskly/core/di/di.dart';
+import '../../../../config/l10n/app_localizations.dart';
 import '../../../reviews/presentation/manager/submit_rating_view_model/submit_rating_view_model.dart';
 import '../../../shared/presentation/manager/subscribe_to_order_record_view_model/subscribe_to_order_record_states.dart';
 import 'order_status_card.dart';
-
 class ChatHeaderSection extends StatelessWidget {
   final OrderEntity order;
   final String currentUserId;
@@ -46,14 +46,15 @@ class ChatHeaderSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
+
     return BlocBuilder<SubscribeOrdersRecordViewModel, OrderViewModelState>(
       builder: (context, state) {
-        final orderData =
-        state is OrderSuccess ? state.order : order;
+        final orderData = state is OrderSuccess ? state.order : order;
         final viewModel = context.read<SubscribeOrdersRecordViewModel>();
-        final adminMessage = viewModel.getAdminMessage(orderData);
+        final adminMessage = viewModel.getAdminMessage(orderData, local);
         final buttonText =
-        viewModel.getActionButtonText(orderData, currentUserId);
+        viewModel.getActionButtonText(orderData, currentUserId, local);
 
         final freelancerRatingButton =
             orderData.status.name == "Completed" &&
@@ -68,18 +69,17 @@ class ChatHeaderSection extends StatelessWidget {
               buttonText: buttonText,
               onButtonPressed: buttonText != null
                   ? () {
-                if (buttonText == "Pay Now ${orderData.budget}SAR") {
+                if (buttonText == local.payNowButton(orderData.budget.toString())) {
                   Navigator.pushNamed(
                     context,
                     RoutesManager.clientPaymentsView,
                     arguments: {'orderEntity': orderData},
                   );
-                } else if (buttonText.toLowerCase() == "submit delivery") {
+                } else if (buttonText == local.submitDeliveryButton) {
                   showConfirmationDialog(
                     context: context,
-                    title: "Submit Delivery",
-                    message:
-                    "Are you sure you want to submit the delivery?",
+                    title: local.submitDeliveryButton,
+                    message: local.submitDeliveryConfirmation,
                     onConfirm: () {
                       context
                           .read<UpdateOrderStatusViewModel>()
@@ -87,23 +87,21 @@ class ChatHeaderSection extends StatelessWidget {
                     },
                     onCancel: () {},
                   );
-                } else if (buttonText == "Work Received") {
+                } else if (buttonText == local.workReceivedButton) {
                   showConfirmationDialog(
                     context: context,
-                    title: "Confirmation",
-                    message: "Are you sure you have received the work?",
+                    title: local.workReceivedButton,
+                    message: local.workReceivedConfirmation,
                     onConfirm: () {
-                      context.read<UpdateOfferStatusViewModel>()..updateOfferStatus( orderData.offerId! , "Completed");
+                      context.read<UpdateOfferStatusViewModel>()
+                        ..updateOfferStatus(orderData.offerId!, "Completed");
                       context
                           .read<UpdateOrderStatusViewModel>()
                           .updateOrderStatus(orderData.id, "Completed");
-                      context
-                          .read<AddEarningsViewModel>()
-                          .addEarnings(
-
+                      context.read<AddEarningsViewModel>().addEarnings(
                         orderData.freelancerId!,
-                          orderData.budget!,
-                      orderData.clientId
+                        orderData.budget!,
+                        orderData.clientId,
                       );
                       _showRatingBottomSheet(context, orderData);
                     },
@@ -128,7 +126,7 @@ class ChatHeaderSection extends StatelessWidget {
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: CustomButton(
-                        title: "Rate Client",
+                        title: local.rateClient, // <-- هنا
                         ontap: () => _showRatingBottomSheet(context, orderData),
                       ),
                     );

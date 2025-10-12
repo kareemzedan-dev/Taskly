@@ -32,7 +32,7 @@ class PriceDurationSection extends StatelessWidget {
                 style: Theme.of(context)
                     .textTheme
                     .bodyLarge
-                    ?.copyWith(color: ColorsManager.black),
+                    ?.copyWith(fontSize: 14.sp, fontWeight: FontWeight.w600),
               ),
             ),
           ),
@@ -40,7 +40,7 @@ class PriceDurationSection extends StatelessWidget {
         SizedBox(height: 5.h),
         Text(
           duration,
-          style: Theme.of(context).textTheme.bodyLarge,
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 12.sp, fontWeight: FontWeight.w600),
         ),
       ],
     );

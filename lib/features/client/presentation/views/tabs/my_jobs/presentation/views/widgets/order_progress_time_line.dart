@@ -33,7 +33,7 @@ class OrderProgressTimeline extends StatelessWidget {
                   width: 28.w,
                   height: 28.w,
                   decoration: BoxDecoration(
-                    color: isActive ? activeColor : Colors.white,
+                    color: isActive ? activeColor : ColorsManager.primary,
                     shape: BoxShape.circle,
                     border: Border.all(
                       color: isActive ? activeColor : inactiveColor,
@@ -42,7 +42,7 @@ class OrderProgressTimeline extends StatelessWidget {
                   ),
                   child: Center(
                     child: isActive
-                        ? Icon(Icons.check, size: 16.sp, color: Colors.white)
+                        ? Icon(Icons.check, size: 16.sp,  )
                         : Icon(Icons.circle_outlined,
                             size: 16.sp, color: inactiveColor),
                   ),
