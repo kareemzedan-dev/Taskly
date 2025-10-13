@@ -19,8 +19,9 @@ import 'action_row.dart';
 import 'delivery_info.dart';
 
 class FreelancerWorkCard extends StatelessWidget {
-  const FreelancerWorkCard({super.key, required this.order,    required this.addFavViewModel,});
+  const FreelancerWorkCard({super.key, required this.order,required  this.offeredOrderIds ,  required this.addFavViewModel,});
   final OrderEntity order;
+  final List<String> offeredOrderIds;
   final AddFavoriteOrderViewModel addFavViewModel; // ✅ أضف هنا
 
   @override
@@ -65,10 +66,17 @@ class FreelancerWorkCard extends StatelessWidget {
                     },
                   ),
                   ActionItem(
-                    title: local.send_offers,
-                    icon: Icons.send,
+                    title: offeredOrderIds.contains(order.id)
+                        ? "مرسل بالفعل"
+                          //already_offered
+                        : local.send_offers,
+                    icon: offeredOrderIds.contains(order.id)
+                        ? Icons.check_circle
+                        : Icons.send,
                     isOffer: true,
-                    onTap: () {
+                    onTap: offeredOrderIds.contains(order.id)
+                        ? null
+                        : () {
                       Navigator.pushNamed(
                         context,
                         RoutesManager.sendOfferView,
@@ -76,6 +84,8 @@ class FreelancerWorkCard extends StatelessWidget {
                       );
                     },
                   ),
+
+
                 ],
               )
             ],

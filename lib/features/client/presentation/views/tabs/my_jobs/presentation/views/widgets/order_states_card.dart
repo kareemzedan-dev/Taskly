@@ -45,6 +45,8 @@ class OrderStatesCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('🎨 Building OrderStatesCard for: ${order.id} - Status: ${order.status}');
+
     final local = AppLocalizations.of(context)!;
     return BlocProvider<GetOffersViewModel>(
       create: (_) => getIt<GetOffersViewModel>()..init(order.id),

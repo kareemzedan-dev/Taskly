@@ -6,6 +6,7 @@ import 'package:taskly/core/di/di.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/send_offer_view_body.dart';
 import 'package:taskly/features/shared/domain/entities/order_entity/order_entity.dart';
 
+import '../../../../../../../../config/l10n/app_localizations.dart';
 import '../view_model/get_commission_view_model/get_commission_view_model.dart';
 import '../view_model/send_offer_view_model/send_offer_view_model.dart';
 
@@ -15,11 +16,12 @@ class SendOfferView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
         title: Text(
-          'Send Offer',
+          local.send_offer,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
             fontWeight: FontWeight.w600,
             fontSize: 18.sp,

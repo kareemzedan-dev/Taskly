@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
 import 'package:taskly/features/messages/presentation/widgets/custom_states_container.dart';
 
+import '../../../../config/l10n/app_localizations.dart';
+
 class OrderStatusCard extends StatelessWidget {
   final double price;
   final String status;
@@ -21,6 +23,7 @@ class OrderStatusCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     return Card(
       elevation: 0,
       color: Colors.grey.shade100,
@@ -34,7 +37,7 @@ class OrderStatusCard extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    "Total Price: \$${price.toStringAsFixed(2)}",
+                    "${local.totalPrice}: ${price.toStringAsFixed(2)} ${local.sar}",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.green,
@@ -44,7 +47,7 @@ class OrderStatusCard extends StatelessWidget {
                   ),
                 ),
                 SizedBox(width: 8.w),
-                CustomStatesContainer(state: status),
+                CustomStatesContainer(state: _localizedStatus(context, status)),
               ],
             ),
             SizedBox(height: 12.h),
@@ -73,5 +76,29 @@ class OrderStatusCard extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+String _localizedStatus(BuildContext context, String status) {
+  final local = AppLocalizations.of(context)!;
+
+  switch (status) {
+    case 'Pending':
+
+      return local.pending;
+    case 'Accepted':
+      return local.accepted;
+      case 'Paid':
+      return local.paid;
+      case 'In Progress':
+      return local.inProgress;
+      case 'Waiting':
+      return local.waiting;
+
+    case 'Cancelled':
+      return local.cancelled;
+    case 'Completed':
+      return local.completed;
+    default:
+      return status;
   }
 }

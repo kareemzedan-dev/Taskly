@@ -245,6 +245,7 @@ class Assets {
   static const String homeHomeRepos = 'lib/features/client/domain/repos/home/home_repos.dart';
   static const String homeServiceResponseDm = 'lib/features/client/data/models/home/service_response_dm.dart';
   static const String homeServiceResponseEntity = 'lib/features/client/domain/entities/home/service_response_entity.dart';
+  static const String images6986782 = 'assets/images/6986782.jpg';
   static const String images9440461 = 'assets/images/9440461.jpg';
   static const String imagesAccount3166234 = 'assets/images/account_3166234.png';
   static const String imagesAccountName = 'assets/images/account_name.png';
@@ -483,6 +484,8 @@ class Assets {
   static const String uploadAttachmentsUploadAttachmentsUseCase = 'lib/features/attachments/domain/use_cases/upload_attachments/upload_attachments_use_case.dart';
   static const String uploadAttachmentsViewModelUploadAttachmentsViewModel = 'lib/features/attachments/presentation/manager/upload_attachments_view_model/upload_attachments_view_model.dart';
   static const String uploadAttachmentsViewModelUploadAttachmentsViewModelStates = 'lib/features/attachments/presentation/manager/upload_attachments_view_model/upload_attachments_view_model_states.dart';
+  static const String uploadOrderAttachmentsViewModelUploadOrderAttachmentsStates = 'lib/features/attachments/presentation/manager/upload_order_attachments_view_model/upload_order_attachments_states.dart';
+  static const String uploadOrderAttachmentsViewModelUploadOrderAttachmentsViewModel = 'lib/features/attachments/presentation/manager/upload_order_attachments_view_model/upload_order_attachments_view_model.dart';
   static const String userInfoDmUserInfoResponseDm = 'lib/features/profile/data/models/user_info_dm/user_info_response_dm.dart';
   static const String userInfoEntityUserInfoEntity = 'lib/features/profile/domain/entities/user_info_entity/user_info_entity.dart';
   static const String userStatusEntityUserStatusEntity = 'lib/features/messages/domain/entities/user_status_entity/user_status_entity.dart';

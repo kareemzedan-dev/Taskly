@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:taskly/config/routes/routes_manager.dart';
 import 'package:taskly/core/helper/convert_to_days.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/offer_actions.dart';
@@ -62,18 +63,35 @@ class OfferCard extends StatelessWidget {
                 children: [
                   // User Info
                   Expanded(
-                    child: UserInfoDisplay(
-                      name: offer.freelancerName,
-                      email: offer.freelancerEmail,
-                      rating: offer.freelancerRating,
-                      profileImage: offer.freelancerImage,
-                      isFreelancer: offer.freelancerIsVerified,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          RoutesManager.reviewsView,
+                          arguments: {
+                            'userId': offer.offer.freelancerId,
+                            'role': 'freelancer',
+                            'userName': offer.freelancerName,
+                            'userRating': offer.freelancerRating,
+                            'userImage': offer.freelancerImage,
+                          },
+
+                          );
+
+                      },
+                      child: UserInfoDisplay(
+                        name: offer.freelancerName,
+                        email: offer.freelancerEmail,
+                        rating: offer.freelancerRating,
+                        profileImage: offer.freelancerImage,
+                        isFreelancer: offer.freelancerIsVerified,
+                      ),
                     ),
                   ),
 
                   // Price & Duration
                   PriceDurationSection(
-                    price: "${offer.offer.offerAmount} \$",
+                    price: "${offer.offer.offerAmount} ${local.sar}",
                     duration: offer.offer.offerDeliveryTime.formatMinutes( context),
                   ),
                 ],

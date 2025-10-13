@@ -102,13 +102,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get noInternetConnection => 'لا يوجد اتصال بالإنترنت';
 
   @override
-  String get emailAlreadyExists => 'البريد الإلكتروني موجود بالفعل أو لم يتم التأكيد. يرجى التحقق من بريدك الإلكتروني.';
+  String get emailAlreadyExists =>
+      'البريد الإلكتروني موجود بالفعل أو لم يتم التأكيد. يرجى التحقق من بريدك الإلكتروني.';
 
   @override
   String get somethingWentWrong => 'حدث خطأ ما، يرجى المحاولة مرة أخرى';
 
   @override
-  String get loginFailed => 'فشل تسجيل الدخول. يرجى التحقق من البريد الإلكتروني وكلمة المرور.';
+  String get loginFailed =>
+      'فشل تسجيل الدخول. يرجى التحقق من البريد الإلكتروني وكلمة المرور.';
 
   @override
   String notRegisteredAsRole(Object role) {
@@ -133,10 +135,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get googleLoginSuccessful => 'تم تسجيل الدخول باستخدام جوجل بنجاح';
 
   @override
-  String get dashboardDescription => 'إدارة كل المستقلين والعملاء في لوحة تحكم واحدة';
+  String get dashboardDescription =>
+      'إدارة كل المستقلين والعملاء في لوحة تحكم واحدة';
 
   @override
-  String get performanceTracking => 'تتبع الطلبات، مراقبة الأداء، والحفاظ على كل شيء تحت السيطرة';
+  String get performanceTracking =>
+      'تتبع الطلبات، مراقبة الأداء، والحفاظ على كل شيء تحت السيطرة';
 
   @override
   String get skip => 'تخطي';
@@ -734,13 +738,16 @@ class AppLocalizationsAr extends AppLocalizations {
   String get noReviewsReceived => 'لم يتم استلام أي تقييمات';
 
   @override
-  String get noReviewsGivenForThisClient => 'لم يتم تقديم أي تقييمات لهذا العميل';
+  String get noReviewsGivenForThisClient =>
+      'لم يتم تقديم أي تقييمات لهذا العميل';
 
   @override
-  String get noReviewsGivenForThisFreelancer => 'لم يتم تقديم أي تقييمات لهذا المستقل';
+  String get noReviewsGivenForThisFreelancer =>
+      'لم يتم تقديم أي تقييمات لهذا المستقل';
 
   @override
-  String get noReviewsReceivedForThisClient => 'لم يتم استلام أي تقييمات لهذا العميل';
+  String get noReviewsReceivedForThisClient =>
+      'لم يتم استلام أي تقييمات لهذا العميل';
 
   @override
   String get service1 => 'توفير المصادر والمراجع الأكاديمية';
@@ -857,7 +864,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get error_select_hiring_method => 'الرجاء اختيار طريقة التوظيف';
 
   @override
-  String get error_wait_attachments => 'يرجى الانتظار حتى يتم تحميل جميع المرفقات';
+  String get error_wait_attachments =>
+      'يرجى الانتظار حتى يتم تحميل جميع المرفقات';
 
   @override
   String get error_select_freelancer => 'الرجاء اختيار المستقل';
@@ -900,13 +908,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get public_posting_title => 'نشر عام';
 
   @override
-  String get public_posting_subtitle => 'انشر طلبك بشكل عام واستقبل عروض متعددة';
+  String get public_posting_subtitle =>
+      'انشر طلبك بشكل عام واستقبل عروض متعددة';
 
   @override
   String get hire_specific_freelancer_title => 'توظيف مستقل محدد';
 
   @override
-  String get hire_specific_freelancer_subtitle => 'أرسل طلبك مباشرة إلى مستقل معين كعرض خاص';
+  String get hire_specific_freelancer_subtitle =>
+      'أرسل طلبك مباشرة إلى مستقل معين كعرض خاص';
 
   @override
   String get private_badge => 'خاص';
@@ -971,7 +981,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get confirm_delete => 'تأكيد الحذف';
 
   @override
-  String get delete_confirmation_message => 'هل أنت متأكد أنك تريد حذف هذا الطلب؟';
+  String get delete_confirmation_message =>
+      'هل أنت متأكد أنك تريد حذف هذا الطلب؟';
 
   @override
   String get delete => 'حذف';
@@ -1016,7 +1027,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get warning => 'تحذير';
 
   @override
-  String get upload_warning_message => 'لقد قمت برفع إثبات الدفع ولكن لم تضغط على زر تنفيذ الدفع. هل أنت متأكد أنك تريد المغادرة؟';
+  String get upload_warning_message =>
+      'لقد قمت برفع إثبات الدفع ولكن لم تضغط على زر تنفيذ الدفع. هل أنت متأكد أنك تريد المغادرة؟';
 
   @override
   String get stay => 'البقاء';
@@ -1028,10 +1040,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get upload_payment_proof => 'رفع إثبات الدفع';
 
   @override
-  String get secure_payment_note => '🔒 دفع آمن. لن يتم الإفراج عن المبلغ حتى يكتمل العمل.';
+  String get secure_payment_note =>
+      '🔒 دفع آمن. لن يتم الإفراج عن المبلغ حتى يكتمل العمل.';
 
   @override
-  String get payment_under_review_message => '📢 لا تقلق، طلب الدفع الخاص بك قيد المراجعة.\nعادة لا يستغرق الأمر وقتًا طويلاً.';
+  String get payment_under_review_message =>
+      '📢 لا تقلق، طلب الدفع الخاص بك قيد المراجعة.\nعادة لا يستغرق الأمر وقتًا طويلاً.';
 
   @override
   String get payment_status => 'حالة الدفع';
@@ -1045,22 +1059,26 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get contact_us_note => '📣 إذا كان لديك أي استفسار، لا تتردد في التواصل معنا. نحن هنا لمساعدتك!';
+  String get contact_us_note =>
+      '📣 إذا كان لديك أي استفسار، لا تتردد في التواصل معنا. نحن هنا لمساعدتك!';
 
   @override
   String get chat_with_admin => 'تحدث مع الإدارة الآن';
 
   @override
-  String get upload_note => 'ملاحظة: بعد إتمام التحويل، يرجى رفع صورة الإيصال أو لقطة شاشة من تطبيق البنك كدليل على الدفع.';
+  String get upload_note =>
+      'ملاحظة: بعد إتمام التحويل، يرجى رفع صورة الإيصال أو لقطة شاشة من تطبيق البنك كدليل على الدفع.';
 
   @override
-  String get leave_warning_message => 'لقد قمت برفع إثبات الدفع ولكن لم تضغط على زر تأكيد الدفع. هل أنت متأكد أنك تريد المغادرة؟';
+  String get leave_warning_message =>
+      'لقد قمت برفع إثبات الدفع ولكن لم تضغط على زر تأكيد الدفع. هل أنت متأكد أنك تريد المغادرة؟';
 
   @override
   String get creating_payment => 'جاري إنشاء الدفع...';
 
   @override
-  String get payment_created_success => 'تم إنشاء الدفع بنجاح، يرجى انتظار موافقة الإدارة';
+  String get payment_created_success =>
+      'تم إنشاء الدفع بنجاح، يرجى انتظار موافقة الإدارة';
 
   @override
   String get make_payment => 'إتمام الدفع';
@@ -1099,7 +1117,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get find_work => 'ابحث عن عمل';
 
   @override
-  String get my_jobs => 'وظائفي';
+  String get my_jobs => 'طلباتي';
 
   @override
   String get messages => 'الرسائل';
@@ -1126,7 +1144,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get private_requests => 'الطلبات الخاصة';
 
   @override
-  String get account_under_verification => 'حسابك قيد المراجعة.\nيرجى الانتظار حتى يتم الموافقة على طلبك.';
+  String get account_under_verification =>
+      'حسابك قيد المراجعة.\nيرجى الانتظار حتى يتم الموافقة على طلبك.';
 
   @override
   String get send_offers => 'إرسال العروض';
@@ -1307,7 +1326,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get enter_time_hint => 'أدخل الوقت';
 
   @override
-  String get offer_description_hint => 'اشرح كيف ستنفذ هذا المشروع، بما في ذلك الأساليب أو أي شروط محددة....';
+  String get offer_description_hint =>
+      'اشرح كيف ستنفذ هذا المشروع، بما في ذلك الأساليب أو أي شروط محددة....';
 
   @override
   String get description_error => 'يرجى إدخال الوصف';
@@ -1400,10 +1420,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get accountName => 'اسم الحساب';
 
   @override
-  String get iban => 'IBAN';
+  String get iban => 'الايبان';
 
   @override
-  String get swiftCode => 'رمز SWIFT';
+  String get swiftCode => 'رمز سويفت';
 
   @override
   String get notesOptional => 'ملاحظات (اختياري)';
@@ -1454,7 +1474,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get searchBankAccount => 'بحث في الحسابات البنكية';
 
   @override
-  String get welcomeAdmin => 'مرحبًا بك يا مسؤول\nادير لوحة التحكم الخاصة بك الآن';
+  String get welcomeAdmin =>
+      'مرحبًا بك يا مسؤول\nادير لوحة التحكم الخاصة بك الآن';
 
   @override
   String get support => 'الدعم';
@@ -1514,10 +1535,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get profileUpdateSuccess => 'تم تحديث الملف الشخصي بنجاح';
 
   @override
-  String get profileUpdateFailed => 'فشل تحديث الملف الشخصي، حاول مرة أخرى لاحقاً';
+  String get profileUpdateFailed =>
+      'فشل تحديث الملف الشخصي، حاول مرة أخرى لاحقاً';
 
   @override
-  String get fillRequiredFields => 'يرجى ملء حقلي البريد الإلكتروني واسم المستخدم';
+  String get fillRequiredFields =>
+      'يرجى ملء حقلي البريد الإلكتروني واسم المستخدم';
 
   @override
   String get lightTheme => 'فاتح';
@@ -1535,55 +1558,64 @@ class AppLocalizationsAr extends AppLocalizations {
   String get english => 'English';
 
   @override
-  String get privacyPolicyWelcome => 'مرحباً بكم في Taskly! خصوصيتك مهمة جداً لنا. تشرح سياسة الخصوصية هذه كيف نجمع ونستخدم ونحمي معلوماتك الشخصية عند استخدامك لتطبيقنا، سواء كنت عميلاً أو مستقلاً.';
+  String get privacyPolicyWelcome =>
+      'مرحباً بكم في Taskly! خصوصيتك مهمة جداً لنا. تشرح سياسة الخصوصية هذه كيف نجمع ونستخدم ونحمي معلوماتك الشخصية عند استخدامك لتطبيقنا، سواء كنت عميلاً أو مستقلاً.';
 
   @override
   String get informationWeCollect => '1. المعلومات التي نجمعها';
 
   @override
-  String get informationWeCollectDesc => '- معلومات الحساب: الاسم، البريد الإلكتروني، رقم الهاتف، تفاصيل الملف الشخصي.\n- تفاصيل الخدمة والطلب: المهام المنشورة والمقبولة والمكتملة.\n- معلومات الدفع: تفاصيل الفواتير وسجل المعاملات.\n- معلومات الجهاز: نوع الجهاز، نظام التشغيل، وعنوان IP.';
+  String get informationWeCollectDesc =>
+      '- معلومات الحساب: الاسم، البريد الإلكتروني، رقم الهاتف، تفاصيل الملف الشخصي.\n- تفاصيل الخدمة والطلب: المهام المنشورة والمقبولة والمكتملة.\n- معلومات الدفع: تفاصيل الفواتير وسجل المعاملات.\n- معلومات الجهاز: نوع الجهاز، نظام التشغيل، وعنوان IP.';
 
   @override
   String get howWeUseInfo => '2. كيف نستخدم معلوماتك';
 
   @override
-  String get howWeUseInfoDesc => 'نستخدم معلوماتك لإنشاء وإدارة الحسابات، ومطابقة العملاء مع المستقلين، وتسهيل التواصل، ومعالجة المدفوعات، وتحسين أداء التطبيق، وضمان الأمان.';
+  String get howWeUseInfoDesc =>
+      'نستخدم معلوماتك لإنشاء وإدارة الحسابات، ومطابقة العملاء مع المستقلين، وتسهيل التواصل، ومعالجة المدفوعات، وتحسين أداء التطبيق، وضمان الأمان.';
 
   @override
   String get sharingData => '3. مشاركة بياناتك';
 
   @override
-  String get sharingDataDesc => 'لا نبيع بياناتك الشخصية. قد نشارك المعلومات فقط مع:\n- المستخدمين الآخرين (تفاصيل محدودة من الملف الشخصي لإكمال المهام).\n- خدمات الطرف الثالث (Firebase، Supabase، معالجات الدفع).\n- السلطات القانونية إذا تطلب القانون.';
+  String get sharingDataDesc =>
+      'لا نبيع بياناتك الشخصية. قد نشارك المعلومات فقط مع:\n- المستخدمين الآخرين (تفاصيل محدودة من الملف الشخصي لإكمال المهام).\n- خدمات الطرف الثالث (Firebase، Supabase، معالجات الدفع).\n- السلطات القانونية إذا تطلب القانون.';
 
   @override
   String get dataSecurity => '4. أمان البيانات';
 
   @override
-  String get dataSecurityDesc => 'ننفذ إجراءات قياسية في الصناعة لحماية بياناتك، ولكن لا توجد طريقة نقل أو تخزين آمنة بنسبة 100%.';
+  String get dataSecurityDesc =>
+      'ننفذ إجراءات قياسية في الصناعة لحماية بياناتك، ولكن لا توجد طريقة نقل أو تخزين آمنة بنسبة 100%.';
 
   @override
   String get yourRights => '5. حقوقك';
 
   @override
-  String get yourRightsDesc => 'لديك الحق في الوصول إلى بياناتك الشخصية وتحديثها أو حذفها، والتواصل معنا بشأن أي مخاوف تتعلق بالخصوصية.';
+  String get yourRightsDesc =>
+      'لديك الحق في الوصول إلى بياناتك الشخصية وتحديثها أو حذفها، والتواصل معنا بشأن أي مخاوف تتعلق بالخصوصية.';
 
   @override
   String get cookiesTracking => '6. ملفات تعريف الارتباط والتتبع';
 
   @override
-  String get cookiesTrackingDesc => 'قد يستخدم Taskly ملفات تعريف الارتباط وتقنيات مماثلة لتخصيص تجربتك وتحليل استخدام التطبيق.';
+  String get cookiesTrackingDesc =>
+      'قد يستخدم Taskly ملفات تعريف الارتباط وتقنيات مماثلة لتخصيص تجربتك وتحليل استخدام التطبيق.';
 
   @override
   String get policyUpdates => '7. تحديثات السياسة';
 
   @override
-  String get policyUpdatesDesc => 'قد نقوم بتحديث سياسة الخصوصية هذه من وقت لآخر. الاستمرار في استخدام Taskly يعني موافقتك على الشروط المحدثة.';
+  String get policyUpdatesDesc =>
+      'قد نقوم بتحديث سياسة الخصوصية هذه من وقت لآخر. الاستمرار في استخدام Taskly يعني موافقتك على الشروط المحدثة.';
 
   @override
   String get changePassword => 'تغيير كلمة المرور';
 
   @override
-  String get changePasswordDesc => 'أدخل كلمة المرور القديمة ثم أدخل كلمة المرور الجديدة لتغيير كلمة المرور.';
+  String get changePasswordDesc =>
+      'أدخل كلمة المرور القديمة ثم أدخل كلمة المرور الجديدة لتغيير كلمة المرور.';
 
   @override
   String get oldPassword => 'كلمة المرور القديمة';
@@ -1646,25 +1678,32 @@ class AppLocalizationsAr extends AppLocalizations {
   String get howToChangeName => 'كيفية تغيير اسمي؟';
 
   @override
-  String get requestServiceAnswer => 'لطلب خدمة، انتقل إلى صفحة الخدمات، اختر الخدمة التي تحتاجها، املأ التفاصيل، وأرسل طلبك.';
+  String get requestServiceAnswer =>
+      'لطلب خدمة، انتقل إلى صفحة الخدمات، اختر الخدمة التي تحتاجها، املأ التفاصيل، وأرسل طلبك.';
 
   @override
-  String get deleteServiceAnswer => 'لحذف طلب خدمة، انتقل إلى علامة تبويب \'وظائفي\'، ابحث عن طلبك تحت \'قيد الانتظار\'، افتحه، وانقر على زر الحذف. قم بالتأكيد لإزالته.';
+  String get deleteServiceAnswer =>
+      'لحذف طلب خدمة، انتقل إلى علامة تبويب \'وظائفي\'، ابحث عن طلبك تحت \'قيد الانتظار\'، افتحه، وانقر على زر الحذف. قم بالتأكيد لإزالته.';
 
   @override
-  String get contactSupportAnswer => 'يمكنك التواصل معنا عبر الهاتف أو البريد الإلكتروني أو إرسال رسالة عبر قسم اتصل بنا أعلاه.';
+  String get contactSupportAnswer =>
+      'يمكنك التواصل معنا عبر الهاتف أو البريد الإلكتروني أو إرسال رسالة عبر قسم اتصل بنا أعلاه.';
 
   @override
-  String get chatWithAdminAnswer => 'للدردشة مباشرة مع المسؤول، انتقل إلى علامة تبويب \'الرسائل\'. ستجد محادثة مثبتة حيث يمكنك إرسال رسائلك والحصول على رد من المسؤول.';
+  String get chatWithAdminAnswer =>
+      'للدردشة مباشرة مع المسؤول، انتقل إلى علامة تبويب \'الرسائل\'. ستجد محادثة مثبتة حيث يمكنك إرسال رسائلك والحصول على رد من المسؤول.';
 
   @override
-  String get updateProfileAnswer => 'انتقل إلى صفحة ملفك الشخصي، انقر على تعديل، وقم بتحديث اسمك أو بريدك الإلكتروني أو كلمة المرور حسب الحاجة.';
+  String get updateProfileAnswer =>
+      'انتقل إلى صفحة ملفك الشخصي، انقر على تعديل، وقم بتحديث اسمك أو بريدك الإلكتروني أو كلمة المرور حسب الحاجة.';
 
   @override
-  String get changePasswordAnswer => 'انتقل إلى صفحة ملفك الشخصي، انقر على تعديل، وقم بتحديث كلمة المرور حسب الحاجة.';
+  String get changePasswordAnswer =>
+      'انتقل إلى صفحة ملفك الشخصي، انقر على تعديل، وقم بتحديث كلمة المرور حسب الحاجة.';
 
   @override
-  String get changeNameAnswer => 'انتقل إلى صفحة ملفك الشخصي، انقر على تعديل، وقم بتعديل اسمك حسب الحاجة.';
+  String get changeNameAnswer =>
+      'انتقل إلى صفحة ملفك الشخصي، انقر على تعديل، وقم بتعديل اسمك حسب الحاجة.';
 
   @override
   String get withdrawalRequest => 'طلب سحب';
@@ -1782,28 +1821,34 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get admin_support => 'دعم المسؤول';
+  String get admin_support => 'خدمة العملاء';
 
   @override
-  String get checkOrderStatusMessage => 'يرجى التحقق من حالة الطلب في قسم الرسائل والتواصل مع العميل إذا لزم الأمر.';
+  String get checkOrderStatusMessage =>
+      'يرجى التحقق من حالة الطلب في قسم الرسائل والتواصل مع العميل إذا لزم الأمر.';
 
   @override
   String get chat_with_admin_support => 'الدردشة مع الدعم';
 
   @override
-  String get offerCompletedMessage => 'تم إتمام هذا العرض. يمكنك ترك تقييم أو التحقق من تفاصيل الطلب في الرسائل.';
+  String get offerCompletedMessage =>
+      'تم إتمام هذا العرض. يمكنك ترك تقييم أو التحقق من تفاصيل الطلب في الرسائل.';
 
   @override
-  String get orderPending => 'النظام: الطلب مازال قيد الانتظار. لم يتم قبول أي عرض بعد.';
+  String get orderPending =>
+      'النظام: الطلب مازال قيد الانتظار. لم يتم قبول أي عرض بعد.';
 
   @override
-  String get orderAccepted => 'النظام: تم قبول العرض. في انتظار الدفع قبل بدء العمل.';
+  String get orderAccepted =>
+      'النظام: تم قبول العرض. في انتظار الدفع قبل بدء العمل.';
 
   @override
-  String get orderPaid => 'النظام: تم تقديم الدفع وهو تحت المراجعة. سيبدأ العمل في أقرب وقت ممكن.';
+  String get orderPaid =>
+      'النظام: تم تقديم الدفع وهو تحت المراجعة. سيبدأ العمل في أقرب وقت ممكن.';
 
   @override
-  String get orderInProgress => 'النظام: تم تأكيد الدفع، يمكنك البدء في العمل الآن.';
+  String get orderInProgress =>
+      'النظام: تم تأكيد الدفع، يمكنك البدء في العمل الآن.';
 
   @override
   String get orderWaiting => 'النظام: تم تسليم العمل للعميل للمراجعة.';
@@ -1839,4 +1884,10 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get rateFreelancer => 'تقييم المستقل';
+
+  @override
+  String get already_offered => 'العرض تم ارساله بالفعل';
+
+  @override
+  String get no_messages_yet => 'لا يوجد رسائل متاحه';
 }

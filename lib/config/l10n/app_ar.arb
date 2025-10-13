@@ -381,7 +381,7 @@
   "payment_proof_uploaded_success": "تم رفع إثبات الدفع بنجاح",
   "home": "الرئيسية",
   "find_work": "ابحث عن عمل",
-  "my_jobs": "وظائفي",
+  "my_jobs": "طلباتي",
   "profile": "الملف الشخصي",
   "search_for_orders": "ابحث عن الطلبات...",
   "search_for_private_orders": "ابحث عن الطلبات الخاصة...",
@@ -481,8 +481,8 @@
   "accountSettings": "إعدادات الحساب",
   "bankName": "اسم البنك",
   "accountName": "اسم الحساب",
-  "iban": "IBAN",
-  "swiftCode": "رمز SWIFT",
+  "iban": "الايبان",
+  "swiftCode": "رمز سويفت",
   "notesOptional": "ملاحظات (اختياري)",
   "activeAccount": "الحساب نشط",
   "enableOrDisableBankAccount": "تمكين أو تعطيل هذا الحساب البنكي",
@@ -612,7 +612,7 @@
 
   "cannotWithdrawMoreThanBalance": "لا يمكنك سحب أكثر من رصيدك المتاح {balance} ريال",
   "cannotWithdrawMoreThanBalance_placeholder": "{balance}"
-,  "admin_support": "دعم المسؤول",
+,  "admin_support": "خدمة العملاء",
   "chat_with_admin_support": "الدردشة مع الدعم",
   "checkOrderStatusMessage": "يرجى التحقق من حالة الطلب في قسم الرسائل والتواصل مع العميل إذا لزم الأمر.",
   "offerCompletedMessage": "تم إتمام هذا العرض. يمكنك ترك تقييم أو التحقق من تفاصيل الطلب في الرسائل."
@@ -630,5 +630,7 @@
   "submitDeliveryConfirmation": "هل أنت متأكد أنك تريد تسليم العمل؟",
   "workReceivedConfirmation": "هل أنت متأكد أنك استلمت العمل؟",
   "rateClient": "تقييم العميل",
-  "rateFreelancer": "تقييم المستقل"
+  "rateFreelancer": "تقييم المستقل",
+  "already_offered": "العرض تم ارساله بالفعل",
+  "no_messages_yet": "لا يوجد رسائل متاحه"
 }

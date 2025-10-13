@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:taskly/core/cache/shared_preferences.dart';
 import 'package:taskly/core/utils/strings_manager.dart';
 import 'package:taskly/features/shared/domain/entities/order_entity/order_entity.dart';
@@ -15,19 +16,29 @@ class FreelancerPublicOrdersViewModel extends Cubit<FreelancerPublicOrdersState>
 
   StreamSubscription<List<OrderEntity>>? _ordersSubscription;
 
-  final List<OrderEntity> _allOrders = []; // كل الأوردرات
-  List<OrderEntity> _filteredOrders = []; // الأوردرات بعد البحث
+  final List<OrderEntity> _allOrders = [];
+  List<OrderEntity> _filteredOrders = [];
+  final List<String> _offeredOrderIds = [];
 
   FreelancerPublicOrdersViewModel(
       this.freelancerOrderUseCase,
       this.subscribeToPublicOrdersUseCase
       ) : super(FreelancerPendingOrdersInitial());
 
-  /// جلب الأوردرات والاشتراك في التحديثات اللحظية
   Future<void> fetchAndSubscribePendingOrders() async {
     emit(FreelancerPendingOrdersLoading());
 
     final freelancerId = SharedPrefHelper.getString(StringsManager.idKey)!;
+
+    final offersResponse = await Supabase.instance.client
+        .from('offers')
+        .select('order_id, status')
+        .eq('freelancer_id', freelancerId)
+        .neq('status', 'withdrawn');
+
+    _offeredOrderIds
+      ..clear()
+      ..addAll((offersResponse as List).map((e) => e['order_id'] as String));
 
     final result = await freelancerOrderUseCase.fetchPublicOrders(freelancerId);
 
@@ -36,42 +47,32 @@ class FreelancerPublicOrdersViewModel extends Cubit<FreelancerPublicOrdersState>
           (orders) {
         _allOrders
           ..clear()
-          ..addAll(orders.where((o) => o.serviceType.name.toLowerCase() == 'public'));
+          ..addAll(orders);
       },
     );
 
-    // ترتيب الأوردرات: الأحدث فوق
     _allOrders.sort((a, b) => b.createdAt.compareTo(a.createdAt));
     _filteredOrders = List.from(_allOrders);
 
     emit(FreelancerPendingOrdersSuccess(List.from(_filteredOrders)));
 
-    // الاشتراك في الوقت الحقيقي
     _ordersSubscription = subscribeToPublicOrdersUseCase
         .subscribeToPublicOrders(freelancerId)
-        .listen(
-          (orders) {
-        print("📥 Orders from stream: ${orders.length}");
+        .listen((orders) {
+      _allOrders
+        ..clear()
+        ..addAll(orders);
 
-        _allOrders
-          ..clear()
-          ..addAll(
-            orders.where((o) => o.serviceType.name.toLowerCase() == 'public'),
-          );
+      _allOrders.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+      _filteredOrders = List.from(_allOrders);
 
-        // ترتيب حسب الأحدث
-        _allOrders.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-        _filteredOrders = List.from(_allOrders);
-
-        emit(FreelancerPendingOrdersSuccess(List.from(_filteredOrders)));
-      },
-      onError: (error) {
-        emit(FreelancerPendingOrdersError('Real-time subscription error: $error'));
-      },
-    );
+      emit(FreelancerPendingOrdersSuccess(List.from(_filteredOrders)));
+    });
   }
 
-  /// فلترة الأوردرات حسب البحث
+  List<String> get offeredOrderIds => _offeredOrderIds;
+
+
   void searchOrders(String query) {
     if (query.isEmpty) {
       _filteredOrders = List.from(_allOrders);

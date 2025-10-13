@@ -62,6 +62,7 @@ class FavouriteOrderList extends StatelessWidget {
                         child: FreelancerWorkCard(
                           order: detailsState.orders[index],
                           addFavViewModel: addFavViewModel,
+                          offeredOrderIds: [],
                         ),
                       ),
                     );

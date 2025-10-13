@@ -84,7 +84,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get continueWithGoogle => 'Continue with Google';
 
   @override
-  String get privacyPolicyAgreement => 'By creating an account you agree to the ';
+  String get privacyPolicyAgreement =>
+      'By creating an account you agree to the ';
 
   @override
   String get privacyPolicy => 'privacy policy';
@@ -102,13 +103,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noInternetConnection => 'No internet connection';
 
   @override
-  String get emailAlreadyExists => 'Email already exists or not confirmed. Please check your email.';
+  String get emailAlreadyExists =>
+      'Email already exists or not confirmed. Please check your email.';
 
   @override
   String get somethingWentWrong => 'Something went wrong, please try again';
 
   @override
-  String get loginFailed => 'Login failed. Please check your email and password.';
+  String get loginFailed =>
+      'Login failed. Please check your email and password.';
 
   @override
   String notRegisteredAsRole(Object role) {
@@ -133,10 +136,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get googleLoginSuccessful => 'Google login successful';
 
   @override
-  String get dashboardDescription => 'Manage all freelancers and clients in one dashboard';
+  String get dashboardDescription =>
+      'Manage all freelancers and clients in one dashboard';
 
   @override
-  String get performanceTracking => 'Track orders, monitor performance, and keep everything under control';
+  String get performanceTracking =>
+      'Track orders, monitor performance, and keep everything under control';
 
   @override
   String get skip => 'Skip';
@@ -737,10 +742,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noReviewsGivenForThisClient => 'No reviews given for this client';
 
   @override
-  String get noReviewsGivenForThisFreelancer => 'No reviews given for this freelancer';
+  String get noReviewsGivenForThisFreelancer =>
+      'No reviews given for this freelancer';
 
   @override
-  String get noReviewsReceivedForThisClient => 'No reviews received for this client';
+  String get noReviewsReceivedForThisClient =>
+      'No reviews received for this client';
 
   @override
   String get service1 => 'Providing academic sources and references';
@@ -857,7 +864,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get error_select_hiring_method => 'Please select hiring method';
 
   @override
-  String get error_wait_attachments => 'Please wait until all attachments are uploaded';
+  String get error_wait_attachments =>
+      'Please wait until all attachments are uploaded';
 
   @override
   String get error_select_freelancer => 'Please select freelancer';
@@ -900,13 +908,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get public_posting_title => 'Public Posting';
 
   @override
-  String get public_posting_subtitle => 'Post your request publicly and receive multiple proposals';
+  String get public_posting_subtitle =>
+      'Post your request publicly and receive multiple proposals';
 
   @override
   String get hire_specific_freelancer_title => 'Hire Specific Freelancer';
 
   @override
-  String get hire_specific_freelancer_subtitle => 'Send your request directly to a specific freelancer as a private offer';
+  String get hire_specific_freelancer_subtitle =>
+      'Send your request directly to a specific freelancer as a private offer';
 
   @override
   String get private_badge => 'Private';
@@ -971,7 +981,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get confirm_delete => 'Confirm Delete';
 
   @override
-  String get delete_confirmation_message => 'Are you sure you want to delete this order?';
+  String get delete_confirmation_message =>
+      'Are you sure you want to delete this order?';
 
   @override
   String get delete => 'Delete';
@@ -1016,7 +1027,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get warning => 'Warning';
 
   @override
-  String get upload_warning_message => 'You have uploaded payment proof but haven\'t pressed Make Payment. Are you sure you want to leave?';
+  String get upload_warning_message =>
+      'You have uploaded payment proof but haven\'t pressed Make Payment. Are you sure you want to leave?';
 
   @override
   String get stay => 'Stay';
@@ -1028,10 +1040,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get upload_payment_proof => 'Upload Payment Proof';
 
   @override
-  String get secure_payment_note => '🔒 Secure payment. Funds will not be released until the work is completed.';
+  String get secure_payment_note =>
+      '🔒 Secure payment. Funds will not be released until the work is completed.';
 
   @override
-  String get payment_under_review_message => '📢 Don\'t worry, your payment request is under review.\nIt usually doesn\'t take long.';
+  String get payment_under_review_message =>
+      '📢 Don\'t worry, your payment request is under review.\nIt usually doesn\'t take long.';
 
   @override
   String get payment_status => 'Payment Status';
@@ -1045,22 +1059,26 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get contact_us_note => '📣 If you have any questions, please contact us. We are here to help!';
+  String get contact_us_note =>
+      '📣 If you have any questions, please contact us. We are here to help!';
 
   @override
   String get chat_with_admin => 'Chat with Admin Now';
 
   @override
-  String get upload_note => 'Note: After completing the transfer, please upload a photo of the receipt or a screenshot from your banking app as proof of payment.';
+  String get upload_note =>
+      'Note: After completing the transfer, please upload a photo of the receipt or a screenshot from your banking app as proof of payment.';
 
   @override
-  String get leave_warning_message => 'You have uploaded payment proof but haven\'t pressed Make Payment. Are you sure you want to leave?';
+  String get leave_warning_message =>
+      'You have uploaded payment proof but haven\'t pressed Make Payment. Are you sure you want to leave?';
 
   @override
   String get creating_payment => 'Creating payment...';
 
   @override
-  String get payment_created_success => 'Payment created successfully, please wait for admin approval';
+  String get payment_created_success =>
+      'Payment created successfully, please wait for admin approval';
 
   @override
   String get make_payment => 'Make Payment';
@@ -1069,7 +1087,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get please_upload_proof => 'Please upload payment proof';
 
   @override
-  String get please_wait_uploads => 'Please wait until all attachments are uploaded';
+  String get please_wait_uploads =>
+      'Please wait until all attachments are uploaded';
 
   @override
   String get iban_number => 'IBAN Number';
@@ -1090,7 +1109,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get upload_payment_proof_first => 'Please upload payment proof';
 
   @override
-  String get payment_proof_uploaded_success => 'Payment proof uploaded successfully';
+  String get payment_proof_uploaded_success =>
+      'Payment proof uploaded successfully';
 
   @override
   String get home => 'Home';
@@ -1126,7 +1146,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get private_requests => 'Private Requests';
 
   @override
-  String get account_under_verification => 'Your account is under verification.\nPlease wait until your request is approved.';
+  String get account_under_verification =>
+      'Your account is under verification.\nPlease wait until your request is approved.';
 
   @override
   String get send_offers => 'Send offers';
@@ -1307,7 +1328,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get enter_time_hint => 'Enter time';
 
   @override
-  String get offer_description_hint => 'Explain how you will execute this project, including methods or any specific conditions....';
+  String get offer_description_hint =>
+      'Explain how you will execute this project, including methods or any specific conditions....';
 
   @override
   String get description_error => 'Please enter a description';
@@ -1412,7 +1434,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get activeAccount => 'Active Account';
 
   @override
-  String get enableOrDisableBankAccount => 'Enable or disable this bank account';
+  String get enableOrDisableBankAccount =>
+      'Enable or disable this bank account';
 
   @override
   String get update => 'Update';
@@ -1421,13 +1444,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deleteAccount => 'Delete Account';
 
   @override
-  String get bankAccountSavedSuccessfully => 'Bank account saved successfully ✅';
+  String get bankAccountSavedSuccessfully =>
+      'Bank account saved successfully ✅';
 
   @override
-  String get bankAccountUpdatedSuccessfully => 'Bank account updated successfully ✅';
+  String get bankAccountUpdatedSuccessfully =>
+      'Bank account updated successfully ✅';
 
   @override
-  String get bankAccountDeletedSuccessfully => 'Bank account deleted successfully ✅';
+  String get bankAccountDeletedSuccessfully =>
+      'Bank account deleted successfully ✅';
 
   @override
   String get noAccountsFound => 'No accounts found';
@@ -1535,55 +1561,64 @@ class AppLocalizationsEn extends AppLocalizations {
   String get english => 'English';
 
   @override
-  String get privacyPolicyWelcome => 'Welcome to Taskly! Your privacy is very important to us. This Privacy Policy explains how we collect, use, and protect your personal information when you use our application, whether you are a Client or a Freelancer.';
+  String get privacyPolicyWelcome =>
+      'Welcome to Taskly! Your privacy is very important to us. This Privacy Policy explains how we collect, use, and protect your personal information when you use our application, whether you are a Client or a Freelancer.';
 
   @override
   String get informationWeCollect => '1. Information We Collect';
 
   @override
-  String get informationWeCollectDesc => '- Account Information: name, email, phone number, profile details.\n- Service & Order Details: tasks created, accepted, and completed.\n- Payment Information: billing details and transaction history.\n- Device Information: device type, OS, and IP address.';
+  String get informationWeCollectDesc =>
+      '- Account Information: name, email, phone number, profile details.\n- Service & Order Details: tasks created, accepted, and completed.\n- Payment Information: billing details and transaction history.\n- Device Information: device type, OS, and IP address.';
 
   @override
   String get howWeUseInfo => '2. How We Use Your Information';
 
   @override
-  String get howWeUseInfoDesc => 'We use your information to create and manage accounts, match Clients with Freelancers, facilitate communication, process payments, improve app performance, and ensure security.';
+  String get howWeUseInfoDesc =>
+      'We use your information to create and manage accounts, match Clients with Freelancers, facilitate communication, process payments, improve app performance, and ensure security.';
 
   @override
   String get sharingData => '3. Sharing Your Data';
 
   @override
-  String get sharingDataDesc => 'We do not sell your personal data. We may share information only with:\n- Other Users (limited profile details to complete tasks).\n- Third-party services (Firebase, Supabase, payment processors).\n- Legal authorities if required by law.';
+  String get sharingDataDesc =>
+      'We do not sell your personal data. We may share information only with:\n- Other Users (limited profile details to complete tasks).\n- Third-party services (Firebase, Supabase, payment processors).\n- Legal authorities if required by law.';
 
   @override
   String get dataSecurity => '4. Data Security';
 
   @override
-  String get dataSecurityDesc => 'We implement industry-standard measures to protect your data, but no method of transmission or storage is 100% secure.';
+  String get dataSecurityDesc =>
+      'We implement industry-standard measures to protect your data, but no method of transmission or storage is 100% secure.';
 
   @override
   String get yourRights => '5. Your Rights';
 
   @override
-  String get yourRightsDesc => 'You have the right to access, update, or delete your personal data and to contact us regarding any privacy concerns.';
+  String get yourRightsDesc =>
+      'You have the right to access, update, or delete your personal data and to contact us regarding any privacy concerns.';
 
   @override
   String get cookiesTracking => '6. Cookies & Tracking';
 
   @override
-  String get cookiesTrackingDesc => 'Taskly may use cookies and similar technologies to personalize your experience and analyze app usage.';
+  String get cookiesTrackingDesc =>
+      'Taskly may use cookies and similar technologies to personalize your experience and analyze app usage.';
 
   @override
   String get policyUpdates => '7. Policy Updates';
 
   @override
-  String get policyUpdatesDesc => 'We may update this Privacy Policy from time to time. Continued use of Taskly means you agree to the updated terms.';
+  String get policyUpdatesDesc =>
+      'We may update this Privacy Policy from time to time. Continued use of Taskly means you agree to the updated terms.';
 
   @override
   String get changePassword => 'Change Password';
 
   @override
-  String get changePasswordDesc => 'Enter your old password then enter your new password to change your password.';
+  String get changePasswordDesc =>
+      'Enter your old password then enter your new password to change your password.';
 
   @override
   String get oldPassword => 'Old Password';
@@ -1646,25 +1681,32 @@ class AppLocalizationsEn extends AppLocalizations {
   String get howToChangeName => 'How to change my name?';
 
   @override
-  String get requestServiceAnswer => 'To request a service, go to the services page, choose the service you need, fill in the details, and submit your request.';
+  String get requestServiceAnswer =>
+      'To request a service, go to the services page, choose the service you need, fill in the details, and submit your request.';
 
   @override
-  String get deleteServiceAnswer => 'To delete a service request, go to the \'My Jobs\' tab, find your request under \'Pending\', open it, and tap the delete button. Confirm to remove it.';
+  String get deleteServiceAnswer =>
+      'To delete a service request, go to the \'My Jobs\' tab, find your request under \'Pending\', open it, and tap the delete button. Confirm to remove it.';
 
   @override
-  String get contactSupportAnswer => 'You can contact us via phone, email, or send a message through the Contact Us section above.';
+  String get contactSupportAnswer =>
+      'You can contact us via phone, email, or send a message through the Contact Us section above.';
 
   @override
-  String get chatWithAdminAnswer => 'To chat directly with the admin, go to the \'Messages\' tab. You will find a pinned chat where you can send your messages and get a response from the admin.';
+  String get chatWithAdminAnswer =>
+      'To chat directly with the admin, go to the \'Messages\' tab. You will find a pinned chat where you can send your messages and get a response from the admin.';
 
   @override
-  String get updateProfileAnswer => 'Go to your profile page, click edit, and update your name, email, or password as needed.';
+  String get updateProfileAnswer =>
+      'Go to your profile page, click edit, and update your name, email, or password as needed.';
 
   @override
-  String get changePasswordAnswer => 'Go to your profile page, click edit, and update your password as needed.';
+  String get changePasswordAnswer =>
+      'Go to your profile page, click edit, and update your password as needed.';
 
   @override
-  String get changeNameAnswer => 'Go to your profile page, click edit, and update your name as needed.';
+  String get changeNameAnswer =>
+      'Go to your profile page, click edit, and update your name as needed.';
 
   @override
   String get withdrawalRequest => 'Withdrawal Request';
@@ -1709,7 +1751,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get submitRequest => 'Submit Request';
 
   @override
-  String get withdrawalRequestPlacedSuccessfully => 'Withdrawal request placed successfully';
+  String get withdrawalRequestPlacedSuccessfully =>
+      'Withdrawal request placed successfully';
 
   @override
   String get enterValidAmount => 'Enter a valid amount';
@@ -1718,7 +1761,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get selectMethodAndEnterPhone => 'Select method and enter phone';
 
   @override
-  String get vodafoneCashNote => '⚠️ Please enter the Vodafone Cash number registered in your name';
+  String get vodafoneCashNote =>
+      '⚠️ Please enter the Vodafone Cash number registered in your name';
 
   @override
   String get analytics => 'Analytics';
@@ -1763,7 +1807,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get termsConditions => 'Terms & Conditions';
 
   @override
-  String get somethingWentWrongTryAgain => 'Something went wrong, Please try again Later';
+  String get somethingWentWrongTryAgain =>
+      'Something went wrong, Please try again Later';
 
   @override
   String get errorFetchingEarnings => 'Error fetching earnings';
@@ -1785,31 +1830,39 @@ class AppLocalizationsEn extends AppLocalizations {
   String get admin_support => 'Admin Support';
 
   @override
-  String get checkOrderStatusMessage => 'Please check the order status in the Messages section and contact the client if needed.';
+  String get checkOrderStatusMessage =>
+      'Please check the order status in the Messages section and contact the client if needed.';
 
   @override
   String get chat_with_admin_support => 'Chat with Admin Support';
 
   @override
-  String get offerCompletedMessage => 'This offer has been completed. You can leave a review or check the order details in Messages.';
+  String get offerCompletedMessage =>
+      'This offer has been completed. You can leave a review or check the order details in Messages.';
 
   @override
-  String get orderPending => 'System: The order is still pending. No offer has been accepted yet.';
+  String get orderPending =>
+      'System: The order is still pending. No offer has been accepted yet.';
 
   @override
-  String get orderAccepted => 'System: The offer has been accepted. Waiting for payment before work can start.';
+  String get orderAccepted =>
+      'System: The offer has been accepted. Waiting for payment before work can start.';
 
   @override
-  String get orderPaid => 'System: Payment has been submitted and is under review. Work will begin as soon as possible.';
+  String get orderPaid =>
+      'System: Payment has been submitted and is under review. Work will begin as soon as possible.';
 
   @override
-  String get orderInProgress => 'System: Order payment has been confirmed, you can start working on it now.';
+  String get orderInProgress =>
+      'System: Order payment has been confirmed, you can start working on it now.';
 
   @override
-  String get orderWaiting => 'System: Work has been submitted to the client for review.';
+  String get orderWaiting =>
+      'System: Work has been submitted to the client for review.';
 
   @override
-  String get orderCompleted => 'System: The order has been completed successfully.';
+  String get orderCompleted =>
+      'System: The order has been completed successfully.';
 
   @override
   String get orderCancelled => 'System: This order has been cancelled.';
@@ -1829,14 +1882,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get workReceivedButton => 'Work Received';
 
   @override
-  String get submitDeliveryConfirmation => 'Are you sure you want to submit the delivery?';
+  String get submitDeliveryConfirmation =>
+      'Are you sure you want to submit the delivery?';
 
   @override
-  String get workReceivedConfirmation => 'Are you sure you have received the work?';
+  String get workReceivedConfirmation =>
+      'Are you sure you have received the work?';
 
   @override
   String get rateClient => 'Rate Client';
 
   @override
   String get rateFreelancer => 'Rate Freelancer';
+
+  @override
+  String get already_offered => 'Already Offered';
+
+  @override
+  String get no_messages_yet => 'No messages yet';
 }

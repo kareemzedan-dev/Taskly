@@ -6,7 +6,9 @@ import 'package:taskly/core/utils/strings_manager.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../../../../../../core/di/di.dart';
 import '../../../../../../../../../core/utils/colors_manger.dart';
+import '../../../../config/l10n/app_localizations.dart';
 import '../../../../core/cache/shared_preferences.dart';
+import '../../../../core/utils/assets_manager.dart';
 import '../../../shared/presentation/views/widgets/message_bubble.dart';
 import '../../domain/entities/message_entity.dart';
 import '../manager/messages_view_model/messages_view_model.dart';
@@ -321,6 +323,7 @@ class _ChatViewBodyState extends State<ChatViewBody> {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -391,13 +394,24 @@ class _ChatViewBodyState extends State<ChatViewBody> {
                             (a, b) => a.createdAt.compareTo(b.createdAt));
 
                     if (allMessages.isEmpty) {
-                      return const Center(
-                        child: Text(
-                          "No messages yet",
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.grey,
-                          ),
+                      return   Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(Assets.assetsNoMessages,
+                            width: 250.w,
+                            height: 250.h,
+                            fit: BoxFit.contain,),
+                            SizedBox(height: 16.h),
+                            Text(
+                            "لا يوجد رسائل بعد",
+                              style: TextStyle(
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ],
                         ),
                       );
                     }

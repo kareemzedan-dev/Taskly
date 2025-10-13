@@ -651,5 +651,7 @@
   "submitDeliveryConfirmation": "Are you sure you want to submit the delivery?",
   "workReceivedConfirmation": "Are you sure you have received the work?",
   "rateClient": "Rate Client",
-  "rateFreelancer": "Rate Freelancer"
+  "rateFreelancer": "Rate Freelancer",
+  "already_offered": "Already Offered",
+  "no_messages_yet": "No messages yet"
 }

@@ -21,6 +21,7 @@ import 'package:taskly/features/client/presentation/views/tabs/home/presentation
 
 import '../../../../../../../../../core/di/di.dart';
 import '../../../../../../../../attachments/data/models/attachments_dm/attachments_dm.dart';
+import '../../../../../../../../attachments/presentation/manager/upload_order_attachments_view_model/upload_order_attachments_view_model.dart';
 
 class OrderViewBody extends StatefulWidget {
   const OrderViewBody({
@@ -40,15 +41,32 @@ class _OrderViewBodyState extends State<OrderViewBody> {
   void initState() {
     super.initState();
     final orderViewModel = context.read<PlaceOrderViewModel>();
+
     orderViewModel.titleController.text = widget.title;
     orderViewModel.selectedCategory = widget.selectedCategory;
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final local = AppLocalizations.of(context)!;
+    final orderViewModel = context.read<PlaceOrderViewModel>();
+
+    orderViewModel.timeUnits = [
+      local.hours,
+      local.days,
+      local.weeks,
+    ];
+    orderViewModel.selectedTimeUnit = orderViewModel.timeUnits.first;
+  }
+
+
+
   int selectedHireMethodIndex = 0;
   List<AttachmentModel> uploadedAttachments = [];
 
-  UploadAttachmentsViewModel uploadAttachmentsViewModel =
-  getIt<UploadAttachmentsViewModel>();
+  UploadOrderAttachmentsViewModel uploadOrderAttachmentsViewModel =
+  getIt<UploadOrderAttachmentsViewModel>();
 
   @override
   Widget build(BuildContext context) {
@@ -147,7 +165,7 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                     ),
                     SizedBox(height: 16.h),
                     AttachmentsFilesSection(
-                      uploadAttachmentsViewModel: uploadAttachmentsViewModel,
+                      uploadOrderAttachmentsViewModel: uploadOrderAttachmentsViewModel,
                     ),
                     SizedBox(height: 28.h),
                     Text(
@@ -203,13 +221,13 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                             MessageType.error,
                           );
                         }
-                        if (uploadAttachmentsViewModel.files.isEmpty) {
-                          return showTemporaryMessage(
-                            context,
-                            local.error_add_attachments,
-                            MessageType.error,
-                          );
-                        }
+                        // if (uploadOrderAttachmentsViewModel.files.isEmpty) {
+                        //   return showTemporaryMessage(
+                        //     context,
+                        //     local.error_add_attachments,
+                        //     MessageType.error,
+                        //   );
+                        // }
                         if (selectedHireMethodIndex == -1) {
                           return showTemporaryMessage(
                             context,
@@ -217,9 +235,9 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                             MessageType.error,
                           );
                         }
-                        if (uploadAttachmentsViewModel.files.isNotEmpty &&
-                            uploadAttachmentsViewModel.files.length !=
-                                uploadAttachmentsViewModel.uploadedFileHashes
+                        if (uploadOrderAttachmentsViewModel.files.isNotEmpty &&
+                            uploadOrderAttachmentsViewModel.files.length !=
+                                uploadOrderAttachmentsViewModel.uploadedFileHashes
                                     .length) {
                           return showTemporaryMessage(
                             context,
@@ -240,7 +258,7 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                               description: orderViewModel
                                   .descriptionController.text,
                               category: orderViewModel.selectedCategory,
-                              attachments: uploadAttachmentsViewModel
+                              attachments: uploadOrderAttachmentsViewModel
                                   .uploadedAttachments,
                               serviceType: ServiceType.public,
                               status: OrderStatus.Pending,
@@ -263,6 +281,11 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                             );
                           }
                           if (orderViewModel.freelancerId!.isNotEmpty) {
+                            print('🕒 deadline => ${orderViewModel.calculateDeadline(
+                              orderViewModel.timeController.text,
+                              orderViewModel.selectedTimeUnit,
+                            )}');
+
                             await context
                                 .read<PlaceOrderViewModel>()
                                 .placeOrder(
@@ -276,7 +299,7 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                                     .descriptionController.text,
                                 category:
                                 orderViewModel.selectedCategory,
-                                attachments: uploadAttachmentsViewModel
+                                attachments: uploadOrderAttachmentsViewModel
                                     .uploadedAttachments,
                                 serviceType: ServiceType.private,
                                 status: OrderStatus.Pending,

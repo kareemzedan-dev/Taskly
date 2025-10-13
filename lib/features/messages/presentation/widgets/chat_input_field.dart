@@ -489,7 +489,7 @@ class _ChatInputFieldState extends State<ChatInputField> {
 
                 boxShadow: [
                   BoxShadow(
-
+                    color: Colors.white ,
                     blurRadius: 8,
                     offset: const Offset(0, -2),
                   ),

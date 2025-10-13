@@ -61,7 +61,7 @@ class FreelancerPrivateOrdersList extends StatelessWidget {
         itemCount: orders.length,
         itemBuilder: (context, index) => Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: FreelancerWorkCard(order: orders[index], addFavViewModel: addFavViewModel,),
+          child: FreelancerWorkCard(order: orders[index], addFavViewModel: addFavViewModel, offeredOrderIds: [],),
         ),
       );
     }

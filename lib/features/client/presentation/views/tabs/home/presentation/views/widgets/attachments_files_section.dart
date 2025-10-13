@@ -5,20 +5,22 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/di/di.dart';
 import 'package:taskly/features/attachments/presentation/manager/upload_attachments_view_model/upload_attachments_view_model_states.dart';
+import 'package:taskly/features/attachments/presentation/manager/upload_order_attachments_view_model/upload_order_attachments_states.dart';
 import '../../../../../../../../attachments/presentation/manager/delete_attachments_view_model/delete_attachments_view_model.dart';
 import '../../../../../../../../attachments/presentation/manager/delete_attachments_view_model/delete_attachments_view_model_states.dart';
 import '../../../../../../../../attachments/presentation/manager/upload_attachments_view_model/upload_attachments_view_model.dart';
 import '../../../../../../../../../core/components/dismissible_error_card.dart';
 import '../../../../../../../../../config/l10n/app_localizations.dart';
+import '../../../../../../../../attachments/presentation/manager/upload_order_attachments_view_model/upload_order_attachments_view_model.dart';
 
 class AttachmentsFilesSection extends StatefulWidget {
-  final UploadAttachmentsViewModel uploadAttachmentsViewModel;
+  final UploadOrderAttachmentsViewModel uploadOrderAttachmentsViewModel;
   final VoidCallback? onTap;
   final VoidCallback? onClearAll;
 
   const AttachmentsFilesSection({
     super.key,
-    required this.uploadAttachmentsViewModel,
+    required this.uploadOrderAttachmentsViewModel,
     this.onTap,
     this.onClearAll,
   });
@@ -43,25 +45,26 @@ class _AttachmentsFilesSectionState extends State<AttachmentsFilesSection> {
 
     return MultiBlocProvider(
       providers: [
-        BlocProvider.value(value: widget.uploadAttachmentsViewModel),
+        BlocProvider.value(value: widget.uploadOrderAttachmentsViewModel),
         BlocProvider.value(value: deleteAttachmentsViewModel),
       ],
-      child: BlocConsumer<UploadAttachmentsViewModel,
-          UploadAttachmentsViewModelStates>(
+      child: BlocConsumer<UploadOrderAttachmentsViewModel,
+          UploadOrderAttachmentsViewModelStates>(
         listener: (context, state) {
-          if (state is UploadAttachmentsViewModelStatesLoading) {
+          if (state is UploadOrderAttachmentsViewModelStatesLoading) {
             _showTemporaryMessage(local.uploading, MessageType.success);
-          } else if (state is UploadAttachmentsViewModelStatesError) {
+          } else if (state is UploadOrderAttachmentsViewModelStatesError) {
             _showTemporaryMessage(local.error(state.message), MessageType.error);
 
-          } else if (state is UploadAttachmentsViewModelStatesSuccess) {
+          } else if (state is UploadOrderAttachmentsViewModelStatesSuccess) {
             _showTemporaryMessage(local.uploaded_successfully, MessageType.success);
           }
+
         },
         builder: (context, state) {
-          final files = widget.uploadAttachmentsViewModel.files;
+          final files = widget.uploadOrderAttachmentsViewModel.files;
           final uploadedHashes =
-              widget.uploadAttachmentsViewModel.uploadedFileHashes;
+              widget.uploadOrderAttachmentsViewModel.uploadedFileHashes;
 
           return Column(
             children: [
@@ -71,7 +74,7 @@ class _AttachmentsFilesSectionState extends State<AttachmentsFilesSection> {
                     icon:
                     const Icon(Icons.attach_file, color: Colors.grey),
                     onPressed: () async {
-                      await widget.uploadAttachmentsViewModel
+                      await widget.uploadOrderAttachmentsViewModel
                           .pickFilesFromDevice();
                     },
                   ),
@@ -87,7 +90,7 @@ class _AttachmentsFilesSectionState extends State<AttachmentsFilesSection> {
                         ),
                         child: Center(
                           child: Text(
-                            widget.uploadAttachmentsViewModel.uploadedFileHashes.isEmpty
+                            widget.uploadOrderAttachmentsViewModel.uploadedFileHashes.isEmpty
                                 ? local.no_files_uploaded_yet
                                 : local.files_uploaded_count(uploadedHashes.length),
 
@@ -114,7 +117,7 @@ class _AttachmentsFilesSectionState extends State<AttachmentsFilesSection> {
                 return FutureBuilder<String>(
                   key: uniqueKey,
                   future:
-                  widget.uploadAttachmentsViewModel.generateFileHash(file),
+                  widget.uploadOrderAttachmentsViewModel.generateFileHash(file),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Container(
@@ -247,9 +250,9 @@ class _AttachmentsFilesSectionState extends State<AttachmentsFilesSection> {
   }
 
   void _onDeleteFile(File file, AppLocalizations local) async {
-    widget.uploadAttachmentsViewModel.removeFileFromQueue(file);
+    widget.uploadOrderAttachmentsViewModel.removeFileFromQueue(file);
 
-    final attachments = widget.uploadAttachmentsViewModel.uploadedAttachments
+    final attachments = widget.uploadOrderAttachmentsViewModel.uploadedAttachments
         .where((e) => e.name == file.path.split('/').last)
         .toList();
 
@@ -272,7 +275,7 @@ class _AttachmentsFilesSectionState extends State<AttachmentsFilesSection> {
       },
           (_) {
         _showTemporaryMessage(local.file_deleted_successfully, MessageType.success);
-        widget.uploadAttachmentsViewModel.uploadedAttachments.remove(attachment);
+        widget.uploadOrderAttachmentsViewModel.uploadedAttachments.remove(attachment);
       },
     );
   }

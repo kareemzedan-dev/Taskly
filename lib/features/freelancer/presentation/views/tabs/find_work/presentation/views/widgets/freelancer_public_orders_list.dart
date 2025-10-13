@@ -7,12 +7,15 @@ import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/pre
 import '../../../../../../../../../config/l10n/app_localizations.dart';
 import '../../../../../../../../shared/domain/entities/order_entity/order_entity.dart';
 import '../../view_model/add_favorite_order_view_model/add_favorite_order_view_model.dart';
+import '../../view_model/freelancer_public_order_view_model/freelancer_public_order_view_model.dart';
 import 'freelancer_work_card_shimmer.dart';
 
 class FreelancerPublicOrdersList extends StatelessWidget {
   final FreelancerPublicOrdersState state;
+  final FreelancerPublicOrdersViewModel viewModel;
 
-  const FreelancerPublicOrdersList({super.key, required this.state, required this.addFavViewModel});
+
+  const FreelancerPublicOrdersList({super.key,required this.viewModel ,  required this.state, required this.addFavViewModel});
   final AddFavoriteOrderViewModel addFavViewModel;
 
   @override
@@ -61,8 +64,10 @@ class FreelancerPublicOrdersList extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: FreelancerWorkCard(
             order: sortedOrders[index],
-            addFavViewModel: addFavViewModel, // ⚠️ هنا
+            addFavViewModel: addFavViewModel,
+            offeredOrderIds: viewModel.offeredOrderIds,
           ),
+
         ),
 
       );

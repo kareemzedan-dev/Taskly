@@ -138,6 +138,7 @@ class _FreelancerHomeTabViewBodyState extends State<FreelancerHomeTabViewBody> {
                                   child: FreelancerPublicOrdersList(
                                     state: pendingState,
                                     addFavViewModel: _addFavoriteOrderViewModel,
+                                    viewModel: _pendingOrdersViewModel,
                                   ),
                                 );
                               },

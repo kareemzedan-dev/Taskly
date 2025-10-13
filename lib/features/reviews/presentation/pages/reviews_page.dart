@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:taskly/config/l10n/app_localizations.dart';
 
 import '../../../../core/components/custom_app_bar.dart';
 import '../widgets/reviews_page_body.dart';
@@ -18,9 +19,10 @@ class ReviewsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: const CustomAppBar(
-        title: "Review",
+      appBar:   CustomAppBar(
+        title:local.reviews,
         backgroundColor: Colors.white,
       ),
       body: ReviewsPageBody(

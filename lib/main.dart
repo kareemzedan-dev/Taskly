@@ -17,7 +17,6 @@ import 'package:taskly/features/client/presentation/views/tabs/home/presentation
 import 'package:taskly/config/l10n/app_localizations.dart';
 import 'core/helper/language_notifier.dart';
 import 'core/services/firebase_notification_service.dart';
-import 'core/services/supabase_service.dart';
 import 'core/services/theme_notifier.dart';
 import 'core/services/user_status_service.dart';
 import 'core/utils/constants_manager.dart';

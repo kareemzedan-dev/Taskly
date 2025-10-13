@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:either_dart/either.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,45 +10,47 @@ import 'package:taskly/features/shared/domain/entities/order_entity/order_entity
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/view_model/place_order_view_model/place_order_view_model_states.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../../../../../../../config/l10n/app_localizations.dart';
 import '../../../../../../../../attachments/data/models/attachments_dm/attachments_dm.dart';
 
 @injectable
 class PlaceOrderViewModel extends Cubit<PlaceOrderViewModelStates> {
-  PlaceOrderUseCase orderUseCase;
-  PlaceOrderViewModel(this.orderUseCase ) : super(PlaceOrderViewModelStatesInitial());
+  final PlaceOrderUseCase orderUseCase;
 
+  PlaceOrderViewModel(this.orderUseCase)
+      : super(PlaceOrderViewModelStatesInitial());
 
-  TextEditingController titleController = TextEditingController();
+  // Controllers and fields
+  final TextEditingController titleController = TextEditingController();
+  final TextEditingController timeController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
+
   List<File> localAttachments = [];
   List<AttachmentModel> uploadedAttachments = [];
-  TextEditingController timeController = TextEditingController();
   final orderId = const Uuid().v4();
-  Map<String, double> uploadProgress = {};
-  String selectedTimeUnit = "Days";
-  final List<String> timeUnits = ["Hours", "Days", "Weeks"];
-  String? selectedCategory;
-  TextEditingController descriptionController = TextEditingController();
   final clientId = SharedPrefHelper.getString("id");
-    String? freelancerId;
 
+  Map<String, double> uploadProgress = {};
 
+  String selectedTimeUnit = "";
+  List<String> timeUnits = [];
+
+  String? selectedCategory;
+  String? freelancerId;
+
+  // Set freelancer
   void setFreelancer(String id) {
     freelancerId = id;
     emit(PlaceOrderViewModelFreelancerSelected(id));
   }
 
- 
-
-  Future<Either<Failures, OrderEntity>> placeOrder(
-    OrderEntity orderEntity,
-  ) async {
+  // Place order
+  Future<Either<Failures, OrderEntity>> placeOrder(OrderEntity orderEntity) async {
     try {
       emit(PlaceOrderViewModelStatesLoading());
       final result = await orderUseCase.callPlaceOrder(orderEntity);
       result.fold(
-        (failure) => emit(PlaceOrderViewModelStatesError(failure.message)),
-        (order) => emit(PlaceOrderViewModelStatesSuccess(order)),
+            (failure) => emit(PlaceOrderViewModelStatesError(failure.message)),
+            (order) => emit(PlaceOrderViewModelStatesSuccess(order)),
       );
       return result;
     } catch (e) {
@@ -57,21 +58,20 @@ class PlaceOrderViewModel extends Cubit<PlaceOrderViewModelStates> {
     }
   }
 
-  DateTime? calculateDeadline(String text, String timeUnit) {
-    if (text.isEmpty) return null;
+  // Calculate deadline based on selected time unit
+  DateTime? calculateDeadline(String timeValue, String selectedUnit) {
+    final parsedValue = int.tryParse(timeValue);
+    if (parsedValue == null) return null;
 
-    final value = int.tryParse(text);
-    if (value == null) return null;
-
-    switch (timeUnit) {
-      case "Hours":
-        return DateTime.now().add(Duration(hours: value));
-      case "Days":
-        return DateTime.now().add(Duration(days: value));
-      case "Weeks":
-        return DateTime.now().add(Duration(days: value * 7));
-      default:
-        return null;
+    if (selectedUnit == 'Hours' || selectedUnit == 'ساعات') {
+      return DateTime.now().add(Duration(hours: parsedValue));
+    } else if (selectedUnit == 'Days' || selectedUnit == 'أيام') {
+      return DateTime.now().add(Duration(days: parsedValue));
+    } else if (selectedUnit == 'Weeks' || selectedUnit == 'أسابيع') {
+      return DateTime.now().add(Duration(days: parsedValue * 7));
     }
+
+    return null;
   }
+
 }

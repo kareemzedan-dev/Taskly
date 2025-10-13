@@ -3,43 +3,67 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/view_model/get_order_view_model.dart/get_order_view_model.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/view_model/get_order_view_model.dart/get_order_view_model_states.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/order_states_card.dart';
-
 import '../../../../../../../../shared/domain/entities/order_entity/order_entity.dart';
 import 'empty_state_animation.dart';
+
 class OrderStatusCardListView extends StatelessWidget {
   const OrderStatusCardListView({
     super.key,
     required this.animationPath,
     required this.message,
     required this.filter,
+    required this.userId,
+    required this.role,
   });
 
   final String animationPath;
   final String message;
   final OrderStatusFilter filter;
+  final String userId;
+  final String role;
+
+  List<OrderEntity> _filterOrders(List<OrderEntity> orders, OrderStatusFilter filter) {
+    final filtered = orders.where((order) {
+      switch (filter) {
+        case OrderStatusFilter.pending:
+          return order.status == OrderStatus.Pending ||
+              order.status == OrderStatus.Accepted ||
+              order.status == OrderStatus.Paid;
+        case OrderStatusFilter.inProgress:
+          return order.status == OrderStatus.InProgress;
+        case OrderStatusFilter.completed:
+          return order.status == OrderStatus.Completed;
+        case OrderStatusFilter.cancelled:
+          return order.status == OrderStatus.Cancelled;
+      }
+    }).toList();
+
+    print('🎯 Filter: $filter - Orders count: ${orders.length} - Filtered: ${filtered.length}');
+    for (var order in filtered) {
+      print('🎯 Order: ${order.id} - Status: ${order.status}');
+    }
+
+    return filtered;
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<GetOrderViewModel, GetOrderViewModelStates>(
+      buildWhen: (previous, current) {
+        // إعادة البناء فقط عندما يتغير الـ state فعلياً
+        return current is GetOrderViewModelStatesSuccess ||
+            current is GetOrderViewModelStatesLoading ||
+            current is GetOrderViewModelStatesError;
+      },
       builder: (context, state) {
+        print('🔄 OrderStatusCardListView rebuilding - State: ${state.runtimeType}');
+
         if (state is GetOrderViewModelStatesLoading) {
           return const Center(child: CircularProgressIndicator());
+        } else if (state is GetOrderViewModelStatesError) {
+          return Center(child: Text(state.message));
         } else if (state is GetOrderViewModelStatesSuccess) {
-
-          final filteredOrders = state.orderEntity.where((order) {
-            switch (filter) {
-              case OrderStatusFilter.pending:
-                return order.status == OrderStatus.Pending ||
-                    order.status == OrderStatus.Accepted ||
-                    order.status == OrderStatus.Paid;
-              case OrderStatusFilter.inProgress:
-                return order.status == OrderStatus.InProgress;
-              case OrderStatusFilter.completed:
-                return order.status == OrderStatus.Completed;
-              case OrderStatusFilter.cancelled:
-                return order.status == OrderStatus.Cancelled;
-            }
-          }).toList();
+          final filteredOrders = _filterOrders(state.orderEntity, filter);
 
           if (filteredOrders.isEmpty) {
             return Center(
@@ -52,16 +76,20 @@ class OrderStatusCardListView extends StatelessWidget {
 
           return ListView.separated(
             itemCount: filteredOrders.length,
-            separatorBuilder: (_, __) => const Divider(),
+            separatorBuilder: (_, __) => const Divider(height: 1),
             itemBuilder: (context, index) {
+              final order = filteredOrders[index];
+              print('📦 Building card for order: ${order.id} - Status: ${order.status}');
+
               return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: OrderStatesCard(order: filteredOrders[index]),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: OrderStatesCard(order: order),
               );
             },
           );
         }
-        return Container();
+
+        return const Center(child: CircularProgressIndicator());
       },
     );
   }

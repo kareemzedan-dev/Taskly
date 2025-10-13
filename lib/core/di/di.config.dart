@@ -34,6 +34,7 @@ import '../../features/attachments/presentation/manager/download_attachments_vie
     as _i338;
 import '../../features/attachments/presentation/manager/upload_attachments_view_model/upload_attachments_view_model.dart'
     as _i11;
+import '../../features/attachments/presentation/manager/upload_order_attachments_view_model/upload_order_attachments_view_model.dart';
 import '../../features/auth/data/data_sources/remote/auth_remote_data_source.dart'
     as _i432;
 import '../../features/auth/data/data_sources/remote/change_password_remote_data_source/change_password_remote_data_source.dart'
@@ -1086,6 +1087,8 @@ extension GetItInjectableX on _i174.GetIt {
               gh<_i669.UpdateUserProfileUseCase>(),
               gh<_i730.UserInfoEntity>(),
             ));
+    gh.factory<UploadOrderAttachmentsViewModel>(() =>
+        UploadOrderAttachmentsViewModel(gh<_i231.UploadAttachmentsUseCase>()));
     return this;
   }
 }

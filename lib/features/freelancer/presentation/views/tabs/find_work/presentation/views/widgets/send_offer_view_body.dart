@@ -36,8 +36,8 @@ class _SendOfferViewBodyState extends State<SendOfferViewBody> {
   final TextEditingController deliveryTimeController = TextEditingController();
 
 
-  String selectedTimeUnit = "Days";
-  final List<String> timeUnits = ["Hours", "Days", "Weeks"];
+  String selectedTimeUnit = "";
+
   final _formKey = GlobalKey<FormState>();
 
   String? descriptionError;
@@ -62,6 +62,14 @@ class _SendOfferViewBodyState extends State<SendOfferViewBody> {
   @override
   Widget build(BuildContext context) {
     final local = AppLocalizations.of(context)!;
+    final List<String> timeUnits = [
+      local.hours, // "ساعات" بالعربي أو "Hours" بالإنجليزي
+      local.days,  // "أيام" أو "Days"
+      local.weeks, // "أسابيع" أو "Weeks"
+    ];
+    if (selectedTimeUnit.isEmpty) {
+      selectedTimeUnit = local.days; // الافتراضي "أيام" أو "Days"
+    }
     String selectedCurrency =   local.sar;
     return BlocConsumer<SendOfferViewModel, SendOfferViewModelStates>(
       listener: (context, state) {

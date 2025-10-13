@@ -4,16 +4,23 @@ import '../../config/l10n/app_localizations.dart';
 
 int convertToMinutes(int value, String unit) {
   switch (unit) {
-    case "Hours":
+    case 'Hours':
+    case 'ساعات':
       return value * 60;
-    case "Days":
+
+    case 'Days':
+    case 'أيام':
       return value * 24 * 60;
-    case "Weeks":
+
+    case 'Weeks':
+    case 'أسابيع':
       return value * 7 * 24 * 60;
+
     default:
       return value;
   }
 }
+
 
 extension FormatMinutesExtension on int {
   String formatMinutes(BuildContext context) {
