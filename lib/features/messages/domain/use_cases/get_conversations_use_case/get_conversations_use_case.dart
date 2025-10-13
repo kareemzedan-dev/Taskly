@@ -14,4 +14,8 @@ import '../../repositories/messages_repos/get_conversation_repo/get_conversation
     return repos.getConversations(userId);
   }
 
+  Stream<List<ConversationEntity>> subscribeToConversations(String userId) {
+    return repos.subscribeToConversations(userId);
+  }
+
 }

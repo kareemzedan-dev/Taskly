@@ -79,10 +79,7 @@ class MessageBubble extends StatelessWidget {
           ),
           if (!isClient) ...[
             SizedBox(width: 8.w),
-            if(chatWithUsers)
-              CircleAvatar( radius: 16.r, backgroundImage: AssetImage(Assets.assetsUserAvatar))
 
-            else
               UserAvatar(imagePath: avatarUrl , radius: 16.r,),
           ],
         ],

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../config/l10n/app_localizations.dart';
+import '../../../attachments/presentation/manager/upload_order_attachments_view_model/upload_order_attachments_view_model.dart';
 import '../../../shared/domain/entities/order_entity/order_entity.dart';
 import '../widgets/client_payments_view_body.dart';
 import '../../../attachments/presentation/manager/upload_attachments_view_model/upload_attachments_view_model.dart';
@@ -19,7 +20,7 @@ class ClientPaymentsView extends StatelessWidget {
 
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => getIt<UploadAttachmentsViewModel>()),
+        BlocProvider(create: (_) => getIt<UploadOrderAttachmentsViewModel>()),
         BlocProvider(create: (_) => getIt<CreatePaymentViewModel>()),
       ],
       child: WillPopScope(
@@ -33,7 +34,7 @@ class ClientPaymentsView extends StatelessWidget {
   }
 
   Future<bool> _onWillPop(BuildContext context, AppLocalizations local) async {
-    final uploadVM = context.read<UploadAttachmentsViewModel>();
+    final uploadVM = context.read<UploadOrderAttachmentsViewModel>();
 
     if (uploadVM.uploadedAttachments.isNotEmpty) {
       final shouldLeave = await showDialog<bool>(

@@ -14,6 +14,10 @@ import 'package:injectable/injectable.dart';
     Future<Either<Failures, List<OrderEntity>>> getAcceptedOrderMessages(String userId,{UserRole? role}) async{
       return await getAcceptedOrderMessageRemoteDataSource.getAcceptedOrderMessages(userId,role: role);
     }
+    @override
+    Stream<List<OrderEntity>> subscribeToAcceptedOrders(String userId,{UserRole? role}) {
+      return getAcceptedOrderMessageRemoteDataSource.subscribeToAcceptedOrders(userId,role: role);
+    }
   
 
 }

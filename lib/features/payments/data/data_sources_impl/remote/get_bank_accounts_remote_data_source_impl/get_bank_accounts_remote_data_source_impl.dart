@@ -14,15 +14,18 @@ class GetBankAccountsRemoteDataSourceImpl
   GetBankAccountsRemoteDataSourceImpl(this.service);
 
   @override
-  Future<Either<Failures, List<BankAccountsModel>>>
-      getBankAccountsFromRemote() async {
+  Future<Either<Failures, List<BankAccountsModel>>> getBankAccountsFromRemote() async {
     try {
-      final List<Map<String, dynamic>> response =
-          await service.getAll(table: 'bank_accounts');
+      // إضافة فلتر للـ status
+      final List<Map<String, dynamic>> response = await service.getAll(
+        table: 'bank_accounts',
+        filters: {'is_active':  true },
+      );
 
-      final accounts =
-          response.map((json) => BankAccountsModel.fromJson(json)).toList();
+      // لو مفيش حسابات، ارجع ليست فاضية بدل الخطأ
+      if (response.isEmpty) return const Right([]);
 
+      final accounts = response.map((json) => BankAccountsModel.fromJson(json)).toList();
       return Right(accounts);
     } catch (e) {
       return Left(ServerFailure(e.toString()));

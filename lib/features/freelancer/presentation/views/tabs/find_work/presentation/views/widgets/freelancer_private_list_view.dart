@@ -59,11 +59,21 @@ class FreelancerPrivateOrdersList extends StatelessWidget {
           child: Divider(color: Colors.grey.shade300, thickness: 1.w),
         ),
         itemCount: orders.length,
-        itemBuilder: (context, index) => Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: FreelancerWorkCard(order: orders[index], addFavViewModel: addFavViewModel, offeredOrderIds: [],),
-        ),
+        itemBuilder: (context, index) {
+          final order = orders[index];
+
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: FreelancerWorkCard(
+              order: order,
+              addFavViewModel: addFavViewModel,
+              offeredOrderIds: (state as FreelancerPrivateOrdersViewModelStatesSuccess).offeredOrderIds,
+            ),
+          );
+        },
       );
+
+
     }
     else if (state is FreelancerPrivateOrdersViewModelStatesError) {
       return const FreelancerWorkCardShimmer();

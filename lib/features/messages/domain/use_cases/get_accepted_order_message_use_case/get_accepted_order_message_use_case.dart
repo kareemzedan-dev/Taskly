@@ -14,4 +14,8 @@ class GetAcceptedOrderMessagesUseCase {
   Future<Either<Failures, List<OrderEntity>>> call(String userId,{UserRole? role}) {
     return repository.getAcceptedOrderMessages(userId, role: role);
   }
+
+  Stream<List<OrderEntity>> subscribeToAcceptedOrders(String userId,{UserRole? role}) {
+    return repository.subscribeToAcceptedOrders(userId, role: role);
+  }
 }

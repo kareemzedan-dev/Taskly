@@ -5,8 +5,14 @@ class FreelancerPrivateOrdersViewModelStatesInitial extends FreelancerPrivateOrd
 class FreelancerPrivateOrdersViewModelStatesLoading extends FreelancerPrivateOrdersViewModelStates {}
 class FreelancerPrivateOrdersViewModelStatesSuccess extends FreelancerPrivateOrdersViewModelStates {
   final List<OrderEntity> orders;
-  FreelancerPrivateOrdersViewModelStatesSuccess({required this.orders});
+  final List<String> offeredOrderIds;
+
+  FreelancerPrivateOrdersViewModelStatesSuccess({
+    required this.orders,
+    required this.offeredOrderIds,
+  });
 }
+
 class FreelancerPrivateOrdersViewModelStatesError extends FreelancerPrivateOrdersViewModelStates {
   final String message;
   FreelancerPrivateOrdersViewModelStatesError({required this.message});

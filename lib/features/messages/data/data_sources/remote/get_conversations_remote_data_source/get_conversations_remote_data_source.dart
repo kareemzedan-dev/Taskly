@@ -9,4 +9,5 @@ abstract class GetConversationsRemoteDataSource {
   Future<Either<Failures, List<ConversationEntity>>> getConversations(String userId);
 
 
+  Stream<List<ConversationEntity>> subscribeToConversations(String userId);
 }

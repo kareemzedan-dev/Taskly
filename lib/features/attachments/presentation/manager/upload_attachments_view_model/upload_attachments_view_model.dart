@@ -47,6 +47,7 @@ class UploadAttachmentsViewModel
     bool singleFileMode = false,
   }) async {
     try {
+
       final result = await FilePicker.platform.pickFiles(
         allowMultiple: false,
         type: FileType.custom,

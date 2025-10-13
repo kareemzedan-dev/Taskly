@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
+import 'package:taskly/features/attachments/presentation/manager/upload_order_attachments_view_model/upload_order_attachments_states.dart';
 import 'package:taskly/features/payments/presentation/widgets/bank_details_card.dart';
 import 'package:taskly/features/payments/presentation/widgets/call_center_icon.dart';
 import 'package:taskly/features/payments/presentation/widgets/payment_note_card.dart';
@@ -10,6 +11,7 @@ import 'package:taskly/features/payments/presentation/widgets/secure_payment_ban
 import '../../../../core/di/di.dart';
 import '../../../attachments/presentation/manager/upload_attachments_view_model/upload_attachments_view_model.dart';
 import '../../../attachments/presentation/manager/upload_attachments_view_model/upload_attachments_view_model_states.dart';
+import '../../../attachments/presentation/manager/upload_order_attachments_view_model/upload_order_attachments_view_model.dart';
 import '../../../shared/presentation/views/widgets/attachments_section.dart';
 import '../manager/get_bank_account_view_model/get_bank_account_view_model.dart';
 import 'bank_details_card_list.dart';
@@ -19,9 +21,9 @@ class PaymentsContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UploadAttachmentsViewModel, UploadAttachmentsViewModelStates>(
+    return BlocBuilder<UploadOrderAttachmentsViewModel, UploadOrderAttachmentsViewModelStates>(
       builder: (context, state) {
-        final attachments = context.read<UploadAttachmentsViewModel>().uploadedAttachments;
+        final attachments = context.read<UploadOrderAttachmentsViewModel>().uploadedAttachments;
 
         return SingleChildScrollView(
           child: Column(

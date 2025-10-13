@@ -19,7 +19,7 @@ class PaymentNoteCard extends StatelessWidget {
           color: ColorsManager.primary.withOpacity(0.2),
         ),
         child: Text(
-          "Note: After completing the transfer, please upload a photo of the receipt or a screenshot from your banking app as proof of payment.",
+            "ملاحظة: بعد إتمام التحويل، يرجى رفع صورة الإيصال أو لقطة شاشة من تطبيق البنك كإثبات للدفع." ,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
             fontWeight: FontWeight.bold,
             fontSize: 13.sp,

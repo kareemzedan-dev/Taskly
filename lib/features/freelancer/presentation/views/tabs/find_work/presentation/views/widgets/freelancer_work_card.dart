@@ -67,6 +67,7 @@ class FreelancerWorkCard extends StatelessWidget {
                   ),
                   ActionItem(
                     title: offeredOrderIds.contains(order.id)
+
                         ? "مرسل بالفعل"
                           //already_offered
                         : local.send_offers,

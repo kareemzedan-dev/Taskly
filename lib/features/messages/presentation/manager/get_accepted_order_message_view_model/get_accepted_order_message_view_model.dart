@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
@@ -12,24 +14,56 @@ import 'get_accepted_order_message_states.dart';
 class GetAcceptedOrderMessageViewModel
     extends Cubit<GetAcceptedOrderMessageStates> {
   GetAcceptedOrderMessageViewModel(this.getAcceptedOrderMessagesUseCase)
-    : super(GetAcceptedOrderMessageStatesInitial());
-  GetAcceptedOrderMessagesUseCase getAcceptedOrderMessagesUseCase;
+      : super(GetAcceptedOrderMessageStatesInitial());
 
-  Future<Either<Failures, List<OrderEntity>>> getAcceptedOrderMessages(
-    String userId,
-      {UserRole? role}
-  ) async {
+  final GetAcceptedOrderMessagesUseCase getAcceptedOrderMessagesUseCase;
+  Stream<List<OrderEntity>>? _ordersStream;
+  StreamSubscription<List<OrderEntity>>? _ordersSubscription;
+
+  Future<void> getAcceptedOrderMessages(
+      String userId, {
+        UserRole? role,
+      }) async {
     try {
       emit(GetAcceptedOrderMessageStatesLoading());
-      final result = await getAcceptedOrderMessagesUseCase(userId, role: role );
-      result.fold(
-        (failure) =>
+
+      // 1️⃣ fetch الحالي
+      final fetchResult = await getAcceptedOrderMessagesUseCase(userId, role: role);
+      List<OrderEntity> currentOrders = [];
+      fetchResult.fold(
+            (failure) =>
             emit(GetAcceptedOrderMessageStatesError(message: failure.message)),
-        (orders) => emit(GetAcceptedOrderMessageStatesSuccess(orders: orders)),
+            (orders) {
+          currentOrders = orders;
+          emit(GetAcceptedOrderMessageStatesSuccess(orders: currentOrders));
+        },
       );
-      return result;
+
+      // 2️⃣ الاشتراك على التغييرات الجديدة
+      _ordersSubscription?.cancel();
+      _ordersStream =
+          getAcceptedOrderMessagesUseCase.subscribeToAcceptedOrders(userId, role: role);
+
+      _ordersSubscription = _ordersStream!.listen((updatedOrders) {
+        // دمج أي تحديثات جديدة مع الأوردرات الحالية
+        final mergedOrders = [
+          ...currentOrders.where((o) =>
+          !updatedOrders.any((u) => u.id == o.id)),
+          ...updatedOrders
+        ];
+
+        currentOrders = mergedOrders;
+        emit(GetAcceptedOrderMessageStatesSuccess(orders: mergedOrders));
+      });
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      emit(GetAcceptedOrderMessageStatesError(message: e.toString()));
     }
+  }
+
+
+  @override
+  Future<void> close() {
+    _ordersSubscription?.cancel();
+    return super.close();
   }
 }

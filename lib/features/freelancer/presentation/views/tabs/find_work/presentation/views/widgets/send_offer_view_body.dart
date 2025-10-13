@@ -14,6 +14,7 @@ import 'package:taskly/features/shared/presentation/views/widgets/description_se
 import 'package:uuid/uuid.dart';
 
 import '../../../../../../../../../core/components/dismissible_error_card.dart';
+import '../../view_model/freelancer_private_orders_view_model/freelancer_private_orders_view_model.dart';
 import '../../view_model/send_offer_view_model/send_offer_view_model.dart';
 import '../../view_model/send_offer_view_model/send_offer_view_model_states.dart';
 import '../../view_model/get_commission_view_model/get_commission_view_model.dart';
@@ -260,7 +261,7 @@ class _SendOfferViewBodyState extends State<SendOfferViewBody> {
                             deliveryTime,
                             selectedTimeUnit,
                           );
-
+                          context.read<FreelancerPrivateOrdersViewModel>().markOrderAsOffered(widget.orderEntity.id);
                           context.read<SendOfferViewModel>().sendOffer(
                             OfferEntity(
                               id: offerId,

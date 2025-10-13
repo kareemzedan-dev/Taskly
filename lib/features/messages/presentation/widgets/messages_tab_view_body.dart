@@ -11,52 +11,71 @@ import 'package:taskly/features/messages/presentation/manager/get_accepted_order
 import '../../../welcome/presentation/cubit/welcome_states.dart';
 import '../manager/get_conversations_view_model/get_conversations_states.dart';
 import '../manager/get_conversations_view_model/get_conversations_view_model.dart';
-class UserMessagesTabViewBody extends StatelessWidget {
+
+
+class UserMessagesTabViewBody extends StatefulWidget {
   const UserMessagesTabViewBody({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final userRole = SharedPrefHelper.getString(StringsManager.roleKey) == 'freelancer'
+  State<UserMessagesTabViewBody> createState() => _UserMessagesTabViewBodyState();
+}
+
+class _UserMessagesTabViewBodyState extends State<UserMessagesTabViewBody> {
+  late final GetAcceptedOrderMessageViewModel orderVM;
+  late final GetConversationsViewModel convVM;
+  late final UserRole userRole;
+
+  @override
+  void initState() {
+    super.initState();
+
+    userRole = SharedPrefHelper.getString(StringsManager.roleKey) == 'freelancer'
         ? UserRole.freelancer
         : UserRole.client;
 
+    orderVM = getIt<GetAcceptedOrderMessageViewModel>();
+    convVM = getIt<GetConversationsViewModel>();
+
+    orderVM.getAcceptedOrderMessages(
+      SharedPrefHelper.getString(StringsManager.idKey)!,
+      role: userRole,
+    );
+
+    convVM.getConversations(
+      SharedPrefHelper.getString(StringsManager.idKey)!,
+    );
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             BlocBuilder<GetAcceptedOrderMessageViewModel, GetAcceptedOrderMessageStates>(
-              bloc: getIt<GetAcceptedOrderMessageViewModel>()
-                ..getAcceptedOrderMessages(
-                  SharedPrefHelper.getString(StringsManager.idKey)!,
-                  role: userRole,
-                ),
+              bloc: orderVM,
               builder: (context, orderState) {
-
                 return BlocBuilder<GetConversationsViewModel, GetConversationsStates>(
-                  bloc: getIt<GetConversationsViewModel>()
-                    ..getConversations(
-                      SharedPrefHelper.getString(StringsManager.idKey)!,
-                    ),
+                  bloc: convVM,
                   builder: (context, convState) {
-
-                    // تحقق من وجود بيانات في الاتنين
-                    final hasOrders = orderState is GetAcceptedOrderMessageStatesSuccess && orderState.orders.isNotEmpty;
+                    final hasOrders = orderState is GetAcceptedOrderMessageStatesSuccess &&
+                        orderState.orders.isNotEmpty;
 
                     final hasConversations = convState is GetConversationsSuccessStates &&
                         convState.conversationsList.isNotEmpty;
 
-                    // لو الاتنين فاضيين
                     if (!hasOrders && !hasConversations) {
                       return const Center(child: Text("No messages"));
                     }
+
                     return Column(
                       children: [
                         if (hasOrders)
                           ListView.builder(
-                            itemCount: (orderState).orders.length,
+                            itemCount: orderState.orders.length,
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
                             itemBuilder: (context, index) {
@@ -82,8 +101,7 @@ class UserMessagesTabViewBody extends StatelessWidget {
                                       arguments: {
                                         "userName": fullName,
                                         "currentUserAvatar": SharedPrefHelper.getString(StringsManager.profileImageKey),
-                                        "receiverAvatar":avatarUrl,
-
+                                        "receiverAvatar": avatarUrl,
                                         "order": order,
                                         "currentUserId": SharedPrefHelper.getString(StringsManager.idKey)!,
                                         "receiverId": chatUserId,
@@ -97,21 +115,14 @@ class UserMessagesTabViewBody extends StatelessWidget {
 
                         if (hasConversations)
                           ListView.builder(
-                            itemCount: (convState).conversationsList.length,
+                            itemCount: convState.conversationsList.length,
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
                             itemBuilder: (context, index) {
                               final conversation = convState.conversationsList[index];
-
-                              // ⛔️ فلترة: لو الـ order.id ظهر قبل كده في orders → ما نعرضوش
                               final orderAlreadyExists = hasOrders &&
-                                  (orderState)
-                                      .orders
-                                      .any((o) => o.id == conversation.order?.id);
-
-                              if (orderAlreadyExists) {
-                                return const SizedBox.shrink(); // مظهرهوش
-                              }
+                                  orderState.orders.any((o) => o.id == conversation.order?.id);
+                              if (orderAlreadyExists) return const SizedBox.shrink();
 
                               final user = conversation.user;
                               return Padding(
@@ -135,7 +146,6 @@ class UserMessagesTabViewBody extends StatelessWidget {
                                         "receiverId": user.id,
                                         "currentUserAvatar": SharedPrefHelper.getString(StringsManager.profileImageKey),
                                         "receiverAvatar": avatarUrl,
-
                                       },
                                     );
                                   },
@@ -145,7 +155,6 @@ class UserMessagesTabViewBody extends StatelessWidget {
                           ),
                       ],
                     );
-
                   },
                 );
               },

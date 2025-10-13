@@ -13,7 +13,7 @@ class FreelancerPrivateOrdersViewModel
   final SubscribeToPrivateOrdersUseCase subscribeToPrivateOrdersUseCase;
   StreamSubscription<List<OrderEntity>>? _ordersSubscription;
   String? _currentFreelancerId;
-
+  List<String> offeredOrderIds = [];
   // قائمة لكل الأوردرات + filtered list
   List<OrderEntity> _allOrders = [];
   List<OrderEntity> _filteredOrders = [];
@@ -63,8 +63,10 @@ class FreelancerPrivateOrdersViewModel
     _filteredOrders = List.from(_allOrders);
 
     emit(FreelancerPrivateOrdersViewModelStatesSuccess(
-        orders: List.from(_filteredOrders)
+      orders: List.from(_filteredOrders),
+      offeredOrderIds: offeredOrderIds,
     ));
+
   }
 
   /// دالة للبحث في الأوردرات
@@ -81,13 +83,25 @@ class FreelancerPrivateOrdersViewModel
     }
 
     emit(FreelancerPrivateOrdersViewModelStatesSuccess(
-        orders: List.from(_filteredOrders)
+      orders: List.from(_filteredOrders),
+      offeredOrderIds: offeredOrderIds,
     ));
+
   }
 
   Future<void> refreshOrders() async {
     if (_currentFreelancerId != null) {
       await fetchAndSubscribePrivateOrders(_currentFreelancerId!);
+    }
+  }
+  void markOrderAsOffered(String orderId) {
+    if (!offeredOrderIds.contains(orderId)) {
+      offeredOrderIds.add(orderId);
+      // إعادة emit عشان الـ UI يعيد البناء
+      emit(FreelancerPrivateOrdersViewModelStatesSuccess(
+        orders: List.from(_filteredOrders),
+        offeredOrderIds: offeredOrderIds,
+      ));
     }
   }
 

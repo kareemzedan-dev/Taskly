@@ -18,4 +18,9 @@ class GetConversationRepoImpl extends GetConversationRepo {
   Future<Either<Failures, List<ConversationEntity>>> getConversations(String userId) {
  return remoteDataSource.getConversations(userId);
   }
+
+  @override
+  Stream<List<ConversationEntity>> subscribeToConversations(String userId) {
+    return remoteDataSource.subscribeToConversations(userId);
+  }
 }

@@ -8,6 +8,7 @@ import 'package:taskly/core/components/dismissible_error_card.dart';
 import 'package:taskly/core/di/di.dart';
 import 'package:taskly/features/attachments/presentation/manager/upload_attachments_view_model/upload_attachments_view_model.dart';
 import 'package:taskly/features/attachments/presentation/manager/upload_attachments_view_model/upload_attachments_view_model_states.dart';
+import 'package:taskly/features/attachments/presentation/manager/upload_order_attachments_view_model/upload_order_attachments_states.dart';
 import 'package:taskly/features/client/presentation/views/client_home_view.dart';
 import 'package:taskly/features/payments/domain/entities/payment_entity.dart';
 import 'package:taskly/features/payments/presentation/manager/create_payment_view_model/create_payment_view_model.dart';
@@ -17,6 +18,7 @@ import 'package:taskly/features/payments/presentation/widgets/upload_payment_pro
 import 'package:uuid/uuid.dart';
 
 import '../../../../config/l10n/app_localizations.dart';
+import '../../../attachments/presentation/manager/upload_order_attachments_view_model/upload_order_attachments_view_model.dart';
 import '../../../shared/domain/entities/order_entity/order_entity.dart';
 
 class ClientPaymentsViewBody extends StatelessWidget {
@@ -27,7 +29,7 @@ class ClientPaymentsViewBody extends StatelessWidget {
 
   Future<bool> _onWillPop(BuildContext context) async {
     final local = AppLocalizations.of(context)!;
-    final uploadVM = context.read<UploadAttachmentsViewModel>();
+    final uploadVM = context.read<UploadOrderAttachmentsViewModel>();
 
     if (uploadVM.uploadedAttachments.isNotEmpty) {
       bool shouldLeave = false;
@@ -51,7 +53,7 @@ class ClientPaymentsViewBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final local = AppLocalizations.of(context)!;
-    final uploadVM = context.read<UploadAttachmentsViewModel>();
+    final uploadVM = context.read<UploadOrderAttachmentsViewModel>();
 
     return WillPopScope(
       onWillPop: () => _onWillPop(context),
@@ -162,18 +164,18 @@ class UploadAttachmentsSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final local = AppLocalizations.of(context)!;
 
-    return BlocBuilder<UploadAttachmentsViewModel,
-        UploadAttachmentsViewModelStates>(
+    return BlocBuilder<UploadOrderAttachmentsViewModel,
+        UploadOrderAttachmentsViewModelStates>(
       builder: (context, state) {
-        if (state is UploadAttachmentsViewModelStatesLoading) {
+        if (state is UploadOrderAttachmentsViewModelStatesLoading) {
           return const Center(child: CupertinoActivityIndicator());
         }
-        if (state is UploadAttachmentsViewModelStatesError) {
+        if (state is UploadOrderAttachmentsViewModelStatesError) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             showTemporaryMessage(context, state.message, MessageType.error);
           });
         }
-        if (state is UploadAttachmentsViewModelStatesSuccess) {
+        if (state is UploadOrderAttachmentsViewModelStatesSuccess) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             showTemporaryMessage(context, local.payment_proof_uploaded_success,
                 MessageType.success);
@@ -181,7 +183,7 @@ class UploadAttachmentsSection extends StatelessWidget {
         }
         return UploadPaymentProofButton(
           onTap: () {
-            context.read<UploadAttachmentsViewModel>().pickFilesFromDevice(
+            context.read<UploadOrderAttachmentsViewModel>().pickFilesFromDevice(
               bucketName: "payment_attachments",
             );
           },

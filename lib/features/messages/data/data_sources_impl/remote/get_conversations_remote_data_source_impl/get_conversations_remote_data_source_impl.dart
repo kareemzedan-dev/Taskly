@@ -98,4 +98,80 @@ class GetUserConversationsRemoteDataSourceImpl
       return Left(ServerFailure(e.toString()));
     }
   }
+  Stream<List<ConversationEntity>> subscribeToConversations(String userId) {
+    // Stream مباشر من جدول messages
+    final stream = supabaseService.supabaseClient
+        .from('messages')
+        .stream(primaryKey: ['id'])
+        .map((messages) => (messages as List)
+        .where((m) =>
+         m['sender_id'] == userId || m['receiver_id'] == userId)
+        .toList());
+
+    return stream.map((messages) async {
+      final Map<String, Map<String, dynamic>> latestConversations = {};
+      for (final msg in messages) {
+        final sender = msg['sender_id']?.toString();
+        final receiver = msg['receiver_id']?.toString();
+        if (sender == null || receiver == null) continue;
+
+        final otherUserId = sender == userId ? receiver : sender;
+        if (!latestConversations.containsKey(otherUserId)) {
+          latestConversations[otherUserId] = msg;
+        }
+      }
+
+      final userIds = latestConversations.keys.toList();
+      if (userIds.isEmpty) return <ConversationEntity>[];
+
+      final usersResponse = await supabaseService.supabaseClient
+          .from('users')
+          .select()
+          .inFilter('id', userIds);
+
+      final orderIds = latestConversations.values
+          .map((msg) => msg['order_id'])
+          .where((id) => id != null)
+          .toList();
+
+      Map<String, OrderEntity> ordersMap = {};
+      if (orderIds.isNotEmpty) {
+        final ordersResponse = await supabaseService.supabaseClient
+            .from('orders')
+            .select()
+            .inFilter('id', orderIds);
+
+        ordersMap = {
+          for (final o in ordersResponse)
+            o['id']: OrderDm.fromJson(Map<String, dynamic>.from(o as Map)).toEntity()
+        };
+      }
+
+      final List<ConversationEntity> conversations =
+      (usersResponse as List).map((u) {
+        final user = Map<String, dynamic>.from(u as Map);
+        final lastMsgData = latestConversations[user['id']];
+        final orderId = lastMsgData?['order_id']?.toString();
+
+        return ConversationEntity(
+          user: UserInfoEntity(
+            id: user['id'],
+            fullName: user['full_name'] ?? '',
+            email: user['email'] ?? '',
+            profileImage: user['profile_image'],
+            role: user['role'] ?? '',
+          ),
+          lastMessage: lastMsgData?['content'],
+          lastMessageTime: lastMsgData?['created_at'] != null
+              ? DateTime.tryParse(lastMsgData!['created_at'])
+              : null,
+          orderId: orderId,
+          order: orderId != null ? ordersMap[orderId] : null,
+        );
+      }).toList();
+
+      return conversations;
+    }).asyncMap((e) async => await e); // تحويل Future<List<>> إلى List<>
+  }
+
 }

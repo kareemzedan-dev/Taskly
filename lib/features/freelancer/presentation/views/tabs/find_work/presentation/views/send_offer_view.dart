@@ -7,6 +7,7 @@ import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/pre
 import 'package:taskly/features/shared/domain/entities/order_entity/order_entity.dart';
 
 import '../../../../../../../../config/l10n/app_localizations.dart';
+import '../view_model/freelancer_private_orders_view_model/freelancer_private_orders_view_model.dart';
 import '../view_model/get_commission_view_model/get_commission_view_model.dart';
 import '../view_model/send_offer_view_model/send_offer_view_model.dart';
 
@@ -35,6 +36,7 @@ class SendOfferView extends StatelessWidget {
       body:   MultiBlocProvider(providers: [
         BlocProvider(create:   (context) => getIt<SendOfferViewModel>(),),
         BlocProvider(create:   (context) => getIt<GetCommissionViewModel>(),),
+     BlocProvider(create:   (context) => getIt<FreelancerPrivateOrdersViewModel>(),),
       ], child:  SendOfferViewBody(orderEntity: orderEntity))
 
     );

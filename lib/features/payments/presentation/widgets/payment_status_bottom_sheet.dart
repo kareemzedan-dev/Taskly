@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:taskly/config/routes/routes_manager.dart';
 import 'package:taskly/core/components/custom_button.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
 import 'package:taskly/features/shared/presentation/views/widgets/attachments_section.dart';
@@ -19,10 +20,11 @@ class PaymentStatusBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     final local = AppLocalizations.of(context)!;
     return Container(
+
       width: double.infinity,
       height: MediaQuery.of(context).size.height * 0.9,
       decoration:   BoxDecoration(
-        color: Theme.of(context).textTheme.bodyLarge?.color ,
+        color: ColorsManager.white ,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(20),
           topRight: Radius.circular(20),
@@ -113,7 +115,7 @@ class PaymentStatusBottomSheet extends StatelessWidget {
 
               // Amount
               Text(
-                local.amount_sar(payment.amount.toString()),
+                "${payment.amount.toString()} ${local.sar}",
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   fontWeight: FontWeight.w600,
                   fontSize: 16.sp,
@@ -153,7 +155,12 @@ class PaymentStatusBottomSheet extends StatelessWidget {
 
               CustomButton(
                 title: local.chat_with_admin,
-                ontap: () {},
+                ontap: () {
+                  Navigator.pushNamed(context, RoutesManager.adminChatView, arguments:  {
+                    "currentUserId": payment.clientId,
+
+                  });
+                },
               ),
               SizedBox(height: 30.h),
             ],
