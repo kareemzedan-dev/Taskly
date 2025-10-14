@@ -245,7 +245,6 @@ class Assets {
   static const String homeHomeRepos = 'lib/features/client/domain/repos/home/home_repos.dart';
   static const String homeServiceResponseDm = 'lib/features/client/data/models/home/service_response_dm.dart';
   static const String homeServiceResponseEntity = 'lib/features/client/domain/entities/home/service_response_entity.dart';
-  static const String images6986782 = 'assets/images/6986782.jpg';
   static const String images9440461 = 'assets/images/9440461.jpg';
   static const String imagesAccount3166234 = 'assets/images/account_3166234.png';
   static const String imagesAccountName = 'assets/images/account_name.png';
@@ -272,6 +271,7 @@ class Assets {
   static const String imagesInternet2889312 = 'assets/images/internet_2889312.png';
   static const String imagesIntialAvatar = 'assets/images/intial_avatar.jpg';
   static const String imagesJobBoard18989826 = 'assets/images/job-board_18989826.png';
+  static const String imagesNoMessages = 'assets/images/no_messages.jpg';
   static const String imagesNoOrder = 'assets/images/no_order.jpg';
   static const String imagesPortraitHappySmileyMan = 'assets/images/portrait-happy-smiley-man.jpg';
   static const String imagesSettings = 'assets/images/settings.png';
@@ -501,6 +501,7 @@ class Assets {
   static const String utilsAssetsManager = 'lib/core/utils/assets_manager.dart';
   static const String utilsColorsManger = 'lib/core/utils/colors_manger.dart';
   static const String utilsConstantsManager = 'lib/core/utils/constants_manager.dart';
+  static const String utilsIconMapper = 'lib/core/utils/icon_mapper.dart';
   static const String utilsNetworkUtils = 'lib/core/utils/network_utils.dart';
   static const String utilsStringsManager = 'lib/core/utils/strings_manager.dart';
   static const String utilsVideosManager = 'lib/core/utils/videos_manager.dart';

@@ -46,7 +46,7 @@ class ServiceCategoryGridView extends StatelessWidget {
           crossAxisCount: 2,
           crossAxisSpacing: 12.w,
           mainAxisSpacing: 16.h,
-          childAspectRatio: 0.85,
+          childAspectRatio: 0.99,
         ),
         itemBuilder: (context, index) {
           final service = services[index];

@@ -104,7 +104,7 @@ List<ServiceEntity> getLocalServices(AppLocalizations local) {
     ServiceEntity(
       key: 'engineering_services',
       title: local.service15,
-      icon: 'engineering',
+      icon: 'notes',
       color: '#9E9E9E',
       buttonText: local.orderNow,
     ),

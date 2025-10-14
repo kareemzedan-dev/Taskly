@@ -32,7 +32,6 @@ class GetConversationsViewModel extends Cubit<GetConversationsStates> {
         },
       );
 
-      // 2️⃣ الاشتراك على التغييرات الجديدة
       _conversationsSubscription?.cancel();
       _conversationsStream = getConversationsUseCase.subscribeToConversations(userId);
 
