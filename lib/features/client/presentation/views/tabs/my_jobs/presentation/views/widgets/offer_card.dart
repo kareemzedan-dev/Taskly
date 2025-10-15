@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/config/routes/routes_manager.dart';
 import 'package:taskly/core/helper/convert_to_days.dart';
+import 'package:taskly/core/services/notification_service.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/offer_actions.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/price_duration_section.dart';
@@ -126,10 +127,15 @@ class OfferCard extends StatelessWidget {
                 text: local.decline_offer,
                 icon: Icons.close,
                 color: Colors.red,
-                onTap: () {
+                onTap: ()async {
 
           context.read<UpdateOfferStatusViewModel>().updateOfferStatus(offer.offer.id, "Rejected");
-
+ await  NotificationService().sendNotification(
+      receiverId: offer.offer.freelancerId,
+      title: "متابعه حاله الطلب",
+      body:
+          "نعتذر لك لقد تم رفض عرضك المقدم علي طلب ${order.title} يمكنك ارسال عرض اخر مناسب او تصفح طلبات اخري ",
+    );
 
                 },
               ),

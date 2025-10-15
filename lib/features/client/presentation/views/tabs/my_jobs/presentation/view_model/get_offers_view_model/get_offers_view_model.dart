@@ -56,7 +56,7 @@ class GetOffersViewModel extends Cubit<GetOffersViewModelStates> {
     return userInfo;
   }
 
-  /// جلب كل العروض مع بيانات الفريلانسر
+
   Future<void> getOffers(String orderId) async {
     emit(GetOffersViewModelLoading());
 

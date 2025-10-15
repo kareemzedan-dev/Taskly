@@ -85,13 +85,13 @@ class UserInfoDisplay extends StatelessWidget {
                     Icon(
                       isFreelancer
                           ? Icons.verified_user_outlined
-                          : Icons.close, // أيقونة غير موثقة
+                          : null,
                       color: isFreelancer ? Colors.green : Colors.red,
                       size: 14.sp,
                     ),
                     SizedBox(width: 5.w),
                     Text(
-                      isFreelancer ? local.verifiedFreelancer :local.unverified_freelancer,
+                      isFreelancer ? local.verifiedFreelancer :"",
                       style: AppTextStyles.bold14.copyWith(
                         color: isFreelancer ? Colors.grey : Colors.red,
                       ),

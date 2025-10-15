@@ -20,6 +20,7 @@ import 'package:taskly/features/client/presentation/views/tabs/home/presentation
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/time_input_raw.dart';
 
 import '../../../../../../../../../core/di/di.dart';
+import '../../../../../../../../../core/services/notification_service.dart';
 import '../../../../../../../../attachments/data/models/attachments_dm/attachments_dm.dart';
 import '../../../../../../../../attachments/presentation/manager/upload_order_attachments_view_model/upload_order_attachments_view_model.dart';
 
@@ -60,13 +61,11 @@ class _OrderViewBodyState extends State<OrderViewBody> {
     orderViewModel.selectedTimeUnit = orderViewModel.timeUnits.first;
   }
 
-
-
   int selectedHireMethodIndex = 0;
   List<AttachmentModel> uploadedAttachments = [];
 
   UploadOrderAttachmentsViewModel uploadOrderAttachmentsViewModel =
-  getIt<UploadOrderAttachmentsViewModel>();
+      getIt<UploadOrderAttachmentsViewModel>();
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +84,7 @@ class _OrderViewBodyState extends State<OrderViewBody> {
             context,
             MaterialPageRoute(
                 builder: (context) => const ClientHomeView(initialIndex: 1)),
-                (_) => false,
+            (_) => false,
           );
         }
 
@@ -112,16 +111,16 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                     Text(
                       local.title_label,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 18.sp,
-                      ),
+                            fontWeight: FontWeight.w700,
+                            fontSize: 18.sp,
+                          ),
                     ),
                     SizedBox(height: 16.h),
                     buildTextField(
                       widget.title,
                       1,
                       orderViewModel.titleController,
-                          (value) {
+                      (value) {
                         orderViewModel.titleController.text = value!;
                       },
                     ),
@@ -129,9 +128,9 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                     Text(
                       local.category_label,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 18.sp,
-                      ),
+                            fontWeight: FontWeight.w700,
+                            fontSize: 18.sp,
+                          ),
                     ),
                     SizedBox(height: 16.h),
                     CategoryDropDown(selectedCategory: widget.selectedCategory),
@@ -139,9 +138,9 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                     Text(
                       local.description_label,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 18.sp,
-                      ),
+                            fontWeight: FontWeight.w700,
+                            fontSize: 18.sp,
+                          ),
                     ),
                     SizedBox(height: 16.h),
                     const DescriptionBox(),
@@ -149,9 +148,9 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                     Text(
                       local.deadline_label,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 18.sp,
-                      ),
+                            fontWeight: FontWeight.w700,
+                            fontSize: 18.sp,
+                          ),
                     ),
                     SizedBox(height: 16.h),
                     const TimeInputRaw(),
@@ -159,21 +158,22 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                     Text(
                       local.attachments_label,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 18.sp,
-                      ),
+                            fontWeight: FontWeight.w700,
+                            fontSize: 18.sp,
+                          ),
                     ),
                     SizedBox(height: 16.h),
                     AttachmentsFilesSection(
-                      uploadOrderAttachmentsViewModel: uploadOrderAttachmentsViewModel,
+                      uploadOrderAttachmentsViewModel:
+                          uploadOrderAttachmentsViewModel,
                     ),
                     SizedBox(height: 28.h),
                     Text(
                       local.hiring_method_label,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 18.sp,
-                      ),
+                            fontWeight: FontWeight.w700,
+                            fontSize: 18.sp,
+                          ),
                     ),
                     SizedBox(height: 16.h),
                     HiringMethodsOptions(
@@ -237,8 +237,8 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                         }
                         if (uploadOrderAttachmentsViewModel.files.isNotEmpty &&
                             uploadOrderAttachmentsViewModel.files.length !=
-                                uploadOrderAttachmentsViewModel.uploadedFileHashes
-                                    .length) {
+                                uploadOrderAttachmentsViewModel
+                                    .uploadedFileHashes.length) {
                           return showTemporaryMessage(
                             context,
                             local.error_wait_attachments,
@@ -247,31 +247,29 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                         }
 
                         if (selectedHireMethodIndex == 0) {
-                          await context
-                              .read<PlaceOrderViewModel>()
-                              .placeOrder(
-                            OrderEntity(
-                              id: orderViewModel.orderId,
-                              clientId: orderViewModel.clientId!,
-                              freelancerId: null,
-                              title: orderViewModel.titleController.text,
-                              description: orderViewModel
-                                  .descriptionController.text,
-                              category: orderViewModel.selectedCategory,
-                              attachments: uploadOrderAttachmentsViewModel
-                                  .uploadedAttachments,
-                              serviceType: ServiceType.public,
-                              status: OrderStatus.Pending,
-                              deadline: orderViewModel.calculateDeadline(
-                                orderViewModel.timeController.text,
-                                orderViewModel.selectedTimeUnit,
-                              ),
-                              createdAt: DateTime.now(),
-                              updatedAt: DateTime.now(),
-                              offersCount: 0,
-                              offerId: null,
-                            ),
-                          );
+                          await context.read<PlaceOrderViewModel>().placeOrder(
+                                OrderEntity(
+                                  id: orderViewModel.orderId,
+                                  clientId: orderViewModel.clientId!,
+                                  freelancerId: null,
+                                  title: orderViewModel.titleController.text,
+                                  description:
+                                      orderViewModel.descriptionController.text,
+                                  category: orderViewModel.selectedCategory,
+                                  attachments: uploadOrderAttachmentsViewModel
+                                      .uploadedAttachments,
+                                  serviceType: ServiceType.public,
+                                  status: OrderStatus.Pending,
+                                  deadline: orderViewModel.calculateDeadline(
+                                    orderViewModel.timeController.text,
+                                    orderViewModel.selectedTimeUnit,
+                                  ),
+                                  createdAt: DateTime.now(),
+                                  updatedAt: DateTime.now(),
+                                  offersCount: 0,
+                                  offerId: null,
+                                ),
+                              );
                         } else if (selectedHireMethodIndex == 1) {
                           if (orderViewModel.freelancerId == null) {
                             return showTemporaryMessage(
@@ -281,7 +279,8 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                             );
                           }
                           if (orderViewModel.freelancerId!.isNotEmpty) {
-                            print('🕒 deadline => ${orderViewModel.calculateDeadline(
+                            print(
+                                '🕒 deadline => ${orderViewModel.calculateDeadline(
                               orderViewModel.timeController.text,
                               orderViewModel.selectedTimeUnit,
                             )}');
@@ -289,29 +288,33 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                             await context
                                 .read<PlaceOrderViewModel>()
                                 .placeOrder(
-                              OrderEntity(
-                                id: orderViewModel.orderId,
-                                clientId: orderViewModel.clientId!,
-                                freelancerId: orderViewModel.freelancerId,
-                                title:
-                                orderViewModel.titleController.text,
-                                description: orderViewModel
-                                    .descriptionController.text,
-                                category:
-                                orderViewModel.selectedCategory,
-                                attachments: uploadOrderAttachmentsViewModel
-                                    .uploadedAttachments,
-                                serviceType: ServiceType.private,
-                                status: OrderStatus.Pending,
-                                deadline: orderViewModel.calculateDeadline(
-                                  orderViewModel.timeController.text,
-                                  orderViewModel.selectedTimeUnit,
-                                ),
-                                createdAt: DateTime.now(),
-                                updatedAt: DateTime.now(),
-                                offersCount: 0,
-                                offerId: null,
-                              ),
+                                  OrderEntity(
+                                    id: orderViewModel.orderId,
+                                    clientId: orderViewModel.clientId!,
+                                    freelancerId: orderViewModel.freelancerId,
+                                    title: orderViewModel.titleController.text,
+                                    description: orderViewModel
+                                        .descriptionController.text,
+                                    category: orderViewModel.selectedCategory,
+                                    attachments: uploadOrderAttachmentsViewModel
+                                        .uploadedAttachments,
+                                    serviceType: ServiceType.private,
+                                    status: OrderStatus.Pending,
+                                    deadline: orderViewModel.calculateDeadline(
+                                      orderViewModel.timeController.text,
+                                      orderViewModel.selectedTimeUnit,
+                                    ),
+                                    createdAt: DateTime.now(),
+                                    updatedAt: DateTime.now(),
+                                    offersCount: 0,
+                                    offerId: null,
+                                  ),
+                                );
+                            await NotificationService().sendNotification(
+                              receiverId: orderViewModel.freelancerId!,
+                              title: 'طلب خاص جديد لك',
+                              body:
+                                  ' لقد استلمت طلب خاص جديد يمكنك الاطلاع عليه من قسم الطلبات الخاص الان .',
                             );
                           }
                         }

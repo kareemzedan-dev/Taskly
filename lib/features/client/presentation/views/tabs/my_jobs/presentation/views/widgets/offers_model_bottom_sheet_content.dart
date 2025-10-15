@@ -41,7 +41,7 @@ class OffersBottomSheetContent extends StatelessWidget {
             MaterialPageRoute(
               builder: (context) => const ClientHomeView(initialIndex: 1),
             ),
-                (route) => false,
+            (route) => false,
           );
           showTemporaryMessage(
             context,
@@ -69,54 +69,51 @@ class OffersBottomSheetContent extends StatelessWidget {
                     OffersHeader(
                       title: local.offersReceived,
                       count: offers.length,
-                      filters:   [local.price, local.delivery, local.rating],
+                      filters: [local.price, local.delivery, local.rating],
                     ),
-
                     Expanded(
                       child: offers.isNotEmpty
                           ? ListView.builder(
-                        itemCount: offers.length,
-                        itemBuilder: (context, index) {
-                          final offer = offers[index];
+                              itemCount: offers.length,
+                              itemBuilder: (context, index) {
+                                final offer = offers[index];
 
-                          return OfferCard(
-                            order: order,
-                            offer: offer,
-                            onAcceptOffer: () {
-
-                              context
-                                  .read<UpdateOfferStatusViewModel>()
-                                  .acceptOfferAndRejectOthers(
-                                offer.offer.orderId,
-                                offer.offer.id,
-                              );
-                            },
-
-                          );
-                        },
-                      )
+                                return OfferCard(
+                                  order: order,
+                                  offer: offer,
+                                  onAcceptOffer: () {
+                                    context
+                                        .read<UpdateOfferStatusViewModel>()
+                                        .acceptOfferAndRejectOthers(
+                                          offer.offer.orderId,
+                                          offer.offer.id,
+                                        );
+                                  },
+                                );
+                              },
+                            )
                           : Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            Assets.assetsImagesempty,
-                            height: 200.h,
-                            width: 200.w,
-                            fit: BoxFit.cover,
-                          ),
-                          SizedBox(height: 20.h),
-                          Text(
-                           local.no_offers_yet,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge
-                                ?.copyWith(
-                                color: Colors.grey,
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  Assets.assetsImagesempty,
+                                  height: 200.h,
+                                  width: 200.w,
+                                  fit: BoxFit.cover,
+                                ),
+                                SizedBox(height: 20.h),
+                                Text(
+                                  local.no_offers_yet,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.copyWith(
+                                          color: Colors.grey,
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
                     ),
                   ],
                 );

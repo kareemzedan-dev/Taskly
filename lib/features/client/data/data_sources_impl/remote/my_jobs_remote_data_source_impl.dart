@@ -152,10 +152,10 @@ class MyJobsRemoteDataSourceImpl extends MyJobsRemoteDataSource {
           final offer = OfferModel.fromJson(offerJson);
           NotificationService().sendNotification(
             receiverId: offer.freelancerId,
-            title: "Offer Status",
+            title: "حاله العروض",
             body: offer.id == offerId
-                ? "Your offer for order '${acceptedOffer.orderName}' has been accepted!"
-                : "Your offer for order '${acceptedOffer.orderName}' has been rejected.",
+                ?   "لقد تم قبول عرضك المقدم على طلب ${acceptedOffer.orderName} يمكنك الان التواصل مع العميل ."
+                : "لقد تم رفض عرضك المقدم على طلب ${acceptedOffer.orderName} يمكنك الان البحث عن طلبات جديده .",
           );
         }
       }
