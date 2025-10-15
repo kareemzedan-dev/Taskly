@@ -50,5 +50,26 @@ class GetFreelancerOffersViewModel extends Cubit<GetFreelancerOffersStates> {
 Stream<(OfferEntity, String)> subscribeToOffers(String freelancerId) {
   return getFreelancerOffersUseCase.subscribeToOffers(freelancerId);
 }
+  StreamSubscription? _subscription;
+
+  void listenToOffersChanges(String freelancerId) {
+    // نلغي أي اشتراك قديم
+    _subscription?.cancel();
+
+    _subscription = subscribeToOffers(freelancerId).listen((event) async {
+      final (offer, action) = event;
+
+      print("📡 Offer change detected: ${offer.id} (${offer.offerStatus}) - $action");
+
+      // بعد أي تغيير، نعمل refresh فوري
+      await getFreelancerOffers(freelancerId);
+    });
+  }
+
+  @override
+  Future<void> close() {
+    _subscription?.cancel();
+    return super.close();
+  }
 
 }

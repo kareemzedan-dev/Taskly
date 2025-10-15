@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:taskly/features/freelancer/domain/entities/offer_entity/offer_entity.dart';
 import '../../../../../../../../../config/l10n/app_localizations.dart';
 import '../../../../../../../../../core/di/di.dart';
+import '../../../../../../../../../core/helper/get_localized_order_status.dart';
 import '../../../../../../../../../core/utils/colors_manger.dart';
 import '../../../../../../../../client/presentation/views/tabs/my_jobs/presentation/views/widgets/expandable_text.dart';
 import '../../../../../../../../profile/presentation/widgets/user_info_section.dart';
@@ -60,6 +61,7 @@ class BaseOfferCard extends StatelessWidget {
   }
 
   Widget _buildUserInfo(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     return BlocBuilder<ProfileViewModel, ProfileViewModelStates>(
       bloc: getIt<ProfileViewModel>()..getUserInfo(offerEntity.clientId, "client"),
       builder: (context, state) {
@@ -75,12 +77,13 @@ class BaseOfferCard extends StatelessWidget {
             userInfo: state.userInfoEntity,
           );
         }
-        return const Center(child: Text("Loading"));
+        return   Center(child: Text(local.loading));
       },
     );
   }
 
   Widget _buildTitleAndStatus(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -99,7 +102,7 @@ class BaseOfferCard extends StatelessWidget {
             border: Border.all(color: ColorsManager.primary.withOpacity(0.1), width: 1.w),
           ),
           child: Text(
-            offerEntity.offerStatus,
+            getLocalizedStatus(local, offerEntity.offerStatus),
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: ColorsManager.primary),
           ),
         ),

@@ -3,148 +3,88 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { initializeApp, cert } from "npm:firebase-admin/app";
 import { getMessaging } from "npm:firebase-admin/messaging";
 console.log("🔔 Starting notification function...");
-// تهيئة Supabase client أولاً
+// تهيئة Supabase client
 const supabaseUrl = Deno.env.get("SUPABASE_URL");
 const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
 if (!supabaseUrl || !supabaseServiceKey) {
-  console.error("❌ Missing Supabase environment variables");
-  throw new Error("Supabase URL or Service Role Key is missing");
+  throw new Error("❌ Supabase URL or Service Role Key is missing");
 }
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
 console.log("✅ Supabase client initialized");
-// تهيئة Firebase بشكل غير متزامن عند الطلب الأول
+// تهيئة Firebase عند أول استخدام
 let firebaseApp = null;
 async function initializeFirebase() {
-  if (firebaseApp) {
-    return firebaseApp;
-  }
-  console.log("🔄 Initializing Firebase...");
+  if (firebaseApp) return firebaseApp;
   const serviceAccountEnv = Deno.env.get("FIREBASE_SERVICE_ACCOUNT_KEY");
-  if (!serviceAccountEnv) {
-    throw new Error("❌ FIREBASE_SERVICE_ACCOUNT_KEY environment variable is missing");
+  if (!serviceAccountEnv) throw new Error("❌ FIREBASE_SERVICE_ACCOUNT_KEY missing");
+  const serviceAccount = JSON.parse(serviceAccountEnv);
+  if (serviceAccount.private_key) {
+    serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, "\n");
   }
-  try {
-    const serviceAccount = JSON.parse(serviceAccountEnv);
-    console.log("✅ Firebase service account parsed successfully");
-    // تنظيف المفتاح الخاص
-    if (serviceAccount.private_key) {
-      serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, '\n');
-      console.log("✅ Private key formatted");
-    }
-    firebaseApp = initializeApp({
-      credential: cert(serviceAccount)
-    });
-    console.log("✅ Firebase app initialized successfully");
-    return firebaseApp;
-  } catch (error) {
-    console.error("❌ Firebase initialization failed:", error);
-    throw new Error(`Firebase init error: ${error.message}`);
-  }
+  firebaseApp = initializeApp({
+    credential: cert(serviceAccount)
+  });
+  console.log("✅ Firebase app initialized successfully");
+  return firebaseApp;
 }
 serve(async (req)=>{
   const startTime = Date.now();
-  console.log(`📨 Request received at ${new Date().toISOString()}`);
+  if (req.method !== "POST") {
+    return new Response(JSON.stringify({
+      success: false,
+      error: "Method not allowed. Use POST."
+    }), {
+      status: 405,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*"
+      }
+    });
+  }
+  const contentType = req.headers.get("content-type");
+  if (!contentType || !contentType.includes("application/json")) {
+    return new Response(JSON.stringify({
+      success: false,
+      error: "Content-Type must be application/json"
+    }), {
+      status: 400,
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+  }
+  let requestBody;
   try {
-    // التحقق من طريقة الطلب
-    if (req.method !== "POST") {
-      console.log("❌ Method not allowed:", req.method);
-      return new Response(JSON.stringify({
-        success: false,
-        error: "Method not allowed. Use POST."
-      }), {
-        status: 405,
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "POST"
-        }
-      });
-    }
-    // التحقق من Content-Type
-    const contentType = req.headers.get("content-type");
-    if (!contentType || !contentType.includes("application/json")) {
-      console.log("❌ Invalid content type:", contentType);
-      return new Response(JSON.stringify({
-        success: false,
-        error: "Content-Type must be application/json"
-      }), {
-        status: 400,
-        headers: {
-          "Content-Type": "application/json"
-        }
-      });
-    }
-    // تحليل JSON body
-    let requestBody;
-    try {
-      requestBody = await req.json();
-      console.log("📦 Request body:", requestBody);
-    } catch (parseError) {
-      console.log("❌ JSON parse error:", parseError);
-      return new Response(JSON.stringify({
-        success: false,
-        error: "Invalid JSON in request body"
-      }), {
-        status: 400,
-        headers: {
-          "Content-Type": "application/json"
-        }
-      });
-    }
-    const { receiverId, title, body } = requestBody;
-    // التحقق من البيانات المطلوبة
-    if (!receiverId) {
-      return new Response(JSON.stringify({
-        success: false,
-        error: "Missing required field: receiverId"
-      }), {
-        status: 400,
-        headers: {
-          "Content-Type": "application/json"
-        }
-      });
-    }
-    if (!title) {
-      return new Response(JSON.stringify({
-        success: false,
-        error: "Missing required field: title"
-      }), {
-        status: 400,
-        headers: {
-          "Content-Type": "application/json"
-        }
-      });
-    }
-    if (!body) {
-      return new Response(JSON.stringify({
-        success: false,
-        error: "Missing required field: body"
-      }), {
-        status: 400,
-        headers: {
-          "Content-Type": "application/json"
-        }
-      });
-    }
-    console.log(`🔍 Searching for FCM token for user: ${receiverId}`);
-    // البحث عن token في قاعدة البيانات
-    const { data: deviceData, error: deviceError } = await supabase.from("user_devices").select("fcm_token") // بس FCM token
-    .eq("user_id", receiverId).not("fcm_token", "is", null).maybeSingle();
-    if (deviceError) {
-      console.error("❌ Database query error:", deviceError);
-      return new Response(JSON.stringify({
-        success: false,
-        error: "Database query failed",
-        details: deviceError.message
-      }), {
-        status: 500,
-        headers: {
-          "Content-Type": "application/json"
-        }
-      });
-    }
-    if (!deviceData || !deviceData.fcm_token) {
-      console.log("❌ No FCM token found for user:", receiverId);
+    requestBody = await req.json();
+  } catch (parseError) {
+    return new Response(JSON.stringify({
+      success: false,
+      error: "Invalid JSON in request body"
+    }), {
+      status: 400,
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+  }
+  const { receiverId, title, body } = requestBody;
+  if (!receiverId || !title || !body) {
+    return new Response(JSON.stringify({
+      success: false,
+      error: "Missing required fields: receiverId, title, body"
+    }), {
+      status: 400,
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+  }
+  try {
+    console.log(`🔍 Searching for FCM tokens for user: ${receiverId}`);
+    // جلب كل الأجهزة للمستخدم
+    const { data: devices, error: deviceError } = await supabase.from("user_devices").select("fcm_token").eq("user_id", receiverId).not("fcm_token", "is", null);
+    if (deviceError) throw deviceError;
+    if (!devices || devices.length === 0) {
       return new Response(JSON.stringify({
         success: false,
         error: "No FCM token found for this user",
@@ -156,60 +96,103 @@ serve(async (req)=>{
         }
       });
     }
-    console.log("✅ FCM token found:", deviceData.fcm_token.substring(0, 20) + "...");
-    // تهيئة Firebase
-    const firebaseApp = await initializeFirebase();
-    // إعداد رسالة الإشعار
-    const message = {
-      token: deviceData.fcm_token,
-      notification: {
-        title: String(title),
-        body: String(body)
-      },
-      data: {
-        user_id: receiverId,
-        timestamp: new Date().toISOString()
+    console.log(`✅ Found ${devices.length} FCM token(s)`);
+    const firebaseAppInstance = await initializeFirebase();
+    const results = [];
+    for (const device of devices){
+      try {
+        // استخدام Notification Messages مع إعدادات الخلفية
+        const message = {
+          token: device.fcm_token,
+          notification: {
+            title: String(title),
+            body: String(body)
+          },
+          android: {
+            priority: "high",
+            ttl: 3600,
+            notification: {
+              title: String(title),
+              body: String(body),
+              sound: "default",
+              channel_id: "high_priority_channel",
+              priority: "max",
+              default_sound: true,
+              default_vibrate_timings: true,
+              // إعدادات إضافية للشاشة المقفولة
+              visibility: "public",
+              notification_count: 1
+            }
+          },
+          apns: {
+            headers: {
+              "apns-priority": "10",
+              "apns-topic": "com.example.taskly" // bundle identifier
+            },
+            payload: {
+              aps: {
+                alert: {
+                  title: String(title),
+                  body: String(body)
+                },
+                sound: "default",
+                badge: 1,
+                contentAvailable: true,
+                // إعدادات للشاشة المقفولة في iOS
+                category: "IMPORTANT",
+                threadId: "important-messages"
+              }
+            }
+          },
+          data: {
+            user_id: receiverId,
+            timestamp: new Date().toISOString(),
+            click_action: "FLUTTER_NOTIFICATION_CLICK",
+            priority: "high",
+            type: "important_message"
+          }
+        };
+        const messageId = await getMessaging(firebaseAppInstance).send(message);
+        results.push({
+          token: device.fcm_token.substring(0, 20) + "...",
+          success: true,
+          messageId
+        });
+        console.log(`✅ Notification sent to token: ${device.fcm_token.substring(0, 20)}...`);
+      } catch (fcmError) {
+        console.error(`❌ Failed to send to token: ${device.fcm_token.substring(0, 20)}...`, fcmError);
+        results.push({
+          token: device.fcm_token.substring(0, 20) + "...",
+          success: false,
+          error: fcmError.message
+        });
       }
-    };
-    console.log("🚀 Sending FCM notification...");
-    // إرسال الإشعار
-    try {
-      const messageId = await getMessaging(firebaseApp).send(message);
-      const executionTime = Date.now() - startTime;
-      console.log(`✅ Notification sent successfully!`, {
-        messageId,
-        userId: receiverId,
-        executionTime: `${executionTime}ms`
-      });
-      return new Response(JSON.stringify({
-        success: true,
-        messageId: messageId,
-        user_id: receiverId,
-        execution_time_ms: executionTime
-      }), {
-        status: 200,
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*"
-        }
-      });
-    } catch (fcmError) {
-      console.error("❌ FCM send error:", fcmError);
-      return new Response(JSON.stringify({
-        success: false,
-        error: "Failed to send notification",
-        details: fcmError.message,
-        fcm_error_code: fcmError.code
-      }), {
-        status: 500,
-        headers: {
-          "Content-Type": "application/json"
-        }
-      });
     }
+    const executionTime = Date.now() - startTime;
+    // حساب النتائج الناجحة والفاشلة
+    const successful = results.filter((r)=>r.success).length;
+    const failed = results.filter((r)=>!r.success).length;
+    console.log(`📊 Results: ${successful} successful, ${failed} failed`);
+    return new Response(JSON.stringify({
+      success: successful > 0,
+      results,
+      summary: {
+        total: devices.length,
+        successful,
+        failed
+      },
+      user_id: receiverId,
+      execution_time_ms: executionTime
+    }), {
+      status: successful > 0 ? 200 : 500,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*"
+      }
+    });
   } catch (error) {
     const executionTime = Date.now() - startTime;
-    console.error("💥 Unhandled error in function:", error);
+    console.error("💥 Unhandled error:", error);
     return new Response(JSON.stringify({
       success: false,
       error: "Internal server error",
@@ -223,3 +206,5 @@ serve(async (req)=>{
     });
   }
 });
+
+

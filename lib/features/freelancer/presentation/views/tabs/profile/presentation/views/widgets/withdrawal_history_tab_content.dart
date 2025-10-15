@@ -51,7 +51,7 @@ class WithdrawalHistoryTabContent extends StatelessWidget {
                             ),
                           ),
                           child: Text(
-                           payment.status,
+                          _localizedStatus(context, payment.status),
                             style: Theme.of(
                               context,
                             ).textTheme.titleMedium?.copyWith(
@@ -120,4 +120,18 @@ class WithdrawalHistoryTabContent extends StatelessWidget {
       ),
     );
   }
+    String _localizedStatus(BuildContext context, String status) {
+    final local = AppLocalizations.of(context)!;
+    switch (status) {
+      case 'pending':
+        return local.pending;
+      case 'Approved':
+        return local.accepted;
+      case 'Rejected':
+        return local.rejected;
+      default:
+        return status;
+    }
+  }
 }
+

@@ -236,6 +236,7 @@ class Assets {
   static const String helperDateTimeFormatter = 'lib/core/helper/date_time_formatter.dart';
   static const String helperFormatLastSeen = 'lib/core/helper/format_last_seen.dart';
   static const String helperGetLocalServices = 'lib/core/helper/get_local_services.dart';
+  static const String helperGetLocalizedOrderStatus = 'lib/core/helper/get_localized_order_status.dart';
   static const String helperHexToColor = 'lib/core/helper/hex_to_color.dart';
   static const String helperLanguageNotifier = 'lib/core/helper/language_notifier.dart';
   static const String helperMyBlocObserver = 'lib/core/helper/my_bloc_observer.dart';
@@ -309,6 +310,8 @@ class Assets {
   static const String lottiesProgress = 'assets/lotties/Progress.json';
   static const String lottiesSuccess = 'assets/lotties/Success.json';
   static const String lottiesWaiting = 'assets/lotties/waiting.json';
+  static const String markMessageAsReadViewModelMarkMessageAsReadViewModel = 'lib/features/messages/presentation/manager/mark_message_as_read_view_model/mark_message_as_read_view_model.dart';
+  static const String markMessageAsReadViewModelMarkMessageAsReadViewModelStates = 'lib/features/messages/presentation/manager/mark_message_as_read_view_model/mark_message_as_read_view_model_states.dart';
   static const String markMessageReadUseCaseMarkMessageReadUseCase = 'lib/features/messages/domain/use_cases/mark_message_read_use_case/mark_message_read_use_case.dart';
   static const String markMessagesAsReadRemoteDataSourceImplMarkMessagesAsReadRemoteDataSourceImpl = 'lib/features/messages/data/data_sources_impl/remote/mark_messages_as_read_remote_data_source_impl/mark_messages_as_read_remote_data_source_impl.dart';
   static const String markMessagesAsReadRemoteDataSourceMarkMessagesAsReadRemoteDataSource = 'lib/features/messages/data/data_sources/remote/mark_messages_as_read_remote_data_source/mark_messages_as_read_remote_data_source.dart';
@@ -406,6 +409,7 @@ class Assets {
   static const String sendToAdminMessagesUseCaseSendToAdminMessagesUseCase = 'lib/features/messages/domain/use_cases/send_to_admin_messages_use_case/send_to_admin_messages_use_case.dart';
   static const String sendToAdminMessagesViewModelSendToAdminMessagesStates = 'lib/features/messages/presentation/manager/send_to_admin_messages_view_model/send_to_admin_messages_states.dart';
   static const String sendToAdminMessagesViewModelSendToAdminMessagesViewModel = 'lib/features/messages/presentation/manager/send_to_admin_messages_view_model/send_to_admin_messages_view_model.dart';
+  static const String servicesAdminService = 'lib/core/services/admin_service.dart';
   static const String servicesCopyToClipboard = 'lib/core/services/copy_to_clipboard.dart';
   static const String servicesDownloadFileService = 'lib/core/services/download_file_service.dart';
   static const String servicesFcmService = 'lib/core/services/fcm_service.dart';

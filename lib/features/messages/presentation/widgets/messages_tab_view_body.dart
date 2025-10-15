@@ -93,6 +93,8 @@ class _UserMessagesTabViewBodyState extends State<UserMessagesTabViewBody> {
                                   chatUserId: chatUserId!,
                                   chatUserRole: chatUserRole,
                                   order: order,
+                                  lastMessage:order.lastMessage??"مرفق",
+                                  lastMessageTime: DateTime.now(),
                                   onTap: () {},
                                   onUserInfoLoaded: (fullName, avatarUrl) {
                                     Navigator.pushNamed(
@@ -133,6 +135,8 @@ class _UserMessagesTabViewBodyState extends State<UserMessagesTabViewBody> {
                                       ? UserRole.client
                                       : UserRole.freelancer,
                                   order: conversation.order!,
+                                  lastMessage: conversation.lastMessage ??"",
+                                  lastMessageTime: conversation.lastMessageTime ?? DateTime.now(),
                                   onTap: () {},
                                   onUserInfoLoaded: (fullName, avatarUrl) {
                                     Navigator.pushNamed(

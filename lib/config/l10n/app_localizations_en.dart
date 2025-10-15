@@ -162,6 +162,44 @@ class AppLocalizationsEn extends AppLocalizations {
   String get payments => 'Payments';
 
   @override
+  String get rate_experience => 'Rate Your Experience';
+
+  @override
+  String experience_with(Object name) {
+    return 'How was your experience with $name?';
+  }
+
+  @override
+  String get add_comment => 'Add a comment (optional)';
+
+  @override
+  String get share_experience => 'Share your experience...';
+
+  @override
+  String get submit_rating => 'Submit Rating';
+
+  @override
+  String get rating_success => 'Rating submitted successfully!';
+
+  @override
+  String get rating_fail => 'Failed to submit rating';
+
+  @override
+  String get excellent => 'Excellent!';
+
+  @override
+  String get very_good => 'Very Good';
+
+  @override
+  String get good => 'Good';
+
+  @override
+  String get fair => 'Fair';
+
+  @override
+  String get poor => 'Poor';
+
+  @override
   String hiUser(Object name) {
     return 'Hi $name,';
   }

@@ -13,6 +13,7 @@ import 'package:dio/dio.dart' as _i361;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:supabase_flutter/supabase_flutter.dart' as _i454;
+import 'package:taskly/features/messages/presentation/manager/mark_message_as_read_view_model/mark_message_as_read_view_model_states.dart';
 
 import '../../features/attachments/data/data_sources/remote/attachments_remote_data_source/attachments_remote_data_source.dart'
     as _i1020;
@@ -446,6 +447,7 @@ import '../../features/messages/domain/use_cases/get_order_messages_use_case/get
     as _i416;
 import '../../features/messages/domain/use_cases/mark_message_read_use_case/mark_message_read_use_case.dart'
     as _i367;
+import '../../features/messages/domain/use_cases/mark_message_read_use_case/mark_message_read_use_case.dart';
 import '../../features/messages/domain/use_cases/send_message_use_case/send_message_use_case.dart'
     as _i366;
 import '../../features/messages/domain/use_cases/send_to_admin_messages_use_case/send_to_admin_messages_use_case.dart'
@@ -468,6 +470,7 @@ import '../../features/messages/presentation/manager/get_conversations_view_mode
     as _i42;
 import '../../features/messages/presentation/manager/get_messages_view_model/get_messages_view_model.dart'
     as _i389;
+import '../../features/messages/presentation/manager/mark_message_as_read_view_model/mark_message_as_read_view_model.dart';
 import '../../features/messages/presentation/manager/messages_view_model/messages_view_model.dart'
     as _i147;
 import '../../features/messages/presentation/manager/send_message_view_model/send_message_view_model.dart'
@@ -1089,6 +1092,9 @@ extension GetItInjectableX on _i174.GetIt {
             ));
     gh.factory<UploadOrderAttachmentsViewModel>(() =>
         UploadOrderAttachmentsViewModel(gh<_i231.UploadAttachmentsUseCase>()));
+
+
+
     return this;
   }
 }

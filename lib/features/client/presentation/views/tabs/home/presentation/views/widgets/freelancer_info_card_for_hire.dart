@@ -7,15 +7,17 @@ import '../../../../../../../../profile/domain/entities/user_info_entity/user_in
 
 class FreelancerInfoCardForHire extends StatelessWidget {
   final UserInfoEntity freelancer;
+  final double userRating;
   final bool isSelected;
   final VoidCallback onTap;
-  final VoidCallback onReviewsTap; // جديد: وظيفة الضغط على أيقونة الريفيوز
+  final VoidCallback onReviewsTap;
 
   const FreelancerInfoCardForHire({
     super.key,
     required this.freelancer,
     required this.isSelected,
     required this.onTap,
+    required this.userRating,
     required this.onReviewsTap, // جديد
   });
 
@@ -68,7 +70,7 @@ class FreelancerInfoCardForHire extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  freelancer.rating?.toStringAsFixed(1) ?? "0.0",
+                  userRating.toStringAsFixed(1) ,
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         fontWeight: FontWeight.w600,
                         fontSize: 14.sp,

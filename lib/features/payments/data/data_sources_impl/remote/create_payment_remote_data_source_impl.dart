@@ -3,7 +3,9 @@ import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:taskly/core/errors/failures.dart';
+import 'package:taskly/core/services/notification_service.dart';
 import 'package:taskly/features/payments/domain/entities/payment_entity.dart';
+import '../../../../../core/services/admin_service.dart';
 import '../../../../attachments/data/models/attachments_dm/attachments_dm.dart';
 import '../../data_sources/remote/create_payment_remote_data_source.dart';
 
@@ -74,6 +76,17 @@ class CreatePaymentRemoteDataSourceImpl extends CreatePaymentRemoteDataSource {
         paymentMethod: response['payment_method'],
         accountNumber: response['account_number'],
         requesterType: response['requester_type'],
+      );
+      NotificationService().sendNotification(
+          receiverId: response['freelancer_id'],
+          title: "متابعه حاله الطلب",
+          body:
+              "لقد تم الدفع بواسطه العميل يرجي الانتظار لحين تأكيد الدفع من قبل الاداره");
+
+
+      NotificationService().sendNotificationToAllAdmins(
+        title: 'إشعار مهم',
+        body: 'هذا إشعار لجميع المشرفين',
       );
 
       return Right(createdPayment);

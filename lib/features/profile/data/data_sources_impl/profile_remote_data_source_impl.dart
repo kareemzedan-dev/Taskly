@@ -61,9 +61,8 @@ class ProfileRemoteDataSourceImpl extends ProfileRemoteDataSource {
         createdAt: userResponse?['created_at'] != null
             ? DateTime.tryParse(userResponse?['created_at'])
             : null,
-        rating: userResponse?['rating'] != null
-            ? (userResponse?['rating'] as num).toDouble()
-            : 1.0,
+        rating: _parseDouble(userResponse?['rating']) ?? 0.0,
+
         billingInfo: role == "client" &&
                 extraResponse?['billing_info'] != null &&
                 extraResponse!['billing_info'].toString().isNotEmpty

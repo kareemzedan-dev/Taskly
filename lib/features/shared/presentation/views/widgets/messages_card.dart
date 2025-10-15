@@ -8,7 +8,9 @@ import 'package:taskly/features/client/presentation/views/tabs/profile/presentat
 import 'package:taskly/features/profile/presentation/manager/profile_view_model/profile_view_model.dart';
 import 'package:taskly/features/profile/presentation/manager/profile_view_model/profile_view_model_states.dart';
 import 'package:taskly/features/reviews/presentation/widgets/user_avatar.dart';
+import '../../../../../config/l10n/app_localizations.dart';
 import '../../../../../core/di/di.dart';
+import '../../../../../core/helper/get_localized_order_status.dart';
 import '../../../../welcome/presentation/cubit/welcome_states.dart';
 import '../../../domain/entities/order_entity/order_entity.dart';
 
@@ -20,6 +22,8 @@ class MessagesCard extends StatelessWidget {
     required this.chatUserId,
     required this.chatUserRole,
     required this.onUserInfoLoaded,
+    required this.lastMessage,
+    required this.lastMessageTime,
   });
 
   final void Function(String fullName, String avatarUrl) onUserInfoLoaded;
@@ -27,9 +31,13 @@ class MessagesCard extends StatelessWidget {
   final OrderEntity order;
   final String chatUserId;
   final UserRole chatUserRole;
+  final String lastMessage;
+  final DateTime lastMessageTime;
+
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
     return BlocProvider(
       create: (context) =>
       getIt<ProfileViewModel>()..getUserInfo(chatUserId, chatUserRole.name),
@@ -86,14 +94,14 @@ class MessagesCard extends StatelessWidget {
                           Row(
                             children: [
                               Icon(
-                                Icons.star,
+                                Icons.message,
                                 color: Colors.grey.shade400,
                                 size: 16.sp,
                               ),
                               SizedBox(width: 4.w),
                               Expanded(
                                 child: Text(
-                                  state.userInfoEntity.rating.toString() ,
+                                 lastMessage ?? "",
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyLarge
@@ -124,7 +132,7 @@ class MessagesCard extends StatelessWidget {
                               borderRadius: BorderRadius.circular(12.r),
                             ),
                             child: Text(
-                              order.status.name,
+                               getLocalizedStatus(local,  order.status.name),
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyLarge

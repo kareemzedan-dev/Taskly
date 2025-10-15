@@ -8,6 +8,7 @@ import 'package:taskly/features/shared/data/models/order_dm/order_dm.dart';
 
 import '../../../../../welcome/presentation/cubit/welcome_states.dart';
 import '../../../data_sources/remote/get_accepted_order_message_remote_data_source/get_accepted_order_message_remote_data_source.dart';
+import 'package:rxdart/rxdart.dart';
 
 @Injectable(as: GetAcceptedOrderMessageRemoteDataSource)
 class GetAcceptedOrderMessageRemoteDataSourceImpl
@@ -16,7 +17,6 @@ class GetAcceptedOrderMessageRemoteDataSourceImpl
 
   GetAcceptedOrderMessageRemoteDataSourceImpl({required this.supabaseService});
 
-  /// الطريقة التقليدية للـ fetch
   @override
   Future<Either<Failures, List<OrderEntity>>> getAcceptedOrderMessages(
       String userId,
@@ -43,43 +43,86 @@ class GetAcceptedOrderMessageRemoteDataSourceImpl
       );
 
       final responseList = response ?? [];
-      final data =
-      responseList.map((e) => OrderDm.fromJson(e).toEntity()).toList();
 
-      return Right(data);
+      final List<OrderEntity> orders = [];
+
+      for (var orderData in responseList) {
+        final order = OrderDm.fromJson(orderData).toEntity();
+
+        final lastMsgData = await supabaseService.supabaseClient
+            .from('messages')
+            .select()
+            .eq('order_id', order.id)
+            .order('created_at', ascending: false)
+            .limit(1)
+            .maybeSingle(); // هيرجع Map<String, dynamic>? مباشرة
+
+        if (lastMsgData != null) {
+          final lastMessageContent = lastMsgData['content'] as String?;
+          final lastMessageTime = DateTime.tryParse(lastMsgData['created_at'] ?? '');
+          orders.add(order.copyWith(
+            lastMessage: lastMessageContent,
+            lastMessageTime: lastMessageTime,
+          ));
+        } else {
+          orders.add(order);
+        }
+
+      }
+
+      return Right(orders);
     } catch (e, st) {
       print("Error fetching accepted messages: $e");
       print(st);
       return Left(ServerFailure(e.toString()));
     }
   }
-  @override
-  Stream<List<OrderEntity>> subscribeToAcceptedOrders(String userId,
-      {UserRole? role}) {
+
+  Stream<List<OrderEntity>> subscribeToAcceptedOrders(String userId, {UserRole? role}) {
     final column = role == UserRole.freelancer ? 'freelancer_id' : 'client_id';
-
     final statuses = [
-
-      'Accepted',
-      'Paid',
-      'In Progress',
-      'Completed',
-      'Waiting',
-      'Cancelled'
+      'Accepted', 'Paid', 'In Progress', 'Completed', 'Waiting', 'Cancelled'
     ];
 
-    final query = supabaseService.supabaseClient
+    // Stream الأوردرات
+    final ordersStream = supabaseService.supabaseClient
         .from('orders')
         .stream(primaryKey: ['id'])
         .eq(column, userId);
 
-    return query.map((event) {
-      final filtered = event
-          .where((e) => statuses.contains(e['status']))
-          .map((e) => OrderDm.fromJson(e).toEntity())
-          .toList();
-      return filtered;
-    });
+    // Stream الرسائل
+    final messagesStream = supabaseService.supabaseClient
+        .from('messages')
+        .stream(primaryKey: ['id']);
+
+    // دمج الأوردرات مع آخر رسالة
+    return Rx.combineLatest2(
+        ordersStream,
+        messagesStream,
+            (List ordersList, List messagesList) {
+          final filteredOrders = ordersList
+              .where((o) => statuses.contains(o['status']))
+              .map((e) => OrderDm.fromJson(e).toEntity())
+              .toList();
+
+          return filteredOrders.map((order) {
+            final lastMessage = messagesList
+                .where((m) => m['order_id'] == order.id)
+                .toList()
+              ..sort((a, b) => (b['created_at'] as String)
+                  .compareTo(a['created_at'] as String));
+
+            if (lastMessage.isNotEmpty) {
+              final last = lastMessage.first;
+              return order.copyWith(
+                lastMessage: last['content'] as String?,
+                lastMessageTime: DateTime.tryParse(last['created_at'] ?? ''),
+              );
+            }
+
+            return order;
+          }).toList();
+        });
   }
 
 

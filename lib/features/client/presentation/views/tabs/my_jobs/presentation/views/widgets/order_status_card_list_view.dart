@@ -38,6 +38,9 @@ class OrderStatusCardListView extends StatelessWidget {
       }
     }).toList();
 
+    // ✅ ترتيب حسب الأحدث أولاً
+    filtered.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+
     print('🎯 Filter: $filter - Orders count: ${orders.length} - Filtered: ${filtered.length}');
     for (var order in filtered) {
       print('🎯 Order: ${order.id} - Status: ${order.status}');
@@ -50,7 +53,7 @@ class OrderStatusCardListView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<GetOrderViewModel, GetOrderViewModelStates>(
       buildWhen: (previous, current) {
-        // إعادة البناء فقط عندما يتغير الـ state فعلياً
+
         return current is GetOrderViewModelStatesSuccess ||
             current is GetOrderViewModelStatesLoading ||
             current is GetOrderViewModelStatesError;

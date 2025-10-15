@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:taskly/config/l10n/app_localizations.dart';
 import 'package:taskly/config/routes/routes_manager.dart';
 import 'package:taskly/core/di/di.dart';
 import 'package:taskly/features/reviews/domain/entities/reviews_entity/reviews_entity.dart';
@@ -39,10 +40,13 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
       : widget.order.clientId;
   String get _ratedUserRole => _isClient ? 'freelancer' : 'client';
   String get _currentUserRole => _isClient ? 'client' : 'freelancer';
-  String get _ratedUserName => _isClient ? 'the freelancer' : 'the client';
+  String get _ratedUserName =>
+      _isClient ? AppLocalizations.of(context)!.freelancer : AppLocalizations.of(context)!.client;
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+
     return BlocProvider(
       create: (_) => getIt<SubmitRatingViewModel>(),
       child: Container(
@@ -63,11 +67,16 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
           listener: (context, state) {
             if (state is SubmitRatingStatesSuccess) {
               setState(() => _isSubmitting = false);
-              Navigator.of(context).pushNamedAndRemoveUntil(_currentUserRole == "client" ? RoutesManager.clientHome : RoutesManager.freelancerHome, (route) => false,);
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                _currentUserRole == "client"
+                    ? RoutesManager.clientHome
+                    : RoutesManager.freelancerHome,
+                    (route) => false,
+              );
 
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Rating submitted successfully!'),
+                SnackBar(
+                  content: Text(loc.rating_success),
                   backgroundColor: Colors.green,
                 ),
               );
@@ -76,12 +85,11 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
               Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(state.failure.message ?? 'Failed to submit rating'),
+                  content: Text(state.failure.message ?? loc.rating_fail),
                   backgroundColor: Colors.red,
                 ),
               );
             }
-
           },
           builder: (context, state) {
             if (state is SubmitRatingStatesLoading) {
@@ -109,7 +117,7 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
                 ),
                 SizedBox(height: 20.h),
                 Text(
-                  'Rate Your Experience',
+                  loc.rate_experience,
                   style: TextStyle(
                     fontSize: 20.sp,
                     fontWeight: FontWeight.bold,
@@ -118,7 +126,7 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
                 ),
                 SizedBox(height: 8.h),
                 Text(
-                  'How was your experience with $_ratedUserName?',
+                  loc.experience_with(_ratedUserName),
                   style: TextStyle(
                     fontSize: 14.sp,
                     color: Colors.grey.shade600,
@@ -148,7 +156,7 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
                 SizedBox(height: 16.h),
                 Center(
                   child: Text(
-                    _getRatingText(_rating),
+                    _getRatingText(_rating, loc),
                     style: TextStyle(
                       fontSize: 14.sp,
                       color: Colors.grey.shade700,
@@ -158,7 +166,7 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
                 ),
                 SizedBox(height: 24.h),
                 Text(
-                  'Add a comment (optional)',
+                  loc.add_comment,
                   style: TextStyle(
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w500,
@@ -176,7 +184,7 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
                     onChanged: (value) => _comment = value,
                     maxLines: 3,
                     decoration: InputDecoration(
-                      hintText: 'Share your experience...',
+                      hintText: loc.share_experience,
                       border: InputBorder.none,
                       contentPadding: EdgeInsets.all(16.w),
                     ),
@@ -199,7 +207,7 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
                           ),
                         ),
                         child: Text(
-                          'Skip',
+                          loc.skip,
                           style: TextStyle(
                             fontSize: 16.sp,
                             color: Colors.grey.shade700,
@@ -232,7 +240,7 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
                           ),
                         )
                             : Text(
-                          'Submit Rating',
+                          loc.submit_rating,
                           style: TextStyle(
                             fontSize: 16.sp,
                             color: Colors.white,
@@ -247,18 +255,17 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
               ],
             );
           },
-        )
-
+        ),
       ),
     );
   }
 
-  String _getRatingText(double rating) {
-    if (rating >= 4.5) return 'Excellent!';
-    if (rating >= 4.0) return 'Very Good';
-    if (rating >= 3.0) return 'Good';
-    if (rating >= 2.0) return 'Fair';
-    return 'Poor';
+  String _getRatingText(double rating, AppLocalizations loc) {
+    if (rating >= 4.5) return loc.excellent;
+    if (rating >= 4.0) return loc.very_good;
+    if (rating >= 3.0) return loc.good;
+    if (rating >= 2.0) return loc.fair;
+    return loc.poor;
   }
 
   void _submitRating(BuildContext context) {
@@ -276,7 +283,6 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
       createdAt: DateTime.now(),
       role: _currentUserRole,
     );
-
 
     context.read<SubmitRatingViewModel>().submitRating(
       reviews: review,

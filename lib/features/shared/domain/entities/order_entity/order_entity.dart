@@ -17,6 +17,8 @@ class OrderEntity {
   final DateTime updatedAt;
   final int? offersCount;
   final String? offerId;
+  final String ? lastMessage;
+  final DateTime ? lastMessageTime;
 
   OrderEntity({
     required this.id,
@@ -34,6 +36,8 @@ class OrderEntity {
     required this.updatedAt,
     required this.offersCount,
     required this.offerId,
+    this.lastMessage,
+    this.lastMessageTime,
   });
 
   // ✅ copyWith
@@ -53,6 +57,8 @@ class OrderEntity {
     DateTime? updatedAt,
     int? offersCount,
     String? offerId,
+    String ? lastMessage,
+    DateTime ? lastMessageTime,
   }) {
     return OrderEntity(
       id: id ?? this.id,
@@ -70,6 +76,8 @@ class OrderEntity {
       updatedAt: updatedAt ?? this.updatedAt,
       offersCount: offersCount ?? this.offersCount,
       offerId: offerId ?? this.offerId,
+      lastMessage: lastMessage ?? this.lastMessage,
+      lastMessageTime: lastMessageTime ?? this.lastMessageTime,
     );
   }
 

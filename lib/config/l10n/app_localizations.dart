@@ -386,6 +386,78 @@ abstract class AppLocalizations {
   /// **'Payments'**
   String get payments;
 
+  /// No description provided for @rate_experience.
+  ///
+  /// In en, this message translates to:
+  /// **'Rate Your Experience'**
+  String get rate_experience;
+
+  /// No description provided for @experience_with.
+  ///
+  /// In en, this message translates to:
+  /// **'How was your experience with {name}?'**
+  String experience_with(Object name);
+
+  /// No description provided for @add_comment.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a comment (optional)'**
+  String get add_comment;
+
+  /// No description provided for @share_experience.
+  ///
+  /// In en, this message translates to:
+  /// **'Share your experience...'**
+  String get share_experience;
+
+  /// No description provided for @submit_rating.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit Rating'**
+  String get submit_rating;
+
+  /// No description provided for @rating_success.
+  ///
+  /// In en, this message translates to:
+  /// **'Rating submitted successfully!'**
+  String get rating_success;
+
+  /// No description provided for @rating_fail.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to submit rating'**
+  String get rating_fail;
+
+  /// No description provided for @excellent.
+  ///
+  /// In en, this message translates to:
+  /// **'Excellent!'**
+  String get excellent;
+
+  /// No description provided for @very_good.
+  ///
+  /// In en, this message translates to:
+  /// **'Very Good'**
+  String get very_good;
+
+  /// No description provided for @good.
+  ///
+  /// In en, this message translates to:
+  /// **'Good'**
+  String get good;
+
+  /// No description provided for @fair.
+  ///
+  /// In en, this message translates to:
+  /// **'Fair'**
+  String get fair;
+
+  /// No description provided for @poor.
+  ///
+  /// In en, this message translates to:
+  /// **'Poor'**
+  String get poor;
+
   /// No description provided for @hiUser.
   ///
   /// In en, this message translates to:

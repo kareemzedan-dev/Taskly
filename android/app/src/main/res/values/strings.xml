@@ -4,4 +4,7 @@
     <!-- Facebook credentials -->
     <string name="facebook_app_id">1229012975822743</string>
     <string name="facebook_client_token">ad4901bb467dc352677260a76c037ea8</string>
+
+    <!-- Facebook login scheme -->
+    <string name="fb_login_protocol_scheme">fb1229012975822743</string>
 </resources>

@@ -37,6 +37,8 @@ class UserInfoDm extends UserInfoEntity {
     super.freelancerBalance,
     super.isVerified,
     super.totalEarnings,
+    super.lastMessage,
+    super.lastMessageTime,
 
   });
 
@@ -82,7 +84,9 @@ class UserInfoDm extends UserInfoEntity {
         (json['freelancer_balance'] as num).toDouble() : 0.0,
         isVerified:  json['is_verified'] ?? false,
         totalEarnings: json['total_earnings'] != null ?
-            (json['total_earnings'] as num).toDouble() : 0.0
+            (json['total_earnings'] as num).toDouble() : 0.0,
+        lastMessage: json['last_message'] ?? '',
+        lastMessageTime: json['last_message_time'] != null ? DateTime.tryParse(json['last_message_time']) : null,
 
 
 
@@ -114,7 +118,9 @@ class UserInfoDm extends UserInfoEntity {
 
       'freelancer_balance': freelancerBalance,
       'is_verified': isVerified,
-      'total_earnings': totalEarnings
+      'total_earnings': totalEarnings,
+      'last_message': lastMessage,
+      'last_message_time': lastMessageTime?.toIso8601String(),
 
     };
   }
@@ -143,6 +149,8 @@ class UserInfoDm extends UserInfoEntity {
     double? freelancerBalance,
     bool? isVerified,
     double? totalEarnings,
+    String? lastMessage,
+    DateTime? lastMessageTime,
   }) {
     return UserInfoDm(
         id: id ?? this.id,
@@ -167,7 +175,9 @@ class UserInfoDm extends UserInfoEntity {
         freelancerStatus: freelancerStatus ?? this.freelancerStatus,
         freelancerBalance: freelancerBalance ?? this.freelancerBalance,
         isVerified: isVerified ?? this.isVerified,
-      totalEarnings: totalEarnings ?? this.totalEarnings
+      totalEarnings: totalEarnings ?? this.totalEarnings,
+      lastMessage: lastMessage ?? this.lastMessage,
+      lastMessageTime: lastMessageTime ?? this.lastMessageTime,
     );
   }
 }

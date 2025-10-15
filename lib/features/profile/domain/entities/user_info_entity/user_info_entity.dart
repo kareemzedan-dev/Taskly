@@ -27,6 +27,8 @@ class UserInfoEntity {
   final int ? jobsCount;
   final int ? reviewsCount;
   final double ? freelancerBalance;
+  final String? lastMessage;
+  final DateTime? lastMessageTime;
 
 
 
@@ -62,6 +64,8 @@ class UserInfoEntity {
     this.freelancerBalance,
     this.isVerified,
     this.totalEarnings,
+    this.lastMessage,
+    this.lastMessageTime,
   });
 }
 class BillingInfo {

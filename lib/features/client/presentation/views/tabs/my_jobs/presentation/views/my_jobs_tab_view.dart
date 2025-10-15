@@ -9,9 +9,10 @@ import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentat
 
 import '../../../../../../../../config/l10n/app_localizations.dart';
 import '../../../../../../../../core/components/dismissible_error_card.dart';
+import '../../../../../../../shared/domain/entities/order_entity/order_entity.dart';
 import '../view_model/delete_order_view_model/delete_order_states.dart';
 import '../view_model/delete_order_view_model/delete_order_view_model.dart';
-
+import '../view_model/get_order_view_model.dart/get_order_view_model_states.dart';
 class MyJobsTabView extends StatelessWidget {
   MyJobsTabView({super.key});
   final String userId = SharedPrefHelper.getString("id")!;
@@ -37,72 +38,126 @@ class MyJobsTabView extends StatelessWidget {
             showTemporaryMessage(context, "Failed to delete order", MessageType.error);
           }
         },
-        child: DefaultTabController(
-          length: 4,
-          child: Scaffold(
-            appBar: AppBar(
-              elevation: 0,
-              shape: Border(
-                bottom: BorderSide(color: Colors.grey.shade300, width: 2),
-              ),
-              title: Text(
-                local.manageOrders,
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  fontWeight: FontWeight.w700,
-                  fontSize: 20.sp,
+        child: BlocBuilder<GetOrderViewModel, GetOrderViewModelStates>(
+          builder: (context, state) {
+            List<OrderEntity> orders = [];
+            if (state is GetOrderViewModelStatesSuccess) {
+              orders = state.orderEntity;
+            }
+
+            int pendingCount =
+                orders.where((o) => o.status == OrderStatus.Accepted || o.status == OrderStatus.Paid || o.status == OrderStatus.Pending).length;
+            int inProgressCount =
+                orders.where((o) => o.status == OrderStatus.InProgress || o.status == OrderStatus.Waiting).length;
+            int completedCount =
+                orders.where((o) => o.status == OrderStatus.Completed).length;
+            int cancelledCount =
+                orders.where((o) => o.status == OrderStatus.Cancelled).length;
+
+            return DefaultTabController(
+              length: 4,
+              child: Scaffold(
+                appBar: AppBar(
+                  elevation: 0,
+                  shape: Border(
+                    bottom: BorderSide(color: Colors.grey.shade300, width: 2),
+                  ),
+                  title: Text(
+                    local.manageOrders,
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 20.sp,
+                    ),
+                  ),
+                  bottom: TabBar(
+                    labelColor: ColorsManager.primary,
+                    unselectedLabelColor: Colors.grey,
+                    labelStyle: TextStyle(
+                        fontSize: 16.sp, fontWeight: FontWeight.w600),
+                    unselectedLabelStyle: TextStyle(
+                        fontSize: 14.sp, fontWeight: FontWeight.w400),
+                    indicatorColor: ColorsManager.primary,
+                    indicatorWeight: 4,
+                    tabs: [
+                      _buildTabWithBadge(local.pending, pendingCount),
+                      _buildTabWithBadge(local.inProgress, inProgressCount),
+                      _buildTabWithBadge(local.completed, completedCount),
+                      _buildTabWithBadge(local.cancelled, cancelledCount),
+                    ],
+                  ),
+                ),
+                body: TabBarView(
+                  children: [
+                    OrderStatusCardListView(
+                      animationPath: "assets/lotties/Loading.json",
+                      message: local.no_pending_orders_yet,
+                      filter: OrderStatusFilter.pending,
+                      userId: userId,
+                      role: "client",
+                    ),
+                    OrderStatusCardListView(
+                      animationPath: "assets/lotties/Progress.json",
+                      message: local.no_orders_in_progress,
+                      filter: OrderStatusFilter.inProgress,
+                      userId: userId,
+                      role: "client",
+                    ),
+                    OrderStatusCardListView(
+                      animationPath: "assets/lotties/Success.json",
+                      message: local.no_completed_orders,
+                      filter: OrderStatusFilter.completed,
+                      userId: userId,
+                      role: "client",
+                    ),
+                    OrderStatusCardListView(
+                      animationPath: "assets/lotties/cancelled.json",
+                      message: local.no_cancelled_orders,
+                      filter: OrderStatusFilter.cancelled,
+                      userId: userId,
+                      role: "client",
+                    ),
+                  ],
                 ),
               ),
-              bottom: TabBar(
-                labelColor: ColorsManager.primary,
-                unselectedLabelColor: Colors.grey,
-                labelStyle: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600),
-                unselectedLabelStyle: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w400),
-                indicatorColor: ColorsManager.primary,
-                indicatorWeight: 4,
-                tabs:   [
-                  Tab(text: local.pending),
-                  Tab(text: local.inProgress),
-                  Tab(text: local.completed),
-                  Tab(text: local.cancelled),
-                ],
-              ),
-            ),
-             body:   TabBarView(
-              children: [
-                OrderStatusCardListView(
-                  animationPath: "assets/lotties/Loading.json",
-                  message: local.no_pending_orders_yet,
-                  filter: OrderStatusFilter.pending,
-                  userId: userId,
-                  role: "client",
-                ),
-                OrderStatusCardListView(
-                  animationPath: "assets/lotties/Progress.json",
-                  message: local.no_orders_in_progress,
-                  filter: OrderStatusFilter.inProgress,
-                  userId: userId,
-                  role: "client",
-                ),
-                OrderStatusCardListView(
-                  animationPath: "assets/lotties/Success.json",
-                  message: local.no_completed_orders,
-                  filter: OrderStatusFilter.completed,
-                  userId: userId,
-                  role: "client",
-                ),
-                OrderStatusCardListView(
-                  animationPath: "assets/lotties/cancelled.json",
-                  message: local.no_cancelled_orders,
-                  filter: OrderStatusFilter.cancelled,
-                  userId: userId,
-                  role: "client",
-                ),
-              ],
-            ),
-          ),
+            );
+          },
         ),
       ),
     );
   }
-}
 
+  Widget _buildTabWithBadge(String title, int count) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Tab(text: title),
+
+          Positioned(
+            top: -5,
+            right: -15,
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+              decoration: BoxDecoration(
+                color: ColorsManager.primary,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              constraints: BoxConstraints(
+                minWidth: 20,
+                minHeight: 20,
+              ),
+              child: Center(
+                child: Text(
+                  '$count',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+}

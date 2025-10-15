@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:taskly/features/messages/presentation/manager/mark_message_as_read_view_model/mark_message_as_read_view_model.dart';
 import '../../../../../../../../../core/errors/failures.dart';
+import '../../../../../core/di/di.dart';
 import '../../../domain/entities/message_entity.dart';
 import '../../../domain/use_cases/get_order_messages_use_case/get_order_messages_use_case.dart';
 import '../../../domain/use_cases/subscribe_to_messages_use_case/subscribe_to_messages_use_case.dart';
@@ -18,6 +20,7 @@ class MessagesViewModel extends Cubit<MessagesStates> {
 
   StreamSubscription<(MessageEntity, String)>? _subscription;
   List<MessageEntity> _messages = [];
+  final markVM = getIt<MarkMessageAsReadViewModel>();
 
   /// جلب الرسائل القديمة + الاشتراك في الجديدة
   Future<void> loadAndSubscribeMessages(String orderId, String currentUserId, String otherUserId) async {
@@ -32,6 +35,7 @@ class MessagesViewModel extends Cubit<MessagesStates> {
           _messages = List.from(messages)
             ..sort((a, b) => a.createdAt.compareTo(b.createdAt));
           emit(MessagesSuccess(messages: _messages));
+          markVM.markMessagesAsRead(orderId);
 
           // 2️⃣ بعد تحميلها بنبدأ الاشتراك في الجديدة
           _subscribeToMessages(orderId, currentUserId , otherUserId);

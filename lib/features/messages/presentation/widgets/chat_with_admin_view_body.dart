@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../../../../../../core/di/di.dart';
+import '../../../../core/utils/assets_manager.dart';
 import '../../../attachments/domain/entities/attachment_entity/attaachments_entity.dart';
 import '../../../shared/presentation/views/widgets/message_bubble.dart';
 import '../../domain/entities/message_entity.dart';
@@ -58,7 +59,8 @@ class _ChatWithAdminViewBodyState extends State<ChatWithAdminViewBody> {
   Widget _buildAttachmentWidget(AttachmentEntity att, bool isCurrentUser) {
     final isImage = att.type.startsWith("image/");
     final isPDF = att.type == "application/pdf";
-    final isAudio = att.type.startsWith("audio/") || att.type == "application/octet-stream";
+    final isAudio =
+        att.type.startsWith("audio/") || att.type == "application/octet-stream";
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 6),
@@ -88,8 +90,8 @@ class _ChatWithAdminViewBodyState extends State<ChatWithAdminViewBody> {
               isImage
                   ? Icons.image
                   : isPDF
-                  ? Icons.picture_as_pdf
-                  : Icons.audiotrack,
+                      ? Icons.picture_as_pdf
+                      : Icons.audiotrack,
               color: Colors.white,
               size: 20,
             ),
@@ -99,52 +101,56 @@ class _ChatWithAdminViewBodyState extends State<ChatWithAdminViewBody> {
             child: GestureDetector(
               onTap: !isAudio
                   ? () {
-                if (isImage) {
-                  showDialog(
-                    context: context,
-                    builder: (_) => Dialog(
-                      backgroundColor: Colors.transparent,
-                      insetPadding: const EdgeInsets.all(20),
-                      child: Stack(
-                        children: [
-                          InteractiveViewer(
-                            child: Image.network(
-                              att.url,
-                              fit: BoxFit.contain,
-                              errorBuilder: (context, error, stackTrace) {
-                                return Container(
-                                  padding: const EdgeInsets.all(20),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Icon(Icons.error, color: Colors.red, size: 40),
-                                      SizedBox(height: 8),
-                                      Text(
-                                        'Failed to load image',
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ],
+                      if (isImage) {
+                        showDialog(
+                          context: context,
+                          builder: (_) => Dialog(
+                            backgroundColor: Colors.transparent,
+                            insetPadding: const EdgeInsets.all(20),
+                            child: Stack(
+                              children: [
+                                InteractiveViewer(
+                                  child: Image.network(
+                                    att.url,
+                                    fit: BoxFit.contain,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return Container(
+                                        padding: const EdgeInsets.all(20),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Icon(Icons.error,
+                                                color: Colors.red, size: 40),
+                                            SizedBox(height: 8),
+                                            Text(
+                                              'Failed to load image',
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
                                   ),
-                                );
-                              },
+                                ),
+                                Positioned(
+                                  top: 10,
+                                  right: 10,
+                                  child: IconButton(
+                                    icon: const Icon(Icons.close,
+                                        color: Colors.white),
+                                    onPressed: () =>
+                                        Navigator.of(context).pop(),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          Positioned(
-                            top: 10,
-                            right: 10,
-                            child: IconButton(
-                              icon: const Icon(Icons.close, color: Colors.white),
-                              onPressed: () => Navigator.of(context).pop(),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                } else if (isPDF) {
-                  launchUrl(Uri.parse(att.url));
-                }
-              }
+                        );
+                      } else if (isPDF) {
+                        launchUrl(Uri.parse(att.url));
+                      }
+                    }
                   : null,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -164,8 +170,8 @@ class _ChatWithAdminViewBodyState extends State<ChatWithAdminViewBody> {
                     isImage
                         ? "Image"
                         : isPDF
-                        ? "PDF Document"
-                        : "Audio File",
+                            ? "PDF Document"
+                            : "Audio File",
                     style: TextStyle(
                       fontSize: 12,
                       color: Colors.grey[600],
@@ -227,7 +233,7 @@ class _ChatWithAdminViewBodyState extends State<ChatWithAdminViewBody> {
           sender: isCurrentUser ? SenderType.client : SenderType.admin,
           message: msg.content ?? "",
           time:
-          "${msg.createdAt.hour}:${msg.createdAt.minute.toString().padLeft(2, '0')}",
+              "${msg.createdAt.hour}:${msg.createdAt.minute.toString().padLeft(2, '0')}",
           chatWithUsers: true,
           avatarUrl: "",
         ),
@@ -243,7 +249,7 @@ class _ChatWithAdminViewBodyState extends State<ChatWithAdminViewBody> {
       widgets.add(
         Column(
           crossAxisAlignment:
-          isCurrentUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+              isCurrentUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
           children: attachments,
         ),
       );
@@ -251,6 +257,7 @@ class _ChatWithAdminViewBodyState extends State<ChatWithAdminViewBody> {
 
     return widgets;
   }
+
   @override
   Widget build(BuildContext context) {
     final vm = context.read<ChatWithAdminViewModel>();
@@ -276,12 +283,28 @@ class _ChatWithAdminViewBodyState extends State<ChatWithAdminViewBody> {
 
               final messages = vm.messages;
               if (messages.isEmpty) {
-                return const Center(
-                  child: Text(
-                    "No messages yet",
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey,
+                return Center(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          Assets.assetsNoMessages,
+                          width: 250.w,
+                          height: 250.h,
+                          fit: BoxFit.contain,
+                        ),
+                        SizedBox(height: 16.h),
+                        Text(
+                          " لا يوجد رسائل بعد \n  لا تتردد في التواصل معنا الان",
+                          textAlign:  TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 );

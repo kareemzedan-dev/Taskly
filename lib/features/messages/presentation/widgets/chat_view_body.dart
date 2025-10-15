@@ -395,23 +395,25 @@ class _ChatViewBodyState extends State<ChatViewBody> {
 
                     if (allMessages.isEmpty) {
                       return   Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(Assets.assetsNoMessages,
-                            width: 250.w,
-                            height: 250.h,
-                            fit: BoxFit.contain,),
-                            SizedBox(height: 16.h),
-                            Text(
-                            "لا يوجد رسائل بعد",
-                              style: TextStyle(
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(Assets.assetsNoMessages,
+                              width: 250.w,
+                              height: 250.h,
+                              fit: BoxFit.contain,),
+                              SizedBox(height: 16.h),
+                              Text(
+                              "لا يوجد رسائل بعد",
+                                style: TextStyle(
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       );
                     }

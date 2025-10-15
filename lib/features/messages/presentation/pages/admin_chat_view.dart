@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:taskly/features/messages/presentation/manager/send_message_view_model/send_message_view_model.dart';
 
@@ -56,8 +58,28 @@ class AdminChatView extends StatelessWidget {
       ],
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: ColorsManager.primary,
-          title:   Text(local.chat_with_admin),
+          backgroundColor: ColorsManager.white,
+          leading: IconButton(
+            icon:const   Icon(CupertinoIcons.back),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          bottom:  const PreferredSize(
+            preferredSize: Size.fromHeight(1),
+            child: Divider(
+              color: Colors.grey,
+              thickness: 1,
+            ),
+          ),
+
+          title:   Text(local.chat_with_admin,
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                fontWeight: FontWeight.w700,
+                fontSize: 20.sp,
+            color: ColorsManager.black,
+              ),
+          ),
         ) ,
         body: SafeArea(
           child: ChatWithAdminViewBody(

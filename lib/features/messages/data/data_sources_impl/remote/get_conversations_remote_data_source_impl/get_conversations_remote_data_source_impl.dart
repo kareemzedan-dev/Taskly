@@ -23,11 +23,12 @@ class GetUserConversationsRemoteDataSourceImpl
     try {
       final response = await supabaseService.supabaseClient
           .from('messages')
-          .select('sender_id, receiver_id, created_at, content, order_id') // ✅ استخدم content بدل message
+          .select('sender_id, receiver_id, created_at, content, order_id')
           .or('sender_id.eq.$userId,receiver_id.eq.$userId')
           .order('created_at', ascending: false);
 
       final Map<String, Map<String, dynamic>> latestConversations = {};
+
       for (final msg in response) {
         final sender = msg['sender_id']?.toString();
         final receiver = msg['receiver_id']?.toString();
@@ -35,7 +36,11 @@ class GetUserConversationsRemoteDataSourceImpl
 
         final otherUserId = sender == userId ? receiver : sender;
 
-        if (!latestConversations.containsKey(otherUserId)) {
+        // ✅ خليه ياخد أحدث رسالة
+        final existingMsg = latestConversations[otherUserId];
+        if (existingMsg == null ||
+            DateTime.parse(msg['created_at'])
+                .isAfter(DateTime.parse(existingMsg['created_at']))) {
           latestConversations[otherUserId] = msg;
         }
       }
@@ -53,7 +58,6 @@ class GetUserConversationsRemoteDataSourceImpl
           .where((id) => id != null)
           .toList();
 
-
       Map<String, OrderEntity> ordersMap = {};
       if (orderIds.isNotEmpty) {
         final ordersResponse = await supabaseService.supabaseClient
@@ -63,12 +67,11 @@ class GetUserConversationsRemoteDataSourceImpl
 
         ordersMap = {
           for (final o in ordersResponse)
-            o['id']: OrderDm.fromJson(Map<String, dynamic>.from(o as Map))
+            o['id']: OrderDm.fromJson(Map<String, dynamic>.from(o as Map)).toEntity()
         };
       }
 
-      final List<ConversationEntity> conversations =
-      (usersResponse as List).map((u) {
+      final List<ConversationEntity> conversations = (usersResponse as List).map((u) {
         final user = Map<String, dynamic>.from(u as Map);
         final lastMsgData = latestConversations[user['id']];
         final orderId = lastMsgData?['order_id']?.toString();
@@ -83,12 +86,16 @@ class GetUserConversationsRemoteDataSourceImpl
           ),
           lastMessage: lastMsgData?['content'],
           lastMessageTime: lastMsgData?['created_at'] != null
-              ? DateTime.tryParse(lastMsgData?['created_at'])
+              ? DateTime.tryParse(lastMsgData!['created_at'])
               : null,
           orderId: orderId,
           order: orderId != null ? ordersMap[orderId] : null,
         );
       }).toList();
+
+      // ✅ رتب المحادثات بالأحدث
+      conversations.sort((a, b) =>
+          (b.lastMessageTime ?? DateTime(0)).compareTo(a.lastMessageTime ?? DateTime(0)));
 
       print("messages response: $response");
       return Right(conversations);
@@ -98,25 +105,33 @@ class GetUserConversationsRemoteDataSourceImpl
       return Left(ServerFailure(e.toString()));
     }
   }
+
+  // ✅ stream شغال real-time ومرتّب بالأحدث
   Stream<List<ConversationEntity>> subscribeToConversations(String userId) {
-    // Stream مباشر من جدول messages
     final stream = supabaseService.supabaseClient
         .from('messages')
         .stream(primaryKey: ['id'])
+        .order('created_at') // ترتيب الرسائل بالوقت
         .map((messages) => (messages as List)
         .where((m) =>
-         m['sender_id'] == userId || m['receiver_id'] == userId)
+    m['sender_id'] == userId || m['receiver_id'] == userId)
         .toList());
 
-    return stream.map((messages) async {
+    return stream.asyncMap((messages) async {
       final Map<String, Map<String, dynamic>> latestConversations = {};
+
       for (final msg in messages) {
         final sender = msg['sender_id']?.toString();
         final receiver = msg['receiver_id']?.toString();
         if (sender == null || receiver == null) continue;
 
         final otherUserId = sender == userId ? receiver : sender;
-        if (!latestConversations.containsKey(otherUserId)) {
+
+        // ✅ دايماً خليه ياخد أحدث رسالة
+        final existingMsg = latestConversations[otherUserId];
+        if (existingMsg == null ||
+            DateTime.parse(msg['created_at'])
+                .isAfter(DateTime.parse(existingMsg['created_at']))) {
           latestConversations[otherUserId] = msg;
         }
       }
@@ -147,8 +162,7 @@ class GetUserConversationsRemoteDataSourceImpl
         };
       }
 
-      final List<ConversationEntity> conversations =
-      (usersResponse as List).map((u) {
+      final List<ConversationEntity> conversations = (usersResponse as List).map((u) {
         final user = Map<String, dynamic>.from(u as Map);
         final lastMsgData = latestConversations[user['id']];
         final orderId = lastMsgData?['order_id']?.toString();
@@ -160,6 +174,7 @@ class GetUserConversationsRemoteDataSourceImpl
             email: user['email'] ?? '',
             profileImage: user['profile_image'],
             role: user['role'] ?? '',
+
           ),
           lastMessage: lastMsgData?['content'],
           lastMessageTime: lastMsgData?['created_at'] != null
@@ -170,8 +185,11 @@ class GetUserConversationsRemoteDataSourceImpl
         );
       }).toList();
 
-      return conversations;
-    }).asyncMap((e) async => await e); // تحويل Future<List<>> إلى List<>
-  }
+      // ✅ رتب بالأحدث
+      conversations.sort((a, b) =>
+          (b.lastMessageTime ?? DateTime(0)).compareTo(a.lastMessageTime ?? DateTime(0)));
 
+      return conversations;
+    });
+  }
 }

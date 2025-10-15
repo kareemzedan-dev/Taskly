@@ -7,7 +7,7 @@ class AppTheme {
   static ThemeData lightTheme = ThemeData(
     fontFamily: "Cairo",
     primaryColor: ColorsManager.primary,
-    scaffoldBackgroundColor: ColorsManager.background,
+    scaffoldBackgroundColor: Colors.white,
     appBarTheme: AppBarTheme(
       backgroundColor: ColorsManager.white,
       elevation: 0,

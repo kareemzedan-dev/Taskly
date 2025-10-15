@@ -35,37 +35,40 @@ class CustomTabBar extends StatelessWidget implements PreferredSizeWidget {
       indicatorWeight: 4,
       tabs: List.generate(tabs.length, (index) {
         return Tab(
-          child: FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(tabs[index]),
-                SizedBox(width: 6.w),
-                if (numbers != null)
-                  Container(
-                    constraints: BoxConstraints(
-                      maxWidth: 24.w,
-                      maxHeight: 24.h,
-                    ),
+          child: Stack(
+            clipBehavior: Clip.none,
+            alignment: Alignment.center,
+            children: [
+              // اسم التاب
+              Text(tabs[index]),
+
+              // البادج (لو موجود رقم)
+              if (numbers != null && numbers!.length > index)
+                Positioned(
+                  top: -10.h,
+                  right: -20.w,
+                  child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
                     decoration: BoxDecoration(
                       color: Colors.red,
                       borderRadius: BorderRadius.circular(12.r),
                     ),
-                    alignment: Alignment.center,
+                    constraints: BoxConstraints(
+                      minWidth: 20.w,
+                      minHeight: 20.h,
+                    ),
                     child: Text(
-                      numbers![index].toString() ,
+                      numbers![index].toString(),
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 12.sp,
                         fontWeight: FontWeight.bold,
                       ),
-                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
-              ],
-            ),
+                ),
+            ],
           ),
         );
       }),

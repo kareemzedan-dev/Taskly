@@ -65,6 +65,7 @@ class OrderStatusCard extends StatelessWidget {
                   child: Text(
                     buttonText!,
                     style: TextStyle(
+                      color: Colors.white,
 
                       fontSize: 16.sp,
                       fontWeight: FontWeight.bold,
@@ -89,7 +90,7 @@ String _localizedStatus(BuildContext context, String status) {
       return local.accepted;
       case 'Paid':
       return local.paid;
-      case 'In Progress':
+      case 'InProgress':
       return local.inProgress;
       case 'Waiting':
       return local.waiting;

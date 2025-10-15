@@ -14,13 +14,11 @@ class FreelancerPrivateOrdersViewModel
   StreamSubscription<List<OrderEntity>>? _ordersSubscription;
   String? _currentFreelancerId;
   List<String> offeredOrderIds = [];
-  // قائمة لكل الأوردرات + filtered list
   List<OrderEntity> _allOrders = [];
   List<OrderEntity> _filteredOrders = [];
 
-  FreelancerPrivateOrdersViewModel(
-      this.subscribeToPrivateOrdersUseCase,
-      ) : super(FreelancerPrivateOrdersViewModelStatesInitial());
+  FreelancerPrivateOrdersViewModel(this.subscribeToPrivateOrdersUseCase)
+      : super(FreelancerPrivateOrdersViewModelStatesInitial());
 
   Future<void> fetchAndSubscribePrivateOrders(String freelancerId) async {
     try {
@@ -35,16 +33,12 @@ class FreelancerPrivateOrdersViewModel
         _handleOrdersUpdate,
         onError: (error) {
           emit(FreelancerPrivateOrdersViewModelStatesError(
-              message: 'Real-time subscription error: $error'
-          ));
+              message: 'Real-time subscription error: $error'));
         },
       );
-
     } catch (e) {
       final failure = Failures(e.toString());
-      emit(FreelancerPrivateOrdersViewModelStatesError(
-          message: failure.message
-      ));
+      emit(FreelancerPrivateOrdersViewModelStatesError(message: failure.message));
     }
   }
 
@@ -53,23 +47,19 @@ class FreelancerPrivateOrdersViewModel
 
     _allOrders = orders.where((order) =>
     order.serviceType.name.toLowerCase() == 'private' &&
-        order.freelancerId == _currentFreelancerId
-    ).toList();
+        order.freelancerId == _currentFreelancerId).toList();
 
-    // ترتيب حسب الأحدث أولاً
     _allOrders.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-
-    // نسخة للفلترة
     _filteredOrders = List.from(_allOrders);
 
     emit(FreelancerPrivateOrdersViewModelStatesSuccess(
       orders: List.from(_filteredOrders),
       offeredOrderIds: offeredOrderIds,
     ));
-
   }
 
-  /// دالة للبحث في الأوردرات
+  int get privateOrdersCount => _filteredOrders.length;
+
   void searchOrders(String query) {
     if (query.isEmpty) {
       _filteredOrders = List.from(_allOrders);
@@ -86,7 +76,6 @@ class FreelancerPrivateOrdersViewModel
       orders: List.from(_filteredOrders),
       offeredOrderIds: offeredOrderIds,
     ));
-
   }
 
   Future<void> refreshOrders() async {
@@ -94,10 +83,10 @@ class FreelancerPrivateOrdersViewModel
       await fetchAndSubscribePrivateOrders(_currentFreelancerId!);
     }
   }
+
   void markOrderAsOffered(String orderId) {
     if (!offeredOrderIds.contains(orderId)) {
       offeredOrderIds.add(orderId);
-      // إعادة emit عشان الـ UI يعيد البناء
       emit(FreelancerPrivateOrdersViewModelStatesSuccess(
         orders: List.from(_filteredOrders),
         offeredOrderIds: offeredOrderIds,

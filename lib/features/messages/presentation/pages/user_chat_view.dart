@@ -19,6 +19,7 @@ import '../../../freelancer/presentation/views/tabs/find_work/presentation/view_
 import '../../../reviews/presentation/manager/get_user_reviews_view_model/get_user_reviews_view_model.dart';
 import '../../../shared/domain/entities/order_entity/order_entity.dart';
 import '../../../shared/presentation/manager/subscribe_to_order_record_view_model/subscribe_to_order_record_view_model.dart';
+import '../manager/mark_message_as_read_view_model/mark_message_as_read_view_model.dart';
 import '../manager/pending_messages_view_model/pending_messages_view_model.dart';
 import '../manager/user_status_view_model/user_status_states.dart';
 import '../manager/user_status_view_model/user_status_view_model.dart';
@@ -86,7 +87,13 @@ class UserChatView extends StatelessWidget {
             return getIt<GetUserReviewsViewModel>();
 
           },
-        )
+        ),
+        BlocProvider(
+          create: (_) {
+            return getIt<MarkMessageAsReadViewModel>();
+
+          },
+        ),
 
 
       ],

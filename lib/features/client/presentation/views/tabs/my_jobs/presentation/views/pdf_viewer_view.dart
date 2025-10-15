@@ -33,7 +33,7 @@ class FileViewerView extends StatelessWidget {
           bottom: BorderSide(color: Colors.grey.shade300, width: 2),
         ),
         leading: IconButton(
-          icon: const Icon(CupertinoIcons.arrow_left ),
+          icon: const Icon(CupertinoIcons.back ),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(

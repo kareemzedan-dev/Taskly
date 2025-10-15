@@ -15,10 +15,14 @@ class MarkMessagesAsReadRemoteDataSourceImpl extends MarkMessagesAsReadRemoteDat
     @override
   Future<Either<Failures, void>> markMessagesAsRead(String orderId) async {
     try {
-      await supabase
+      await supabaseService.supabaseClient
           .from('messages')
-          .update({'is_read': true})
-          .eq('order_id', orderId);
+          .update({
+        'seen_at': DateTime.now().toIso8601String(),
+      })
+          .eq('order_id', orderId)
+          .filter('seen_at', 'is', null);
+
 
       return const Right(null);
     } on PostgrestException catch (e) {

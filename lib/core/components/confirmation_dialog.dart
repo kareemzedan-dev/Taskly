@@ -15,8 +15,8 @@ class ConfirmationDialog extends StatelessWidget {
     required this.message,
     required this.onConfirm,
     required this.onCancel,
-    this.confirmText = "Ok",
-    this.cancelText = "Cancel",
+    this.confirmText =  "نعم",
+    this.cancelText = "لا",
   });
 
   @override
@@ -94,8 +94,8 @@ Future<void> showConfirmationDialog({
   required String message,
   required VoidCallback onConfirm,
   VoidCallback? onCancel,
-  String confirmText = "Ok",
-  String cancelText = "Cancel",
+  String confirmText = "نعم",
+  String cancelText = "لا",
 }) {
   return showDialog(
     context: context,

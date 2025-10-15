@@ -70,8 +70,9 @@ class FreelancerPublicOrdersViewModel extends Cubit<FreelancerPublicOrdersState>
     });
   }
 
-  List<String> get offeredOrderIds => _offeredOrderIds;
+  int get publicOrdersCount => _filteredOrders.length;
 
+  List<String> get offeredOrderIds => _offeredOrderIds;
 
   void searchOrders(String query) {
     if (query.isEmpty) {

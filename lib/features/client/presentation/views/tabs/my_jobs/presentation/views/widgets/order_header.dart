@@ -7,6 +7,7 @@ import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentat
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/state_bage.dart';
 
 import '../../../../../../../../../config/l10n/app_localizations.dart';
+import '../../../../../../../../../core/helper/get_localized_order_status.dart';
 
 
 class OrderHeader extends StatelessWidget {
@@ -31,7 +32,7 @@ class OrderHeader extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             StatusBadge(
-              text: _getLocalizedStatus(local, orderStatus),
+              text: getLocalizedStatus(local, orderStatus),
               color: ColorsManager.primary,
               icon: Icons.pending_actions_outlined,
             ),
@@ -72,21 +73,4 @@ class OrderHeader extends StatelessWidget {
   }
 }
 
-String _getLocalizedStatus(AppLocalizations local, String status) {
-  switch (status.toLowerCase()) {
-    case "pending":
-      return local.pending;
-    case "inprogress":
-      return local.inProgress;
-    case "completed":
-      return local.completed;
-    case "cancelled":
-      return local.cancelled;
-    case "paid":
-      return local.paid;
-    case "waiting":
-      return local.waiting;
-    default:
-      return status;
-  }
-}
+

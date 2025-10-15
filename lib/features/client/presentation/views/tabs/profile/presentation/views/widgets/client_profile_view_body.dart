@@ -118,32 +118,7 @@ class _ClientProfileViewBodyState extends State<ClientProfileViewBody> {
                     }
                   },
                 ),
-                AccountItemRow(
-                  image: Assets.assetsImagesBrushes3450037,
-                  text: local.theme,
-                  onTap: () async {
-                    final selectedTheme = await showModalBottomSheet<String>(
-                      context: context,
-                      backgroundColor: Colors.transparent,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(12),
-                        ),
-                      ),
-                      builder: (context) {
-                        return ThemeBottomSheetContent(
-                          initialTheme: _currentTheme,
-                        );
-                      },
-                    );
 
-                    if (selectedTheme != null) {
-                      setState(() {
-                        _currentTheme = selectedTheme;
-                      });
-                    }
-                  },
-                ),
                 SizedBox(height: 10.h),
                 AccountItemRow(
                   image: Assets.assetsImagesCahngePassword,
@@ -172,14 +147,14 @@ class _ClientProfileViewBodyState extends State<ClientProfileViewBody> {
                     );
                   },
                 ),
-                SizedBox(height: 10.h),
-                AccountItemRow(
-                  image: Assets.assetsImagesDocument10103871,
-                  text: local.terms_conditions,
-                ),
+                // SizedBox(height: 10.h),
+                // AccountItemRow(
+                //   image: Assets.assetsImagesDocument10103871,
+                //   text: local.terms_conditions,
+                // ),
               ],
             ),
-
+SizedBox(height: 20.h,),
             /// ✅ Logout Button
             Container(
               width: double.infinity,

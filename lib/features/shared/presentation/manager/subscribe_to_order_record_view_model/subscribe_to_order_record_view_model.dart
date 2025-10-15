@@ -68,6 +68,11 @@ class SubscribeOrdersRecordViewModel extends Cubit<OrderViewModelState> {
         return null;
       case OrderStatus.Waiting:
         if (currentUserId == order.clientId) return local.workReceivedButton;
+
+        case OrderStatus.Completed:
+        if (currentUserId == order.freelancerId) return local.rateClient;
+        if (currentUserId == order.clientId) return local.rateFreelancer;
+
         return null;
       default:
         return null;

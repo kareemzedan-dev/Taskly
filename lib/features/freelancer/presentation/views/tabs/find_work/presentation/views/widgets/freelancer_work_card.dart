@@ -257,6 +257,7 @@ class CategoryChip extends StatelessWidget {
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
               fontWeight: FontWeight.w400,
               fontSize: 12.sp,
+              color: Colors.white,
 
             ),
           ),

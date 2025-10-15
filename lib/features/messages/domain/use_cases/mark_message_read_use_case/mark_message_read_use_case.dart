@@ -3,7 +3,7 @@ import 'package:injectable/injectable.dart';
 import 'package:taskly/features/messages/domain/repositories/messages_repos/mark_messages_as_read_repo/mark_messages_as_read_repo.dart';
 import '../../../../../core/errors/failures.dart';
 
-@lazySingleton
+@injectable
 class MarkMessagesAsReadUseCase {
   final MarkMessagesAsReadRepo repository;
 

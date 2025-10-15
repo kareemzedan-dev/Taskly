@@ -161,6 +161,44 @@ class AppLocalizationsAr extends AppLocalizations {
   String get payments => 'المدفوعات';
 
   @override
+  String get rate_experience => 'قيّم تجربتك';
+
+  @override
+  String experience_with(Object name) {
+    return 'كيف كانت تجربتك مع $name؟';
+  }
+
+  @override
+  String get add_comment => 'أضف تعليقًا (اختياريًا)';
+
+  @override
+  String get share_experience => 'شاركنا تجربتك...';
+
+  @override
+  String get submit_rating => 'إرسال التقييم';
+
+  @override
+  String get rating_success => 'تم إرسال التقييم بنجاح!';
+
+  @override
+  String get rating_fail => 'فشل في إرسال التقييم';
+
+  @override
+  String get excellent => 'ممتاز!';
+
+  @override
+  String get very_good => 'جيد جدًا';
+
+  @override
+  String get good => 'جيد';
+
+  @override
+  String get fair => 'مقبول';
+
+  @override
+  String get poor => 'سيئ';
+
+  @override
   String hiUser(Object name) {
     return 'مرحبًا $name،';
   }
