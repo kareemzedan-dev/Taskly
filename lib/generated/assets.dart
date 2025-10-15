@@ -467,6 +467,8 @@ class Assets {
   static const String subscribeToPublicOrdersViewModelSubscribeToPublicOrdersStates = 'lib/features/freelancer/presentation/views/tabs/find_work/presentation/view_model/subscribe_to_public_orders_view_model/subscribe_to_public_orders_states.dart';
   static const String subscribeToPublicOrdersViewModelSubscribeToPublicOrdersViewModel = 'lib/features/freelancer/presentation/views/tabs/find_work/presentation/view_model/subscribe_to_public_orders_view_model/subscribe_to_public_orders_view_model.dart';
   static const String themeAppTheme = 'lib/config/theme/app_theme.dart';
+  static const String unreadMessagesBadgeViewModelUnreadBadgeStates = 'lib/features/messages/presentation/manager/unread_messages_badge_view_model/unread_badge_states.dart';
+  static const String unreadMessagesBadgeViewModelUnreadMessagesBadgeViewModel = 'lib/features/messages/presentation/manager/unread_messages_badge_view_model/unread_messages_badge_view_model.dart';
   static const String updateOfferStatusUseCaseUpdateOfferStatusUseCase = 'lib/features/client/domain/use_cases/my_jobs/update_offer_status_use_case/update_offer_status_use_case.dart';
   static const String updateOfferStatusViewModelUpdateOfferStatusStates = 'lib/features/client/presentation/views/tabs/my_jobs/presentation/view_model/update_offer_status_view_model/update_offer_status_states.dart';
   static const String updateOfferStatusViewModelUpdateOfferStatusViewModel = 'lib/features/client/presentation/views/tabs/my_jobs/presentation/view_model/update_offer_status_view_model/update_offer_status_view_model.dart';

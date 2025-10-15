@@ -13,7 +13,6 @@ import '../../../../../core/di/di.dart';
 import '../../../../../core/helper/get_localized_order_status.dart';
 import '../../../../welcome/presentation/cubit/welcome_states.dart';
 import '../../../domain/entities/order_entity/order_entity.dart';
-
 class MessagesCard extends StatelessWidget {
   const MessagesCard({
     super.key,
@@ -24,6 +23,7 @@ class MessagesCard extends StatelessWidget {
     required this.onUserInfoLoaded,
     required this.lastMessage,
     required this.lastMessageTime,
+    required this.unreadCount, // ← عدد الرسائل غير المقروءة
   });
 
   final void Function(String fullName, String avatarUrl) onUserInfoLoaded;
@@ -33,7 +33,7 @@ class MessagesCard extends StatelessWidget {
   final UserRole chatUserRole;
   final String lastMessage;
   final DateTime lastMessageTime;
-
+  final int unreadCount; // ← عدد الرسائل غير المقروءة
 
   @override
   Widget build(BuildContext context) {
@@ -43,10 +43,8 @@ class MessagesCard extends StatelessWidget {
       getIt<ProfileViewModel>()..getUserInfo(chatUserId, chatUserRole.name),
       child: BlocBuilder<ProfileViewModel, ProfileViewModelStates>(
         builder: (context, state) {
-          if (state is ProfileViewModelStatesLoading) {
-            return const UserInfoSectionShimmer();
-          }
-          if (state is ProfileViewModelStatesError) {
+          if (state is ProfileViewModelStatesLoading ||
+              state is ProfileViewModelStatesError) {
             return const UserInfoSectionShimmer();
           }
           if (state is ProfileViewModelStatesSuccess) {
@@ -63,7 +61,7 @@ class MessagesCard extends StatelessWidget {
                 width: double.infinity,
                 decoration: BoxDecoration(
                   border: Border.all(
-                    color: ColorsManager.primary.withValues(alpha: 0.2),
+                    color: ColorsManager.primary.withAlpha(50),
                     width: 2.w,
                   ),
                   borderRadius: BorderRadius.circular(12.r),
@@ -71,8 +69,46 @@ class MessagesCard extends StatelessWidget {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Avatar
-                   UserAvatar( imagePath:state.userInfoEntity.profileImage    , radius:  30.r,),
+                    // Avatar مع badge
+                    Stack(
+                      children: [
+                        UserAvatar(
+                          imagePath: state.userInfoEntity.profileImage,
+                          radius: 30.r,
+                        ),
+                        if (unreadCount > 0)
+                          Positioned(
+                            right: 0,
+                            top: 0,
+                            child: Container(
+                              padding: EdgeInsets.all(4.r),
+                              decoration: BoxDecoration(
+                                color: Colors.red,
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: Colors.white,
+                                  width: 1.5.w,
+                                ),
+                              ),
+                              constraints: BoxConstraints(
+                                minWidth: 18.w,
+                                minHeight: 18.w,
+                              ),
+                              child: Center(
+                                child: Text(
+                                  unreadCount > 99 ? '99+' : '$unreadCount',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 10.sp,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
                     SizedBox(width: 12.w),
                     Expanded(
                       child: Column(
@@ -101,7 +137,7 @@ class MessagesCard extends StatelessWidget {
                               SizedBox(width: 4.w),
                               Expanded(
                                 child: Text(
-                                 lastMessage ?? "",
+                                  lastMessage,
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyLarge
@@ -127,12 +163,11 @@ class MessagesCard extends StatelessWidget {
                             padding: EdgeInsets.symmetric(
                                 horizontal: 6.w, vertical: 4.h),
                             decoration: BoxDecoration(
-
                               border: Border.all(color: ColorsManager.primary),
                               borderRadius: BorderRadius.circular(12.r),
                             ),
                             child: Text(
-                               getLocalizedStatus(local,  order.status.name),
+                              getLocalizedStatus(local, order.status.name),
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyLarge
@@ -174,7 +209,8 @@ class MessagesCard extends StatelessWidget {
                               startPadding: 10.0,
                               accelerationDuration: const Duration(seconds: 1),
                               accelerationCurve: Curves.linear,
-                              decelerationDuration: const Duration(milliseconds: 500),
+                              decelerationDuration:
+                              const Duration(milliseconds: 500),
                               decelerationCurve: Curves.easeOut,
                             ),
                           ),

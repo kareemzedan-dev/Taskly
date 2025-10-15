@@ -9,7 +9,7 @@ class MarkMessagesAsReadRepoImpl implements MarkMessagesAsReadRepo {
 
   MarkMessagesAsReadRepoImpl(this.remoteDataSource);
   @override
-  Future<Either<Failures, void>> markMessagesAsRead(String orderId) {
-    return remoteDataSource.markMessagesAsRead(orderId);
+  Future<Either<Failures, void>> markMessagesAsRead(String orderId,String currentUserId) {
+    return remoteDataSource.markMessagesAsRead(orderId, currentUserId);
   }
 }
