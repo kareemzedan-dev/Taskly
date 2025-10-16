@@ -302,6 +302,7 @@ class Assets {
   static const String libMain = 'lib/main.dart';
   static const String loginResponseDmLoginResponseDm = 'lib/features/auth/data/models/login_response_dm/login_response_dm.dart';
   static const String loginResponseEntityLoginResponseEntity = 'lib/features/auth/domain/entities/login_response_entity/login_response_entity.dart';
+  static const String lottiesAlert = 'assets/lotties/alert.json';
   static const String lottiesCancelled = 'assets/lotties/cancelled.json';
   static const String lottiesEmpty = 'assets/lotties/empty.json';
   static const String lottiesLoading = 'assets/lotties/Loading.json';
@@ -635,6 +636,7 @@ class Assets {
   static const String widgetsPendingMessageWidget = 'lib/features/messages/presentation/widgets/pending_message_widget.dart';
   static const String widgetsPendingOfferCard = 'lib/features/freelancer/presentation/views/tabs/my_jobs/presentation/views/widgets/pending_offer_card.dart';
   static const String widgetsPriceDurationSection = 'lib/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/price_duration_section.dart';
+  static const String widgetsPrivacyAgreementDialog = 'lib/features/messages/presentation/widgets/privacy_agreement_dialog.dart';
   static const String widgetsPrivacyPolicyViewBody = 'lib/features/shared/presentation/views/widgets/privacy_policy_view_body.dart';
   static const String widgetsPrivateHireSection = 'lib/features/client/presentation/views/tabs/home/presentation/views/widgets/private_hire_section.dart';
   static const String widgetsProfileSection = 'lib/features/shared/presentation/views/widgets/profile_section.dart';
