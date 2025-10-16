@@ -38,7 +38,10 @@ class FreelancerInfoCardForHire extends StatelessWidget {
         ),
         child: Row(
           children: [
-            UserAvatar(radius: 16.r, imagePath: freelancer.profileImage),
+            UserAvatar(radius: 16.r,
+
+                userName:  freelancer.fullName,
+                imagePath: freelancer.profileImage),
             const SizedBox(width: 10),
             Expanded(
               child: Column(

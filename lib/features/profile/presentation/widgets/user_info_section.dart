@@ -44,6 +44,7 @@ class UserInfoSection extends StatelessWidget {
       child: Row(
         children: [
          UserAvatar(
+           userName: displayName,
             imagePath:profileImage,
             radius:   30.r  ,
           ),

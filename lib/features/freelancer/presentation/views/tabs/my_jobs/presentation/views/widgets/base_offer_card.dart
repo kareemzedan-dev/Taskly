@@ -16,8 +16,8 @@ import '../../../../../../../../client/presentation/views/tabs/profile/presentat
 
 class BaseOfferCard extends StatelessWidget {
   final OfferEntity offerEntity;
-  final Widget? topWidget; // زي رسالة أو badge
-  final Widget? bottomWidget; // زي Actions أو Delete button
+  final Widget? topWidget;
+  final Widget? bottomWidget;
 
   const BaseOfferCard({
     super.key,
@@ -59,7 +59,7 @@ class BaseOfferCard extends StatelessWidget {
               SizedBox(height: 16.h),
               _buildTitleAndStatus(context),
               SizedBox(height: 8.h),
-              _buildDescription(context), // دلوقتي هتستخدم ExpandableText
+              _buildDescription(context),
               SizedBox(height: 8.h),
               _buildAmountRow(context),
               if (bottomWidget != null) ...[

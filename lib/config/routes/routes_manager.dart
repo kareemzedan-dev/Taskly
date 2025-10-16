@@ -80,15 +80,19 @@ class RoutesManager {
 
       case chatView:
         final args = settings.arguments as Map<String, dynamic>;
-        final userName = args['userName'] as String;
         final currentUserAvatar = args['currentUserAvatar'] as String;
         final receiverAvatar = args['receiverAvatar'] as String;
         final order = args['order'] as OrderEntity;
         final currentUserId = args['currentUserId'] as String;
         final receiverId = args['receiverId'] as String;
+        final receiverName = args['receiverName'] as String;
+        final currentUserName = args['currentUserName'] as String;
         return MaterialPageRoute(
             builder: (_) => UserChatView(
-                userName: userName,
+              currentUserName: currentUserName,
+                receiverName: receiverName,
+
+
                 currentUserAvatar: currentUserAvatar,
                 receiverAvatar: receiverAvatar,
                 order: order,

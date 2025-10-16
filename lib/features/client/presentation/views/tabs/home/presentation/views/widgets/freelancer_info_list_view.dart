@@ -28,16 +28,16 @@ class _FreelancerInfoListViewState extends State<FreelancerInfoListView> {
     if (_isPrefetching) return;
     _isPrefetching = true;
 
-    // Prefetch لكل freelancer غير موجود في الكاش
-    await Future.wait(freelancers.map((f) async {
+    for (final f in freelancers) {
       if (profileVM.getUserFromCache(f.id) == null) {
         await profileVM.fetchUserInfo(f.id, "freelancer");
+        if (mounted) setState(() {}); 
       }
-    }));
+    }
 
     _isPrefetching = false;
-    setState(() {}); // إعادة بناء الـ ListView بعد جلب البيانات
   }
+
 
   @override
   Widget build(BuildContext context) {

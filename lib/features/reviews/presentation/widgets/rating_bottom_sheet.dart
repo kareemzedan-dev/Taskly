@@ -16,12 +16,14 @@ class RatingBottomSheet extends StatefulWidget {
   final OrderEntity order;
   final String currentUserId;
   final String receiverId;
+  final String userName;
 
   const RatingBottomSheet({
     super.key,
     required this.order,
     required this.currentUserId,
     required this.receiverId,
+    required this.userName,
   });
 
   @override
@@ -126,7 +128,7 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
                 ),
                 SizedBox(height: 8.h),
                 Text(
-                  loc.experience_with(_ratedUserName),
+                  loc.experience_with(widget.userName ??""),
                   style: TextStyle(
                     fontSize: 14.sp,
                     color: Colors.grey.shade600,

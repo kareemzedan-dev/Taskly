@@ -62,7 +62,7 @@ class _PrivateHireSectionState extends State<PrivateHireSection> {
                   ],
                   onChanged: (query) {
                     setState(() {
-                      selectedQuery = query; // دلوقتي حيحتفظ بالقيمة
+                      selectedQuery = query;
                     });
                   },
                 ),

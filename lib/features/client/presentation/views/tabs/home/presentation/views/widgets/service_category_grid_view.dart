@@ -46,25 +46,22 @@ class ServiceCategoryGridView extends StatelessWidget {
           crossAxisCount: 2,
           crossAxisSpacing: 12.w,
           mainAxisSpacing: 16.h,
-          childAspectRatio: 0.99,
+          childAspectRatio: .99.sp,
         ),
         itemBuilder: (context, index) {
           final service = services[index];
-          return AspectRatio(
-            aspectRatio: 0.8,
-            child: ServiceCategory(
-              serviceEntity: service,
-              onTap: () {
-                Navigator.pushNamed(
-                  context,
-                  RoutesManager.serviceOrderView,
-                  arguments: {
-                    'title': service.title,
-                    'category': service.key,
-                  },
-                );
-              },
-            ),
+          return ServiceCategory(
+            serviceEntity: service,
+            onTap: () {
+              Navigator.pushNamed(
+                context,
+                RoutesManager.serviceOrderView,
+                arguments: {
+                  'title': service.title,
+                  'category': service.key,
+                },
+              );
+            },
           );
         },
       ),

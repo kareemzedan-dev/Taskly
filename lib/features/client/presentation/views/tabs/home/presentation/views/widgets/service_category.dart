@@ -39,7 +39,7 @@ class ServiceCategory extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Container للأيقونة
+
             Container(
               height: 70.h,
               decoration: BoxDecoration(

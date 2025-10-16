@@ -42,6 +42,7 @@ class UserInfoHomeHeader extends StatelessWidget {
           ],
         ),
         UserAvatar(
+          userName: fullName,
           imagePath: imageUrl,
           radius: 24.r,
         )

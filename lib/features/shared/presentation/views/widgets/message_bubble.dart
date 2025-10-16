@@ -12,6 +12,7 @@ class MessageBubble extends StatelessWidget {
   final SenderType sender;
   final String avatarUrl;
   final bool  chatWithUsers;
+  final String userName;
 
   const MessageBubble({
     super.key,
@@ -20,6 +21,7 @@ class MessageBubble extends StatelessWidget {
     required this.sender,
     required this.avatarUrl,
     this.chatWithUsers = false,
+    required this.userName,
   });
 
   @override
@@ -34,7 +36,7 @@ class MessageBubble extends StatelessWidget {
         isClient ? MainAxisAlignment.start : MainAxisAlignment.end,
         children: [
           if (isClient) ...[
-            UserAvatar(imagePath: avatarUrl , radius: 16.r,),
+            UserAvatar(imagePath: avatarUrl , radius: 16.r, userName: userName),
             SizedBox(width: 8.w),
           ],
           Flexible(
@@ -80,7 +82,7 @@ class MessageBubble extends StatelessWidget {
           if (!isClient) ...[
             SizedBox(width: 8.w),
 
-              UserAvatar(imagePath: avatarUrl , radius: 16.r,),
+              UserAvatar(imagePath: avatarUrl , radius: 16.r, userName: userName),
           ],
         ],
       ),

@@ -24,10 +24,10 @@ class FreelancerProfileViewBody extends StatefulWidget {
   State<FreelancerProfileViewBody> createState() =>
       _FreelancerProfileViewBodyState();
 }
-
 class _FreelancerProfileViewBodyState extends State<FreelancerProfileViewBody> {
   String _currentLanguage = "English";
   String _currentTheme = "Light";
+  dynamic _userInfo; // ✅ متغير نخزن فيه بيانات المستخدم
 
   @override
   Widget build(BuildContext context) {
@@ -41,16 +41,17 @@ class _FreelancerProfileViewBodyState extends State<FreelancerProfileViewBody> {
           children: [
             const SizedBox(height: 20),
             BlocProvider(
-              create: (context) =>
-              getIt<ProfileViewModel>()..getUserInfo(
-                SharedPrefHelper.getString(StringsManager.idKey)!,
-                SharedPrefHelper.getString(StringsManager.roleKey)!,
-              ),
+              create: (context) => getIt<ProfileViewModel>()
+                ..getUserInfo(
+                  SharedPrefHelper.getString(StringsManager.idKey)!,
+                 "freelancer",
+                ),
               child: BlocBuilder<ProfileViewModel, ProfileViewModelStates>(
                 builder: (context, state) {
                   if (state is ProfileViewModelStatesLoading) {
                     return const UserInfoSectionShimmer();
                   } else if (state is ProfileViewModelStatesSuccess) {
+                    _userInfo = state.userInfoEntity;
                     return UserInfoSection(
                       onTap: () {
                         Navigator.pushNamed(
@@ -59,7 +60,7 @@ class _FreelancerProfileViewBodyState extends State<FreelancerProfileViewBody> {
                           arguments: state.userInfoEntity,
                         );
                       },
-                      rating:  state.userInfoEntity.rating!,
+                      rating: state.userInfoEntity.rating!,
                     );
                   } else if (state is ProfileViewModelStatesError) {
                     return Text(state.message);
@@ -70,42 +71,26 @@ class _FreelancerProfileViewBodyState extends State<FreelancerProfileViewBody> {
             ),
 
             SizedBox(height: 40.h),
-            ProfileSection(
-              title: local.dashboardSection,
-              children: [
-                AccountItemRow(
-                  image: Assets.assetsImagesWallet2527857,
-                  text: local.earnings,
-                  onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      RoutesManager.freelancerEarningView,
-                    );
-                  },
-                ),
-                SizedBox(height: 10.h),
-                AccountItemRow(
-                  image: Assets.assetsImagesWithdrawal8211181,
-                  text: local.withdrawBalance,
-                  onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      RoutesManager.requestWithdrawalView,
-                    );
-                  },
-                ),
-
-              ],
-            ),
 
             ProfileSection(
               title: local.workSection,
               children: [
                 SizedBox(height: 10.h),
                 GestureDetector(
-                  onTap: () {
-
-
+                  onTap: _userInfo == null
+                      ? null
+                      : () {
+                    Navigator.pushNamed(
+                      context,
+                      RoutesManager.reviewsView,
+                      arguments: {
+                        'userId': _userInfo.id,
+                        'role': 'freelancer',
+                        'userName': _userInfo.fullName,
+                        'userRating': _userInfo.rating,
+                        'userImage': _userInfo.profileImage,
+                      },
+                    );
                   },
                   child: AccountItemRow(
                     image: Assets.assetsImagesStar967444,
@@ -115,21 +100,22 @@ class _FreelancerProfileViewBodyState extends State<FreelancerProfileViewBody> {
               ],
             ),
 
-            ProfileSection(
-              title: local.supportSection,
-              children: [
-                AccountItemRow(
-                  image: Assets.assetsImagesTechSupport5109502,
-                  text: local.technicalSupport,
-                  onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      RoutesManager.technicalSupportView,
-                    );
-                  },
-                ),
-              ],
-            ),
+
+            // ProfileSection(
+            //   title: local.supportSection,
+            //   children: [
+            //     AccountItemRow(
+            //       image: Assets.assetsImagesTechSupport5109502,
+            //       text: local.technicalSupport,
+            //       onTap: () {
+            //         Navigator.pushNamed(
+            //           context,
+            //           RoutesManager.technicalSupportView,
+            //         );
+            //       },
+            //     ),
+            //   ],
+            // ),
 
             ProfileSection(
               title: local.accountSection,
@@ -160,32 +146,32 @@ class _FreelancerProfileViewBodyState extends State<FreelancerProfileViewBody> {
                     }
                   },
                 ),
-                AccountItemRow(
-                  image: Assets.assetsImagesBrushes3450037,
-                  text: local.theme,
-                  onTap: () async {
-                    final selectedTheme = await showModalBottomSheet<String>(
-                      context: context,
-                      backgroundColor: Colors.transparent,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(12),
-                        ),
-                      ),
-                      builder: (context) {
-                        return ThemeBottomSheetContent(
-                          initialTheme: _currentTheme,
-                        );
-                      },
-                    );
-
-                    if (selectedTheme != null) {
-                      setState(() {
-                        _currentTheme = selectedTheme;
-                      });
-                    }
-                  },
-                ),
+                // AccountItemRow(
+                //   image: Assets.assetsImagesBrushes3450037,
+                //   text: local.theme,
+                //   onTap: () async {
+                //     final selectedTheme = await showModalBottomSheet<String>(
+                //       context: context,
+                //       backgroundColor: Colors.transparent,
+                //       shape: const RoundedRectangleBorder(
+                //         borderRadius: BorderRadius.vertical(
+                //           top: Radius.circular(12),
+                //         ),
+                //       ),
+                //       builder: (context) {
+                //         return ThemeBottomSheetContent(
+                //           initialTheme: _currentTheme,
+                //         );
+                //       },
+                //     );
+                //
+                //     if (selectedTheme != null) {
+                //       setState(() {
+                //         _currentTheme = selectedTheme;
+                //       });
+                //     }
+                //   },
+                // ),
                 SizedBox(height: 10.h),
 
                 AccountItemRow(
@@ -214,14 +200,14 @@ class _FreelancerProfileViewBodyState extends State<FreelancerProfileViewBody> {
                     );
                   },
                 ),
-                SizedBox(height: 10.h),
-                AccountItemRow(
-                  image: Assets.assetsImagesDocument10103871,
-                  text: local.termsConditions,
-                ),
+                // SizedBox(height: 10.h),
+                // AccountItemRow(
+                //   image: Assets.assetsImagesDocument10103871,
+                //   text: local.termsConditions,
+                // ),
               ],
             ),
-
+            SizedBox(height: 20.h),
             Container(
               width: double.infinity,
               padding: EdgeInsets.symmetric(vertical: 14.h, horizontal: 16.w),

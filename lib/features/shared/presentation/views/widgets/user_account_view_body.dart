@@ -153,6 +153,7 @@ class _UserAccountViewBodyState extends State<UserAccountViewBody> {
                     child: Stack(
                       children: [
                         UserAvatar(
+                          userName:  widget.userInfoEntity.fullName,
                           radius: 50.r,
                           imagePath: _pickedImagePath ??
                               SharedPrefHelper.getString(

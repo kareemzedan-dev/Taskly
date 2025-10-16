@@ -16,3 +16,5 @@ class ProfileViewModelStatesSuccess extends ProfileViewModelStates {
 }
 
 class ProfileViewModelStatesLoading extends ProfileViewModelStates {}
+
+class ProfileViewModelStatesCacheUpdated extends ProfileViewModelStates {}

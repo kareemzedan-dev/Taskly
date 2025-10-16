@@ -506,6 +506,7 @@ class Assets {
   static const String userStatusViewModelUserStatusViewModel = 'lib/features/messages/presentation/manager/user_status_view_model/user_status_view_model.dart';
   static const String utilsAppTextStyles = 'lib/core/utils/app_text_styles.dart';
   static const String utilsAssetsManager = 'lib/core/utils/assets_manager.dart';
+  static const String utilsCategoryTranslator = 'lib/core/utils/category_translator.dart';
   static const String utilsColorsManger = 'lib/core/utils/colors_manger.dart';
   static const String utilsConstantsManager = 'lib/core/utils/constants_manager.dart';
   static const String utilsIconMapper = 'lib/core/utils/icon_mapper.dart';

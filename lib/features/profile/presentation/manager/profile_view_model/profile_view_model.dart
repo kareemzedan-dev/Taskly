@@ -44,11 +44,18 @@ class ProfileViewModel extends Cubit<ProfileViewModelStates> {
   Future<UserInfoEntity?> fetchUserInfo(String userId, String role) async {
     final result = await profileUseCase.callUserInfo(userId, role);
     return result.fold(
-          (l) => null,
+          (l) {
+        debugPrint("Error fetching user $userId: ${l.message}");
+        return null;
+      },
           (r) {
         cachedUsers[userId] = r;
+        emit(ProfileViewModelStatesCacheUpdated());
+
         return r;
       },
     );
   }
+
+
 }

@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
 
 import '../../../../../config/l10n/app_localizations.dart';
+import '../../../../../core/utils/category_translator.dart';
 
 class JobHeader extends StatelessWidget {
   const JobHeader({
@@ -46,7 +47,7 @@ class JobHeader extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: Text(
-                    category,
+                    CategoryTranslator.getArabicName(context, category ?? ""),
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       fontWeight: FontWeight.w500,
                       fontSize: 12.sp,

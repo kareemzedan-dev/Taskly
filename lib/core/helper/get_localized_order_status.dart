@@ -16,6 +16,8 @@ String getLocalizedStatus(AppLocalizations local, String status) {
       return local.paid;
     case "waiting":
       return local.waiting;
+      case "rejected":
+      return local.rejected;
     default:
       return status;
   }

@@ -73,6 +73,7 @@ class MessagesCard extends StatelessWidget {
                     Stack(
                       children: [
                         UserAvatar(
+                          userName: state.userInfoEntity.fullName,
                           imagePath: state.userInfoEntity.profileImage,
                           radius: 30.r,
                         ),

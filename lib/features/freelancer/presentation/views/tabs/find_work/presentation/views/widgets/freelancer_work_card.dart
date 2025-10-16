@@ -6,6 +6,7 @@ import 'package:taskly/core/cache/shared_preferences.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
 import 'package:taskly/core/utils/strings_manager.dart';
 import '../../../../../../../../../config/l10n/app_localizations.dart';
+import '../../../../../../../../../core/utils/category_translator.dart';
 import '../../../../../../../data/models/favorite_order_model/favorite_order_model.dart';
 import '../../../../../../../domain/entities/favorite_order_entity/favorite_order_entity.dart';
 import '../../view_model/add_favorite_order_view_model/add_favorite_order_states.dart';
@@ -27,6 +28,7 @@ class FreelancerWorkCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final local = AppLocalizations.of(context)!;
+
     return Card(
       elevation: 10,
       child: Container(
@@ -45,7 +47,8 @@ class FreelancerWorkCard extends StatelessWidget {
               const SizedBox(height: 10),
               Title(order.title),
               const SizedBox(height: 5),
-              CategoryChip(order.category ?? local.noCategory),
+
+          CategoryChip(CategoryTranslator.getArabicName(context, order.category ?? "")),
               const SizedBox(height: 16),
               Description(order.description ??local.noDescription),
               const SizedBox(height: 16),
@@ -284,4 +287,7 @@ class Description extends StatelessWidget {
       overflow: TextOverflow.ellipsis,
     );
   }
+}
+String getArabicCategoryName(String backendValue, Map<String, String> categories) {
+  return categories[backendValue] ?? backendValue;
 }

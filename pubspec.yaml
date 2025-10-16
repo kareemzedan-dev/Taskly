@@ -81,6 +81,7 @@ flutter:
     - lib/features/reviews/domain/use_cases/
     - lib/features/reviews/domain/use_cases/get_user_reviews_use_case/
     - lib/core/services/
+    - lib/core/utils/
 
   fonts:
     - family: Cairo

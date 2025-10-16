@@ -10,6 +10,7 @@ import 'package:taskly/features/profile/presentation/manager/profile_view_model/
 import '../../../../../../../../../config/l10n/app_localizations.dart';
 import '../../../../../../../../../config/routes/routes_manager.dart';
 import '../../../../../../../../../core/di/di.dart';
+import '../../../../../../../../reviews/presentation/widgets/user_avatar.dart';
 import 'client_details_shimmer.dart';
 
 class ClientDetailsSection extends StatelessWidget {
@@ -22,11 +23,7 @@ class ClientDetailsSection extends StatelessWidget {
     final local = AppLocalizations.of(context)!;
     return BlocProvider(
       create: (context) =>
-      getIt<ProfileViewModel>()
-        ..getUserInfo(
-            userId,
-            "client"
-        ),
+          getIt<ProfileViewModel>()..getUserInfo(userId, "client"),
       child: BlocBuilder<ProfileViewModel, ProfileViewModelStates>(
         builder: (context, state) {
           if (state is ProfileViewModelStatesLoading) {
@@ -42,15 +39,11 @@ class ClientDetailsSection extends StatelessWidget {
                 SizedBox(height: 16.h),
                 Text(
                   local.clientDetails,
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .bodyLarge
-                      ?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16.sp,
-                    color: Colors.black,
-                  ),
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16.sp,
+                        color: Colors.black,
+                      ),
                 ),
                 SizedBox(height: 8.h),
                 GestureDetector(
@@ -63,81 +56,77 @@ class ClientDetailsSection extends StatelessWidget {
                         "role": "client",
                         "userRating": client.rating,
                         "userName": client.fullName,
-                         "userImage": client.profileImage,
-                         
-
-                   
+                        "userImage": client.profileImage,
                       },
                     );
-                    },
+                  },
                   child: Row(
-                children: [
-                CircleAvatar(
-                radius: 30.r,
-                  backgroundColor: Colors.grey.shade300,
-                  backgroundImage: client.profileImage != null
-                      ? NetworkImage(client.profileImage!)
-                      : const AssetImage(Assets.assetsUserAvatar)
-                  as ImageProvider,
-                ),
-                SizedBox(width: 16.w),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      (client.fullName != null && client.fullName!.isNotEmpty)
-                          ? client.fullName!
-                          :local.unknown_client,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 14.sp,
-                        color: Colors.black,
+                    children: [
+                      UserAvatar(
+                        userName: client.fullName,
+                        imagePath: client.profileImage,
+                        radius: 22.r,
                       ),
-                    ),
-
-                    SizedBox(height: 4.h),
-                    Row(
-                      children: [
-                        Icon(CupertinoIcons.star_fill, color: Colors.amber,
-                          size: 16.sp,),
-                        SizedBox(width: 4.h),
-                        Text(
-                          "${client.rating ?? 0.0}",
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.copyWith(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 12.sp,
-                            color: Colors.grey.shade800,
+                      SizedBox(width: 16.w),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            (client.fullName != null &&
+                                    client.fullName!.isNotEmpty)
+                                ? client.fullName!
+                                : local.unknown_client,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14.sp,
+                              color: Colors.black,
+                            ),
                           ),
-                        ),
-                        SizedBox(width: 16.w),
-                        Text(
-                          local.jobs_posted(client.jobsCount??""),
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14.sp,
-                            color: Colors.grey.shade800,
+                          SizedBox(height: 4.h),
+                          Row(
+                            children: [
+                              Icon(
+                                CupertinoIcons.star_fill,
+                                color: Colors.amber,
+                                size: 16.sp,
+                              ),
+                              SizedBox(width: 4.h),
+                              Text(
+                                "${client.rating ?? 0.0}",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 12.sp,
+                                      color: Colors.grey.shade800,
+                                    ),
+                              ),
+                              SizedBox(width: 16.w),
+                              Text(
+                                local.jobs_posted(client.jobsCount ?? ""),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 14.sp,
+                                      color: Colors.grey.shade800,
+                                    ),
+                              ),
+                            ],
                           ),
-                        ),
-
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
+                SizedBox(height: 16.h),
               ],
-            ),
-          ),
-          SizedBox(height: 16.h),
-          ],
-          );
+            );
           }
 
-          return const SizedBox.shrink
-          (
-          );
+          return const SizedBox.shrink();
         },
       ),
     );

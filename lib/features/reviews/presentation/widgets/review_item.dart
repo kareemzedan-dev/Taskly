@@ -142,6 +142,7 @@ class ReviewItem extends StatelessWidget {
     return Row(
       children: [
         UserAvatar(
+          userName: userName,
           imagePath: profileImage,
           radius: 22.r,
         ),

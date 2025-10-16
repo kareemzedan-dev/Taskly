@@ -246,6 +246,7 @@ class _OrderViewBodyState extends State<OrderViewBody> {
                           );
                         }
 
+
                         if (selectedHireMethodIndex == 0) {
                           await context.read<PlaceOrderViewModel>().placeOrder(
                                 OrderEntity(

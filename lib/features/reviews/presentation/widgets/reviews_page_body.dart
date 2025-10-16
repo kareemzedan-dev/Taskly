@@ -50,7 +50,9 @@ class ReviewsPageBody extends StatelessWidget {
                   padding: EdgeInsets.all(16.w),
                   child: Column(
                     children: [
-                      UserAvatar(radius: 40.r, imagePath: userImage),
+                      UserAvatar(radius: 40.r,
+                          userName: userName,
+                          imagePath: userImage),
                       SizedBox(height: 8.h),
                       Text(
                         userName,
