@@ -86,8 +86,7 @@ class SendMessagesRemoteDataSourceImpl extends SendMessagesRemoteDataSource {
       await supabase.from('messages').insert(insertData).select().single();
 
       debugPrint("✅ Message inserted successfully: ${response['id']}");
-      // بعد ما الرسالة اتسجلت بنجاح
-// بعد ما الرسالة اتحفظت
+
       final messageModel = MessageModel.fromJson(response);
 
 // 👇 تحقق من حالة المستخدم قبل إرسال الإشعار
