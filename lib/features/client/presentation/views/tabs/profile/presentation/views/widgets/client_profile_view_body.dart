@@ -28,7 +28,7 @@ class ClientProfileViewBody extends StatefulWidget {
 class _ClientProfileViewBodyState extends State<ClientProfileViewBody> {
   String _currentLanguage = "English";
   String _currentTheme = "Light";
-
+  dynamic _userInfo;
   @override
   Widget build(BuildContext context) {
     final local = AppLocalizations.of(context)!;
@@ -51,6 +51,8 @@ class _ClientProfileViewBodyState extends State<ClientProfileViewBody> {
                   if (state is ProfileViewModelStatesLoading) {
                     return const UserInfoSectionShimmer();
                   } else if (state is ProfileViewModelStatesSuccess) {
+
+                    _userInfo = state.userInfoEntity;
                     return UserInfoSection(
                       onTap: () {
                         Navigator.pushNamed(
@@ -87,7 +89,31 @@ class _ClientProfileViewBodyState extends State<ClientProfileViewBody> {
                 ),
               ],
             ),
-
+            ProfileSection(
+              title: local.workSection,
+              children: [
+                SizedBox(height: 10.h),
+                GestureDetector(
+                  onTap:   () {
+                    Navigator.pushNamed(
+                      context,
+                      RoutesManager.reviewsView,
+                      arguments: {
+                        'userId': _userInfo.id,
+                        'role': 'client',
+                        'userName': _userInfo.fullName,
+                        'userRating': _userInfo.rating,
+                        'userImage': _userInfo.profileImage,
+                      },
+                    );
+                  },
+                  child: AccountItemRow(
+                    image: Assets.assetsImagesStar967444,
+                    text: local.reviewsRatings,
+                  ),
+                ),
+              ],
+            ),
             /// ✅ Account Section
             ProfileSection(
               title: local.account,

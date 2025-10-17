@@ -27,7 +27,7 @@ class FreelancerProfileViewBody extends StatefulWidget {
 class _FreelancerProfileViewBodyState extends State<FreelancerProfileViewBody> {
   String _currentLanguage = "English";
   String _currentTheme = "Light";
-  dynamic _userInfo; // ✅ متغير نخزن فيه بيانات المستخدم
+  dynamic _userInfo;
 
   @override
   Widget build(BuildContext context) {
