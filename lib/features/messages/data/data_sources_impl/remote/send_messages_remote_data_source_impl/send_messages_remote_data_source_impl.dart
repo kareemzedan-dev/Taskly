@@ -11,6 +11,7 @@ import 'package:taskly/features/messages/domain/entities/message_entity.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../../../core/services/notification_service.dart';
+import '../../../../../../core/utils/network_utils.dart';
 
 @Injectable(as: SendMessagesRemoteDataSource)
 class SendMessagesRemoteDataSourceImpl extends SendMessagesRemoteDataSource {
@@ -21,6 +22,8 @@ class SendMessagesRemoteDataSourceImpl extends SendMessagesRemoteDataSource {
   @override
   Future<Either<Failures, MessageEntity>> sendMessage(
       String orderId, MessageEntity message) async {
+
+
     debugPrint("📩 [SendMessagesRemoteDataSource] Sending message...");
     debugPrint("🧾 Order ID: $orderId");
     debugPrint("👤 Sender ID: ${message.senderId}");
@@ -50,6 +53,9 @@ class SendMessagesRemoteDataSourceImpl extends SendMessagesRemoteDataSource {
     }
 
     try {
+      if (!await NetworkUtils.hasInternet()) {
+        return const Left(NetworkFailure('تحقق من اتصالك بالانترنت'));
+      }
       debugPrint("🧠 Checking payment for order...");
       final String generatedId = const Uuid().v4();
 

@@ -6,6 +6,8 @@ import 'package:taskly/core/services/supabase_service.dart';
 import 'package:taskly/features/messages/data/data_sources/remote/get_order_messages_remote_data_source/get_order_messages_remote_data_source.dart';
 import 'package:taskly/features/messages/data/models/message_model.dart';
 import 'package:taskly/features/messages/domain/entities/message_entity.dart';
+
+import '../../../../../../core/utils/network_utils.dart';
 @Injectable(as: GetOrderMessagesRemoteDataSource)
 class GetOrderMessagesRemoteDataSourceImpl extends GetOrderMessagesRemoteDataSource {
   final SupabaseService supabaseService;
@@ -18,6 +20,9 @@ class GetOrderMessagesRemoteDataSourceImpl extends GetOrderMessagesRemoteDataSou
       String otherUserId,
    ) async {
     try {
+      if (!await NetworkUtils.hasInternet()) {
+        return const Left(NetworkFailure('تحقق من اتصالك بالانترنت'));
+      }
       final response = await supabaseService.supabaseClient
           .from('messages')
           .select()

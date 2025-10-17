@@ -21,9 +21,10 @@ class OfferRemoteDataSourceImpl implements OfferRemoteDataSource {
   Future<Either<Failures, OfferEntity>> placeOffer(
       OfferEntity offerEntity) async {
     try {
-      if (NetworkUtils.hasInternet() == false) {
-        return const Left(NetworkFailure('No internet connection'));
+      if (!await NetworkUtils.hasInternet()) {
+        return const Left(NetworkFailure('تحقق من اتصالك بالانترنت'));
       }
+
 
       final offerModel = OfferModel(
         id: offerEntity.id,
@@ -69,9 +70,10 @@ class OfferRemoteDataSourceImpl implements OfferRemoteDataSource {
   Future<Either<Failures, List<OfferEntity>>> getFreelancerOffers(
       String freelancerId, String status) async {
     try {
-      if (NetworkUtils.hasInternet() == false) {
-        return const Left(NetworkFailure('No internet connection'));
+      if (!await NetworkUtils.hasInternet()) {
+        return const Left(NetworkFailure('تحقق من اتصالك بالانترنت'));
       }
+
 
       final query = supabaseService.supabaseClient
           .from('offers')
@@ -103,9 +105,10 @@ class OfferRemoteDataSourceImpl implements OfferRemoteDataSource {
   Future<Either<Failures, OrderEntity>> fetchOrderDetails(
       String orderId) async {
     try {
-      if (NetworkUtils.hasInternet() == false) {
-        return const Left(NetworkFailure('No internet connection'));
+      if (!await NetworkUtils.hasInternet()) {
+        return const Left(NetworkFailure('تحقق من اتصالك بالانترنت'));
       }
+
 
       final orderResponse = await supabaseService.supabaseClient
           .from('orders')
@@ -124,8 +127,6 @@ class OfferRemoteDataSourceImpl implements OfferRemoteDataSource {
     }
   }
 
-  /// ✅ بدل RealtimeChannel و unsubscribe
-  /// هنخليها Stream بيرجع (OfferEntity, action)
   @override
   Stream<(OfferEntity, String)> subscribeToOffers(String freelancerId) {
     return supabaseService

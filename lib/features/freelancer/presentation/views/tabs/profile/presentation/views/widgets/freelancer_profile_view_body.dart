@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
 import 'package:taskly/config/l10n/app_localizations.dart';
 import 'package:taskly/config/routes/routes_manager.dart';
 import 'package:taskly/core/utils/assets_manager.dart';
@@ -48,6 +49,7 @@ class _FreelancerProfileViewBodyState extends State<FreelancerProfileViewBody> {
                 ),
               child: BlocBuilder<ProfileViewModel, ProfileViewModelStates>(
                 builder: (context, state) {
+
                   if (state is ProfileViewModelStatesLoading) {
                     return const UserInfoSectionShimmer();
                   } else if (state is ProfileViewModelStatesSuccess) {
@@ -63,9 +65,14 @@ class _FreelancerProfileViewBodyState extends State<FreelancerProfileViewBody> {
                       rating: state.userInfoEntity.rating!,
                     );
                   } else if (state is ProfileViewModelStatesError) {
-                    return Text(state.message);
+                    return Center(child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("تحقق من اتصالك بالانترنت"),
+                      ],
+                    ));
                   }
-                  return Container();
+                  return const UserInfoSectionShimmer();
                 },
               ),
             ),

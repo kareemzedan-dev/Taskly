@@ -3,6 +3,7 @@ import 'package:injectable/injectable.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:taskly/core/errors/failures.dart';
 import 'package:taskly/features/messages/domain/entities/message_entity.dart';
+import '../../../../../../core/utils/network_utils.dart';
 import '../../../../../attachments/data/models/attachments_dm/attachments_dm.dart';
 import '../../../data_sources/remote/send_to_admin_messages_remote_data_source/send_to_admin_messages_remote_data_source.dart';
 import '../../../models/message_model.dart';
@@ -16,6 +17,9 @@ class SendToAdminMessagesRemoteDataSourceImpl
   @override
   Future<Either<Failures, void>> SendToAdminMessage({required MessageEntity message}) async {
     try {
+      if (!await NetworkUtils.hasInternet()) {
+        return const Left(NetworkFailure('تحقق من اتصالك بالانترنت'));
+      }
       String adminId = message.receiverId.isNotEmpty ? message.receiverId : '';
 
       if (adminId.isEmpty) {

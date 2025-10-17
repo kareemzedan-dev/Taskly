@@ -10,8 +10,7 @@ import '../../../../../../../domain/use_cases/subscribe_to_public_orders_use_cas
 import 'freelancer_public_order_states.dart';
 
 @injectable
-class FreelancerPublicOrdersViewModel
-    extends Cubit<FreelancerPublicOrdersState> {
+class FreelancerPublicOrdersViewModel extends Cubit<FreelancerPublicOrdersState> {
   final FetchPublicOrdersUseCase freelancerOrderUseCase;
   final SubscribeToPublicOrdersUseCase subscribeToPublicOrdersUseCase;
 
@@ -22,41 +21,60 @@ class FreelancerPublicOrdersViewModel
   final List<String> _offeredOrderIds = [];
 
   FreelancerPublicOrdersViewModel(
-      this.freelancerOrderUseCase, this.subscribeToPublicOrdersUseCase)
-      : super(FreelancerPendingOrdersInitial());
+      this.freelancerOrderUseCase,
+      this.subscribeToPublicOrdersUseCase,
+      ) : super(FreelancerPendingOrdersInitial());
 
   Future<void> fetchAndSubscribePendingOrders() async {
     emit(FreelancerPendingOrdersLoading());
 
-    final freelancerId = SharedPrefHelper.getString(StringsManager.idKey)!;
+    try {
+      final freelancerId = SharedPrefHelper.getString(StringsManager.idKey)!;
 
-    final offersResponse = await Supabase.instance.client
-        .from('offers')
-        .select('order_id, status')
-        .eq('freelancer_id', freelancerId)
-        .neq('status', 'withdrawn')
-        .neq("status", 'Rejected');
+      // ✅ نجيب العروض بتاعت الفريلانسر
+      final offersResponse = await Supabase.instance.client
+          .from('offers')
+          .select('order_id, status')
+          .eq('freelancer_id', freelancerId)
+          .neq('status', 'withdrawn')
+          .neq("status", 'Rejected');
 
-    _offeredOrderIds
-      ..clear()
-      ..addAll((offersResponse as List).map((e) => e['order_id'] as String));
+      _offeredOrderIds
+        ..clear()
+        ..addAll((offersResponse as List).map((e) => e['order_id'] as String));
 
-    final result = await freelancerOrderUseCase.fetchPublicOrders(freelancerId);
+      // ✅ هنا نستخدم fold صح
+      final result = await freelancerOrderUseCase.fetchPublicOrders(freelancerId);
 
-    result.fold(
-      (_) {},
-      (orders) {
-        _allOrders
-          ..clear()
-          ..addAll(orders);
-      },
-    );
+      result.fold(
+            (failure) {
 
-    _allOrders.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-    _filteredOrders = List.from(_allOrders);
+          emit(FreelancerPendingOrdersError(
+            failure.message ?? 'Failed to load orders. Please check your internet connection.',
+          ));
+        },
+            (orders) {
+          // ✅ حالة النجاح
+          _allOrders
+            ..clear()
+            ..addAll(orders);
 
-    emit(FreelancerPendingOrdersSuccess(List.from(_filteredOrders)));
+          _allOrders.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+          _filteredOrders = List.from(_allOrders);
 
+          emit(FreelancerPendingOrdersSuccess(List.from(_filteredOrders)));
+
+
+          _subscribeToRealtime(freelancerId);
+        },
+      );
+    } catch (e) {
+      // ⚠️ أي Error غير متوقع
+      emit(FreelancerPendingOrdersError('Unexpected error occurred: $e'));
+    }
+  }
+
+  void _subscribeToRealtime(String freelancerId) {
     _ordersSubscription = subscribeToPublicOrdersUseCase
         .subscribeToPublicOrders(freelancerId)
         .listen((orders) {
@@ -72,7 +90,6 @@ class FreelancerPublicOrdersViewModel
   }
 
   int get publicOrdersCount => _filteredOrders.length;
-
   List<String> get offeredOrderIds => _offeredOrderIds;
 
   void searchOrders(String query) {

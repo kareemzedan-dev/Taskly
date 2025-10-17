@@ -11,46 +11,46 @@ class UserInfoSectionShimmer extends StatelessWidget {
       baseColor: Colors.grey.shade300,
       highlightColor: Colors.grey.shade100,
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // Avatar
+          // Avatar shimmer
           Container(
             width: 80.r,
             height: 80.r,
-            decoration: const BoxDecoration(
-
+            decoration: BoxDecoration(
+              color: Colors.white,
               shape: BoxShape.circle,
             ),
           ),
           SizedBox(width: 20.w),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: 120.w,
-                height: 16.h,
 
-              ),
-              SizedBox(height: 8.h),
-              Container(
-                width: 180.w,
-                height: 14.h,
-
-              ),
-              SizedBox(height: 8.h),
-              Container(
-                width: 100.w,
-                height: 14.h,
-
-              ),
-              SizedBox(height: 8.h),
-              Container(
-                width: 140.w,
-                height: 14.h,
-
-              ),
-            ],
-          )
+          // User info lines shimmer
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildShimmerLine(width: 160.w, height: 16.h),
+                SizedBox(height: 10.h),
+                _buildShimmerLine(width: 200.w, height: 14.h),
+                SizedBox(height: 10.h),
+                _buildShimmerLine(width: 120.w, height: 14.h),
+                SizedBox(height: 10.h),
+                _buildShimmerLine(width: 180.w, height: 14.h),
+              ],
+            ),
+          ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildShimmerLine({required double width, required double height}) {
+    return Container(
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8.r),
       ),
     );
   }

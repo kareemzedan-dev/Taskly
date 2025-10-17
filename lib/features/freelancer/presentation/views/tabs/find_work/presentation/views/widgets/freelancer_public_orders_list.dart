@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
 import 'package:taskly/core/utils/assets_manager.dart';
  import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/view_model/freelancer_public_order_view_model/freelancer_public_order_states.dart';
 import 'package:taskly/features/freelancer/presentation/views/tabs/find_work/presentation/views/widgets/freelancer_work_card.dart';
@@ -73,7 +74,14 @@ class FreelancerPublicOrdersList extends StatelessWidget {
       );
     }
     else if (state is FreelancerPendingOrdersError) {
-      return const FreelancerWorkCardShimmer();
+      return Center(child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Lottie.asset('assets/lotties/no_internet.json', width: 200, height: 200),
+          const SizedBox(height: 20),
+          Text("تحقق من اتصالك بالانترنت"),
+        ],
+      ));
     }
     return Container();
   }

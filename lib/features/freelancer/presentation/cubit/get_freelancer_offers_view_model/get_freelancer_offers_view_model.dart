@@ -3,6 +3,7 @@ import 'package:bloc/bloc.dart';
 import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
 import '../../../../../core/errors/failures.dart';
+import '../../../../../core/utils/network_utils.dart';
 import '../../../domain/entities/offer_entity/offer_entity.dart';
 import '../../../domain/use_cases/get_freelancer_offers_use_case/get_freelancer_offers_use_case.dart';
 import 'get_freelancer_offers_states.dart';
@@ -17,6 +18,7 @@ class GetFreelancerOffersViewModel extends Cubit<GetFreelancerOffersStates> {
       String freelancerId,
       [String? status]) async {
     try {
+
       emit(GetFreelancerOffersLoadingState());
       print("📡 Calling use case with freelancerId: $freelancerId and status: ${status ?? "all"}");
 

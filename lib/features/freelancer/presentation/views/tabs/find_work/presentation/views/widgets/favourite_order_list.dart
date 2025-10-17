@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 import 'package:taskly/core/cache/shared_preferences.dart';
 import 'package:taskly/core/di/di.dart';
 import 'package:taskly/core/utils/strings_manager.dart';
@@ -67,14 +68,28 @@ class FavouriteOrderList extends StatelessWidget {
                       ),
                     );
                   } else if (detailsState is GetFavouriteOrderDetailsErrorState) {
-                    return Center(child: Text("خطأ: ${detailsState.message}"));
+                    return Center(child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Lottie.asset('assets/lotties/no_internet.json', width: 200, height: 200),
+                        const SizedBox(height: 20),
+                        Text("تحقق من اتصالك بالانترنت"),
+                      ],
+                    ));
                   }
                   return const SizedBox.shrink();
                 },
               ),
             );
           } else if (state is GetFavoriteOrderErrorState) {
-            return Center(child: Text("خطأ: ${state.failure}"));
+            return Center(child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Lottie.asset('assets/lotties/no_internet.json', width: 200, height: 200),
+                const SizedBox(height: 20),
+                Text("تحقق من اتصالك بالانترنت"),
+              ],
+            ));
           }
           return const SizedBox.shrink();
         },

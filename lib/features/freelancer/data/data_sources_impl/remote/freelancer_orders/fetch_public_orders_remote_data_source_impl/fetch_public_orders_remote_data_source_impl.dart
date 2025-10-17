@@ -18,7 +18,7 @@ class FetchPublicOrdersRemoteDataSourceImpl implements FetchPublicOrdersRemoteDa
   @override
   Future<Either<Failures, List<OrderEntity>>> fetchPublicOrders(String freelancerId) async {
     try {
-      if (NetworkUtils.hasInternet() == false) {
+      if (!await NetworkUtils.hasInternet()) {
         return const Left(NetworkFailure('No internet connection'));
       }
 

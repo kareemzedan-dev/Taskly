@@ -262,7 +262,7 @@ class Assets {
   static const String imagesClient = 'assets/images/client.png';
   static const String imagesCover = 'assets/images/cover.jpg';
   static const String imagesDocument10103871 = 'assets/images/document_10103871.png';
-  static const String imagesEmptyRemovebgPreview = 'assets/images/empty-removebg-preview.png';
+  static const String imagesEmpty = 'assets/images/empty.png';
   static const String imagesEnglishFlag = 'assets/images/english_flag.png';
   static const String imagesFace = 'assets/images/face.png';
   static const String imagesFaq6736884 = 'assets/images/faq_6736884.png';
@@ -307,6 +307,7 @@ class Assets {
   static const String lottiesCancelled = 'assets/lotties/cancelled.json';
   static const String lottiesEmpty = 'assets/lotties/empty.json';
   static const String lottiesLoading = 'assets/lotties/Loading.json';
+  static const String lottiesNoInternet = 'assets/lotties/no_internet.json';
   static const String lottiesNotFound = 'assets/lotties/Not_found.json';
   static const String lottiesOrderLoading = 'assets/lotties/order_Loading.json';
   static const String lottiesProgress = 'assets/lotties/Progress.json';

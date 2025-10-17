@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 import 'package:taskly/core/cache/shared_preferences.dart';
 import 'package:taskly/core/di/di.dart';
 import 'package:taskly/core/utils/strings_manager.dart';
@@ -93,7 +94,14 @@ class _MyJobsTabViewBodyState extends State<MyJobsTabViewBody> {
           }
 
           if (state is GetFreelancerOffersErrorState) {
-            return Center(child: Text(state.message));
+            return Center(child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Lottie.asset('assets/lotties/no_internet.json', width: 200, height: 200),
+                const SizedBox(height: 20),
+                Text(state.message),
+              ],
+            ));
           }
 
           if (state is GetFreelancerOffersSuccessState) {

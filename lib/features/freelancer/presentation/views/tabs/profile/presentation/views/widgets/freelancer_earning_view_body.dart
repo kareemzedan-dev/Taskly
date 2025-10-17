@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
 import 'package:taskly/config/l10n/app_localizations.dart';
 import 'package:taskly/config/routes/routes_manager.dart';
 import 'package:taskly/core/components/custom_button.dart';
@@ -23,7 +24,14 @@ class FreelancerEarningViewBody extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           }
           if (state is GetTotalEarningsErrorState) {
-            return Center(child: Text(state.message));
+            return Center(child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Lottie.asset('assets/lotties/no_internet.json', width: 200, height: 200),
+                const SizedBox(height: 20),
+                Text("تحقق من اتصالك بالانترنت"),
+              ],
+            ));
           }
           if (state is GetTotalEarningsSuccessState) {
             return Padding(

@@ -4,6 +4,7 @@ import 'package:injectable/injectable.dart';
 import 'package:taskly/core/services/supabase_service.dart';
 import 'package:taskly/features/messages/domain/entities/message_entity.dart';
 import '../../../../../../core/errors/failures.dart';
+import '../../../../../../core/utils/network_utils.dart';
 import '../../../../../attachments/data/models/attachments_dm/attachments_dm.dart';
 import '../../../data_sources/remote/get_admin_messages_remote_data_source/get_admin_messages_remote_data_source.dart';
 
@@ -16,6 +17,9 @@ class GetAdminMessagesRemoteDataSourceImpl implements GetAdminMessagesRemoteData
   @override
   Future<Either<Failures, List<MessageEntity>>> getAdminMessages(String currentUserId) async {
     try {
+      if (!await NetworkUtils.hasInternet()) {
+        return const Left(NetworkFailure('تحقق من اتصالك بالانترنت'));
+      }
       // ✅ جلب أول admin فقط
       final adminsResponse = await supabaseService.supabaseClient
           .from('admins')

@@ -8,6 +8,8 @@ import 'package:taskly/features/shared/data/data_sources/remote/orders_remote_da
 import 'package:taskly/features/shared/data/models/order_dm/order_dm.dart';
 import 'package:taskly/features/shared/domain/entities/order_entity/order_entity.dart';
 
+import '../../../../../../core/utils/network_utils.dart';
+
 @Injectable(as: OrdersRemoteDataSource)
 class OrdersRemoteDataSourceImpl extends OrdersRemoteDataSource {
   final SupabaseService supabaseService  ;
@@ -21,10 +23,10 @@ class OrdersRemoteDataSourceImpl extends OrdersRemoteDataSource {
     String role,
   ) async {
     try {
-      final connectivityResult = await Connectivity().checkConnectivity();
-      if (connectivityResult == ConnectivityResult.none) {
-        return const Left(Failures("No internet connection"));
+      if (!await NetworkUtils.hasInternet()) {
+        return const Left(NetworkFailure('No internet connection'));
       }
+
 
       String fieldName;
       if (role.toLowerCase() == 'client') {
