@@ -15,7 +15,8 @@ class FavouriteOrdersView extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async {
 
-        Navigator.pushReplacementNamed(context, RoutesManager.freelancerHome);
+        Navigator.pushNamedAndRemoveUntil(context, RoutesManager.freelancerHome, (route) => false);
+
         return false;
       },
       child: Scaffold(
@@ -34,8 +35,8 @@ class FavouriteOrdersView extends StatelessWidget {
             child: Container(color: Colors.grey.shade300, height: 1.0),
           ),
           leading: GestureDetector(
-            onTap: () => Navigator.pushReplacementNamed(
-                context, RoutesManager.freelancerHome),
+            onTap: () => Navigator.pushNamedAndRemoveUntil(
+                context, RoutesManager.freelancerHome, (route) => false),
             child: const Icon(CupertinoIcons.back ),
           ),
         ),

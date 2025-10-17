@@ -1,9 +1,11 @@
 import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
+import 'package:taskly/core/cache/shared_preferences.dart';
 import 'package:taskly/core/errors/failures.dart';
 import 'package:taskly/core/services/supabase_service.dart';
 import 'package:taskly/core/utils/network_utils.dart';
 import 'package:taskly/features/reviews/domain/entities/reviews_entity/reviews_entity.dart';
+import '../../../../../../core/utils/strings_manager.dart';
 import '../../../data_sources/remote/submit_rating_remote_data_source/submit_rating_remote_data_source.dart';
 
 @Injectable(as: SubmitRatingRemoteDataSource)
@@ -72,6 +74,7 @@ class SubmitRatingRemoteDataSourceImpl implements SubmitRatingRemoteDataSource {
           .from('users')
           .update({'rating': avgRating})
           .eq('id', targetId);
+      SharedPrefHelper.setString(StringsManager.ratingKey, avgRating.toString());
 
       return const Right(null);
 

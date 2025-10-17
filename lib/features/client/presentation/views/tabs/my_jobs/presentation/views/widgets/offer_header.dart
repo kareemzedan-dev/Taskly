@@ -41,7 +41,8 @@ class OffersHeader extends StatelessWidget {
                   Text(
                     title,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    
+
+                      color: Colors.white,
                           fontSize: 18.sp,
                           fontWeight: FontWeight.w600,
                         ),
@@ -58,6 +59,7 @@ class OffersHeader extends StatelessWidget {
                     child: Text(
                       "$count",
                       style: TextStyle(
+                        color: Colors.white,
 
                         fontSize: 14.sp,
                         fontWeight: FontWeight.bold,

@@ -10,7 +10,8 @@ import '../../../../../../../domain/use_cases/subscribe_to_public_orders_use_cas
 import 'freelancer_public_order_states.dart';
 
 @injectable
-class FreelancerPublicOrdersViewModel extends Cubit<FreelancerPublicOrdersState> {
+class FreelancerPublicOrdersViewModel
+    extends Cubit<FreelancerPublicOrdersState> {
   final FetchPublicOrdersUseCase freelancerOrderUseCase;
   final SubscribeToPublicOrdersUseCase subscribeToPublicOrdersUseCase;
 
@@ -21,9 +22,8 @@ class FreelancerPublicOrdersViewModel extends Cubit<FreelancerPublicOrdersState>
   final List<String> _offeredOrderIds = [];
 
   FreelancerPublicOrdersViewModel(
-      this.freelancerOrderUseCase,
-      this.subscribeToPublicOrdersUseCase
-      ) : super(FreelancerPendingOrdersInitial());
+      this.freelancerOrderUseCase, this.subscribeToPublicOrdersUseCase)
+      : super(FreelancerPendingOrdersInitial());
 
   Future<void> fetchAndSubscribePendingOrders() async {
     emit(FreelancerPendingOrdersLoading());
@@ -34,7 +34,8 @@ class FreelancerPublicOrdersViewModel extends Cubit<FreelancerPublicOrdersState>
         .from('offers')
         .select('order_id, status')
         .eq('freelancer_id', freelancerId)
-        .neq('status', 'withdrawn');
+        .neq('status', 'withdrawn')
+        .neq("status", 'Rejected');
 
     _offeredOrderIds
       ..clear()
@@ -43,8 +44,8 @@ class FreelancerPublicOrdersViewModel extends Cubit<FreelancerPublicOrdersState>
     final result = await freelancerOrderUseCase.fetchPublicOrders(freelancerId);
 
     result.fold(
-          (_) {},
-          (orders) {
+      (_) {},
+      (orders) {
         _allOrders
           ..clear()
           ..addAll(orders);

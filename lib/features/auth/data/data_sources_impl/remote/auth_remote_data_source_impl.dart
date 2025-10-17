@@ -38,15 +38,17 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
     required String fullName,
     required String email,
     required String role,
+      String? profileImage,
+    String? rating,
   }) async {
     await SharedPrefHelper.setString(StringsManager.tokenKey, token);
     await SharedPrefHelper.setString(StringsManager.idKey, id);
     await SharedPrefHelper.setString(StringsManager.fullNameKey, fullName);
     await SharedPrefHelper.setString(StringsManager.emailKey, email);
     await SharedPrefHelper.setString(StringsManager.roleKey, role);
-    await SharedPrefHelper.setString(StringsManager.ratingKey, "0.0");
+    await SharedPrefHelper.setString(StringsManager.ratingKey,rating ?? "0.0");
     await SharedPrefHelper.setString(StringsManager.phoneNumberKey, "");
-    await SharedPrefHelper.setString(StringsManager.profileImageKey, "");
+    await SharedPrefHelper.setString(StringsManager.profileImageKey, profileImage??"");
   }
 
   Future<void> _saveUserToSupabase({
@@ -119,7 +121,6 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
       }
     }
   }
-
   Future<void> _handleUserAfterAuth({
     required String id,
     required String fullName,
@@ -127,14 +128,27 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
     required String token,
     required String role,
     String? avatarUrl,
+    String? rating,
   }) async {
+
+    final userData = await supabase
+        .from('users')
+        .select()
+        .eq('id', id)
+        .maybeSingle();
+
+    final actualRating = userData?['rating']?.toString() ?? rating ?? "0.0";
+
     await _saveUserLocally(
       id: id,
       fullName: fullName,
       email: email,
       token: token,
       role: role,
+      profileImage: avatarUrl,
+      rating: actualRating,
     );
+
     await _saveUserToSupabase(
       id: id,
       fullName: fullName,
@@ -142,8 +156,10 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
       role: role,
       avatarUrl: avatarUrl,
     );
+
     await _insertRoleData(id, role);
   }
+
 
   // ========================= Email/Password Register =========================
   @override
@@ -250,8 +266,10 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
         email: user.email ?? '',
         token: token ?? '',
         role: role,
-
+        rating: userData?['rating']?.toString() ?? '0.0', // <-- تحويل
+        avatarUrl: userData?['profile_image']?.toString() ?? '',
       );
+
 
       await _fcmService.registerDeviceToken(user.id);
 
@@ -303,10 +321,12 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
       final fullName = account.displayName ?? '';
       final avatarUrl = account.photoUrl;
 
+
       final existingUser = await supabase
           .from('users')
           .select()
           .eq('email', email)
+
           .maybeSingle();
 
       if (existingUser != null && existingUser['role'] != role) {
@@ -328,6 +348,7 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
         token: supabaseToken,
         role: role,
         avatarUrl: avatarUrl,
+
       );
 
       await _fcmService.registerDeviceToken(userId);

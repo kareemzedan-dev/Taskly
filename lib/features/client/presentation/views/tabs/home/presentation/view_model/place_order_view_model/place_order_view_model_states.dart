@@ -23,3 +23,9 @@ class PlaceOrderViewModelFreelancerSelected extends PlaceOrderViewModelStates {
   final String id;
   PlaceOrderViewModelFreelancerSelected(this.id);
 }
+
+class PlaceOrderViewModelHiringMethodChanged extends PlaceOrderViewModelStates {
+  final int index;
+  PlaceOrderViewModelHiringMethodChanged(this.index);
+}
+

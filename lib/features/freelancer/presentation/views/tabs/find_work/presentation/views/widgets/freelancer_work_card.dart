@@ -72,7 +72,7 @@ class FreelancerWorkCard extends StatelessWidget {
                     title: offeredOrderIds.contains(order.id)
 
                         ? "مرسل بالفعل"
-                          //already_offered
+
                         : local.send_offers,
                     icon: offeredOrderIds.contains(order.id)
                         ? Icons.check_circle

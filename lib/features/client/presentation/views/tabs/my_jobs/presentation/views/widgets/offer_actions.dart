@@ -41,7 +41,9 @@ class OfferActions extends StatelessWidget {
             filled: false,
             onTap: () {
               Navigator.pushNamed(context, RoutesManager.chatView, arguments: {
-                "userName": userName,
+
+                "currentUserName": SharedPrefHelper.getString(StringsManager.fullNameKey),
+                "receiverName": userName,
                 "currentUserAvatar": SharedPrefHelper.getString(StringsManager.profileImageKey),
                 "receiverAvatar": userImage,
 

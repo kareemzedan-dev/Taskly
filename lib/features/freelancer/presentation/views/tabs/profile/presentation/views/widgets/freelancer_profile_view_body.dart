@@ -71,15 +71,39 @@ class _FreelancerProfileViewBodyState extends State<FreelancerProfileViewBody> {
             ),
 
             SizedBox(height: 40.h),
+            ProfileSection(
+              title: local.dashboardSection,
+              children: [
+                AccountItemRow(
+                  image: Assets.assetsImagesWallet2527857,
+                  text: local.earnings,
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      RoutesManager.freelancerEarningView,
+                    );
+                  },
+                ),
+                SizedBox(height: 10.h),
+                AccountItemRow(
+                  image: Assets.assetsImagesWithdrawal8211181,
+                  text: local.withdrawBalance,
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      RoutesManager.requestWithdrawalView,
+                    );
+                  },
+                ),
 
+              ],
+            ),
             ProfileSection(
               title: local.workSection,
               children: [
                 SizedBox(height: 10.h),
                 GestureDetector(
-                  onTap: _userInfo == null
-                      ? null
-                      : () {
+                  onTap:   () {
                     Navigator.pushNamed(
                       context,
                       RoutesManager.reviewsView,

@@ -6,12 +6,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/di/di.dart';
 import 'package:taskly/features/attachments/presentation/manager/upload_attachments_view_model/upload_attachments_view_model_states.dart';
 import 'package:taskly/features/attachments/presentation/manager/upload_order_attachments_view_model/upload_order_attachments_states.dart';
+import '../../../../../../../../attachments/data/models/attachments_dm/attachments_dm.dart';
 import '../../../../../../../../attachments/presentation/manager/delete_attachments_view_model/delete_attachments_view_model.dart';
 import '../../../../../../../../attachments/presentation/manager/delete_attachments_view_model/delete_attachments_view_model_states.dart';
 import '../../../../../../../../attachments/presentation/manager/upload_attachments_view_model/upload_attachments_view_model.dart';
 import '../../../../../../../../../core/components/dismissible_error_card.dart';
 import '../../../../../../../../../config/l10n/app_localizations.dart';
 import '../../../../../../../../attachments/presentation/manager/upload_order_attachments_view_model/upload_order_attachments_view_model.dart';
+import '../../view_model/place_order_view_model/place_order_view_model.dart';
 
 class AttachmentsFilesSection extends StatefulWidget {
   final UploadOrderAttachmentsViewModel uploadOrderAttachmentsViewModel;
@@ -58,6 +60,17 @@ class _AttachmentsFilesSectionState extends State<AttachmentsFilesSection> {
 
           } else if (state is UploadOrderAttachmentsViewModelStatesSuccess) {
             _showTemporaryMessage(local.uploaded_successfully, MessageType.success);
+            context.read<PlaceOrderViewModel>().setUploadedAttachments(
+              state.attachments.map((e) => AttachmentModel(
+                id: e.id,
+                url: e.url,
+                name: e.name,
+                type: e.type,
+                size: e.size,
+                storagePath: e.storagePath,
+              )).toList(),
+            );
+
           }
 
         },

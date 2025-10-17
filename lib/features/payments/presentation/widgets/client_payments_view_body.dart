@@ -60,6 +60,7 @@ class ClientPaymentsViewBody extends StatelessWidget {
       child: Scaffold(
 
         appBar: AppBar(
+          surfaceTintColor: Colors.white,
 
 
           elevation: 0,

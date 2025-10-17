@@ -37,7 +37,7 @@ class FreelancerEarningViewBody extends StatelessWidget {
                       style: textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: ColorsManager.primary,
-                        fontSize: 40.sp,
+                        fontSize: 30.sp,
                       ),
                     ),
                   ),

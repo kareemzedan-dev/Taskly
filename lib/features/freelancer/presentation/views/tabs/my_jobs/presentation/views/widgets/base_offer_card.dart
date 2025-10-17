@@ -88,7 +88,7 @@ class BaseOfferCard extends StatelessWidget {
             name: state.userInfoEntity.fullName!,
             email: state.userInfoEntity.email,
             rating: state.userInfoEntity.rating!,
-            profileImage: state.userInfoEntity.profileImage!,
+            profileImage: state.userInfoEntity.profileImage ?? "",
             onTap: () {
               Navigator.pushNamed(context, RoutesManager.reviewsView,
                   arguments: {

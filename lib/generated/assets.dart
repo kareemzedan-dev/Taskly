@@ -54,6 +54,7 @@ class Assets {
   static const String clientOrderStatusViewModelClientOrderStatusViewModel = 'lib/features/client/presentation/views/tabs/my_jobs/presentation/view_model/client_order_status_view_model/client_order_status_view_model.dart';
   static const String componentsCircleIconButton = 'lib/core/components/circle_icon_button.dart';
   static const String componentsConfirmationDialog = 'lib/core/components/confirmation_dialog.dart';
+  static const String componentsCustomAlertDialog = 'lib/core/components/custom_alert_dialog.dart';
   static const String componentsCustomAppBar = 'lib/core/components/custom_app_bar.dart';
   static const String componentsCustomBottomNavigationBar = 'lib/core/components/custom_bottom_navigation_bar.dart';
   static const String componentsCustomButton = 'lib/core/components/custom_button.dart';
@@ -261,7 +262,7 @@ class Assets {
   static const String imagesClient = 'assets/images/client.png';
   static const String imagesCover = 'assets/images/cover.jpg';
   static const String imagesDocument10103871 = 'assets/images/document_10103871.png';
-  static const String imagesEmpty = 'assets/images/empty.jpg';
+  static const String imagesEmptyRemovebgPreview = 'assets/images/empty-removebg-preview.png';
   static const String imagesEnglishFlag = 'assets/images/english_flag.png';
   static const String imagesFace = 'assets/images/face.png';
   static const String imagesFaq6736884 = 'assets/images/faq_6736884.png';
@@ -343,6 +344,7 @@ class Assets {
   static const String pendingMessageModelPendingMessageModel = 'lib/features/messages/data/models/pending_message_model/pending_message_model.dart';
   static const String pendingMessagesViewModelPendingMessagesViewModel = 'lib/features/messages/presentation/manager/pending_messages_view_model/pending_messages_view_model.dart';
   static const String placeOrderUseCasePlaceOrderUseCase = 'lib/features/client/domain/use_cases/home/place_order_use_case/place_order_use_case.dart';
+  static const String placeOrderViewModelPlaceOrderValidator = 'lib/features/client/presentation/views/tabs/home/presentation/view_model/place_order_view_model/place_order_validator.dart';
   static const String placeOrderViewModelPlaceOrderViewModel = 'lib/features/client/presentation/views/tabs/home/presentation/view_model/place_order_view_model/place_order_view_model.dart';
   static const String placeOrderViewModelPlaceOrderViewModelStates = 'lib/features/client/presentation/views/tabs/home/presentation/view_model/place_order_view_model/place_order_view_model_states.dart';
   static const String placeWithdrawalBalanceRemoteDataSourceImplPlaceWithdrawalBalanceRemoteDataSourceImpl = 'lib/features/freelancer/data/data_sources_impl/remote/earings_remote_data_source_impl/place_withdrawal_balance_remote_data_source_impl/place_withdrawal_balance_remote_data_source_impl.dart';
@@ -625,6 +627,7 @@ class Assets {
   static const String widgetsOffersModelBottomSheetContent = 'lib/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/offers_model_bottom_sheet_content.dart';
   static const String widgetsOrderActionButton = 'lib/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/order_action_button.dart';
   static const String widgetsOrderDetailsBottomSheetContent = 'lib/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/order_details_bottom_sheet_content.dart';
+  static const String widgetsOrderFormSection = 'lib/features/client/presentation/views/tabs/home/presentation/views/widgets/order_form_section.dart';
   static const String widgetsOrderHeader = 'lib/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/order_header.dart';
   static const String widgetsOrderProgressTimeLine = 'lib/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/order_progress_time_line.dart';
   static const String widgetsOrderStatesCard = 'lib/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/order_states_card.dart';

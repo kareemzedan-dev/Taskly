@@ -9,7 +9,6 @@ import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentat
 import '../../../../../../../../../config/l10n/app_localizations.dart';
 import '../../../../../../../../../core/helper/get_localized_order_status.dart';
 
-
 class OrderHeader extends StatelessWidget {
   final String orderName;
   final String orderId;
@@ -36,10 +35,8 @@ class OrderHeader extends StatelessWidget {
               color: ColorsManager.primary,
               icon: Icons.pending_actions_outlined,
             ),
-
             SizedBox(width: 5.w),
-            if(orderStatus != "Paid" && orderStatus != "InProgress" &&
-                orderStatus != "Waiting")
+            if (orderStatus == "Pending" || orderStatus == "Accepted")
               GestureDetector(
                 onTap: () {
                   showConfirmationDialog(
@@ -51,7 +48,7 @@ class OrderHeader extends StatelessWidget {
                     },
                   );
                 },
-                child:   StatusBadge(
+                child: StatusBadge(
                   text: local.delete,
                   color: Colors.red,
                   icon: Icons.delete,
@@ -67,10 +64,7 @@ class OrderHeader extends StatelessWidget {
           ),
           softWrap: true,
         ),
-
       ],
     );
   }
 }
-
-

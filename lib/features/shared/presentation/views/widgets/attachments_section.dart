@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:taskly/core/utils/assets_manager.dart';
 
 import '../../../../../config/l10n/app_localizations.dart';
 import '../../../../attachments/data/models/attachments_dm/attachments_dm.dart';
@@ -34,10 +35,23 @@ class AttachmentsSection extends StatelessWidget {
           width: double.infinity,
           height: 200.h,
           decoration: BoxDecoration(
-            color: Colors.grey.shade500,
+            border: Border.all(color: Colors.grey.shade200,width: 1),
+            color: Colors.white,
             borderRadius: BorderRadius.circular(10.r),
           ),
-          child: AttachmentCardViewerListView(
+
+          child: attachmentEntity.isEmpty ? Center(child: Column(
+            children: [
+              Image.asset(Assets.assetsImagesempty,height: 130.h,),
+              SizedBox(height: 20.h),
+              Text("لا يوجد مرفقات",style:  Theme.of(context).textTheme.bodyLarge?.copyWith(
+                fontWeight: FontWeight.w600,
+                fontSize: 16.sp,
+                color: Colors.black,
+
+              ),),
+            ],
+          )) : AttachmentCardViewerListView(
             attachmentEntity: attachmentEntity,
             isFreelancer: isFreelancer
           ),

@@ -15,7 +15,7 @@ class JobDetailsView extends StatelessWidget {
     final local = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-         surfaceTintColor: Colors.transparent, 
+         surfaceTintColor: Colors.white,
         title: Text(
           local.job_details,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(

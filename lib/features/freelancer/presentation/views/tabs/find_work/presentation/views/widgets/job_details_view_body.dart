@@ -47,9 +47,9 @@ class JobDetailsViewBody extends StatelessWidget {
               ),
             ),
           ),
-          CustomButton(title: local.send_offer , ontap: () {
-            Navigator.pushNamed(context, RoutesManager.sendOfferView, arguments:orderEntity);
-          }),
+          // CustomButton(title: local.send_offer , ontap: () {
+          //   Navigator.pushNamed(context, RoutesManager.sendOfferView, arguments:orderEntity);
+          // }),
           const SizedBox(height: 30),
         ],
       ),

@@ -9,6 +9,7 @@ import 'package:taskly/features/reviews/domain/entities/reviews_entity/reviews_e
 import 'package:uuid/uuid.dart';
 
 import '../../../shared/domain/entities/order_entity/order_entity.dart';
+import '../manager/get_user_reviews_view_model/get_user_reviews_view_model.dart';
 import '../manager/submit_rating_view_model/submit_rating_states.dart';
 import '../manager/submit_rating_view_model/submit_rating_view_model.dart';
 
@@ -68,6 +69,7 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
         child: BlocConsumer<SubmitRatingViewModel, SubmitRatingStates>(
           listener: (context, state) {
             if (state is SubmitRatingStatesSuccess) {
+
               setState(() => _isSubmitting = false);
               Navigator.of(context).pushNamedAndRemoveUntil(
                 _currentUserRole == "client"
@@ -81,7 +83,9 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
                   content: Text(loc.rating_success),
                   backgroundColor: Colors.green,
                 ),
+
               );
+              context.read<GetUserReviewsViewModel>().getUserReviews(widget.currentUserId, _currentUserRole);
             } else if (state is SubmitRatingStatesError) {
               setState(() => _isSubmitting = false);
               Navigator.pop(context);

@@ -135,7 +135,7 @@ class Assets {
   /// Assets for assetsImagesIcFacebook
   /// assets/images/ic_facebook.svg
   static const String assetsImagesIcFacebook = "assets/images/ic_facebook.svg";
-static const String assetsImagesempty = "assets/images/empty.jpg";
+static const String assetsImagesempty = "assets/images/empty.png";
 static const String assetsAdminAvatar = "assets/images/admin_avatar.jpg";
 
 static const String assetsApple = "assets/images/apple.png";
