@@ -18,6 +18,8 @@ import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentat
 
 import '../../../../../../../../../config/l10n/app_localizations.dart';
 import '../../../../../../../../../config/routes/routes_manager.dart';
+import '../../../../../../../../../core/cache/shared_preferences.dart';
+import '../../../../../../../../../core/utils/strings_manager.dart';
 import '../../view_model/update_offer_status_view_model/update_offer_status_view_model.dart';
 
 int getStep(OrderStatus status) {
@@ -166,26 +168,47 @@ class OrderStatesCard extends StatelessWidget {
                   },
                 ),
                 SizedBox(height: 10.h),
-                OrderActionButton(
-                  text: local.viewDetails,
-                  icon: Icons.remove_red_eye_outlined,
-                  color: ColorsManager.primary,
-                  onTap: () {
-                    showModalBottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      backgroundColor:  Theme.of(context).scaffoldBackgroundColor,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(20),
-                        ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: OrderActionButton(
+                        text: local.viewDetails,
+                        icon: Icons.remove_red_eye_outlined,
+                        color: ColorsManager.primary,
+                        onTap: () {
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(20),
+                              ),
+                            ),
+                            builder: (context) {
+                              return OrderDetailsBottomSheetContent(order: order);
+                            },
+                          );
+                        },
                       ),
-                      builder: (context) {
-                        return OrderDetailsBottomSheetContent(order: order);
-                      },
-                    );
-                  },
+                    ),
+                    SizedBox(width: 10.w),
+                    Expanded(
+                      child: OrderActionButton(
+                        text: local.chat_with_admin,
+                        icon: Icons.chat,
+                        color: ColorsManager.primary,
+                        onTap: () {
+                          Navigator.pushNamed(context, RoutesManager.adminChatView, arguments: {
+                            "currentUserId":
+                            SharedPrefHelper.getString(StringsManager.idKey),
+                          });
+                        },
+                      ),
+                    ),
+                  ],
                 ),
+
               ],
             ),
           ),

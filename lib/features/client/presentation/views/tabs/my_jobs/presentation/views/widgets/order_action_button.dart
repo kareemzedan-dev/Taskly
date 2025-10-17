@@ -1,4 +1,4 @@
-
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
@@ -7,7 +7,7 @@ class OrderActionButton extends StatelessWidget {
   final String text;
   final IconData icon;
   final Color color;
-  final int? count; 
+  final int? count;
   final VoidCallback onTap;
 
   const OrderActionButton({
@@ -32,7 +32,7 @@ class OrderActionButton extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.r),
           color: hasCount ? color : Colors.transparent,
-          border: hasCount ? null : Border.all(color: color),
+          border: hasCount ? null : Border.all(color: color, width: 1.5),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -40,15 +40,20 @@ class OrderActionButton extends StatelessWidget {
             Icon(
               icon,
               color: hasCount ? ColorsManager.white : color,
-              size: 20.sp,
+              size: 16.sp,
             ),
-            SizedBox(width: 8.w),
-            Text(
-              text,
-              style: TextStyle(
-                color: hasCount ? ColorsManager.white : color,
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w600,
+            SizedBox(width: 6.w),
+            Flexible(
+              child: AutoSizeText(
+                text,
+                maxLines: 1,
+                minFontSize: 10,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: hasCount ? ColorsManager.white : color,
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
             if (hasCount) ...[
@@ -62,8 +67,10 @@ class OrderActionButton extends StatelessWidget {
                   color: Colors.red,
                   borderRadius: BorderRadius.circular(12.r),
                 ),
-                child: Text(
+                child: AutoSizeText(
                   "$count",
+                  maxLines: 1,
+                  minFontSize: 10,
                   style: TextStyle(
                     color: ColorsManager.white,
                     fontSize: 14.sp,
