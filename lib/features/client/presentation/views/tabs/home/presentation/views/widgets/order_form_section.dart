@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/config/l10n/app_localizations.dart';
-import 'package:taskly/config/routes/routes_manager.dart';
-import 'package:taskly/core/cache/shared_preferences.dart';
 import 'package:taskly/core/components/custom_button.dart';
-import 'package:taskly/core/di/di.dart';
-import 'package:taskly/core/utils/strings_manager.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/view_model/place_order_view_model/place_order_view_model.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/category_drop_down.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/description_box.dart';
@@ -15,13 +11,12 @@ import 'package:taskly/features/client/presentation/views/tabs/home/presentation
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/time_input_raw.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/attachments_files_section.dart';
 import 'package:taskly/features/profile/presentation/manager/profile_view_model/profile_view_model.dart';
-import '../../../../../../../../../core/components/custom_alert_dialog.dart';
-import '../../../../../../../../../core/components/custom_text_field.dart';
-import '../../../../../../../../attachments/presentation/manager/upload_order_attachments_view_model/upload_order_attachments_states.dart';
 import '../../../../../../../../attachments/presentation/manager/upload_order_attachments_view_model/upload_order_attachments_view_model.dart';
+import '../../../../../../../../attachments/presentation/manager/upload_order_attachments_view_model/upload_order_attachments_states.dart';
 import '../../../../../../../../profile/presentation/manager/profile_view_model/profile_view_model_states.dart';
-import '../../../../../../../../../core/components/dismissible_error_card.dart';
-class OrderFormSection extends StatelessWidget {
+import '../../../../../../../../../core/components/custom_text_field.dart';
+
+class OrderFormSection extends StatefulWidget {
   final int selectedHireMethodIndex;
   final ValueChanged<int> onHireMethodChanged;
   final VoidCallback onSubmit;
@@ -34,12 +29,20 @@ class OrderFormSection extends StatelessWidget {
   });
 
   @override
+  State<OrderFormSection> createState() => _OrderFormSectionState();
+}
+
+
+
+class _OrderFormSectionState extends State<OrderFormSection> {
+
+  @override
   Widget build(BuildContext context) {
     final local = AppLocalizations.of(context)!;
     final viewModel = context.read<PlaceOrderViewModel>();
 
-    final profileVM = context.read<ProfileViewModel>();
-    final uploadVM = context.read<UploadOrderAttachmentsViewModel>();
+    final profileVM = context.watch<ProfileViewModel>();
+    final uploadVM = context.watch<UploadOrderAttachmentsViewModel>();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,33 +78,30 @@ class OrderFormSection extends StatelessWidget {
         _buildLabel(context, local.hiring_method_label),
         SizedBox(height: 16.h),
         HiringMethodsOptions(
-          selectedIndex: selectedHireMethodIndex,
-          onChanged: onHireMethodChanged,
+          selectedIndex: widget.selectedHireMethodIndex,
+          onChanged: widget.onHireMethodChanged,
         ),
-        if (selectedHireMethodIndex == 1)
+        if (widget.selectedHireMethodIndex == 1)
           PrivateHireSection(selectedId: viewModel.freelancerId),
         SizedBox(height: 28.h),
 
-        // زر الإرسال حسب حالة المستخدم ورفع الملفات
+        // زر الإرسال
         BlocBuilder<ProfileViewModel, ProfileViewModelStates>(
           builder: (context, profileState) {
-            bool isActive = false;
-            if (profileState is ProfileViewModelStatesSuccess) {
-              isActive = profileState.userInfoEntity.clientStatus == "Active";
-            }
+            final isActive = profileState is ProfileViewModelStatesSuccess &&
+                profileState.userInfoEntity.clientStatus == "Active";
 
-            return BlocBuilder<UploadOrderAttachmentsViewModel, UploadOrderAttachmentsViewModelStates>(
+            return BlocBuilder<UploadOrderAttachmentsViewModel,
+                UploadOrderAttachmentsViewModelStates>(
               builder: (context, uploadState) {
-                final isUploading = uploadState is UploadOrderAttachmentsViewModelStatesLoading;
+                final isUploading =
+                    uploadState is UploadOrderAttachmentsViewModelStatesLoading;
 
                 return CustomButton(
-                  title: isUploading
-                      ? "جاري رفع الملفات..."
-                      : isActive
-                      ? local.submit_button
-                      : "${local.submit_button} ...",
-                  ontap: (isUploading || !isActive) ? null : onSubmit,
-                  isEnable: isActive && !isUploading,
+                  title:
+                      isUploading ? "جاري رفع الملفات..." : local.submit_button,
+                  ontap: isUploading ? null : widget.onSubmit,
+                  isEnable: !isUploading,
                 );
               },
             );
@@ -115,9 +115,9 @@ class OrderFormSection extends StatelessWidget {
     return Text(
       text,
       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-        fontWeight: FontWeight.w700,
-        fontSize: 18.sp,
-      ),
+            fontWeight: FontWeight.w700,
+            fontSize: 18.sp,
+          ),
     );
   }
 }

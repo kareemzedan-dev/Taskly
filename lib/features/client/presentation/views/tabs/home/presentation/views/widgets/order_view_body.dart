@@ -7,6 +7,7 @@ import 'package:taskly/core/utils/colors_manger.dart';
 import 'package:taskly/features/client/presentation/views/client_home_view.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/view_model/place_order_view_model/place_order_view_model.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/view_model/place_order_view_model/place_order_view_model_states.dart';
+import '../../../../../../../../../core/cache/shared_preferences.dart';
 import '../../../../../../../../../core/components/dismissible_error_card.dart';
 import 'order_form_section.dart';
 
@@ -23,6 +24,7 @@ class OrderViewBody extends StatefulWidget {
   @override
   State<OrderViewBody> createState() => _OrderViewBodyState();
 }
+
 class _OrderViewBodyState extends State<OrderViewBody> {
   late PlaceOrderViewModel viewModel;
   List<String> timeUnits = [];
@@ -73,10 +75,16 @@ class _OrderViewBodyState extends State<OrderViewBody> {
             SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(16),
-                child: OrderFormSection(
-                  selectedHireMethodIndex: viewModel.hireMethodIndex,
-                  onHireMethodChanged: (val) => viewModel.setHireMethod(val),
-                  onSubmit: () => viewModel.submitOrder(),
+
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: MediaQuery.of(context).size.height,
+                  ),
+                  child: OrderFormSection(
+                    selectedHireMethodIndex: viewModel.hireMethodIndex,
+                    onHireMethodChanged: (val) => viewModel.setHireMethod(val),
+                    onSubmit: () => viewModel.submitOrder(),
+                  ),
                 ),
               ),
             ),

@@ -7,7 +7,10 @@ import 'package:taskly/features/client/presentation/views/tabs/home/presentation
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/order_view_body.dart';
 
 import '../../../../../../../../config/l10n/app_localizations.dart';
+import '../../../../../../../../core/cache/shared_preferences.dart';
+import '../../../../../../../../core/utils/strings_manager.dart';
 import '../../../../../../../attachments/presentation/manager/upload_order_attachments_view_model/upload_order_attachments_view_model.dart';
+import '../../../../../../../profile/presentation/manager/profile_view_model/profile_view_model.dart';
 
 class OrderView extends StatelessWidget {
   const OrderView({super.key,required this.title,required this.selectedCategory});
@@ -41,6 +44,9 @@ class OrderView extends StatelessWidget {
 
 
       body:  MultiBlocProvider(providers: [
+        BlocProvider(
+          create: (context) => getIt<ProfileViewModel>()..fetchUserInfo(SharedPrefHelper.getString(StringsManager.idKey)!, SharedPrefHelper.getString(StringsManager.roleKey)!),
+        ),
         BlocProvider(
           create: (context) => getIt<PlaceOrderViewModel>(),
         ),
