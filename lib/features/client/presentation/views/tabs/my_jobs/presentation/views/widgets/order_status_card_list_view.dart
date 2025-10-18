@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/view_model/get_order_view_model.dart/get_order_view_model.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/view_model/get_order_view_model.dart/get_order_view_model_states.dart';
 import 'package:taskly/features/client/presentation/views/tabs/my_jobs/presentation/views/widgets/order_states_card.dart';
@@ -64,7 +65,14 @@ class OrderStatusCardListView extends StatelessWidget {
         if (state is GetOrderViewModelStatesLoading) {
           return const Center(child: CircularProgressIndicator());
         } else if (state is GetOrderViewModelStatesError) {
-          return Center(child: Text(state.message));
+          return Center(child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Lottie.asset('assets/lotties/no_internet.json', width: 200, height: 200),
+              const SizedBox(height: 20),
+              Text("تحقق من اتصالك بالانترنت"),
+            ],
+          ));
         } else if (state is GetOrderViewModelStatesSuccess) {
           final filteredOrders = _filterOrders(state.orderEntity, filter);
 

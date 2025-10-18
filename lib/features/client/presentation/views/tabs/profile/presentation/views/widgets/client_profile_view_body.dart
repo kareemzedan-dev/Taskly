@@ -66,7 +66,7 @@ class _ClientProfileViewBodyState extends State<ClientProfileViewBody> {
                   } else if (state is ProfileViewModelStatesError) {
                     return Text(state.message);
                   }
-                  return Container();
+                  return const UserInfoSectionShimmer();
                 },
               ),
             ),
