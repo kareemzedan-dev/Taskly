@@ -7,6 +7,7 @@ import 'package:taskly/features/client/presentation/views/tabs/home/presentation
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/views/widgets/order_view_body.dart';
 
 import '../../../../../../../../config/l10n/app_localizations.dart';
+import '../../../../../../../attachments/presentation/manager/upload_order_attachments_view_model/upload_order_attachments_view_model.dart';
 
 class OrderView extends StatelessWidget {
   const OrderView({super.key,required this.title,required this.selectedCategory});
@@ -39,10 +40,16 @@ class OrderView extends StatelessWidget {
       ),
 
 
-      body: BlocProvider(
-        create: (context) => getIt<PlaceOrderViewModel>(),
+      body:  MultiBlocProvider(providers: [
+        BlocProvider(
+          create: (context) => getIt<PlaceOrderViewModel>(),
+        ),
+        BlocProvider(
+          create: (context) => getIt<UploadOrderAttachmentsViewModel>(),
+        ),
+      ],
         child: OrderViewBody(title:title!,selectedCategory:selectedCategory! ),
-      ),
+    )
     );
   }
 }

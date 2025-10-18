@@ -15,6 +15,7 @@ import 'package:taskly/config/routes/routes_manager.dart';
 import 'package:taskly/core/utils/strings_manager.dart';
 import 'package:taskly/features/client/presentation/views/tabs/home/presentation/view_model/services_view_model/services_view_model.dart';
 import 'package:taskly/config/l10n/app_localizations.dart';
+import 'package:taskly/features/messages/presentation/manager/messages_view_model/messages_view_model.dart';
 import 'core/helper/language_notifier.dart';
 import 'core/services/firebase_notification_service.dart';
 import 'core/services/theme_notifier.dart';
@@ -63,6 +64,7 @@ Future<void> main() async {
           getIt<SubscribeToUnreadMessagesViewModel>()
             ..getUnreadMessagesStream(SharedPrefHelper.getString(StringsManager.idKey)!),
         ),
+
 
 
         BlocProvider(

@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:bloc/bloc.dart';
 import 'package:either_dart/either.dart';
 import 'package:file_picker/file_picker.dart';
@@ -8,9 +7,7 @@ import 'package:taskly/core/errors/failures.dart';
 import 'package:taskly/features/attachments/data/models/attachments_dm/attachments_dm.dart';
 import 'package:taskly/features/attachments/domain/entities/attachment_entity/attaachments_entity.dart';
 import 'package:taskly/features/attachments/domain/use_cases/upload_attachments/upload_attachments_use_case.dart';
-import 'package:taskly/features/attachments/presentation/manager/upload_attachments_view_model/upload_attachments_view_model_states.dart';
 import 'package:taskly/features/attachments/presentation/manager/upload_order_attachments_view_model/upload_order_attachments_states.dart';
-
 
 @injectable
 class UploadOrderAttachmentsViewModel extends Cubit<UploadOrderAttachmentsViewModelStates> {
@@ -25,6 +22,9 @@ class UploadOrderAttachmentsViewModel extends Cubit<UploadOrderAttachmentsViewMo
   int _fileCounter = 0;
   List<AttachmentModel> uploadedAttachments = [];
 
+  bool isUploading = false; // 👈 الجديد
+  bool get isUploadingNow => isUploading; // 👈 getter للقراءة فقط
+
   String generateFileKey(File file) {
     if (!_fileKeys.containsKey(file)) {
       _fileKeys[file] = 'file_${_fileCounter++}_${DateTime.now().millisecondsSinceEpoch}';
@@ -37,13 +37,14 @@ class UploadOrderAttachmentsViewModel extends Cubit<UploadOrderAttachmentsViewMo
     final fileSize = await file.length();
     return '$fileName-$fileSize';
   }
+
   Future<void> pickFilesFromDevice({
     String? bucketName,
     bool singleFileMode = false,
   }) async {
     try {
       final result = await FilePicker.platform.pickFiles(
-        allowMultiple: false, // ⛔ ملف واحد في كل اختيار
+        allowMultiple: false,
         type: FileType.custom,
         allowedExtensions: ['jpg', 'png', 'pdf', 'doc', 'docx'],
       );
@@ -57,14 +58,12 @@ class UploadOrderAttachmentsViewModel extends Cubit<UploadOrderAttachmentsViewMo
 
           if (!uploadedFileHashes.contains(fileHash)) {
             if (singleFileMode) {
-              // ✅ يستبدل القديم بالجديد
               files.clear();
             } else {
-              // ✅ يحتفظ بالقديم
               for (final existingFile in files) {
                 final existingHash = await generateFileHash(existingFile);
                 if (existingHash == fileHash) {
-                  return; // الملف مكرر
+                  return; // مكرر
                 }
               }
             }
@@ -85,22 +84,16 @@ class UploadOrderAttachmentsViewModel extends Cubit<UploadOrderAttachmentsViewMo
 
   void removeFileFromQueue(File file) async {
     final fileHash = await generateFileHash(file);
-
     files.remove(file);
-
     _fileKeys.remove(file);
-
     uploadedFileHashes.remove(fileHash);
-
     uploadedAttachments.removeWhere((e) => e.name == file.path.split('/').last);
-
     emit(UploadOrderAttachmentsViewModelStatesInitial());
   }
 
-
   Future<Either<Failures, List<AttachmentEntity>>> uploadAttachments({String? bucketName}) async {
-
     try {
+      isUploading = true; // 👈 بداية الرفع
       emit(UploadOrderAttachmentsViewModelStatesLoading());
 
       final newFiles = <File>[];
@@ -116,6 +109,7 @@ class UploadOrderAttachmentsViewModel extends Cubit<UploadOrderAttachmentsViewMo
       }
 
       if (newFiles.isEmpty) {
+        isUploading = false; // 👈 إيقاف الحالة حتى لو مفيش رفع
         emit(UploadOrderAttachmentsViewModelStatesError(
             message: duplicateFiles.isNotEmpty
                 ? 'All files have already been uploaded'
@@ -126,7 +120,9 @@ class UploadOrderAttachmentsViewModel extends Cubit<UploadOrderAttachmentsViewMo
       final result = await uploadAttachmentsUseCase.callUploadAttachments(newFiles, bucketName: bucketName);
 
       result.fold(
-            (failure) => emit(UploadOrderAttachmentsViewModelStatesError(message: failure.message)),
+            (failure) {
+          emit(UploadOrderAttachmentsViewModelStatesError(message: failure.message));
+        },
             (attachments) async {
           for (final file in newFiles) {
             final hash = await generateFileHash(file);
@@ -153,16 +149,15 @@ class UploadOrderAttachmentsViewModel extends Cubit<UploadOrderAttachmentsViewMo
       final failure = ServerFailure(e.toString());
       emit(UploadOrderAttachmentsViewModelStatesError(message: failure.message));
       return Left(failure);
+    } finally {
+      isUploading = false; // 👈 مهما حصل، نوقف الحالة بعد الرفع
     }
   }
-  void removeFile(File file) {
-    final fileHash = generateFileHash(file);
-    fileHash.then((hash) {
-      if (uploadedFileHashes.contains(hash)) {
-        uploadedFileHashes.remove(hash);
-      }
-    });
 
+  void removeFile(File file) {
+    generateFileHash(file).then((hash) {
+      uploadedFileHashes.remove(hash);
+    });
     files.remove(file);
     _fileKeys.remove(file);
     emit(UploadOrderAttachmentsViewModelStatesInitial());
@@ -170,14 +165,12 @@ class UploadOrderAttachmentsViewModel extends Cubit<UploadOrderAttachmentsViewMo
 
   Future<void> clearFiles() async {
     final List<File> filesToKeep = [];
-
     for (final file in files) {
       final fileHash = await generateFileHash(file);
       if (uploadedFileHashes.contains(fileHash)) {
         filesToKeep.add(file);
       }
     }
-
     files = filesToKeep;
     emit(UploadOrderAttachmentsViewModelStatesInitial());
   }

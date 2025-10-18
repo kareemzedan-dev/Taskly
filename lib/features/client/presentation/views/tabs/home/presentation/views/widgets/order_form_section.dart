@@ -17,9 +17,10 @@ import 'package:taskly/features/client/presentation/views/tabs/home/presentation
 import 'package:taskly/features/profile/presentation/manager/profile_view_model/profile_view_model.dart';
 import '../../../../../../../../../core/components/custom_alert_dialog.dart';
 import '../../../../../../../../../core/components/custom_text_field.dart';
+import '../../../../../../../../attachments/presentation/manager/upload_order_attachments_view_model/upload_order_attachments_states.dart';
+import '../../../../../../../../attachments/presentation/manager/upload_order_attachments_view_model/upload_order_attachments_view_model.dart';
 import '../../../../../../../../profile/presentation/manager/profile_view_model/profile_view_model_states.dart';
 import '../../../../../../../../../core/components/dismissible_error_card.dart';
-
 class OrderFormSection extends StatelessWidget {
   final int selectedHireMethodIndex;
   final ValueChanged<int> onHireMethodChanged;
@@ -37,6 +38,9 @@ class OrderFormSection extends StatelessWidget {
     final local = AppLocalizations.of(context)!;
     final viewModel = context.read<PlaceOrderViewModel>();
 
+    final profileVM = context.read<ProfileViewModel>();
+    final uploadVM = context.read<UploadOrderAttachmentsViewModel>();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -44,9 +48,7 @@ class OrderFormSection extends StatelessWidget {
         SizedBox(height: 16.h),
         CustomTextFormField(
           validator: (value) {
-            if (value!.isEmpty) {
-              return "ادخل العنوان";
-            }
+            if (value!.isEmpty) return "ادخل العنوان";
             return null;
           },
           keyboardType: TextInputType.text,
@@ -68,9 +70,7 @@ class OrderFormSection extends StatelessWidget {
         SizedBox(height: 28.h),
         _buildLabel(context, local.attachments_label),
         SizedBox(height: 16.h),
-        AttachmentsFilesSection(
-          uploadOrderAttachmentsViewModel: viewModel.uploadOrderAttachmentsViewModel,
-        ),
+        AttachmentsFilesSection(uploadOrderAttachmentsViewModel: uploadVM),
         SizedBox(height: 28.h),
         _buildLabel(context, local.hiring_method_label),
         SizedBox(height: 16.h),
@@ -82,68 +82,30 @@ class OrderFormSection extends StatelessWidget {
           PrivateHireSection(selectedId: viewModel.freelancerId),
         SizedBox(height: 28.h),
 
-        // BlocProvider للتحكم في حالة الزر حسب حالة المستخدم
-        BlocProvider(
-          create: (context) => getIt<ProfileViewModel>()
-            ..getUserInfo(
-              SharedPrefHelper.getString(StringsManager.idKey)!,
-              "client",
-            ),
-          child: BlocListener<ProfileViewModel, ProfileViewModelStates>(
-            listener: (context, state) {
-              if (state is ProfileViewModelStatesSuccess &&
-                  state.userInfoEntity.clientStatus != "Active") {
-                showDialog(
-                  context: context,
-                  builder: (_) => CustomAlertDialog(
-                    title: "تحذير",
-                    content:
-                    "انت مقيد مؤقتًا من نشر الطلبات. يمكنك التواصل مع الدعم الآن لحل المشكلة.",
-                    positiveButtonText: "تواصل مع الدعم",
-                    onPositivePressed: () {
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                      Navigator.pushNamed(
-                        context,
-                        RoutesManager.adminChatView,
-                        arguments: {
-                          "currentUserId": SharedPrefHelper.getString(StringsManager.idKey),
+        // زر الإرسال حسب حالة المستخدم ورفع الملفات
+        BlocBuilder<ProfileViewModel, ProfileViewModelStates>(
+          builder: (context, profileState) {
+            bool isActive = false;
+            if (profileState is ProfileViewModelStatesSuccess) {
+              isActive = profileState.userInfoEntity.clientStatus == "Active";
+            }
 
-                        },
-
-                      );
-                    },
-                    negativeButtonText: "إلغاء",
-                    onNegativePressed: () {
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                    },
-                    lottieAsset: "assets/lotties/alert.json",
-                    leadingIcon: Icons.security,
-                    leadingIconColor: Colors.orange,
-                    warningLabel: "انتباه",
-                    warningColor: Colors.red,
-                  ),
-                );
-
-              }
-            },
-            child: BlocBuilder<ProfileViewModel, ProfileViewModelStates>(
-              builder: (context, state) {
-                bool isActive = false;
-
-                if (state is ProfileViewModelStatesSuccess) {
-                  isActive = state.userInfoEntity.clientStatus == "Active";
-                }
+            return BlocBuilder<UploadOrderAttachmentsViewModel, UploadOrderAttachmentsViewModelStates>(
+              builder: (context, uploadState) {
+                final isUploading = uploadState is UploadOrderAttachmentsViewModelStatesLoading;
 
                 return CustomButton(
-                  title: isActive ? local.submit_button : "${local.submit_button} ...",
-                  ontap: isActive ? onSubmit : () {},
-                  isEnable: isActive,
+                  title: isUploading
+                      ? "جاري رفع الملفات..."
+                      : isActive
+                      ? local.submit_button
+                      : "${local.submit_button} ...",
+                  ontap: (isUploading || !isActive) ? null : onSubmit,
+                  isEnable: isActive && !isUploading,
                 );
               },
-            ),
-          ),
+            );
+          },
         ),
       ],
     );
