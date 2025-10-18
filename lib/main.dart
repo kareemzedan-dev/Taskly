@@ -20,6 +20,8 @@ import 'core/services/firebase_notification_service.dart';
 import 'core/services/theme_notifier.dart';
 import 'core/services/user_status_service.dart';
 import 'core/utils/constants_manager.dart';
+import 'features/messages/presentation/manager/subscribe_to_unread_messages_view_model/subscribe_to_unread_messages_view_model.dart';
+import 'features/messages/presentation/manager/unread_messages_badge_view_model/unread_messages_badge_view_model.dart';
 import 'features/profile/presentation/manager/profile_view_model/profile_view_model.dart';
 import 'firebase_options.dart';
 
@@ -57,6 +59,13 @@ Future<void> main() async {
     MultiBlocProvider(
       providers: [
         BlocProvider(
+          create: (context) =>
+          getIt<SubscribeToUnreadMessagesViewModel>()
+            ..getUnreadMessagesStream(SharedPrefHelper.getString(StringsManager.idKey)!),
+        ),
+
+
+        BlocProvider(
           create: (context) => getIt<ServicesViewModel>()..getServices(),
         ),
         if (userId != null && role != null)
@@ -91,6 +100,8 @@ class _TasklyState extends State<Taskly> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
+
+
     userStatusService = getIt<UserStatusService>();
     if (widget.userId != null) {
       userStatusService.initialize(widget.userId!);

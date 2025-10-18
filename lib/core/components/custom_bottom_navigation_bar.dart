@@ -3,10 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:taskly/core/utils/assets_manager.dart';
 import 'package:taskly/core/utils/colors_manger.dart';
+import 'package:taskly/features/messages/presentation/manager/subscribe_to_unread_messages_view_model/subscribe_to_unread_messages_view_model.dart';
+import 'package:taskly/features/messages/presentation/manager/subscribe_to_unread_messages_view_model/subscribe_to_unread_messages_view_model_states.dart';
 import '../../config/l10n/app_localizations.dart';
-import 'package:taskly/features/messages/presentation/manager/unread_messages_badge_view_model/unread_badge_states.dart';
-import 'package:taskly/features/messages/presentation/manager/unread_messages_badge_view_model/unread_messages_badge_view_model.dart';
-import 'package:taskly/core/di/di.dart';
 
 class CustomBottomNavigationBar extends StatelessWidget {
   const CustomBottomNavigationBar({
@@ -25,14 +24,14 @@ class CustomBottomNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final local = AppLocalizations.of(context)!;
-    final unreadVM = getIt<UnreadMessagesBadgeViewModel>();
 
-    return BlocBuilder<UnreadMessagesBadgeViewModel, UnreadMessagesBadgeState>(
-      bloc: unreadVM,
+    return BlocBuilder<SubscribeToUnreadMessagesViewModel,
+        SubscribeToUnreadMessagesViewModelStates>(
       builder: (context, state) {
-        int totalUnread = 0;
-        if (state is UnreadMessagesBadgeUpdated) {
-          totalUnread = state.unreadCounts.values.fold(0, (a, b) => a + b);
+        bool hasUnread = false;
+
+        if (state is SubscribeToUnreadMessagesViewModelStatesSuccess) {
+          hasUnread = state.messages.any((m) => m.seenAt == null);
         }
 
         return BottomNavigationBar(
@@ -40,16 +39,6 @@ class CustomBottomNavigationBar extends StatelessWidget {
           type: BottomNavigationBarType.fixed,
           currentIndex: currentIndex,
           onTap: onTap,
-          selectedLabelStyle: const TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.bold,
-            color: Colors.transparent,
-          ),
-          unselectedLabelStyle: const TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.normal,
-            color: Colors.transparent,
-          ),
           selectedItemColor: ColorsManager.primary,
           unselectedItemColor: Theme.of(context).textTheme.bodyLarge?.color,
           items: [
@@ -83,7 +72,6 @@ class CustomBottomNavigationBar extends StatelessWidget {
               ),
               label: local.my_jobs,
             ),
-            // 🟢 هنا نضيف البادج فوق أيقونة الشات
             BottomNavigationBarItem(
               icon: Stack(
                 clipBehavior: Clip.none,
@@ -94,29 +82,16 @@ class CustomBottomNavigationBar extends StatelessWidget {
                     height: 24.h,
                     width: 24.w,
                   ),
-                  if (totalUnread > 0)
+                  if (hasUnread)
                     Positioned(
-                      right: -4,
-                      top: -4,
+                      right: -3,
+                      top: -3,
                       child: Container(
-                        padding: const EdgeInsets.all(4),
+                        width: 10,
+                        height: 10,
                         decoration: const BoxDecoration(
-                          color: ColorsManager.primary,
+                          color: Colors.redAccent,
                           shape: BoxShape.circle,
-                        ),
-                        constraints: const BoxConstraints(
-                          minWidth: 18,
-                          minHeight: 18,
-                        ),
-                        child: Center(
-                          child: Text(
-                            totalUnread > 9 ? "9+" : "$totalUnread",
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
                         ),
                       ),
                     ),
@@ -131,29 +106,16 @@ class CustomBottomNavigationBar extends StatelessWidget {
                     height: 24.h,
                     width: 24.w,
                   ),
-                  if (totalUnread > 0)
+                  if (hasUnread)
                     Positioned(
-                      right: -4,
-                      top: -4,
+                      right: -3,
+                      top: -3,
                       child: Container(
-                        padding: const EdgeInsets.all(4),
+                        width: 10,
+                        height: 10,
                         decoration: const BoxDecoration(
-                          color: ColorsManager.primary,
+                          color: Colors.redAccent,
                           shape: BoxShape.circle,
-                        ),
-                        constraints: const BoxConstraints(
-                          minWidth: 18,
-                          minHeight: 18,
-                        ),
-                        child: Center(
-                          child: Text(
-                            totalUnread > 9 ? "9+" : "$totalUnread",
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
                         ),
                       ),
                     ),
